@@ -3,6 +3,8 @@ package io.github.moyusowo.neoartisan.block.crop;
 import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisan.block.BlockStateUtil;
 import io.github.moyusowo.neoartisanapi.api.block.crop.CropStageProperty;
+import io.github.moyusowo.neoartisanapi.api.item.ItemGenerator;
+import org.apache.commons.lang3.IntegerRange;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -51,15 +53,43 @@ final class ReadUtil {
             if (section == null) throw new IllegalArgumentException("You can not provide a empty stage!");
             Integer appearance = BlockStateUtil.parseBlockStateId(section.getString("appearance"));
             if (appearance == null) throw new IllegalArgumentException("You must provide a appearance state!");
-            List<String> dropNames = section.getStringList("drops");
-            List<NamespacedKey> drops = new ArrayList<>();
-            for (String dropName : dropNames) {
-                drops.add(stringToNamespaceKey(dropName));
+            List<ItemGenerator> generators = new ArrayList<>();
+            ConfigurationSection drops = section.getConfigurationSection("drops");
+            if (drops != null) {
+                for (String registryId : drops.getKeys(false)) {
+                    ConfigurationSection item = drops.getConfigurationSection(registryId);
+                    if (item == null) {
+                        int cnt = drops.getInt(registryId);
+                        generators.add(ItemGenerator.SimpleGenerator(stringToNamespaceKey(registryId), cnt));
+                    } else {
+                        int min = item.getInt("min");
+                        int max = item.getInt("max");
+                        generators.add(ItemGenerator.rangedGenerator(stringToNamespaceKey(registryId), min, max));
+                    }
+                }
             }
-            CropStageProperty cropStageProperty = new CropStageProperty(appearance, drops.toArray(new NamespacedKey[0]));
+            CropStageProperty cropStageProperty = new CropStageProperty(appearance, generators.toArray(new ItemGenerator[0]));
             properties.add(cropStageProperty);
         }
         if (properties.isEmpty()) throw new IllegalArgumentException("You must provide any stages!");
         return properties;
+    }
+
+    public static int getMinFertilizeGrowth(YamlConfiguration crop) {
+        ConfigurationSection section = crop.getConfigurationSection("fertilizeGrowth");
+        if (section == null) {
+            return crop.getInt("fertilizeGrowth");
+        } else {
+            return section.getInt("min");
+        }
+    }
+
+    public static int getMaxFertilizeGrowth(YamlConfiguration crop) {
+        ConfigurationSection section = crop.getConfigurationSection("fertilizeGrowth");
+        if (section == null) {
+            return crop.getInt("fertilizeGrowth");
+        } else {
+            return section.getInt("max");
+        }
     }
 }

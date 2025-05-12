@@ -1,19 +1,28 @@
 package io.github.moyusowo.neoartisanapi.api.block.crop;
 
+import io.github.moyusowo.neoartisanapi.api.item.ItemGenerator;
 import org.bukkit.NamespacedKey;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
 
 @SuppressWarnings("unused")
-public record CropStageProperty(int appearanceState, NamespacedKey[] drops) {
+public record CropStageProperty(int appearanceState, ItemGenerator[] generators) {
 
-    public CropStageProperty(int appearanceState, NamespacedKey[] drops) {
+    public CropStageProperty(int appearanceState, ItemGenerator[] generators) {
         this.appearanceState = appearanceState;
-        this.drops = Arrays.copyOf(drops, drops.length);
+        this.generators = Arrays.copyOf(generators, generators.length);
     }
 
-    @Override
-    public NamespacedKey[] drops() {
-        return Arrays.copyOf(drops, drops.length);
+    public ItemStack[] drops() {
+        ItemStack[] drops = new ItemStack[generators.length];
+        for (int i = 0; i < drops.length; i++) {
+            drops[i] = generators[i].generate();
+        }
+        return drops;
+    }
+
+    public ItemGenerator[] generators() {
+        return Arrays.copyOf(generators, generators.length);
     }
 }

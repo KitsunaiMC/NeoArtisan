@@ -11,7 +11,9 @@ public interface CropRegistry {
         return Bukkit.getServicesManager().load(CropRegistry.class);
     }
 
-    void registerCrop(NamespacedKey cropId, int actualState, List<CropStageProperty> stages);
+    void registerCrop(NamespacedKey cropId, int actualState, List<CropStageProperty> stages, int boneMealMinGrowth, int boneMealMaxGrowth);
+
+    void registerCrop(NamespacedKey cropId, int actualState, List<CropStageProperty> stages, int boneMealGrowth);
 
     boolean isArtisanCrop(NamespacedKey cropId);
 

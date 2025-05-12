@@ -12,4 +12,10 @@ public interface ArtisanCrop {
     int getMaxStage();
 
     int getActualState();
+
+    int getBoneMealMinGrowth();
+
+    int getBoneMealMaxGrowth();
+
+    int generateBoneMealGrowth();
 }

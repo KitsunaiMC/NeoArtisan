@@ -53,16 +53,20 @@ class CropRegistryImpl implements CropRegistry {
     }
 
     private void readYml(YamlConfiguration yml) {
-        registerCrop(ReadUtil.getCropId(yml), ReadUtil.getActualState(yml), ReadUtil.getStages(yml));
+        registerCrop(ReadUtil.getCropId(yml), ReadUtil.getActualState(yml), ReadUtil.getStages(yml), ReadUtil.getMinFertilizeGrowth(yml), ReadUtil.getMaxFertilizeGrowth(yml));
     }
 
-    public void registerCrop(NamespacedKey cropId, int actualState, List<CropStageProperty> stages) {
+    public void registerCrop(NamespacedKey cropId, int actualState, List<CropStageProperty> stages, int boneMealMinGrowth, int boneMealMaxGrowth) {
         for (CropStageProperty property : stages) {
             if (usedStates.contains(stateById(property.appearanceState()))) {
                 throw new IllegalArgumentException("The BlockState: " + stateById(property.appearanceState()) + " is used!");
             }
         }
-        registry.put(cropId, new ArtisanCropImpl(cropId, actualState, stages));
+        registry.put(cropId, new ArtisanCropImpl(cropId, actualState, stages, boneMealMinGrowth, boneMealMaxGrowth));
+    }
+
+    public void registerCrop(NamespacedKey cropId, int actualState, List<CropStageProperty> stages, int boneMealGrowth) {
+        registerCrop(cropId, actualState, stages, boneMealGrowth, boneMealGrowth);
     }
 
     public boolean isArtisanCrop(NamespacedKey cropId) {
