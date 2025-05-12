@@ -1,0 +1,20 @@
+registryId: magic_sword
+rawMaterial: iron_sword
+customModelData: -1
+displayName: <yellow>魔法剑~ # 默认为白色+非斜体
+lore: # 默认为灰色+非斜体
+  - 魔法剑一把
+  - 可以帮助你更快地杀怪
+weapon:
+  speed: 1.0
+  knockback: 1.5
+  damage: 11.0
+attribute:
+  global:
+    magic: 10.2
+    ice: 5.8
+    fire: 6.1
+  itemstack:
+    level: 1
+    exp: 5.0
+maxDurability: 5000

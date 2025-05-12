@@ -1,0 +1,4 @@
+allprojects {
+    group = "io.github.moyusowo"
+    version = "1.4.0"
+}
