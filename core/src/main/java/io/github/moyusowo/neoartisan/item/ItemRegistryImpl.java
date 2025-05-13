@@ -320,6 +320,7 @@ final class ItemRegistryImpl implements ItemRegistry {
     @SuppressWarnings("unchecked")
     public @Nullable <T> T getItemstackAttributeValue(@NotNull ItemStack itemStack, @NotNull NamespacedKey attributeKey) {
         if (itemStack.getPersistentDataContainer().has(attributeKey)) {
+            if (!AttributeRegistry.getAttributeRegistryManager().hasItemstackAttribute(attributeKey)) return null;
             String typeName = AttributeRegistry.getAttributeRegistryManager().getItemstackAttributeTypeName(attributeKey);
             return (T) itemStack.getPersistentDataContainer().get(attributeKey, AttributeTypeRegistry.getAttributeTypeRegistryManager().getAttributePDCType(typeName));
         }
