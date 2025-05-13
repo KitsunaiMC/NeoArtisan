@@ -21,7 +21,8 @@ final class AttributeRegistryImpl implements AttributeRegistry {
         itemstackAttributeRegistry = new HashMap<>();
         instance = this;
         registerFromFile();
-        NeoArtisan.logger().info("成功从文件注册 " + (globalAttributeRegistry.size() + itemstackAttributeRegistry.size()) + " 个全局自定义属性");
+        NeoArtisan.logger().info("成功从文件注册 " + (globalAttributeRegistry.size()) + " 个全局自定义属性");
+        NeoArtisan.logger().info("成功从文件注册 " + (itemstackAttributeRegistry.size()) + " 个物品堆自定义属性");
     }
 
     private final Map<NamespacedKey, String> globalAttributeRegistry, itemstackAttributeRegistry;
