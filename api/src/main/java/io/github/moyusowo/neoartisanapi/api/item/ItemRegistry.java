@@ -1,5 +1,6 @@
 package io.github.moyusowo.neoartisanapi.api.item;
 
+import io.github.moyusowo.neoartisanapi.api.attribute.AttributeRegistry;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -283,6 +284,7 @@ public interface ItemRegistry {
      * @param <T> 属性值类型
      * @throws IllegalStateException 如果属性类型不匹配
      * @see #setItemstackAttributeValue(ItemStack, NamespacedKey, Object)
+     * @apiNote 调用该方法之前应该总是调用 {@link AttributeRegistry#hasItemstackAttribute(NamespacedKey)} 以确保属性已注册
      */
     @Nullable <T> T getItemstackAttributeValue(@NotNull ItemStack itemStack, @NotNull NamespacedKey attributeKey);
 
@@ -295,6 +297,7 @@ public interface ItemRegistry {
      * @param <T> 属性值类型
      * @throws IllegalArgumentException 如果属性未注册或值类型无效
      * @see #getItemstackAttributeValue(ItemStack, NamespacedKey)
+     * @apiNote 调用该方法之前应该总是调用 {@link AttributeRegistry#hasItemstackAttribute(NamespacedKey)} 以确保属性已注册
      */
     <T> void setItemstackAttributeValue(@NotNull ItemStack itemStack, @NotNull NamespacedKey attributeKey, @NotNull T value);
 }
