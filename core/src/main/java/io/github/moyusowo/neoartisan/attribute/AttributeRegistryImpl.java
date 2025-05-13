@@ -41,6 +41,10 @@ final class AttributeRegistryImpl implements AttributeRegistry {
             YamlConfiguration global = YamlConfiguration.loadConfiguration(globalFile);
             for (String key : global.getKeys(false)) {
                 String value = global.getString(key);
+                if (value == null) {
+                    NeoArtisan.logger().warning("物品全局属性配置文件格式错误，类型不可为空，不可有子键，错误键: " + key);
+                    continue;
+                }
                 if (!AttributeTypeRegistryImpl.getInstance().hasAttributeType(value)) throw new IllegalArgumentException("You must provide a legal type name!");
                 globalAttributeRegistry.put(new NamespacedKey(NeoArtisan.instance(), key), value);
             }
@@ -49,6 +53,10 @@ final class AttributeRegistryImpl implements AttributeRegistry {
             YamlConfiguration attribute = YamlConfiguration.loadConfiguration(itemstackFile);
             for (String key : attribute.getKeys(false)) {
                 String value = attribute.getString(key);
+                if (value == null) {
+                    NeoArtisan.logger().warning("物品堆属性配置文件格式错误，类型不可为空，不可有子键，错误键: " + key);
+                    continue;
+                }
                 if (!AttributeTypeRegistryImpl.getInstance().hasAttributeType(value)) throw new IllegalArgumentException("You must provide a legal type name!");
                 itemstackAttributeRegistry.put(new NamespacedKey(NeoArtisan.instance(), key), value);
             }

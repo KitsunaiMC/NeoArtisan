@@ -42,6 +42,10 @@ public class PlayerAttributeRegistryImpl implements PlayerAttributeRegistry {
             YamlConfiguration global = YamlConfiguration.loadConfiguration(playerFile);
             for (String key : global.getKeys(false)) {
                 String value = global.getString(key);
+                if (value == null) {
+                    NeoArtisan.logger().warning("玩家属性配置文件格式错误，类型不可为空，不可有子键，错误键: " + key);
+                    continue;
+                }
                 if (!AttributeTypeRegistryImpl.getInstance().hasAttributeType(value)) throw new IllegalArgumentException("You must provide a legal type name!");
                 playerAttributeRegistry.put(new NamespacedKey(NeoArtisan.instance(), key), value);
             }
