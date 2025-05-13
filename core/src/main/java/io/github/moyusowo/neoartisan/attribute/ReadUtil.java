@@ -5,6 +5,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 
+import static io.github.moyusowo.neoartisan.util.Util.saveDefaultIfNotExists;
+
 final class ReadUtil {
 
     private ReadUtil() {}
@@ -16,17 +18,9 @@ final class ReadUtil {
             recipeFolder.mkdirs();
             saveDefaultIfNotExists("attribute/global_attribute.yml");
             saveDefaultIfNotExists("attribute/itemstack_attribute.yml");
+            saveDefaultIfNotExists("attribute/player_attribute.yml");
         }
         return recipeFolder;
-    }
-
-    private static void saveDefaultIfNotExists(String resourcePath) {
-        String targetPath = resourcePath.replace('/', File.separatorChar);
-        File targetFile = new File(NeoArtisan.instance().getDataFolder(), targetPath);
-        if (targetFile.exists()) {
-            return;
-        }
-        NeoArtisan.instance().saveResource(resourcePath, false);
     }
 
     public static boolean isYmlFile(@NotNull File file) {
