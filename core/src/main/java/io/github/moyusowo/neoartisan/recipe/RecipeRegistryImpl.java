@@ -1,26 +1,19 @@
 package io.github.moyusowo.neoartisan.recipe;
 
 import io.github.moyusowo.neoartisan.NeoArtisan;
+import io.github.moyusowo.neoartisan.util.init.InitMethod;
+import io.github.moyusowo.neoartisan.util.init.InitPriority;
 import io.github.moyusowo.neoartisan.util.ArrayKey;
-import io.github.moyusowo.neoartisanapi.api.item.ItemRegistry;
+import io.github.moyusowo.neoartisan.util.terminate.TerminateMethod;
 import io.github.moyusowo.neoartisanapi.api.recipe.ArtisanShapedRecipe;
 import io.github.moyusowo.neoartisanapi.api.recipe.ArtisanShapelessRecipe;
 import io.github.moyusowo.neoartisanapi.api.recipe.RecipeRegistry;
-import io.github.moyusowo.neoartisan.util.Util;
-import org.bukkit.Material;
+import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
-import org.bukkit.block.Furnace;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.*;
-import org.bukkit.inventory.*;
+import org.bukkit.plugin.ServicePriority;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.File;
-import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 final class RecipeRegistryImpl implements Listener, RecipeRegistry {
@@ -34,6 +27,7 @@ final class RecipeRegistryImpl implements Listener, RecipeRegistry {
         return instance;
     }
 
+    @InitMethod(order = InitPriority.NORMAL)
     public static void init() {
         new RecipeRegistryImpl();
     }
@@ -43,6 +37,12 @@ final class RecipeRegistryImpl implements Listener, RecipeRegistry {
         shapedRegistry = new ConcurrentHashMap<>();
         shapelessRegistry = new ConcurrentHashMap<>();
         registerListener();
+        Bukkit.getServicesManager().register(
+                RecipeRegistry.class,
+                RecipeRegistryImpl.getInstance(),
+                NeoArtisan.instance(),
+                ServicePriority.Normal
+        );
     }
 
     final ConcurrentHashMap<ArrayKey, ArtisanShapedRecipe> shapedRegistry;
@@ -76,6 +76,11 @@ final class RecipeRegistryImpl implements Listener, RecipeRegistry {
 
     void register(ArrayKey identifier, ArtisanShapelessRecipe r) {
         shapelessRegistry.put(identifier, r);
+    }
+
+    @TerminateMethod
+    static void resetRecipe() {
+        Bukkit.resetRecipes();
     }
 
 }

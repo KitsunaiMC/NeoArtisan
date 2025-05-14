@@ -1,16 +1,18 @@
 package io.github.moyusowo.neoartisan.attribute;
 
 import io.github.moyusowo.neoartisan.NeoArtisan;
+import io.github.moyusowo.neoartisan.util.init.InitMethod;
+import io.github.moyusowo.neoartisan.util.init.InitPriority;
 import io.github.moyusowo.neoartisanapi.api.attribute.AttributeTypeRegistry;
 import io.github.moyusowo.neoartisanapi.api.attribute.PlayerAttributeRegistry;
+import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.plugin.ServicePriority;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,6 +20,7 @@ public class PlayerAttributeRegistryImpl implements PlayerAttributeRegistry {
 
     private static PlayerAttributeRegistryImpl instance;
 
+    @InitMethod(order = InitPriority.HIGH)
     public static void init() {
         new PlayerAttributeRegistryImpl();
     }
@@ -29,6 +32,12 @@ public class PlayerAttributeRegistryImpl implements PlayerAttributeRegistry {
     private PlayerAttributeRegistryImpl() {
         instance = this;
         playerAttributeRegistry = new HashMap<>();
+        Bukkit.getServicesManager().register(
+                PlayerAttributeRegistry.class,
+                PlayerAttributeRegistryImpl.getInstance(),
+                NeoArtisan.instance(),
+                ServicePriority.Normal
+        );
     }
 
     private final Map<NamespacedKey, String> playerAttributeRegistry;

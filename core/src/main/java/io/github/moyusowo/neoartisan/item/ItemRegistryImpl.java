@@ -1,26 +1,25 @@
 package io.github.moyusowo.neoartisan.item;
 
 import io.github.moyusowo.neoartisan.NeoArtisan;
+import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisanapi.api.attribute.AttributeRegistry;
 import io.github.moyusowo.neoartisanapi.api.attribute.AttributeTypeRegistry;
 import io.github.moyusowo.neoartisanapi.api.item.*;
 import io.github.moyusowo.neoartisan.util.NamespacedKeyDataType;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.plugin.ServicePriority;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.File;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-
-import static io.github.moyusowo.neoartisan.util.Util.isYmlFile;
 
 final class ItemRegistryImpl implements ItemRegistry {
 
@@ -35,8 +34,15 @@ final class ItemRegistryImpl implements ItemRegistry {
     private ItemRegistryImpl() {
         instance = this;
         registry = new ConcurrentHashMap<>();
+        Bukkit.getServicesManager().register(
+                ItemRegistry.class,
+                ItemRegistryImpl.getInstance(),
+                NeoArtisan.instance(),
+                ServicePriority.Normal
+        );
     }
 
+    @InitMethod
     public static void init() {
         new ItemRegistryImpl();
     }

@@ -1,9 +1,13 @@
 package io.github.moyusowo.neoartisan.item;
 
+import io.github.moyusowo.neoartisan.NeoArtisan;
+import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisanapi.api.attribute.AttributeRegistry;
 import io.github.moyusowo.neoartisanapi.api.attribute.AttributeTypeRegistry;
 import io.github.moyusowo.neoartisanapi.api.item.AttributeProperty;
+import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
+import org.bukkit.plugin.ServicePriority;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -16,6 +20,16 @@ class AttributePropertyImpl implements AttributeProperty {
     public AttributePropertyImpl() {
         this.globalAttributeValues = new HashMap<>();
         this.itemstackAttributeValues = new HashMap<>();
+    }
+
+    @InitMethod
+    static void init() {
+        Bukkit.getServicesManager().register(
+                AttributeProperty.class,
+                new AttributePropertyImpl(),
+                NeoArtisan.instance(),
+                ServicePriority.Normal
+        );
     }
 
     @Override

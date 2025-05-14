@@ -2,18 +2,18 @@ package io.github.moyusowo.neoartisan.block.crop;
 
 import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisan.block.network.BlockMappingsManager;
+import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisanapi.api.block.crop.CropRegistry;
 import io.github.moyusowo.neoartisanapi.api.block.crop.CropStageProperty;
 import net.minecraft.world.level.block.state.BlockState;
+import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
-import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.plugin.ServicePriority;
 
-import java.io.File;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static io.github.moyusowo.neoartisan.util.Util.isYmlFile;
 import static io.github.moyusowo.neoartisan.block.BlockStateUtil.stateById;
 
 class CropRegistryImpl implements CropRegistry {
@@ -24,9 +24,9 @@ class CropRegistryImpl implements CropRegistry {
         return instance;
     }
 
+    @InitMethod
     public static void init() {
         new CropRegistryImpl();
-        ArtisanCropBehavior.init();
     }
 
     private final ConcurrentHashMap<NamespacedKey, ArtisanCropImpl> registry;
@@ -37,6 +37,12 @@ class CropRegistryImpl implements CropRegistry {
         instance = this;
         registry = new ConcurrentHashMap<>();
         usedStates = BlockMappingsManager.getUsedStates();
+        Bukkit.getServicesManager().register(
+                CropRegistry.class,
+                CropRegistryImpl.getInstance(),
+                NeoArtisan.instance(),
+                ServicePriority.Normal
+        );
     }
 
     public void registerCrop(NamespacedKey cropId, int actualState, List<CropStageProperty> stages, int boneMealMinGrowth, int boneMealMaxGrowth) {

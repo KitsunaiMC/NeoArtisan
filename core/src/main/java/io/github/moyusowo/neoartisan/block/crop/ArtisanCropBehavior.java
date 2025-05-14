@@ -2,6 +2,7 @@ package io.github.moyusowo.neoartisan.block.crop;
 
 
 import io.github.moyusowo.neoartisan.NeoArtisan;
+import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisanapi.api.block.crop.ArtisanCropStorage;
 import io.github.moyusowo.neoartisanapi.api.block.crop.CropRegistry;
 import io.github.moyusowo.neoartisanapi.api.block.crop.CurrentCropStage;
@@ -37,6 +38,7 @@ final class ArtisanCropBehavior implements Listener {
 
     private ArtisanCropBehavior() {}
 
+    @InitMethod
     static void init() {
         NeoArtisan.registerListener(new ArtisanCropBehavior());
     }

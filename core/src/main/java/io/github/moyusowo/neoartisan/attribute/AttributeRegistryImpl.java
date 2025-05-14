@@ -1,17 +1,20 @@
 package io.github.moyusowo.neoartisan.attribute;
 
 import io.github.moyusowo.neoartisan.NeoArtisan;
+import io.github.moyusowo.neoartisan.util.init.InitMethod;
+import io.github.moyusowo.neoartisan.util.init.InitPriority;
 import io.github.moyusowo.neoartisanapi.api.attribute.AttributeRegistry;
+import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
-import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.plugin.ServicePriority;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
 final class AttributeRegistryImpl implements AttributeRegistry {
 
+    @InitMethod(order = InitPriority.HIGH)
     public static void init() {
         new AttributeRegistryImpl();
     }
@@ -20,6 +23,12 @@ final class AttributeRegistryImpl implements AttributeRegistry {
         instance = this;
         globalAttributeRegistry = new HashMap<>();
         itemstackAttributeRegistry = new HashMap<>();
+        Bukkit.getServicesManager().register(
+                AttributeRegistry.class,
+                AttributeRegistryImpl.getInstance(),
+                NeoArtisan.instance(),
+                ServicePriority.Normal
+        );
     }
 
     private final Map<NamespacedKey, String> globalAttributeRegistry, itemstackAttributeRegistry;

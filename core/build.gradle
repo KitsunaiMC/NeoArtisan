@@ -19,6 +19,7 @@ repositories {
 dependencies {
     implementation(project(":api"))
     paperweight.paperDevBundle("1.21.4-R0.1-SNAPSHOT")
+    implementation 'org.reflections:reflections:0.10.2'
 }
 
 paperweight {

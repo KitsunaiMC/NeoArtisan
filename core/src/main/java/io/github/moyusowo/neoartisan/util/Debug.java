@@ -2,6 +2,7 @@ package io.github.moyusowo.neoartisan.util;
 
 import io.github.moyusowo.neoartisan.NeoArtisan;
 
+import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisanapi.api.item.ItemRegistry;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
@@ -14,6 +15,7 @@ public class Debug implements Listener {
 
     private Debug() {}
 
+    @InitMethod
     public static void init() {
         NeoArtisan.registerListener(new Debug());
     }
