@@ -27,7 +27,6 @@ class CropRegistryImpl implements CropRegistry {
     public static void init() {
         new CropRegistryImpl();
         ArtisanCropBehavior.init();
-        NeoArtisan.logger().info("成功从文件注册 " + instance.registry.size() + " 个自定义作物");
     }
 
     private final ConcurrentHashMap<NamespacedKey, ArtisanCropImpl> registry;
@@ -38,22 +37,6 @@ class CropRegistryImpl implements CropRegistry {
         instance = this;
         registry = new ConcurrentHashMap<>();
         usedStates = BlockMappingsManager.getUsedStates();
-        registerCropFromFile();
-    }
-
-    public void registerCropFromFile() {
-        File[] files = ReadUtil.readAllFiles();
-        if (files != null) {
-            for (File file : files) {
-                if (isYmlFile(file)) {
-                    readYml(YamlConfiguration.loadConfiguration(file));
-                }
-            }
-        }
-    }
-
-    private void readYml(YamlConfiguration yml) {
-        registerCrop(ReadUtil.getCropId(yml), ReadUtil.getActualState(yml), ReadUtil.getStages(yml), ReadUtil.getMinFertilizeGrowth(yml), ReadUtil.getMaxFertilizeGrowth(yml));
     }
 
     public void registerCrop(NamespacedKey cropId, int actualState, List<CropStageProperty> stages, int boneMealMinGrowth, int boneMealMaxGrowth) {

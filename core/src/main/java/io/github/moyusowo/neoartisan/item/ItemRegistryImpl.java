@@ -35,44 +35,10 @@ final class ItemRegistryImpl implements ItemRegistry {
     private ItemRegistryImpl() {
         instance = this;
         registry = new ConcurrentHashMap<>();
-        registerItemFromFile();
-        NeoArtisan.logger().info("成功从文件注册 " + registry.size() + " 个自定义物品");
     }
 
     public static void init() {
         new ItemRegistryImpl();
-    }
-
-    public void registerItemFromFile() {
-        File[] files = ReadUtil.readAllFiles();
-        if (files != null) {
-            for (File file : files) {
-                if (isYmlFile(file)) {
-                    readYml(YamlConfiguration.loadConfiguration(file));
-                }
-            }
-        }
-    }
-
-    private void readYml(YamlConfiguration item) {
-        BuilderImpl builder = (BuilderImpl) builder();
-        builder.registryId(ReadUtil.getRegistryId(item));
-        builder.rawMaterial(ReadUtil.getRawMaterial(item));
-        builder.hasOriginalCraft(ReadUtil.getOriginalCraft(item));
-        Integer customModelData = ReadUtil.getCustomModelData(item);
-        if (customModelData != null) builder.customModelData(customModelData);
-        String displayName = ReadUtil.getDisplayName(item);
-        if (displayName != null) builder.displayName(displayName);
-        List<String> lore = ReadUtil.getLore(item);
-        builder.lore(lore);
-        builder.foodProperty(ReadUtil.getFood(item));
-        builder.weaponProperty(ReadUtil.getWeapon(item));
-        Integer maxDurability = ReadUtil.getMaxDurability(item);
-        if (maxDurability != null) builder.maxDurability(maxDurability);
-        builder.armorProperty(ReadUtil.getArmor(item));
-        builder.attributeProperty(ReadUtil.getAttribute(item));
-        builder.cropId(ReadUtil.getCropId(item));
-        registerItem(builder);
     }
 
     @NotNull

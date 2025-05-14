@@ -29,28 +29,10 @@ public class PlayerAttributeRegistryImpl implements PlayerAttributeRegistry {
     private PlayerAttributeRegistryImpl() {
         instance = this;
         playerAttributeRegistry = new HashMap<>();
-        registerFromFile();
-        NeoArtisan.logger().info("成功从文件注册 " + (playerAttributeRegistry.size()) + " 个玩家自定义属性");
     }
 
     private final Map<NamespacedKey, String> playerAttributeRegistry;
 
-    private void registerFromFile() {
-        File file = ReadUtil.readAttributeFiles();
-        File playerFile = new File(file, "player_attribute.yml");
-        if (playerFile.isFile() && ReadUtil.isYmlFile(playerFile)) {
-            YamlConfiguration global = YamlConfiguration.loadConfiguration(playerFile);
-            for (String key : global.getKeys(false)) {
-                String value = global.getString(key);
-                if (value == null) {
-                    NeoArtisan.logger().warning("玩家属性配置文件格式错误，类型不可为空，不可有子键，错误键: " + key);
-                    continue;
-                }
-                if (!AttributeTypeRegistryImpl.getInstance().hasAttributeType(value)) throw new IllegalArgumentException("You must provide a legal type name!");
-                playerAttributeRegistry.put(new NamespacedKey(NeoArtisan.instance(), key), value);
-            }
-        }
-    }
 
     @Override
     public void registerPlayerAttribute(@NotNull NamespacedKey attributeKey, @NotNull String typeName) {

@@ -17,12 +17,9 @@ final class AttributeRegistryImpl implements AttributeRegistry {
     }
 
     private AttributeRegistryImpl() {
+        instance = this;
         globalAttributeRegistry = new HashMap<>();
         itemstackAttributeRegistry = new HashMap<>();
-        instance = this;
-        registerFromFile();
-        NeoArtisan.logger().info("成功从文件注册 " + (globalAttributeRegistry.size()) + " 个全局自定义属性");
-        NeoArtisan.logger().info("成功从文件注册 " + (itemstackAttributeRegistry.size()) + " 个物品堆自定义属性");
     }
 
     private final Map<NamespacedKey, String> globalAttributeRegistry, itemstackAttributeRegistry;
@@ -31,36 +28,6 @@ final class AttributeRegistryImpl implements AttributeRegistry {
 
     public static AttributeRegistryImpl getInstance() {
         return instance;
-    }
-
-    private void registerFromFile() {
-        File file = ReadUtil.readAttributeFiles();
-        File globalFile = new File(file, "global_attribute.yml");
-        File itemstackFile = new File(file, "itemstack_attribute.yml");
-        if (globalFile.isFile() && ReadUtil.isYmlFile(globalFile)) {
-            YamlConfiguration global = YamlConfiguration.loadConfiguration(globalFile);
-            for (String key : global.getKeys(false)) {
-                String value = global.getString(key);
-                if (value == null) {
-                    NeoArtisan.logger().warning("物品全局属性配置文件格式错误，类型不可为空，不可有子键，错误键: " + key);
-                    continue;
-                }
-                if (!AttributeTypeRegistryImpl.getInstance().hasAttributeType(value)) throw new IllegalArgumentException("You must provide a legal type name!");
-                globalAttributeRegistry.put(new NamespacedKey(NeoArtisan.instance(), key), value);
-            }
-        }
-        if (itemstackFile.isFile() && ReadUtil.isYmlFile(itemstackFile)) {
-            YamlConfiguration attribute = YamlConfiguration.loadConfiguration(itemstackFile);
-            for (String key : attribute.getKeys(false)) {
-                String value = attribute.getString(key);
-                if (value == null) {
-                    NeoArtisan.logger().warning("物品堆属性配置文件格式错误，类型不可为空，不可有子键，错误键: " + key);
-                    continue;
-                }
-                if (!AttributeTypeRegistryImpl.getInstance().hasAttributeType(value)) throw new IllegalArgumentException("You must provide a legal type name!");
-                itemstackAttributeRegistry.put(new NamespacedKey(NeoArtisan.instance(), key), value);
-            }
-        }
     }
 
     @Override
