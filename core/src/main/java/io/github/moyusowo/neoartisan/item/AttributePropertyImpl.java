@@ -33,27 +33,24 @@ class AttributePropertyImpl implements AttributeProperty {
     }
 
     @Override
-    public AttributeProperty empty() {
-        return new AttributePropertyImpl();
-    }
-
-    @Override
-    public void addGlobalAttribute(@NotNull NamespacedKey attributeKey, @NotNull Object value) {
+    public AttributeProperty addGlobalAttribute(@NotNull NamespacedKey attributeKey, @NotNull Object value) {
         if (!AttributeRegistry.getAttributeRegistryManager().hasGlobalAttribute(attributeKey)) throw new IllegalArgumentException("You didn't register this attribute!");
         String typeName = AttributeRegistry.getAttributeRegistryManager().getGlobalAttributeTypeName(attributeKey);
         Class<?> typeJavaClass = AttributeTypeRegistry.getAttributeTypeRegistryManager().getAttributeJavaType(typeName);
         if (!typeJavaClass.isInstance(value)) throw new IllegalArgumentException("the value doesn't match the attribute!");
         this.globalAttributeValues.put(attributeKey, value);
+        return this;
     }
 
     @Override
-    public void addItemstackAttribute(@NotNull NamespacedKey attributeKey, @NotNull Object value) {
+    public AttributeProperty addItemstackAttribute(@NotNull NamespacedKey attributeKey, @NotNull Object value) {
         if (attributeKey == null) throw new IllegalArgumentException("You can't provide a null key!");
-        if (!AttributeRegistry.getAttributeRegistryManager().hasItemstackAttribute(attributeKey)) throw new IllegalArgumentException("You didn't register this attribute!");
-        String typeName = AttributeRegistry.getAttributeRegistryManager().getItemstackAttributeTypeName(attributeKey);
+        if (!AttributeRegistry.getAttributeRegistryManager().hasItemStackAttribute(attributeKey)) throw new IllegalArgumentException("You didn't register this attribute!");
+        String typeName = AttributeRegistry.getAttributeRegistryManager().getItemStackAttributeTypeName(attributeKey);
         Class<?> typeJavaClass = AttributeTypeRegistry.getAttributeTypeRegistryManager().getAttributeJavaType(typeName);
         if (!typeJavaClass.isInstance(value)) throw new IllegalArgumentException("the value doesn't match the attribute!");
         this.itemstackAttributeValues.put(attributeKey, value);
+        return this;
     }
 
     @Override
@@ -77,7 +74,7 @@ class AttributePropertyImpl implements AttributeProperty {
     @Override
     @SuppressWarnings("unchecked")
     public @NotNull <T> T getItemstackAttributeValue(@NotNull NamespacedKey attributeKey) {
-        String typeName = AttributeRegistry.getAttributeRegistryManager().getItemstackAttributeTypeName(attributeKey);
+        String typeName = AttributeRegistry.getAttributeRegistryManager().getItemStackAttributeTypeName(attributeKey);
         Class<T> type = (Class<T>) AttributeTypeRegistry.getAttributeTypeRegistryManager().getAttributeJavaType(typeName);
         return type.cast(this.itemstackAttributeValues.get(attributeKey));
     }

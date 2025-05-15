@@ -32,7 +32,7 @@ public interface ArtisanShapedRecipe {
      * @param registryId 自定义物品注册ID（不能为null）
      * @throws IllegalArgumentException 如果重复绑定同一字符
      */
-    void add(char c, @NotNull NamespacedKey registryId);
+    ArtisanShapedRecipe add(char c, @NotNull NamespacedKey registryId);
 
     /**
      * 设置合成结果。
@@ -43,7 +43,7 @@ public interface ArtisanShapedRecipe {
      * @param count 产出数量
      * @see #build()
      */
-    void setResult(@NotNull NamespacedKey result, int count);
+    ArtisanShapedRecipe setResult(@NotNull NamespacedKey result, int count);
 
     /**
      * 完成配方构建并注册到服务器。
