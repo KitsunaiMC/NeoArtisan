@@ -1,7 +1,7 @@
 package io.github.moyusowo.neoartisan.block.network;
 
 import io.github.moyusowo.neoartisan.NeoArtisan;
-import io.github.moyusowo.neoartisan.block.internal.ArtisanCropStorageInternal;
+import io.github.moyusowo.neoartisan.block.crop.internal.ArtisanCropStorageInternal;
 import io.github.moyusowo.neoartisan.util.ReflectionUtil;
 import io.github.moyusowo.neoartisanapi.api.block.crop.CurrentCropStage;
 import io.netty.buffer.Unpooled;
