@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
  * <p>属性分为两种类型：</p>
  * <ul>
  *   <li><b>全局属性(GlobalAttribute)</b> - 对所有同ID物品生效的共享属性</li>
- *   <li><b>物品堆属性(ItemstackAttribute)</b> - 仅对单个物品实例有效的独立属性（如耐久、等级等）</li>
+ *   <li><b>物品堆属性(ItemStackAttribute)</b> - 仅对单个物品实例有效的独立属性（如耐久、等级等）</li>
  * </ul>
  *
  * <p>通过此接口可以注册、获取和管理服务器中属性系统的所有属性。
@@ -52,7 +52,7 @@ public interface AttributeRegistry {
      * @param typeName 属性类型名称（不能为null或空）
      * @throws IllegalArgumentException 如果属性已注册或参数无效
      */
-    void registerItemstackAttribute(@NotNull NamespacedKey attributeKey, @NotNull String typeName);
+    void registerItemStackAttribute(@NotNull NamespacedKey attributeKey, @NotNull String typeName);
 
     /**
      * 检查是否已注册指定的全局属性。
@@ -68,7 +68,7 @@ public interface AttributeRegistry {
      * @param attributeKey 要检查的属性键（不能为null）
      * @return 如果属性已注册返回true，否则返回false
      */
-    boolean hasItemstackAttribute(@NotNull NamespacedKey attributeKey);
+    boolean hasItemStackAttribute(@NotNull NamespacedKey attributeKey);
 
     /**
      * 获取全局属性的类型名称。
@@ -86,7 +86,7 @@ public interface AttributeRegistry {
      * @param attributeKey 要查询的属性键（不能为null）
      * @return 注册时指定的类型名称（不会为null）
      * @throws IllegalArgumentException 如果属性未注册
-     * @apiNote 调用该方法之前应该总是调用 {@link AttributeRegistry#hasItemstackAttribute(NamespacedKey)}
+     * @apiNote 调用该方法之前应该总是调用 {@link AttributeRegistry#hasItemStackAttribute(NamespacedKey)}
      */
-    @NotNull String getItemstackAttributeTypeName(@NotNull NamespacedKey attributeKey);
+    @NotNull String getItemStackAttributeTypeName(@NotNull NamespacedKey attributeKey);
 }

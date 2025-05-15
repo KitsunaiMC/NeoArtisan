@@ -46,7 +46,7 @@ final class AttributeRegistryImpl implements AttributeRegistry {
     }
 
     @Override
-    public void registerItemstackAttribute(@NotNull NamespacedKey attributeKey, @NotNull String typeName) {
+    public void registerItemStackAttribute(@NotNull NamespacedKey attributeKey, @NotNull String typeName) {
         if (!AttributeTypeRegistryImpl.getInstance().hasAttributeType(typeName)) throw new IllegalArgumentException("You must provide a legal type name!");
         itemstackAttributeRegistry.put(attributeKey, typeName);
     }
@@ -57,7 +57,7 @@ final class AttributeRegistryImpl implements AttributeRegistry {
     }
 
     @Override
-    public boolean hasItemstackAttribute(@NotNull NamespacedKey attributeKey) {
+    public boolean hasItemStackAttribute(@NotNull NamespacedKey attributeKey) {
         return itemstackAttributeRegistry.containsKey(attributeKey);
     }
 
@@ -68,7 +68,7 @@ final class AttributeRegistryImpl implements AttributeRegistry {
     }
 
     @Override
-    public @NotNull String getItemstackAttributeTypeName(@NotNull NamespacedKey attributeKey) {
+    public @NotNull String getItemStackAttributeTypeName(@NotNull NamespacedKey attributeKey) {
         if (!itemstackAttributeRegistry.containsKey(attributeKey)) throw new IllegalArgumentException("You must check if attribute exists before get!");
         return itemstackAttributeRegistry.get(attributeKey);
     }

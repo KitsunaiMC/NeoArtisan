@@ -229,7 +229,7 @@ class ArtisanItemImpl implements ArtisanItem {
         if (!this.attributeProperty.isEmpty()) {
             NamespacedKey[] keys = this.attributeProperty.getItemstackAttributeKeys();
             for (NamespacedKey key : keys) {
-                String typeName = AttributeRegistry.getAttributeRegistryManager().getItemstackAttributeTypeName(key);
+                String typeName = AttributeRegistry.getAttributeRegistryManager().getItemStackAttributeTypeName(key);
                 PersistentDataType<?, ?> PDCType = AttributeTypeRegistry.getAttributeTypeRegistryManager().getAttributePDCType(typeName);
                 itemMeta.getPersistentDataContainer().set(key, PDCType, this.attributeProperty.getItemstackAttributeValue(key));
             }

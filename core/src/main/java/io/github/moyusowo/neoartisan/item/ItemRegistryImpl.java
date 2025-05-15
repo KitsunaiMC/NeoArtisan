@@ -290,10 +290,10 @@ final class ItemRegistryImpl implements ItemRegistry {
 
     @Override
     @SuppressWarnings("unchecked")
-    public @Nullable <T> T getItemstackAttributeValue(@NotNull ItemStack itemStack, @NotNull NamespacedKey attributeKey) {
+    public @Nullable <T> T getItemStackAttributeValue(@NotNull ItemStack itemStack, @NotNull NamespacedKey attributeKey) {
         if (itemStack.getPersistentDataContainer().has(attributeKey)) {
-            if (!AttributeRegistry.getAttributeRegistryManager().hasItemstackAttribute(attributeKey)) throw new IllegalArgumentException("You didn't register the attribute!");
-            String typeName = AttributeRegistry.getAttributeRegistryManager().getItemstackAttributeTypeName(attributeKey);
+            if (!AttributeRegistry.getAttributeRegistryManager().hasItemStackAttribute(attributeKey)) throw new IllegalArgumentException("You didn't register the attribute!");
+            String typeName = AttributeRegistry.getAttributeRegistryManager().getItemStackAttributeTypeName(attributeKey);
             return (T) itemStack.getPersistentDataContainer().get(attributeKey, AttributeTypeRegistry.getAttributeTypeRegistryManager().getAttributePDCType(typeName));
         }
         return null;
@@ -301,13 +301,13 @@ final class ItemRegistryImpl implements ItemRegistry {
 
     @Override
     @SuppressWarnings("unchecked")
-    public <T> void setItemstackAttributeValue(@NotNull ItemStack itemStack, @NotNull NamespacedKey attributeKey, @NotNull T value) {
-        if (!AttributeRegistry.getAttributeRegistryManager().hasItemstackAttribute(attributeKey)) throw new IllegalArgumentException("You didn't register the attribute!");
+    public <T> void setItemStackAttributeValue(@NotNull ItemStack itemStack, @NotNull NamespacedKey attributeKey, @NotNull T value) {
+        if (!AttributeRegistry.getAttributeRegistryManager().hasItemStackAttribute(attributeKey)) throw new IllegalArgumentException("You didn't register the attribute!");
         ItemMeta meta = itemStack.getItemMeta();
         if (meta.getPersistentDataContainer().has(attributeKey)) {
             meta.getPersistentDataContainer().remove(attributeKey);
         }
-        String typeName = AttributeRegistry.getAttributeRegistryManager().getItemstackAttributeTypeName(attributeKey);
+        String typeName = AttributeRegistry.getAttributeRegistryManager().getItemStackAttributeTypeName(attributeKey);
         PersistentDataType<?, T> type = (PersistentDataType<?, T>) AttributeTypeRegistry.getAttributeTypeRegistryManager().getAttributePDCType(typeName);
         meta.getPersistentDataContainer().set(attributeKey, type, value);
         itemStack.setItemMeta(meta);
