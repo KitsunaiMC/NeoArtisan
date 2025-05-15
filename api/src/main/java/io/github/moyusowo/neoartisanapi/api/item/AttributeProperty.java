@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * 物品属性存储容器接口，用于管理物品的全局默认属性和实例初始属性。
  *
- * <p>本接口实例通过 {@link #createAttributeProperty()} 工厂方法获取，通常不应直接实现。</p>
+ * <p>本接口实例通过 {@link #empty()} 工厂方法获取，通常不应直接实现。</p>
  *
  * <h3>属性存储机制：</h3>
  * <ul>
@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
  *   <li><b>物品堆属性</b> - 作为新建物品实例的初始值存储，不影响已有实例</li>
  * </ul>
  *
- * @see #createAttributeProperty()
+ * @see #empty()
  */
 @SuppressWarnings("unused")
 public interface AttributeProperty {
@@ -25,16 +25,9 @@ public interface AttributeProperty {
      *
      * @return 新的自定义物品属性配置实例
      */
-    static AttributeProperty createAttributeProperty() {
+    static AttributeProperty empty() {
         return Bukkit.getServicesManager().load(AttributeProperty.class);
     }
-
-    /**
-     * 获取空属性容器（所有属性未设置状态）。
-     *
-     * @return 静态空实例，不包含任何属性配置
-     */
-    AttributeProperty empty();
 
     /**
      * 添加/更新全局模板属性。
@@ -43,7 +36,7 @@ public interface AttributeProperty {
      * @param value 属性值（不可为null）
      * @throws IllegalArgumentException 如果参数为null或值类型不合法
      */
-    void addGlobalAttribute(@NotNull NamespacedKey attributeKey, @NotNull Object value);
+    AttributeProperty addGlobalAttribute(@NotNull NamespacedKey attributeKey, @NotNull Object value);
 
     /**
      * 添加/更新物品实例初始属性。
@@ -52,7 +45,7 @@ public interface AttributeProperty {
      * @param value 新建物品时的默认值（不可为null）
      * @throws IllegalArgumentException 如果参数为null或值类型不合法
      */
-    void addItemstackAttribute(@NotNull NamespacedKey attributeKey, @NotNull Object value);
+    AttributeProperty addItemstackAttribute(@NotNull NamespacedKey attributeKey, @NotNull Object value);
 
     /**
      * 检查是否存在指定的全局属性。

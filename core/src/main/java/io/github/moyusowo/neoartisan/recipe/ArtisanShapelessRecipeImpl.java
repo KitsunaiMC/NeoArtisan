@@ -43,7 +43,7 @@ class ArtisanShapelessRecipeImpl implements ArtisanShapelessRecipe {
     }
 
     @Override
-    public void add(NamespacedKey registryId) {
+    public ArtisanShapelessRecipe add(NamespacedKey registryId) {
         try {
             if (built) throw new IllegalAccessException("It's already registered!");
         } catch (IllegalAccessException e) {
@@ -51,11 +51,12 @@ class ArtisanShapelessRecipeImpl implements ArtisanShapelessRecipe {
         }
         if (i == recipe.length) throw new ArrayIndexOutOfBoundsException("You can no longer add!");
         recipe[i++] = registryId;
+        return this;
     }
 
     @Override
     @SuppressWarnings("unused")
-    public void add(NamespacedKey... registryIds) {
+    public ArtisanShapelessRecipe add(NamespacedKey... registryIds) {
         try {
             if (built) throw new IllegalAccessException("It's already registered!");
         } catch (IllegalAccessException e) {
@@ -65,11 +66,12 @@ class ArtisanShapelessRecipeImpl implements ArtisanShapelessRecipe {
         for (NamespacedKey registryId : registryIds) {
             recipe[i++] = registryId;
         }
+        return this;
     }
 
     @Override
     @SuppressWarnings("unused")
-    public void setResult(NamespacedKey registryId, int count) {
+    public ArtisanShapelessRecipe setResult(NamespacedKey registryId, int count) {
         try {
             if (built) throw new IllegalAccessException("It's already registered!");
         } catch (IllegalAccessException e) {
@@ -77,6 +79,7 @@ class ArtisanShapelessRecipeImpl implements ArtisanShapelessRecipe {
         }
         result = registryId;
         this.count = count;
+        return this;
     }
 
     @Override

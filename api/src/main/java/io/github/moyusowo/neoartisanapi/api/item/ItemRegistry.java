@@ -283,10 +283,10 @@ public interface ItemRegistry {
      * @return 属性值，如果不存在返回null
      * @param <T> 属性值类型
      * @throws IllegalStateException 如果属性类型不匹配
-     * @see #setItemstackAttributeValue(ItemStack, NamespacedKey, Object)
-     * @apiNote 调用该方法之前应该总是调用 {@link AttributeRegistry#hasItemstackAttribute(NamespacedKey)} 以确保属性已注册
+     * @see #setItemStackAttributeValue(ItemStack, NamespacedKey, Object)
+     * @apiNote 调用该方法之前应该总是调用 {@link AttributeRegistry#hasItemStackAttribute(NamespacedKey)} 以确保属性已注册
      */
-    @Nullable <T> T getItemstackAttributeValue(@NotNull ItemStack itemStack, @NotNull NamespacedKey attributeKey);
+    @Nullable <T> T getItemStackAttributeValue(@NotNull ItemStack itemStack, @NotNull NamespacedKey attributeKey);
 
     /**
      * 设置物品堆上的动态属性值。
@@ -296,8 +296,8 @@ public interface ItemRegistry {
      * @param value 要设置的值（不能为null）
      * @param <T> 属性值类型
      * @throws IllegalArgumentException 如果属性未注册或值类型无效
-     * @see #getItemstackAttributeValue(ItemStack, NamespacedKey)
-     * @apiNote 调用该方法之前应该总是调用 {@link AttributeRegistry#hasItemstackAttribute(NamespacedKey)} 以确保属性已注册
+     * @see #getItemStackAttributeValue(ItemStack, NamespacedKey)
+     * @apiNote 调用该方法之前应该总是调用 {@link AttributeRegistry#hasItemStackAttribute(NamespacedKey)} 以确保属性已注册
      */
-    <T> void setItemstackAttributeValue(@NotNull ItemStack itemStack, @NotNull NamespacedKey attributeKey, @NotNull T value);
+    <T> void setItemStackAttributeValue(@NotNull ItemStack itemStack, @NotNull NamespacedKey attributeKey, @NotNull T value);
 }

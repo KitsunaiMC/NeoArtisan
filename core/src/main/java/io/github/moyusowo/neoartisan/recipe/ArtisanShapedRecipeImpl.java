@@ -47,17 +47,18 @@ class ArtisanShapedRecipeImpl implements ArtisanShapedRecipe {
     }
 
     @Override
-    public void add(char c, @NotNull NamespacedKey registryId) {
+    public ArtisanShapedRecipe add(char c, @NotNull NamespacedKey registryId) {
         try {
             if (built) throw new IllegalAccessException("It's already registered!");
         } catch (IllegalAccessException e) {
             NeoArtisan.logger().severe(e.getLocalizedMessage());
         }
         toRegistryId.put(c, registryId);
+        return this;
     }
 
     @Override
-    public void setResult(@NotNull NamespacedKey result, int count) {
+    public ArtisanShapedRecipe setResult(@NotNull NamespacedKey result, int count) {
         try {
             if (built) throw new IllegalAccessException("It's already registered!");
         } catch (IllegalAccessException e) {
@@ -65,6 +66,7 @@ class ArtisanShapedRecipeImpl implements ArtisanShapedRecipe {
         }
         this.result = result;
         this.count = count;
+        return this;
     }
 
     @Override

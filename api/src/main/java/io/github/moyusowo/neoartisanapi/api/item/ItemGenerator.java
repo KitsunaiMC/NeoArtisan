@@ -9,7 +9,7 @@ import java.util.concurrent.ThreadLocalRandom;
 @SuppressWarnings("unused")
 public interface ItemGenerator {
 
-    static ItemGenerator SimpleGenerator(NamespacedKey registryId, int amount) {
+    static ItemGenerator simpleGenerator(NamespacedKey registryId, int amount) {
         return new SimpleItemGenerator(registryId, amount);
     }
 

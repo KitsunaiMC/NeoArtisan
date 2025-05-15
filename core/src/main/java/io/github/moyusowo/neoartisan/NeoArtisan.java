@@ -1,11 +1,8 @@
 package io.github.moyusowo.neoartisan;
 
-import io.github.moyusowo.neoartisan.attribute.AttributeInit;
-import io.github.moyusowo.neoartisan.block.ArtisanBlockInit;
 import io.github.moyusowo.neoartisan.block.crop.CropDataSerializer;
-import io.github.moyusowo.neoartisan.item.ArtisanItemInit;
-import io.github.moyusowo.neoartisan.recipe.ArtisanRecipeInit;
-import io.github.moyusowo.neoartisan.util.Debug;
+import io.github.moyusowo.neoartisan.util.init.Initializer;
+import io.github.moyusowo.neoartisan.util.terminate.Terminator;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Server;
@@ -16,6 +13,8 @@ import java.io.IOException;
 import java.util.logging.Logger;
 
 public final class NeoArtisan extends JavaPlugin {
+
+    private static String pkg = "io.github.moyusowo.neoartisan";
 
     private static NeoArtisan instance;
     private static NamespacedKey artisanItemIdKey;
@@ -64,21 +63,13 @@ public final class NeoArtisan extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        AttributeInit.init();
-        ArtisanItemInit.init();
-        ArtisanRecipeInit.init();
-        ArtisanBlockInit.init();
-        Debug.init();
+        Initializer.scanPackage(pkg);
+        Initializer.executeEnable();
     }
 
     @Override
     public void onDisable() {
-        Bukkit.resetRecipes();
-        try {
-            CropDataSerializer.save();
-            NeoArtisan.logger().info("作物数据保存成功");
-        } catch (IOException e) {
-            NeoArtisan.logger().severe("作物数据保存失败: " + e);
-        }
+        Terminator.scanPackage(pkg);
+        Terminator.executeDisable();
     }
 }

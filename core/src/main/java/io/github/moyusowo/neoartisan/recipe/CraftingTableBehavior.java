@@ -1,6 +1,8 @@
 package io.github.moyusowo.neoartisan.recipe;
 
 import io.github.moyusowo.neoartisan.NeoArtisan;
+import io.github.moyusowo.neoartisan.util.init.InitMethod;
+import io.github.moyusowo.neoartisan.util.init.InitPriority;
 import io.github.moyusowo.neoartisan.util.ArrayKey;
 import io.github.moyusowo.neoartisanapi.api.item.ItemRegistry;
 import org.bukkit.Material;
@@ -15,13 +17,13 @@ import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.Arrays;
 import java.util.Map;
 
 final class CraftingTableBehavior implements Listener {
 
     private CraftingTableBehavior() {}
 
+    @InitMethod(order = InitPriority.NORMAL)
     static void registerListener() {
         NeoArtisan.registerListener(new CraftingTableBehavior());
     }

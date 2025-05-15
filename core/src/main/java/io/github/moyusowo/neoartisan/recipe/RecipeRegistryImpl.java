@@ -1,26 +1,19 @@
 package io.github.moyusowo.neoartisan.recipe;
 
 import io.github.moyusowo.neoartisan.NeoArtisan;
+import io.github.moyusowo.neoartisan.util.init.InitMethod;
+import io.github.moyusowo.neoartisan.util.init.InitPriority;
 import io.github.moyusowo.neoartisan.util.ArrayKey;
-import io.github.moyusowo.neoartisanapi.api.item.ItemRegistry;
+import io.github.moyusowo.neoartisan.util.terminate.TerminateMethod;
 import io.github.moyusowo.neoartisanapi.api.recipe.ArtisanShapedRecipe;
 import io.github.moyusowo.neoartisanapi.api.recipe.ArtisanShapelessRecipe;
 import io.github.moyusowo.neoartisanapi.api.recipe.RecipeRegistry;
-import io.github.moyusowo.neoartisan.util.Util;
-import org.bukkit.Material;
+import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
-import org.bukkit.block.Furnace;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.*;
-import org.bukkit.inventory.*;
+import org.bukkit.plugin.ServicePriority;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.File;
-import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 final class RecipeRegistryImpl implements Listener, RecipeRegistry {
@@ -34,6 +27,7 @@ final class RecipeRegistryImpl implements Listener, RecipeRegistry {
         return instance;
     }
 
+    @InitMethod(order = InitPriority.NORMAL)
     public static void init() {
         new RecipeRegistryImpl();
     }
@@ -43,9 +37,12 @@ final class RecipeRegistryImpl implements Listener, RecipeRegistry {
         shapedRegistry = new ConcurrentHashMap<>();
         shapelessRegistry = new ConcurrentHashMap<>();
         registerListener();
-        registerFromFile();
-        NeoArtisan.logger().info("成功从文件注册 " + shapedRegistry.size() + " 个自定义有序配方");
-        NeoArtisan.logger().info("成功从文件注册 " + shapelessRegistry.size() + " 个自定义无序配方");
+        Bukkit.getServicesManager().register(
+                RecipeRegistry.class,
+                RecipeRegistryImpl.getInstance(),
+                NeoArtisan.instance(),
+                ServicePriority.Normal
+        );
     }
 
     final ConcurrentHashMap<ArrayKey, ArtisanShapedRecipe> shapedRegistry;
@@ -73,48 +70,17 @@ final class RecipeRegistryImpl implements Listener, RecipeRegistry {
         NeoArtisan.registerListener(instance);
     }
 
-    public void registerFromFile() {
-        File[] files = ReadUtil.readAllFiles();
-        if (files != null) {
-            for (File file : files) {
-                if (ReadUtil.isYmlFile(file)) {
-                    readYml(YamlConfiguration.loadConfiguration(file));
-                }
-            }
-        }
-    }
-
-    private void readYml(YamlConfiguration yml) {
-        String recipeType = ReadUtil.getRecipeType(yml);
-        if (recipeType.equals("shaped")) readShaped(yml);
-        else if (recipeType.equals("shapeless")) readShapeless(yml);
-    }
-
-    private void readShaped(YamlConfiguration yml) {
-        List<String> shape = ReadUtil.getShaped(yml);
-        ArtisanShapedRecipeImpl r = new ArtisanShapedRecipeImpl(shape.get(0), shape.get(1), shape.get(2));
-        for (Map.Entry<Character, String> entry : ReadUtil.getShapedMappings(yml).entrySet()) {
-            r.add(entry.getKey(), Util.stringToNamespaceKey(entry.getValue()));
-        }
-        r.setResult(Util.stringToNamespaceKey(ReadUtil.getResult(yml)), ReadUtil.getCount(yml));
-        r.build();
-    }
-
-    private void readShapeless(YamlConfiguration yml) {
-        List<String> items = ReadUtil.getShapelessItems(yml);
-        ArtisanShapelessRecipeImpl r = new ArtisanShapelessRecipeImpl(Util.stringToNamespaceKey(ReadUtil.getResult(yml)), ReadUtil.getCount(yml));
-        for (String item : items) {
-            r.add(Util.stringToNamespaceKey(item));
-        }
-        r.build();
-    }
-
     void register(ArrayKey identifier, ArtisanShapedRecipe r) {
         shapedRegistry.put(identifier, r);
     }
 
     void register(ArrayKey identifier, ArtisanShapelessRecipe r) {
         shapelessRegistry.put(identifier, r);
+    }
+
+    @TerminateMethod
+    static void resetRecipe() {
+        Bukkit.resetRecipes();
     }
 
 }

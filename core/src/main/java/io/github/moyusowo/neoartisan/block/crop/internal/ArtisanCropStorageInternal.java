@@ -1,4 +1,4 @@
-package io.github.moyusowo.neoartisan.block.internal;
+package io.github.moyusowo.neoartisan.block.crop.internal;
 import io.github.moyusowo.neoartisanapi.api.block.crop.CurrentCropStage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;

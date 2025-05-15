@@ -1,19 +1,21 @@
 package io.github.moyusowo.neoartisan.block.crop;
 
 import io.github.moyusowo.neoartisan.NeoArtisan;
-import io.github.moyusowo.neoartisan.block.internal.ArtisanCropStorageInternal;
+import io.github.moyusowo.neoartisan.block.crop.internal.ArtisanCropStorageInternal;
+import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisanapi.api.block.crop.ArtisanCropStorage;
 import io.github.moyusowo.neoartisanapi.api.block.crop.CurrentCropStage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
+import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.CraftWorld;
+import org.bukkit.plugin.ServicePriority;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,6 +29,7 @@ final class ArtisanCropStorageImpl implements ArtisanCropStorage, ArtisanCropSto
         return instance;
     }
 
+    @InitMethod
     public static void init() {
         new ArtisanCropStorageImpl();
     }
@@ -35,23 +38,25 @@ final class ArtisanCropStorageImpl implements ArtisanCropStorage, ArtisanCropSto
         instance = this;
         this.storage = new HashMap<>();
         this.lock = new ReentrantReadWriteLock();
-        try {
-            CropDataSerializer.load(this.storage);
-            NeoArtisan.logger().info("作物数据读取成功");
-        } catch (IOException e) {
-            NeoArtisan.logger().severe("作物数据读取失败: " + e);
-        }
+        CropDataSerializer.load(this.storage);
         new BukkitRunnable() {
             @Override
             public void run() {
-                try {
-                    CropDataSerializer.save();
-                    NeoArtisan.logger().info("作物数据自动保存成功");
-                } catch (IOException e) {
-                    NeoArtisan.logger().severe("作物数据保存失败: " + e);
-                }
+                CropDataSerializer.save();
             }
         }.runTaskLaterAsynchronously(NeoArtisan.instance(), 20L * 120);
+        Bukkit.getServicesManager().register(
+                ArtisanCropStorage.class,
+                ArtisanCropStorageImpl.getInstance(),
+                NeoArtisan.instance(),
+                ServicePriority.Normal
+        );
+        Bukkit.getServicesManager().register(
+                ArtisanCropStorageInternal.class,
+                ArtisanCropStorageImpl.getInstance(),
+                NeoArtisan.instance(),
+                ServicePriority.Normal
+        );
     }
 
     private final Map<Level, Map<ChunkPos, Map<BlockPos, CurrentCropStage>>> storage;

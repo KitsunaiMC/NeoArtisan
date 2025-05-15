@@ -1,8 +1,13 @@
 package io.github.moyusowo.neoartisan.attribute;
 
+import io.github.moyusowo.neoartisan.NeoArtisan;
+import io.github.moyusowo.neoartisan.util.init.InitMethod;
+import io.github.moyusowo.neoartisan.util.init.InitPriority;
 import io.github.moyusowo.neoartisanapi.api.attribute.AttributeTypeRegistry;
 import io.github.moyusowo.neoartisan.util.Todos;
+import org.bukkit.Bukkit;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.plugin.ServicePriority;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -12,6 +17,7 @@ final class AttributeTypeRegistryImpl implements AttributeTypeRegistry {
 
     private static AttributeTypeRegistryImpl instance;
 
+    @InitMethod(order = InitPriority.HIGH)
     public static void init() {
         new AttributeTypeRegistryImpl();
     }
@@ -21,12 +27,18 @@ final class AttributeTypeRegistryImpl implements AttributeTypeRegistry {
     }
 
     private AttributeTypeRegistryImpl() {
+        instance = this;
         attributeTypeRegistry = new HashMap<>();
         attributeTypeRegistry.put("int", PersistentDataType.INTEGER);
         attributeTypeRegistry.put("integer", PersistentDataType.INTEGER);
         attributeTypeRegistry.put("double", PersistentDataType.DOUBLE);
         attributeTypeRegistry.put("string", PersistentDataType.STRING);
-        instance = this;
+        Bukkit.getServicesManager().register(
+                AttributeTypeRegistry.class,
+                AttributeTypeRegistryImpl.getInstance(),
+                NeoArtisan.instance(),
+                ServicePriority.Normal
+        );
     }
 
     private final Map<String, PersistentDataType<?, ?>> attributeTypeRegistry;

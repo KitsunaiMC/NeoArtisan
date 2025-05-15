@@ -26,7 +26,7 @@ public interface ArtisanShapelessRecipe {
      * @param registryId 自定义物品注册ID（不能为null）
      * @see #add(NamespacedKey...)
      */
-    void add(NamespacedKey registryId);
+    ArtisanShapelessRecipe add(NamespacedKey registryId);
 
     /**
      * 批量添加多个相同材料到合成配方。
@@ -45,7 +45,7 @@ public interface ArtisanShapelessRecipe {
      * @param registryIds 相同材料的注册ID数组（不能为null或空）
      * @see #add(NamespacedKey)
      */
-    void add(NamespacedKey... registryIds);
+    ArtisanShapelessRecipe add(NamespacedKey... registryIds);
 
     /**
      * 设置合成结果物品及数量。
@@ -55,7 +55,7 @@ public interface ArtisanShapelessRecipe {
      * @param registryId 结果物品注册ID（不能为null）
      * @param count 产出数量
      */
-    void setResult(NamespacedKey registryId, int count);
+    ArtisanShapelessRecipe setResult(NamespacedKey registryId, int count);
 
     /**
      * 完成配方构建并注册到服务器。

@@ -1,6 +1,7 @@
 package io.github.moyusowo.neoartisan.block.network;
 
 import io.github.moyusowo.neoartisan.NeoArtisan;
+import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -22,8 +23,8 @@ public final class BlockMappingsManager {
 
     private static final Set<BlockState> usedStates = new HashSet<>();
 
+    @InitMethod
     public static void init() {
-        AddPipeline.init();
         File dataFolder = NeoArtisan.instance().getDataFolder();
         File itemFolder = new File(dataFolder, "block");
         if (!itemFolder.exists()) {

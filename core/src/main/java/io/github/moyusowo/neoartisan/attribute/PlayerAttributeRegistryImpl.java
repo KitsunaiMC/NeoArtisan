@@ -1,16 +1,18 @@
 package io.github.moyusowo.neoartisan.attribute;
 
 import io.github.moyusowo.neoartisan.NeoArtisan;
+import io.github.moyusowo.neoartisan.util.init.InitMethod;
+import io.github.moyusowo.neoartisan.util.init.InitPriority;
 import io.github.moyusowo.neoartisanapi.api.attribute.AttributeTypeRegistry;
 import io.github.moyusowo.neoartisanapi.api.attribute.PlayerAttributeRegistry;
+import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.plugin.ServicePriority;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,6 +20,7 @@ public class PlayerAttributeRegistryImpl implements PlayerAttributeRegistry {
 
     private static PlayerAttributeRegistryImpl instance;
 
+    @InitMethod(order = InitPriority.HIGH)
     public static void init() {
         new PlayerAttributeRegistryImpl();
     }
@@ -29,28 +32,16 @@ public class PlayerAttributeRegistryImpl implements PlayerAttributeRegistry {
     private PlayerAttributeRegistryImpl() {
         instance = this;
         playerAttributeRegistry = new HashMap<>();
-        registerFromFile();
-        NeoArtisan.logger().info("成功从文件注册 " + (playerAttributeRegistry.size()) + " 个玩家自定义属性");
+        Bukkit.getServicesManager().register(
+                PlayerAttributeRegistry.class,
+                PlayerAttributeRegistryImpl.getInstance(),
+                NeoArtisan.instance(),
+                ServicePriority.Normal
+        );
     }
 
     private final Map<NamespacedKey, String> playerAttributeRegistry;
 
-    private void registerFromFile() {
-        File file = ReadUtil.readAttributeFiles();
-        File playerFile = new File(file, "player_attribute.yml");
-        if (playerFile.isFile() && ReadUtil.isYmlFile(playerFile)) {
-            YamlConfiguration global = YamlConfiguration.loadConfiguration(playerFile);
-            for (String key : global.getKeys(false)) {
-                String value = global.getString(key);
-                if (value == null) {
-                    NeoArtisan.logger().warning("玩家属性配置文件格式错误，类型不可为空，不可有子键，错误键: " + key);
-                    continue;
-                }
-                if (!AttributeTypeRegistryImpl.getInstance().hasAttributeType(value)) throw new IllegalArgumentException("You must provide a legal type name!");
-                playerAttributeRegistry.put(new NamespacedKey(NeoArtisan.instance(), key), value);
-            }
-        }
-    }
 
     @Override
     public void registerPlayerAttribute(@NotNull NamespacedKey attributeKey, @NotNull String typeName) {
