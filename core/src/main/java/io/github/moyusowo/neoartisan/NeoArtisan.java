@@ -61,6 +61,10 @@ public final class NeoArtisan extends JavaPlugin {
         return instance.getServer();
     }
 
+    public static boolean isDebugMode() {
+        return true;
+    }
+
     @Override
     public void onEnable() {
         Initializer.scanPackage(pkg);
