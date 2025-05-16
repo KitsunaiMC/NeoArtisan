@@ -4,6 +4,7 @@ import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
 import io.github.moyusowo.neoartisan.util.ArrayKey;
+import io.github.moyusowo.neoartisanapi.NeoArtisanAPI;
 import io.github.moyusowo.neoartisanapi.api.item.ItemRegistry;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -36,8 +37,8 @@ final class CraftingTableBehavior implements Listener {
         if (event.getRecipe() != null) {
             for (int i = 0; i < 9; i++) {
                 if (matrix[i] == null) continue;
-                NamespacedKey registryId = ItemRegistry.getItemRegistryManager().getRegistryId(matrix[i]);
-                if (ItemRegistry.getItemRegistryManager().isArtisanItem(registryId) && (!ItemRegistry.getItemRegistryManager().getArtisanItem(registryId).hasOriginalCraft())) {
+                NamespacedKey registryId = NeoArtisanAPI.getItemRegistry().getRegistryId(matrix[i]);
+                if (NeoArtisanAPI.getItemRegistry().isArtisanItem(registryId) && (!NeoArtisanAPI.getItemRegistry().getArtisanItem(registryId).hasOriginalCraft())) {
                     event.getInventory().setResult(null);
                     break;
                 } else {
@@ -48,12 +49,12 @@ final class CraftingTableBehavior implements Listener {
         ArrayKey shapedRegistryKey = ArtisanShapedRecipeImpl.toRegistryKey(matrix);
         if (RecipeRegistryImpl.getInstance().shapedRegistry.containsKey(shapedRegistryKey)) {
             ArtisanShapedRecipeImpl r = (ArtisanShapedRecipeImpl) RecipeRegistryImpl.getInstance().shapedRegistry.get(shapedRegistryKey);
-            event.getInventory().setResult(ItemRegistry.getItemRegistryManager().getItemStack(r.getResult(), r.getCount()));
+            event.getInventory().setResult(NeoArtisanAPI.getItemRegistry().getItemStack(r.getResult(), r.getCount()));
         } else {
             ArrayKey shapelessRegistryKey = ArtisanShapelessRecipeImpl.toRegistryKey(matrix);
             if (RecipeRegistryImpl.getInstance().shapelessRegistry.containsKey(shapelessRegistryKey)) {
                 ArtisanShapelessRecipeImpl r = (ArtisanShapelessRecipeImpl) RecipeRegistryImpl.getInstance().shapelessRegistry.get(shapelessRegistryKey);
-                event.getInventory().setResult(ItemRegistry.getItemRegistryManager().getItemStack(r.getResult(), r.getCount()));
+                event.getInventory().setResult(NeoArtisanAPI.getItemRegistry().getItemStack(r.getResult(), r.getCount()));
             }
         }
     }

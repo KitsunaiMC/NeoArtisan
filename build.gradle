@@ -1,4 +1,27 @@
+plugins {
+    id 'base'
+}
+
 allprojects {
     group = "io.github.moyusowo"
-    version = "2.0.2"
+    version = "2.0.3"
+}
+
+tasks.register('copySubprojectJar', Copy) {
+    dependsOn ':core:shadowJar' // 确保子项目先构建
+
+    // 源文件路径（假设子项目名为 'subproject'）
+    from project(':core').tasks.shadowJar.archiveFile
+
+    // 目标路径（根项目的 build 目录）
+    into layout.buildDirectory // 或直接写 'build'
+
+    // 重命名（示例：在原文件名前加前缀）
+    rename { filename ->
+        "NeoArtisan-${version}-all.jar"
+    }
+}
+
+tasks.named('build') {
+    finalizedBy 'copySubprojectJar'
 }

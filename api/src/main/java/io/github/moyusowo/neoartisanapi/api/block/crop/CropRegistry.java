@@ -7,10 +7,6 @@ import java.util.List;
 
 public interface CropRegistry {
 
-    static CropRegistry getCropRegistryManager() {
-        return Bukkit.getServicesManager().load(CropRegistry.class);
-    }
-
     void registerCrop(NamespacedKey cropId, int actualState, List<CropStageProperty> stages, int boneMealMinGrowth, int boneMealMaxGrowth);
 
     void registerCrop(NamespacedKey cropId, int actualState, List<CropStageProperty> stages, int boneMealGrowth);

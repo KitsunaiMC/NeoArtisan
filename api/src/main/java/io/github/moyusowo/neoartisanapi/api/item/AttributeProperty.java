@@ -45,7 +45,7 @@ public interface AttributeProperty {
      * @param value 新建物品时的默认值（不可为null）
      * @throws IllegalArgumentException 如果参数为null或值类型不合法
      */
-    AttributeProperty addItemstackAttribute(@NotNull NamespacedKey attributeKey, @NotNull Object value);
+    AttributeProperty addItemStackAttribute(@NotNull NamespacedKey attributeKey, @NotNull Object value);
 
     /**
      * 检查是否存在指定的全局属性。
@@ -61,7 +61,7 @@ public interface AttributeProperty {
      * @param attributeKey 要检查的属性标识
      * @return 如果存在该物品属性返回true
      */
-    boolean hasItemstackAttribute(@NotNull NamespacedKey attributeKey);
+    boolean hasItemStackAttribute(@NotNull NamespacedKey attributeKey);
 
     /**
      * 获取全局属性值。
@@ -81,7 +81,7 @@ public interface AttributeProperty {
      * @return 存储的属性值（不会为null）
      * @throws IllegalArgumentException 如果属性不存在或类型不匹配
      */
-    @NotNull <T> T getItemstackAttributeValue(@NotNull NamespacedKey attributeKey);
+    @NotNull <T> T getItemStackAttributeValue(@NotNull NamespacedKey attributeKey);
 
     /**
      * 判断当前容器是否为空配置。
@@ -95,5 +95,5 @@ public interface AttributeProperty {
      *
      * @return 物品属性键数组，无属性时返回空数组（不会为null）
      */
-    NamespacedKey[] getItemstackAttributeKeys();
+    NamespacedKey[] getItemStackAttributeKeys();
 }

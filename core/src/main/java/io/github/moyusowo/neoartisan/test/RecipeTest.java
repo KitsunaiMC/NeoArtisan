@@ -3,6 +3,7 @@ package io.github.moyusowo.neoartisan.test;
 import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
+import io.github.moyusowo.neoartisanapi.NeoArtisanAPI;
 import io.github.moyusowo.neoartisanapi.api.item.ArmorProperty;
 import io.github.moyusowo.neoartisanapi.api.item.FoodProperty;
 import io.github.moyusowo.neoartisanapi.api.item.ItemRegistry;
@@ -19,12 +20,12 @@ final class RecipeTest {
     @InitMethod(order = InitPriority.LOW)
     private static void register() {
         if (NeoArtisan.isDebugMode()) {
-            RecipeRegistry.getRecipeRegistryManager().createShapedRecipe("A B", "", "")
+            NeoArtisanAPI.getRecipeRegistry().createShapedRecipe("A B", "", "")
                     .add('A', ItemTest.magic_bread)
                     .add('B', ItemTest.magic_sword)
                     .setResult(Material.APPLE.getKey(), 64)
                     .build();
-            RecipeRegistry.getRecipeRegistryManager().createShapelessRecipe()
+            NeoArtisanAPI.getRecipeRegistry().createShapelessRecipe()
                     .add(
                             ItemTest.magic_diamond,
                             ItemTest.magic_bread,

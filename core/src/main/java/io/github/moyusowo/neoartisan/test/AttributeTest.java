@@ -3,9 +3,9 @@ package io.github.moyusowo.neoartisan.test;
 import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
-import io.github.moyusowo.neoartisanapi.api.attribute.AttributeRegistry;
-import io.github.moyusowo.neoartisanapi.api.attribute.PlayerAttributeRegistry;
+import io.github.moyusowo.neoartisanapi.NeoArtisanAPI;
 import org.bukkit.NamespacedKey;
+import org.bukkit.persistence.PersistentDataType;
 
 import static io.github.moyusowo.neoartisan.test.ItemTest.namespace;
 
@@ -18,17 +18,17 @@ final class AttributeTest {
     @InitMethod(order = InitPriority.LOW)
     private static void register() {
         if (NeoArtisan.isDebugMode()) {
-            AttributeRegistry.getAttributeRegistryManager().registerGlobalAttribute(
+            NeoArtisanAPI.getGlobalAttributeRegistry().registerAttribute(
                     global,
-                    "double"
+                    PersistentDataType.DOUBLE
             );
-            AttributeRegistry.getAttributeRegistryManager().registerItemStackAttribute(
+            NeoArtisanAPI.getItemStackAttributeRegistry().registerAttribute(
                     itemstack,
-                    "int"
+                    PersistentDataType.INTEGER
             );
-            PlayerAttributeRegistry.getPlayerAttributeRegistryManager().registerPlayerAttribute(
+            NeoArtisanAPI.getPlayerAttributeRegistry().registerAttribute(
                     player,
-                    "double"
+                    PersistentDataType.FLOAT
             );
         }
     }

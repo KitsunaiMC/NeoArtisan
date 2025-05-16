@@ -1,6 +1,7 @@
 package io.github.moyusowo.neoartisan.util;
 
 import io.github.moyusowo.neoartisan.NeoArtisan;
+import io.github.moyusowo.neoartisanapi.NeoArtisanAPI;
 import io.github.moyusowo.neoartisanapi.api.item.ItemRegistry;
 import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.AttributeModifier;
@@ -10,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.util.Collection;
 
+@SuppressWarnings("unused")
 public final class Util {
 
     private Util() {}
@@ -18,7 +20,7 @@ public final class Util {
         String id = s;
         if (!id.contains(":")) id = "minecraft:" + s;
         NamespacedKey key = NamespacedKey.fromString(id);
-        if (!ItemRegistry.getItemRegistryManager().hasItem(key)) throw new IllegalArgumentException(s + " is not a effective registryId");
+        if (!NeoArtisanAPI.getItemRegistry().hasItem(key)) throw new IllegalArgumentException(s + " is not a effective registryId");
         return key;
     }
 

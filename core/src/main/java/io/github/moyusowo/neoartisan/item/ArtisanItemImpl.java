@@ -3,8 +3,7 @@ package io.github.moyusowo.neoartisan.item;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import io.github.moyusowo.neoartisan.NeoArtisan;
-import io.github.moyusowo.neoartisanapi.api.attribute.AttributeRegistry;
-import io.github.moyusowo.neoartisanapi.api.attribute.AttributeTypeRegistry;
+import io.github.moyusowo.neoartisanapi.NeoArtisanAPI;
 import io.github.moyusowo.neoartisanapi.api.item.*;
 import io.github.moyusowo.neoartisan.util.NamespacedKeyDataType;
 import net.kyori.adventure.text.Component;
@@ -227,11 +226,10 @@ class ArtisanItemImpl implements ArtisanItem {
             ((Damageable) itemMeta).setMaxDamage(this.maxDurability);
         }
         if (!this.attributeProperty.isEmpty()) {
-            NamespacedKey[] keys = this.attributeProperty.getItemstackAttributeKeys();
+            NamespacedKey[] keys = this.attributeProperty.getItemStackAttributeKeys();
             for (NamespacedKey key : keys) {
-                String typeName = AttributeRegistry.getAttributeRegistryManager().getItemStackAttributeTypeName(key);
-                PersistentDataType<?, ?> PDCType = AttributeTypeRegistry.getAttributeTypeRegistryManager().getAttributePDCType(typeName);
-                itemMeta.getPersistentDataContainer().set(key, PDCType, this.attributeProperty.getItemstackAttributeValue(key));
+                PersistentDataType<?, ?> PDCType = NeoArtisanAPI.getItemStackAttributeRegistry().getAttributePDCType(key);
+                itemMeta.getPersistentDataContainer().set(key, PDCType, this.attributeProperty.getItemStackAttributeValue(key));
             }
         }
         itemMeta.setAttributeModifiers(modifiers);

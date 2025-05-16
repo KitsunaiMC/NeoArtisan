@@ -1,17 +1,43 @@
 package io.github.moyusowo.neoartisanapi;
 
-import org.bukkit.plugin.java.JavaPlugin;
+import io.github.moyusowo.neoartisanapi.api.attribute.GlobalAttributeRegistry;
+import io.github.moyusowo.neoartisanapi.api.attribute.ItemStackAttributeRegistry;
+import io.github.moyusowo.neoartisanapi.api.attribute.PlayerAttributeRegistry;
+import io.github.moyusowo.neoartisanapi.api.block.crop.ArtisanCropStorage;
+import io.github.moyusowo.neoartisanapi.api.block.crop.CropRegistry;
+import io.github.moyusowo.neoartisanapi.api.item.ItemRegistry;
+import io.github.moyusowo.neoartisanapi.api.recipe.RecipeRegistry;
+import org.bukkit.Bukkit;
 
-public final class NeoArtisanAPI extends JavaPlugin {
+@SuppressWarnings("unused")
+public final class NeoArtisanAPI {
 
-    @Override
-    public void onEnable() {
-        // Plugin startup logic
-
+    public static GlobalAttributeRegistry getGlobalAttributeRegistry() {
+        return Bukkit.getServicesManager().load(GlobalAttributeRegistry.class);
     }
 
-    @Override
-    public void onDisable() {
-        // Plugin shutdown logic
+    public static ItemStackAttributeRegistry getItemStackAttributeRegistry() {
+        return Bukkit.getServicesManager().load(ItemStackAttributeRegistry.class);
     }
+
+    public static PlayerAttributeRegistry getPlayerAttributeRegistry() {
+        return Bukkit.getServicesManager().load(PlayerAttributeRegistry.class);
+    }
+
+    public static ArtisanCropStorage getArtisanCropStorage() {
+        return Bukkit.getServicesManager().load(ArtisanCropStorage.class);
+    }
+
+    public static CropRegistry getCropRegistry() {
+        return Bukkit.getServicesManager().load(CropRegistry.class);
+    }
+
+    public static ItemRegistry getItemRegistry() {
+        return Bukkit.getServicesManager().load(ItemRegistry.class);
+    }
+
+    public static RecipeRegistry getRecipeRegistry() {
+        return Bukkit.getServicesManager().load(RecipeRegistry.class);
+    }
+
 }

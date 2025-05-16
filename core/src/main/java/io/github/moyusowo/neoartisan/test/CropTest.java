@@ -3,6 +3,7 @@ package io.github.moyusowo.neoartisan.test;
 import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
+import io.github.moyusowo.neoartisanapi.NeoArtisanAPI;
 import io.github.moyusowo.neoartisanapi.api.block.crop.CropRegistry;
 import io.github.moyusowo.neoartisanapi.api.block.crop.CropStageProperty;
 import io.github.moyusowo.neoartisanapi.api.item.ItemGenerator;
@@ -23,7 +24,7 @@ final class CropTest {
     @InitMethod(order = InitPriority.LOW)
     private static void register() {
         if (NeoArtisan.isDebugMode()) {
-            CropRegistry.getCropRegistryManager().registerCrop(
+            NeoArtisanAPI.getCropRegistry().registerCrop(
                     magic_crop,
                     Block.getId(Blocks.WHEAT.defaultBlockState().setValue(BlockStateProperties.AGE_7, 1)),
                     List.of(

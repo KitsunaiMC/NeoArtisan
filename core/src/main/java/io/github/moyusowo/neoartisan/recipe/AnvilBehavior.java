@@ -3,6 +3,7 @@ package io.github.moyusowo.neoartisan.recipe;
 import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
+import io.github.moyusowo.neoartisanapi.NeoArtisanAPI;
 import io.github.moyusowo.neoartisanapi.api.item.ItemRegistry;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -23,11 +24,11 @@ final class AnvilBehavior implements Listener {
         if (event.getResult() == null) return;
         ItemStack firstItem = event.getInventory().getFirstItem();
         ItemStack secondItem = event.getInventory().getSecondItem();
-        if (ItemRegistry.getItemRegistryManager().isArtisanItem(firstItem)) {
+        if (NeoArtisanAPI.getItemRegistry().isArtisanItem(firstItem)) {
             event.setResult(null);
             return;
         }
-        if (ItemRegistry.getItemRegistryManager().isArtisanItem(secondItem)) {
+        if (NeoArtisanAPI.getItemRegistry().isArtisanItem(secondItem)) {
             event.setResult(null);
         }
     }
