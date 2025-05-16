@@ -4,6 +4,7 @@ import org.bukkit.NamespacedKey;
 
 import java.util.Arrays;
 
+@SuppressWarnings("unused")
 public class ArrayKey {
 
     private final NamespacedKey[] array;

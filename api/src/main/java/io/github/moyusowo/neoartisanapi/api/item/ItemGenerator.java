@@ -1,5 +1,6 @@
 package io.github.moyusowo.neoartisanapi.api.item;
 
+import io.github.moyusowo.neoartisanapi.NeoArtisanAPI;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -34,7 +35,7 @@ public interface ItemGenerator {
 
         @Override
         public @NotNull ItemStack generate() {
-            return ItemRegistry.getItemRegistryManager().getItemStack(this.registryId, this.amount);
+            return NeoArtisanAPI.getItemRegistry().getItemStack(this.registryId, this.amount);
         }
     }
 
@@ -56,7 +57,7 @@ public interface ItemGenerator {
 
         @Override
         public @NotNull ItemStack generate() {
-            return ItemRegistry.getItemRegistryManager().getItemStack(this.registryId, ThreadLocalRandom.current().nextInt(min, max + 1));
+            return NeoArtisanAPI.getItemRegistry().getItemStack(this.registryId, ThreadLocalRandom.current().nextInt(min, max + 1));
         }
     }
 

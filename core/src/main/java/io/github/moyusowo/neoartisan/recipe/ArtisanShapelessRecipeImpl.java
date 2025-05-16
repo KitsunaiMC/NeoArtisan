@@ -2,6 +2,7 @@ package io.github.moyusowo.neoartisan.recipe;
 
 import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisan.util.ArrayKey;
+import io.github.moyusowo.neoartisanapi.NeoArtisanAPI;
 import io.github.moyusowo.neoartisanapi.api.item.ItemRegistry;
 import io.github.moyusowo.neoartisanapi.api.recipe.ArtisanShapelessRecipe;
 import org.bukkit.NamespacedKey;
@@ -20,7 +21,7 @@ class ArtisanShapelessRecipeImpl implements ArtisanShapelessRecipe {
         NamespacedKey[] matrixKeys = new NamespacedKey[9];
         for (int i = 0; i < 9; i++) {
             if (matrix[i] != null) {
-                matrixKeys[i] = ItemRegistry.getItemRegistryManager().getRegistryId(matrix[i]);
+                matrixKeys[i] = NeoArtisanAPI.getItemRegistry().getRegistryId(matrix[i]);
             } else {
                 matrixKeys[i] = RecipeRegistryImpl.EMPTY;
             }

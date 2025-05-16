@@ -22,15 +22,6 @@ import org.jetbrains.annotations.NotNull;
 public interface RecipeRegistry {
 
     /**
-     * 获取自定义合成配方注册表管理器的实例。
-     *
-     * @return 自定义合成配方注册表管理器的实例
-     */
-    static RecipeRegistry getRecipeRegistryManager() {
-        return Bukkit.getServicesManager().load(RecipeRegistry.class);
-    }
-
-    /**
      * 创建有序合成配方模板。
      *
      * <p>配方格式使用字母代表材料，每行对应工作台的3个格子：</p>

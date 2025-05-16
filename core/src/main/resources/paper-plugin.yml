@@ -1,5 +1,5 @@
 name: NeoArtisan
-version: '2.0.2'
+version: ${version}
 main: io.github.moyusowo.neoartisan.NeoArtisan
 api-version: '1.21.4'
 authors: [ MoYuOwO ]

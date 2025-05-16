@@ -2,6 +2,7 @@ package io.github.moyusowo.neoartisan.recipe;
 
 import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
+import io.github.moyusowo.neoartisanapi.NeoArtisanAPI;
 import io.github.moyusowo.neoartisanapi.api.item.ItemRegistry;
 import org.bukkit.block.Furnace;
 import org.bukkit.event.EventHandler;
@@ -24,7 +25,7 @@ final class FurnaceBehavior implements Listener {
         Furnace furnace = (Furnace) event.getBlock().getState();
         ItemStack fuel = furnace.getSnapshotInventory().getFuel();
         ItemStack smelting = furnace.getSnapshotInventory().getSmelting();
-        if ((ItemRegistry.getItemRegistryManager().isArtisanItem(smelting)) || (ItemRegistry.getItemRegistryManager().isArtisanItem(fuel))) {
+        if ((NeoArtisanAPI.getItemRegistry().isArtisanItem(smelting)) || (NeoArtisanAPI.getItemRegistry().isArtisanItem(fuel))) {
             event.setCancelled(true);
         }
     }

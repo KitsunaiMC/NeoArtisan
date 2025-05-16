@@ -2,6 +2,7 @@ package io.github.moyusowo.neoartisan.recipe;
 
 import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
+import io.github.moyusowo.neoartisanapi.NeoArtisanAPI;
 import io.github.moyusowo.neoartisanapi.api.item.ItemRegistry;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -19,7 +20,7 @@ final class SmithingBehavior implements Listener {
     @EventHandler
     private void onSmithing(PrepareSmithingEvent event) {
         if (event.getInventory().getInputEquipment() == null) return;
-        if (ItemRegistry.getItemRegistryManager().isArtisanItem(event.getInventory().getInputEquipment())) event.setResult(null);
+        if (NeoArtisanAPI.getItemRegistry().isArtisanItem(event.getInventory().getInputEquipment())) event.setResult(null);
     }
 
 }

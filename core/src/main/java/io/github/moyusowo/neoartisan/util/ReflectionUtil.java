@@ -3,6 +3,7 @@ package io.github.moyusowo.neoartisan.util;
 import java.lang.reflect.Field;
 import java.util.concurrent.ConcurrentHashMap;
 
+@SuppressWarnings("unused")
 public class ReflectionUtil {
     private static final ConcurrentHashMap<String, Field> FIELD_CACHE = new ConcurrentHashMap<>();
 

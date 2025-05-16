@@ -3,7 +3,6 @@ package io.github.moyusowo.neoartisan.attribute;
 import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
-import io.github.moyusowo.neoartisanapi.api.attribute.AttributeTypeRegistry;
 import io.github.moyusowo.neoartisanapi.api.attribute.PlayerAttributeRegistry;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
@@ -40,22 +39,27 @@ public class PlayerAttributeRegistryImpl implements PlayerAttributeRegistry {
         );
     }
 
-    private final Map<NamespacedKey, String> playerAttributeRegistry;
+    private final Map<NamespacedKey, PersistentDataType<?, ?>> playerAttributeRegistry;
 
 
     @Override
-    public void registerPlayerAttribute(@NotNull NamespacedKey attributeKey, @NotNull String typeName) {
-        if (!AttributeTypeRegistry.getAttributeTypeRegistryManager().hasAttributeType(typeName)) throw new IllegalArgumentException("You must provide a legal type name!");
-        playerAttributeRegistry.put(attributeKey, typeName);
+    public void registerAttribute(@NotNull NamespacedKey attributeKey, @NotNull PersistentDataType<?, ?> pdcType) {
+        playerAttributeRegistry.put(attributeKey, pdcType);
     }
 
     @Override
-    public boolean hasPlayerAttribute(@NotNull NamespacedKey attributeKey) {
+    public boolean hasAttribute(@NotNull NamespacedKey attributeKey) {
         return playerAttributeRegistry.containsKey(attributeKey);
     }
 
     @Override
-    public @NotNull String getPlayerAttributeTypeName(@NotNull NamespacedKey attributeKey) {
+    public @NotNull Class<?> getAttributeJavaType(@NotNull NamespacedKey attributeKey) {
+        if (!playerAttributeRegistry.containsKey(attributeKey)) throw new IllegalArgumentException("You must check if attribute exists before get!");
+        return playerAttributeRegistry.get(attributeKey).getComplexType();
+    }
+
+    @Override
+    public @NotNull PersistentDataType<?, ?> getAttributePDCType(@NotNull NamespacedKey attributeKey) {
         if (!playerAttributeRegistry.containsKey(attributeKey)) throw new IllegalArgumentException("You must check if attribute exists before get!");
         return playerAttributeRegistry.get(attributeKey);
     }
@@ -63,10 +67,9 @@ public class PlayerAttributeRegistryImpl implements PlayerAttributeRegistry {
     @Override
     @SuppressWarnings("unchecked")
     public <T> @Nullable T getPlayerAttribute(@NotNull Player player, @NotNull NamespacedKey attributeKey) {
-        if (!PlayerAttributeRegistry.getPlayerAttributeRegistryManager().hasPlayerAttribute(attributeKey)) throw new IllegalArgumentException("You didn't register the attribute!");
+        if (!hasAttribute(attributeKey)) throw new IllegalArgumentException("You didn't register the attribute!");
         if (player.getPersistentDataContainer().has(attributeKey)) {
-            String typeName = PlayerAttributeRegistry.getPlayerAttributeRegistryManager().getPlayerAttributeTypeName(attributeKey);
-            return (T) player.getPersistentDataContainer().get(attributeKey, AttributeTypeRegistry.getAttributeTypeRegistryManager().getAttributePDCType(typeName));
+            return (T) player.getPersistentDataContainer().get(attributeKey, getAttributePDCType(attributeKey));
         }
         return null;
     }
@@ -74,12 +77,11 @@ public class PlayerAttributeRegistryImpl implements PlayerAttributeRegistry {
     @Override
     @SuppressWarnings("unchecked")
     public <T> void setPlayerAttribute(@NotNull Player player, @NotNull NamespacedKey attributeKey, T value) {
-        if (!PlayerAttributeRegistry.getPlayerAttributeRegistryManager().hasPlayerAttribute(attributeKey)) throw new IllegalArgumentException("You didn't register the attribute!");
+        if (!hasAttribute(attributeKey)) throw new IllegalArgumentException("You didn't register the attribute!");
         if (player.getPersistentDataContainer().has(attributeKey)) {
             player.getPersistentDataContainer().remove(attributeKey);
         }
-        String typeName = PlayerAttributeRegistry.getPlayerAttributeRegistryManager().getPlayerAttributeTypeName(attributeKey);
-        PersistentDataType<?, T> type = (PersistentDataType<?, T>) AttributeTypeRegistry.getAttributeTypeRegistryManager().getAttributePDCType(typeName);
+        PersistentDataType<?, T> type = (PersistentDataType<?, T>) getAttributePDCType(attributeKey);
         player.getPersistentDataContainer().set(attributeKey, type, value);
     }
 }

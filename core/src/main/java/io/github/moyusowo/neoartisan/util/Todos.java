@@ -2,6 +2,7 @@ package io.github.moyusowo.neoartisan.util;
 
 import java.util.logging.Logger;
 
+@SuppressWarnings("unused")
 public class Todos {
     private static final Logger LOGGER = Logger.getLogger("TODO");
 
