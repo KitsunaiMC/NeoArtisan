@@ -14,7 +14,8 @@ import java.util.logging.Logger;
 
 public final class NeoArtisan extends JavaPlugin {
 
-    private static String pkg = "io.github.moyusowo.neoartisan";
+    private static final String pkg = "io.github.moyusowo.neoartisan";
+    private static final boolean isDebugMode = true;
 
     private static NeoArtisan instance;
     private static NamespacedKey artisanItemIdKey;
@@ -62,7 +63,7 @@ public final class NeoArtisan extends JavaPlugin {
     }
 
     public static boolean isDebugMode() {
-        return true;
+        return isDebugMode;
     }
 
     @Override

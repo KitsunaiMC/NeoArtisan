@@ -30,7 +30,9 @@ public final class Initializer {
         ENABLE_METHODS.forEach(method -> {
             try {
                 method.invoke(null);
-                NeoArtisan.logger().info("成功初始化: " + method.getDeclaringClass().getName() + "." + method.getName());
+                if (NeoArtisan.isDebugMode()) {
+                    NeoArtisan.logger().info("成功初始化: " + method.getDeclaringClass().getName() + "." + method.getName());
+                }
             } catch (Exception e) {
                 throw new RuntimeException("初始化失败: " + method, e);
             }

@@ -30,7 +30,9 @@ public final class Terminator {
         DISABLE_METHODS.forEach(method -> {
             try {
                 method.invoke(null);
-                NeoArtisan.logger().info("成功调用关闭前方法: " + method.getDeclaringClass().getName() + "." + method.getName());
+                if (NeoArtisan.isDebugMode()) {
+                    NeoArtisan.logger().info("成功调用关闭前方法: " + method.getDeclaringClass().getName() + "." + method.getName());
+                }
             } catch (Exception e) {
                 throw new RuntimeException("方法调用失败: " + method, e);
             }
