@@ -194,33 +194,31 @@ class ArtisanItemImpl implements ArtisanItem {
             );
         }
         if (this.armorProperty != ArmorProperty.EMPTY) {
-            EquippableComponent equippableComponent = itemMeta.getEquippable();
-            equippableComponent.setSlot(this.armorProperty.slot());
-            itemMeta.setEquippable(equippableComponent);
-            if (this.armorProperty.armor() != null) {
-                modifiers.removeAll(Attribute.ARMOR);
-                modifiers.put(
-                        Attribute.ARMOR,
-                        new AttributeModifier(
-                                this.registryId,
-                                this.armorProperty.armor(),
-                                AttributeModifier.Operation.ADD_NUMBER,
-                                this.armorProperty.slot().getGroup()
-                        )
-                );
+            if (this.armorProperty.slot() != null) {
+                EquippableComponent equippableComponent = itemMeta.getEquippable();
+                equippableComponent.setSlot(this.armorProperty.slot());
+                itemMeta.setEquippable(equippableComponent);
             }
-            if (this.armorProperty.armorToughness() != null) {
-                modifiers.removeAll(Attribute.ARMOR_TOUGHNESS);
-                modifiers.put(
-                        Attribute.ARMOR_TOUGHNESS,
-                        new AttributeModifier(
-                                this.registryId,
-                                this.armorProperty.armorToughness(),
-                                AttributeModifier.Operation.ADD_NUMBER,
-                                this.armorProperty.slot().getGroup()
-                        )
-                );
-            }
+            modifiers.removeAll(Attribute.ARMOR);
+            modifiers.put(
+                    Attribute.ARMOR,
+                    new AttributeModifier(
+                            this.registryId,
+                            this.armorProperty.armor(),
+                            AttributeModifier.Operation.ADD_NUMBER,
+                            this.armorProperty.slot().getGroup()
+                    )
+            );
+            modifiers.removeAll(Attribute.ARMOR_TOUGHNESS);
+            modifiers.put(
+                    Attribute.ARMOR_TOUGHNESS,
+                    new AttributeModifier(
+                            this.registryId,
+                            this.armorProperty.armorToughness(),
+                            AttributeModifier.Operation.ADD_NUMBER,
+                            this.armorProperty.slot().getGroup()
+                    )
+            );
         }
         if (this.maxDurability != null && (itemMeta instanceof Damageable)) {
             ((Damageable) itemMeta).setMaxDamage(this.maxDurability);
@@ -234,23 +232,6 @@ class ArtisanItemImpl implements ArtisanItem {
         }
         itemMeta.setAttributeModifiers(modifiers);
         return itemMeta;
-    }
-
-    private static Component toNameComponent(String s) {
-        s = "<white><italic:false>" + s;
-        return MiniMessage.miniMessage().deserialize(s);
-    }
-
-    private static List<Component> toLoreComponentList(List<String> list) {
-        List<Component> newList = new ArrayList<>();
-        for (String s : list) {
-            newList.add(
-                    MiniMessage.miniMessage().deserialize(
-                            "<gray><italic:false>" + s
-                    )
-            );
-        }
-        return newList;
     }
 
 }

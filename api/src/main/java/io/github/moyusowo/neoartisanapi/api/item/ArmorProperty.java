@@ -17,7 +17,7 @@ import org.jetbrains.annotations.Nullable;
  * @param slot 装备槽位（必选）
  */
 @SuppressWarnings("unused")
-public record ArmorProperty(@Nullable Integer armor, @Nullable Integer armorToughness, @NotNull EquipmentSlot slot) {
+public record ArmorProperty(@NotNull Integer armor, @NotNull Integer armorToughness, @Nullable EquipmentSlot slot) {
     /**
      * 空护甲属性配置，表示物品无护甲特性。
      * <p>等效于 {@code new ArmorProperty(null, null, null)}
