@@ -80,7 +80,7 @@ final class ItemTest {
                                     new ArmorProperty(
                                             5,
                                             1,
-                                            EquipmentSlot.HEAD
+                                            null
                                     )
                             )
                             .maxDurability(2500)

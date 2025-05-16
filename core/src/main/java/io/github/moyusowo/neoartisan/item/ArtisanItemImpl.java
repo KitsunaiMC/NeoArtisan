@@ -6,8 +6,9 @@ import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisanapi.NeoArtisanAPI;
 import io.github.moyusowo.neoartisanapi.api.item.*;
 import io.github.moyusowo.neoartisan.util.NamespacedKeyDataType;
+import io.papermc.paper.datacomponent.DataComponentTypes;
+import io.papermc.paper.datacomponent.item.*;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
@@ -22,7 +23,6 @@ import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("unused")
@@ -39,7 +39,8 @@ class ArtisanItemImpl implements ArtisanItem {
     private final ArmorProperty armorProperty;
     private final AttributePropertyImpl attributeProperty;
     private final NamespacedKey cropId;
-    private final ItemMeta itemMeta;
+    private final ItemMeta cachedItemMeta;
+    private final ItemStack cachedItemStack;
 
     protected ArtisanItemImpl(
             NamespacedKey registryId,
@@ -67,13 +68,14 @@ class ArtisanItemImpl implements ArtisanItem {
         this.armorProperty = armorProperty;
         this.attributeProperty = attributeProperty;
         this.cropId = cropId;
-        this.itemMeta = createNewItemMeta();
+        this.cachedItemMeta = createNewItemMeta();
+        this.cachedItemStack = createNewItemStack();
     }
 
     protected ItemStack getItemStack(int count) {
         ItemStack itemStack = new ItemStack(this.rawMaterial);
         itemStack.setAmount(Math.min(count, itemStack.getMaxStackSize()));
-        itemStack.setItemMeta(this.itemMeta.clone());
+        itemStack.setItemMeta(this.cachedItemMeta.clone());
         return itemStack;
     }
 
@@ -143,6 +145,7 @@ class ArtisanItemImpl implements ArtisanItem {
     }
 
 
+    @Deprecated(since = "2.0.3")
     @SuppressWarnings("UnstableApiUsage")
     private ItemMeta createNewItemMeta() {
         ItemMeta itemMeta = new ItemStack(this.rawMaterial).getItemMeta();
@@ -194,33 +197,31 @@ class ArtisanItemImpl implements ArtisanItem {
             );
         }
         if (this.armorProperty != ArmorProperty.EMPTY) {
-            EquippableComponent equippableComponent = itemMeta.getEquippable();
-            equippableComponent.setSlot(this.armorProperty.slot());
-            itemMeta.setEquippable(equippableComponent);
-            if (this.armorProperty.armor() != null) {
-                modifiers.removeAll(Attribute.ARMOR);
-                modifiers.put(
-                        Attribute.ARMOR,
-                        new AttributeModifier(
-                                this.registryId,
-                                this.armorProperty.armor(),
-                                AttributeModifier.Operation.ADD_NUMBER,
-                                this.armorProperty.slot().getGroup()
-                        )
-                );
+            if (this.armorProperty.slot() != null) {
+                EquippableComponent equippableComponent = itemMeta.getEquippable();
+                equippableComponent.setSlot(this.armorProperty.slot());
+                itemMeta.setEquippable(equippableComponent);
             }
-            if (this.armorProperty.armorToughness() != null) {
-                modifiers.removeAll(Attribute.ARMOR_TOUGHNESS);
-                modifiers.put(
-                        Attribute.ARMOR_TOUGHNESS,
-                        new AttributeModifier(
-                                this.registryId,
-                                this.armorProperty.armorToughness(),
-                                AttributeModifier.Operation.ADD_NUMBER,
-                                this.armorProperty.slot().getGroup()
-                        )
-                );
-            }
+            modifiers.removeAll(Attribute.ARMOR);
+            modifiers.put(
+                    Attribute.ARMOR,
+                    new AttributeModifier(
+                            this.registryId,
+                            this.armorProperty.armor(),
+                            AttributeModifier.Operation.ADD_NUMBER,
+                            this.armorProperty.slot().getGroup()
+                    )
+            );
+            modifiers.removeAll(Attribute.ARMOR_TOUGHNESS);
+            modifiers.put(
+                    Attribute.ARMOR_TOUGHNESS,
+                    new AttributeModifier(
+                            this.registryId,
+                            this.armorProperty.armorToughness(),
+                            AttributeModifier.Operation.ADD_NUMBER,
+                            this.armorProperty.slot().getGroup()
+                    )
+            );
         }
         if (this.maxDurability != null && (itemMeta instanceof Damageable)) {
             ((Damageable) itemMeta).setMaxDamage(this.maxDurability);
@@ -236,21 +237,127 @@ class ArtisanItemImpl implements ArtisanItem {
         return itemMeta;
     }
 
-    private static Component toNameComponent(String s) {
-        s = "<white><italic:false>" + s;
-        return MiniMessage.miniMessage().deserialize(s);
-    }
-
-    private static List<Component> toLoreComponentList(List<String> list) {
-        List<Component> newList = new ArrayList<>();
-        for (String s : list) {
-            newList.add(
-                    MiniMessage.miniMessage().deserialize(
-                            "<gray><italic:false>" + s
-                    )
-            );
+    @SuppressWarnings("UnstableApiUsage")
+    private ItemStack createNewItemStack() {
+        ItemStack itemStack = ItemStack.of(this.rawMaterial);
+        var modifiers = itemStack.getDataOrDefault(DataComponentTypes.ATTRIBUTE_MODIFIERS, ItemAttributeModifiers.itemAttributes().build());
+        if (this.displayName != null) {
+            itemStack.setData(DataComponentTypes.ITEM_NAME, this.displayName);
         }
-        return newList;
+        if (this.lore != null) {
+            ItemLore itemLore = ItemLore.lore().addLines(this.lore).build();
+            itemStack.setData(DataComponentTypes.LORE, itemLore);
+        }
+        if (this.customModelData != null) {
+            CustomModelData data = CustomModelData.customModelData().addFloat(this.customModelData).build();
+            itemStack.setData(DataComponentTypes.CUSTOM_MODEL_DATA, data);
+        }
+        if (this.foodProperty != FoodProperty.EMPTY) {
+            FoodProperties foodProperties = FoodProperties.food()
+                    .canAlwaysEat(this.foodProperty.canAlwaysEat())
+                    .nutrition(this.foodProperty.nutrition())
+                    .saturation(this.foodProperty.saturation())
+                    .build();
+            itemStack.setData(DataComponentTypes.FOOD, foodProperties);
+        }
+        if (this.weaponProperty != WeaponProperty.EMPTY) {
+            modifiers.modifiers().removeIf(
+                    entry ->
+                        entry.attribute() == Attribute.ATTACK_DAMAGE ||
+                        entry.attribute() == Attribute.ATTACK_SPEED ||
+                        entry.attribute() == Attribute.ATTACK_KNOCKBACK
+            );
+            modifiers.modifiers().add(new PaperItemAttributeModifiers.PaperEntry(
+                    Attribute.ATTACK_DAMAGE,
+                    new AttributeModifier(
+                            NeoArtisan.getArtisanItemAttackDamageKey(),
+                            this.weaponProperty.damage(),
+                            AttributeModifier.Operation.ADD_NUMBER,
+                            EquipmentSlotGroup.MAINHAND
+                    )
+            ));
+            modifiers.modifiers().add(new PaperItemAttributeModifiers.PaperEntry(
+                    Attribute.ATTACK_SPEED,
+                    new AttributeModifier(
+                            NeoArtisan.getArtisanItemAttackSpeedKey(),
+                            this.weaponProperty.speed(),
+                            AttributeModifier.Operation.ADD_NUMBER,
+                            EquipmentSlotGroup.MAINHAND
+                    )
+            ));
+            modifiers.modifiers().add(new PaperItemAttributeModifiers.PaperEntry(
+                    Attribute.ATTACK_KNOCKBACK,
+                    new AttributeModifier(
+                            NeoArtisan.getArtisanItemAttackKnockbackKey(),
+                            this.weaponProperty.knockback(),
+                            AttributeModifier.Operation.ADD_NUMBER,
+                            EquipmentSlotGroup.MAINHAND
+                    )
+            ));
+        }
+        if (this.armorProperty != ArmorProperty.EMPTY) {
+            modifiers.modifiers().removeIf(
+                    entry ->
+                            entry.attribute() == Attribute.ARMOR ||
+                            entry.attribute() == Attribute.ARMOR_TOUGHNESS
+            );
+            if (this.armorProperty.slot() != null) {
+                itemStack.setData(DataComponentTypes.EQUIPPABLE, Equippable.equippable(this.armorProperty.slot()));
+                modifiers.modifiers().add(new PaperItemAttributeModifiers.PaperEntry(
+                        Attribute.ARMOR,
+                        new AttributeModifier(
+                                this.registryId,
+                                this.armorProperty.armor(),
+                                AttributeModifier.Operation.ADD_NUMBER,
+                                this.armorProperty.slot().getGroup()
+                        )
+                ));
+                modifiers.modifiers().add(new PaperItemAttributeModifiers.PaperEntry(
+                        Attribute.ARMOR_TOUGHNESS,
+                        new AttributeModifier(
+                                this.registryId,
+                                this.armorProperty.armorToughness(),
+                                AttributeModifier.Operation.ADD_NUMBER,
+                                this.armorProperty.slot().getGroup()
+                        )
+                ));
+            } else {
+                var equippable = itemStack.getData(DataComponentTypes.EQUIPPABLE);
+                if (equippable == null) throw new IllegalArgumentException("You can not set null slot in a unequipped item!");
+                modifiers.modifiers().add(new PaperItemAttributeModifiers.PaperEntry(
+                        Attribute.ARMOR,
+                        new AttributeModifier(
+                                this.registryId,
+                                this.armorProperty.armor(),
+                                AttributeModifier.Operation.ADD_NUMBER,
+                                equippable.slot().getGroup()
+                        )
+                ));
+                modifiers.modifiers().add(new PaperItemAttributeModifiers.PaperEntry(
+                        Attribute.ARMOR_TOUGHNESS,
+                        new AttributeModifier(
+                                this.registryId,
+                                this.armorProperty.armorToughness(),
+                                AttributeModifier.Operation.ADD_NUMBER,
+                                equippable.slot().getGroup()
+                        )
+                ));
+            }
+        }
+        if (this.maxDurability != null) {
+            itemStack.setData(DataComponentTypes.MAX_DAMAGE, this.maxDurability);
+        }
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        if (!this.attributeProperty.isEmpty()) {
+            NamespacedKey[] keys = this.attributeProperty.getItemStackAttributeKeys();
+            for (NamespacedKey key : keys) {
+                PersistentDataType<?, ?> PDCType = NeoArtisanAPI.getItemStackAttributeRegistry().getAttributePDCType(key);
+                itemMeta.getPersistentDataContainer().set(key, PDCType, this.attributeProperty.getItemStackAttributeValue(key));
+            }
+        }
+        itemMeta.getPersistentDataContainer().set(NeoArtisan.getArtisanItemIdKey(), NamespacedKeyDataType.TYPE, this.registryId);
+        itemStack.setItemMeta(itemMeta);
+        return itemStack;
     }
 
 }
