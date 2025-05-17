@@ -19,6 +19,7 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 import org.bukkit.craftbukkit.CraftWorld;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -62,6 +63,7 @@ final class ArtisanCropBehavior implements Listener {
 
     @EventHandler
     private static void onArtisanCropBreak(BlockBreakEvent event) {
+        if (event.isCancelled()) return;
         if (!NeoArtisanAPI.getArtisanBlockStorage().isArtisanBlock(event.getBlock())) return;
         if (!(NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlock(event.getBlock()) instanceof CurrentCropStage currentCropStage)) return;
         if (event.isCancelled()) return;
@@ -79,6 +81,7 @@ final class ArtisanCropBehavior implements Listener {
 
     @EventHandler
     private static void onBlockBreakUnderCrop(BlockBreakEvent event) {
+        if (event.isCancelled()) return;
         if (!NeoArtisanAPI.getArtisanBlockStorage().isArtisanBlock(event.getBlock().getRelative(BlockFace.UP))) return;
         if (!(NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlock(event.getBlock().getRelative(BlockFace.UP)) instanceof CurrentCropStage currentCropStage)) return;
         if (event.isCancelled()) return;
@@ -91,7 +94,7 @@ final class ArtisanCropBehavior implements Listener {
         ArtisanBlockStorageInternal.getInternal().removeArtisanBlock(event.getBlock().getRelative(BlockFace.UP));
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGH)
     private static void onWaterFlowOverCustomCrop(BlockBreakBlockEvent event) {
         if (!NeoArtisanAPI.getArtisanBlockStorage().isArtisanBlock(event.getBlock())) return;
         if (!(NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlock(event.getBlock()) instanceof CurrentCropStage currentCropStage)) return;
@@ -104,6 +107,7 @@ final class ArtisanCropBehavior implements Listener {
 
     @EventHandler
     private static void onEntityChangeFarmland(EntityChangeBlockEvent event) {
+        if (event.isCancelled()) return;
         if (!NeoArtisanAPI.getArtisanBlockStorage().isArtisanBlock(event.getBlock().getRelative(BlockFace.UP))) return;
         if (!(NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlock(event.getBlock().getRelative(BlockFace.UP)) instanceof CurrentCropStage currentCropStage)) return;
         if (event.getBlock().getType() != Material.FARMLAND) return;
@@ -119,6 +123,7 @@ final class ArtisanCropBehavior implements Listener {
 
     @EventHandler
     private static void onCustomCropGrow(BlockGrowEvent event) {
+        if (event.isCancelled()) return;
         if (!NeoArtisanAPI.getArtisanBlockStorage().isArtisanBlock(event.getBlock())) return;
         if (!(NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlock(event.getBlock()) instanceof CurrentCropStage currentCropStage)) return;
         if (event.isCancelled()) return;
