@@ -73,10 +73,16 @@ class ArtisanItemImpl implements ArtisanItem {
     }
 
     protected ItemStack getItemStack(int count) {
-        ItemStack itemStack = new ItemStack(this.rawMaterial);
-        itemStack.setAmount(Math.min(count, itemStack.getMaxStackSize()));
-        itemStack.setItemMeta(this.cachedItemMeta.clone());
-        return itemStack;
+        if (NeoArtisan.isDebugMode()) {
+            ItemStack itemStack = this.cachedItemStack.clone();
+            itemStack.setAmount(Math.min(count, itemStack.getMaxStackSize()));
+            return itemStack;
+        } else {
+            ItemStack itemStack = new ItemStack(this.rawMaterial);
+            itemStack.setAmount(Math.min(count, itemStack.getMaxStackSize()));
+            itemStack.setItemMeta(this.cachedItemMeta.clone());
+            return itemStack;
+        }
     }
 
     protected ItemStack getItemStack() {
@@ -201,27 +207,48 @@ class ArtisanItemImpl implements ArtisanItem {
                 EquippableComponent equippableComponent = itemMeta.getEquippable();
                 equippableComponent.setSlot(this.armorProperty.slot());
                 itemMeta.setEquippable(equippableComponent);
+                modifiers.removeAll(Attribute.ARMOR);
+                modifiers.put(
+                        Attribute.ARMOR,
+                        new AttributeModifier(
+                                this.registryId,
+                                this.armorProperty.armor(),
+                                AttributeModifier.Operation.ADD_NUMBER,
+                                this.armorProperty.slot().getGroup()
+                        )
+                );
+                modifiers.removeAll(Attribute.ARMOR_TOUGHNESS);
+                modifiers.put(
+                        Attribute.ARMOR_TOUGHNESS,
+                        new AttributeModifier(
+                                this.registryId,
+                                this.armorProperty.armorToughness(),
+                                AttributeModifier.Operation.ADD_NUMBER,
+                                this.armorProperty.slot().getGroup()
+                        )
+                );
+            } else {
+                modifiers.removeAll(Attribute.ARMOR);
+                modifiers.put(
+                        Attribute.ARMOR,
+                        new AttributeModifier(
+                                this.registryId,
+                                this.armorProperty.armor(),
+                                AttributeModifier.Operation.ADD_NUMBER,
+                                this.rawMaterial.getEquipmentSlot().getGroup()
+                        )
+                );
+                modifiers.removeAll(Attribute.ARMOR_TOUGHNESS);
+                modifiers.put(
+                        Attribute.ARMOR_TOUGHNESS,
+                        new AttributeModifier(
+                                this.registryId,
+                                this.armorProperty.armorToughness(),
+                                AttributeModifier.Operation.ADD_NUMBER,
+                                this.rawMaterial.getEquipmentSlot().getGroup()
+                        )
+                );
             }
-            modifiers.removeAll(Attribute.ARMOR);
-            modifiers.put(
-                    Attribute.ARMOR,
-                    new AttributeModifier(
-                            this.registryId,
-                            this.armorProperty.armor(),
-                            AttributeModifier.Operation.ADD_NUMBER,
-                            this.armorProperty.slot().getGroup()
-                    )
-            );
-            modifiers.removeAll(Attribute.ARMOR_TOUGHNESS);
-            modifiers.put(
-                    Attribute.ARMOR_TOUGHNESS,
-                    new AttributeModifier(
-                            this.registryId,
-                            this.armorProperty.armorToughness(),
-                            AttributeModifier.Operation.ADD_NUMBER,
-                            this.armorProperty.slot().getGroup()
-                    )
-            );
         }
         if (this.maxDurability != null && (itemMeta instanceof Damageable)) {
             ((Damageable) itemMeta).setMaxDamage(this.maxDurability);
@@ -240,7 +267,19 @@ class ArtisanItemImpl implements ArtisanItem {
     @SuppressWarnings("UnstableApiUsage")
     private ItemStack createNewItemStack() {
         ItemStack itemStack = ItemStack.of(this.rawMaterial);
-        var modifiers = itemStack.getDataOrDefault(DataComponentTypes.ATTRIBUTE_MODIFIERS, ItemAttributeModifiers.itemAttributes().build());
+        var unmodifiableModifiers = itemStack.getDataOrDefault(DataComponentTypes.ATTRIBUTE_MODIFIERS, ItemAttributeModifiers.itemAttributes().build());
+        final var builder = ItemAttributeModifiers.itemAttributes();
+        unmodifiableModifiers.modifiers().forEach(entry -> {
+            if (
+                    entry.attribute() != Attribute.ATTACK_DAMAGE &&
+                    entry.attribute() != Attribute.ATTACK_SPEED &&
+                    entry.attribute() != Attribute.ATTACK_KNOCKBACK &&
+                    entry.attribute() != Attribute.ARMOR &&
+                    entry.attribute() != Attribute.ARMOR_TOUGHNESS
+            ) {
+                builder.addModifier(entry.attribute(), entry.modifier(), entry.getGroup());
+            }
+        });
         if (this.displayName != null) {
             itemStack.setData(DataComponentTypes.ITEM_NAME, this.displayName);
         }
@@ -261,92 +300,101 @@ class ArtisanItemImpl implements ArtisanItem {
             itemStack.setData(DataComponentTypes.FOOD, foodProperties);
         }
         if (this.weaponProperty != WeaponProperty.EMPTY) {
-            modifiers.modifiers().removeIf(
-                    entry ->
+            builder.addModifier(
+                Attribute.ATTACK_DAMAGE,
+                new AttributeModifier(
+                        NeoArtisan.getArtisanItemAttackDamageKey(),
+                        this.weaponProperty.damage(),
+                        AttributeModifier.Operation.ADD_NUMBER,
+                        EquipmentSlotGroup.MAINHAND
+
+            ));
+            builder.addModifier(
+                Attribute.ATTACK_SPEED,
+                new AttributeModifier(
+                        NeoArtisan.getArtisanItemAttackSpeedKey(),
+                        this.weaponProperty.speed(),
+                        AttributeModifier.Operation.ADD_NUMBER,
+                        EquipmentSlotGroup.MAINHAND
+                )
+            );
+            builder.addModifier(
+                Attribute.ATTACK_KNOCKBACK,
+                new AttributeModifier(
+                        NeoArtisan.getArtisanItemAttackKnockbackKey(),
+                        this.weaponProperty.knockback(),
+                        AttributeModifier.Operation.ADD_NUMBER,
+                        EquipmentSlotGroup.MAINHAND
+                )
+            );
+        } else {
+            unmodifiableModifiers.modifiers().forEach(entry -> {
+                if (
                         entry.attribute() == Attribute.ATTACK_DAMAGE ||
                         entry.attribute() == Attribute.ATTACK_SPEED ||
                         entry.attribute() == Attribute.ATTACK_KNOCKBACK
-            );
-            modifiers.modifiers().add(new PaperItemAttributeModifiers.PaperEntry(
-                    Attribute.ATTACK_DAMAGE,
-                    new AttributeModifier(
-                            NeoArtisan.getArtisanItemAttackDamageKey(),
-                            this.weaponProperty.damage(),
-                            AttributeModifier.Operation.ADD_NUMBER,
-                            EquipmentSlotGroup.MAINHAND
-                    )
-            ));
-            modifiers.modifiers().add(new PaperItemAttributeModifiers.PaperEntry(
-                    Attribute.ATTACK_SPEED,
-                    new AttributeModifier(
-                            NeoArtisan.getArtisanItemAttackSpeedKey(),
-                            this.weaponProperty.speed(),
-                            AttributeModifier.Operation.ADD_NUMBER,
-                            EquipmentSlotGroup.MAINHAND
-                    )
-            ));
-            modifiers.modifiers().add(new PaperItemAttributeModifiers.PaperEntry(
-                    Attribute.ATTACK_KNOCKBACK,
-                    new AttributeModifier(
-                            NeoArtisan.getArtisanItemAttackKnockbackKey(),
-                            this.weaponProperty.knockback(),
-                            AttributeModifier.Operation.ADD_NUMBER,
-                            EquipmentSlotGroup.MAINHAND
-                    )
-            ));
+                ) {
+                    builder.addModifier(entry.attribute(), entry.modifier(), entry.getGroup());
+                }
+            });
         }
         if (this.armorProperty != ArmorProperty.EMPTY) {
-            modifiers.modifiers().removeIf(
-                    entry ->
-                            entry.attribute() == Attribute.ARMOR ||
-                            entry.attribute() == Attribute.ARMOR_TOUGHNESS
-            );
             if (this.armorProperty.slot() != null) {
                 itemStack.setData(DataComponentTypes.EQUIPPABLE, Equippable.equippable(this.armorProperty.slot()));
-                modifiers.modifiers().add(new PaperItemAttributeModifiers.PaperEntry(
-                        Attribute.ARMOR,
-                        new AttributeModifier(
-                                this.registryId,
-                                this.armorProperty.armor(),
-                                AttributeModifier.Operation.ADD_NUMBER,
-                                this.armorProperty.slot().getGroup()
-                        )
-                ));
-                modifiers.modifiers().add(new PaperItemAttributeModifiers.PaperEntry(
-                        Attribute.ARMOR_TOUGHNESS,
-                        new AttributeModifier(
-                                this.registryId,
-                                this.armorProperty.armorToughness(),
-                                AttributeModifier.Operation.ADD_NUMBER,
-                                this.armorProperty.slot().getGroup()
-                        )
-                ));
+                builder.addModifier(
+                    Attribute.ARMOR,
+                    new AttributeModifier(
+                            this.registryId,
+                            this.armorProperty.armor(),
+                            AttributeModifier.Operation.ADD_NUMBER,
+                            this.armorProperty.slot().getGroup()
+                    )
+                );
+                builder.addModifier(
+                    Attribute.ARMOR_TOUGHNESS,
+                    new AttributeModifier(
+                            this.registryId,
+                            this.armorProperty.armorToughness(),
+                            AttributeModifier.Operation.ADD_NUMBER,
+                            this.armorProperty.slot().getGroup()
+                    )
+                );
             } else {
                 var equippable = itemStack.getData(DataComponentTypes.EQUIPPABLE);
                 if (equippable == null) throw new IllegalArgumentException("You can not set null slot in a unequipped item!");
-                modifiers.modifiers().add(new PaperItemAttributeModifiers.PaperEntry(
-                        Attribute.ARMOR,
-                        new AttributeModifier(
-                                this.registryId,
-                                this.armorProperty.armor(),
-                                AttributeModifier.Operation.ADD_NUMBER,
-                                equippable.slot().getGroup()
-                        )
-                ));
-                modifiers.modifiers().add(new PaperItemAttributeModifiers.PaperEntry(
-                        Attribute.ARMOR_TOUGHNESS,
-                        new AttributeModifier(
-                                this.registryId,
-                                this.armorProperty.armorToughness(),
-                                AttributeModifier.Operation.ADD_NUMBER,
-                                equippable.slot().getGroup()
-                        )
-                ));
+                builder.addModifier(
+                    Attribute.ARMOR,
+                    new AttributeModifier(
+                            this.registryId,
+                            this.armorProperty.armor(),
+                            AttributeModifier.Operation.ADD_NUMBER,
+                            equippable.slot().getGroup()
+                    )
+                );
+                builder.addModifier(
+                    Attribute.ARMOR_TOUGHNESS,
+                    new AttributeModifier(
+                            this.registryId,
+                            this.armorProperty.armorToughness(),
+                            AttributeModifier.Operation.ADD_NUMBER,
+                            equippable.slot().getGroup()
+                    )
+                );
             }
+        } else {
+            unmodifiableModifiers.modifiers().forEach(entry -> {
+                if (
+                        entry.attribute() == Attribute.ARMOR ||
+                        entry.attribute() == Attribute.ARMOR_TOUGHNESS
+                ) {
+                    builder.addModifier(entry.attribute(), entry.modifier(), entry.getGroup());
+                }
+            });
         }
         if (this.maxDurability != null) {
             itemStack.setData(DataComponentTypes.MAX_DAMAGE, this.maxDurability);
         }
+        itemStack.setData(DataComponentTypes.ATTRIBUTE_MODIFIERS, builder.build());
         ItemMeta itemMeta = itemStack.getItemMeta();
         if (!this.attributeProperty.isEmpty()) {
             NamespacedKey[] keys = this.attributeProperty.getItemStackAttributeKeys();
