@@ -1,7 +1,9 @@
-package io.github.moyusowo.neoartisan.block.crop;
+package io.github.moyusowo.neoartisan.block.storage;
 
 import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisan.util.terminate.TerminateMethod;
+import io.github.moyusowo.neoartisanapi.NeoArtisanAPI;
+import io.github.moyusowo.neoartisanapi.api.block.ArtisanBlockState;
 import io.github.moyusowo.neoartisanapi.api.block.crop.CurrentCropStage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.ChunkPos;
@@ -16,37 +18,40 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public final class CropDataSerializer {
+final class BlockDataSerializer {
 
-    private CropDataSerializer() {}
+    private BlockDataSerializer() {}
 
     @TerminateMethod
     public static void save() {
         try {
-            File dataFolder = new File(NeoArtisan.instance().getDataFolder(), "block/crop/storage");
+            File dataFolder = new File(NeoArtisan.instance().getDataFolder(), "block/storage");
             if (!dataFolder.exists()) dataFolder.mkdirs();
             for (World world : Bukkit.getWorlds()) {
                 CraftWorld craftWorld = (CraftWorld) world;
                 Level level = craftWorld.getHandle();
-                Map<ChunkPos, Map<BlockPos, CurrentCropStage>> chunkMap = ArtisanCropStorageImpl.getInstance().getLevelArtisanCrops(level);
+                Map<ChunkPos, Map<BlockPos, ArtisanBlockState>> chunkMap = ArtisanBlockStorageImpl.getInstance().getLevelArtisanBlocks(level);
                 File file = new File(dataFolder, world.getUID() + ".dat");
                 try (DataOutputStream out = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(file)))) {
                     out.writeInt(chunkMap.size());
-                    for (Map.Entry<ChunkPos, Map<BlockPos, CurrentCropStage>> chunkEntry : chunkMap.entrySet()) {
+                    for (Map.Entry<ChunkPos, Map<BlockPos, ArtisanBlockState>> chunkEntry : chunkMap.entrySet()) {
                         ChunkPos chunkPos = chunkEntry.getKey();
                         out.writeInt(chunkPos.x);
                         out.writeInt(chunkPos.z);
-                        Map<BlockPos, CurrentCropStage> blockMap = chunkEntry.getValue();
+                        Map<BlockPos, ArtisanBlockState> blockMap = chunkEntry.getValue();
                         out.writeInt(blockMap.size());
-                        for (Map.Entry<BlockPos, CurrentCropStage> blockEntry : blockMap.entrySet()) {
-                            BlockPos pos = blockEntry.getKey();
-                            out.writeInt(pos.getX());
-                            out.writeInt(pos.getY());
-                            out.writeInt(pos.getZ());
-                            CurrentCropStage currentCropStage = blockEntry.getValue();
-                            out.writeUTF(currentCropStage.cropId().getNamespace());
-                            out.writeUTF(currentCropStage.cropId().getKey());
-                            out.writeInt(currentCropStage.stage());
+                        for (Map.Entry<BlockPos, ArtisanBlockState> blockEntry : blockMap.entrySet()) {
+                            if (blockEntry.getValue() instanceof CurrentCropStage) {
+                                out.writeUTF("crop");
+                                BlockPos pos = blockEntry.getKey();
+                                out.writeInt(pos.getX());
+                                out.writeInt(pos.getY());
+                                out.writeInt(pos.getZ());
+                                CurrentCropStage currentCropStage = blockEntry.getValue();
+                                out.writeUTF(currentCropStage.cropId().getNamespace());
+                                out.writeUTF(currentCropStage.cropId().getKey());
+                                out.writeInt(currentCropStage.stage());
+                            }
                         }
                     }
                 }
@@ -57,9 +62,9 @@ public final class CropDataSerializer {
         }
     }
 
-    public static void load(Map<Level, Map<ChunkPos, Map<BlockPos, CurrentCropStage>>> storage) {
+    public static void load(Map<Level, Map<ChunkPos, Map<BlockPos, ArtisanBlockState>>> storage) {
         try {
-            File dataFolder = new File(NeoArtisan.instance().getDataFolder(), "block/crop/storage");
+            File dataFolder = new File(NeoArtisan.instance().getDataFolder(), "block/storage");
             if (!dataFolder.exists()) return;
             File[] files = dataFolder.listFiles();
             if (files == null) return;
@@ -71,26 +76,29 @@ public final class CropDataSerializer {
                     CraftWorld craftWorld = (CraftWorld) world;
                     if (craftWorld == null) throw new IllegalArgumentException("UUID can not match!");
                     Level level = craftWorld.getHandle();
-                    Map<ChunkPos, Map<BlockPos, CurrentCropStage>> chunkMap = new HashMap<>();
+                    Map<ChunkPos, Map<BlockPos, ArtisanBlockState>> chunkMap = new HashMap<>();
                     storage.put(level, chunkMap);
                     try (DataInputStream in = new DataInputStream(new BufferedInputStream(new FileInputStream(file)))) {
                         int chunkCount = in.readInt();
                         for (int i = 0; i < chunkCount; i++) {
                             ChunkPos chunkPos = new ChunkPos(in.readInt(), in.readInt());
-                            Map<BlockPos, CurrentCropStage> blockMap = new HashMap<>();
+                            Map<BlockPos, ArtisanBlockState> blockMap = new HashMap<>();
                             chunkMap.put(chunkPos, blockMap);
                             int blockCount = in.readInt();
                             for (int j = 0; j < blockCount; j++) {
-                                BlockPos blockPos = new BlockPos(
-                                        in.readInt(),
-                                        in.readInt(),
-                                        in.readInt()
-                                );
-                                CurrentCropStage currentCropStage = new CurrentCropStageImpl(
-                                        new NamespacedKey(in.readUTF(), in.readUTF()),
-                                        in.readInt()
-                                );
-                                blockMap.put(blockPos, currentCropStage);
+                                String type = in.readUTF();
+                                if (type.equals("crop")) {
+                                    BlockPos blockPos = new BlockPos(
+                                            in.readInt(),
+                                            in.readInt(),
+                                            in.readInt()
+                                    );
+                                    CurrentCropStage currentCropStage = NeoArtisanAPI.getCropRegistry().emptyCropStage(
+                                            new NamespacedKey(in.readUTF(), in.readUTF()),
+                                            in.readInt()
+                                    );
+                                    blockMap.put(blockPos, (ArtisanBlockState) currentCropStage);
+                                }
                             }
                         }
                     }
@@ -100,5 +108,4 @@ public final class CropDataSerializer {
             NeoArtisan.logger().severe("作物数据读取失败: " + e);
         }
     }
-
 }

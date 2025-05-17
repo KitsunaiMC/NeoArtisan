@@ -1,8 +1,9 @@
 package io.github.moyusowo.neoartisan.block.network;
 
 import io.github.moyusowo.neoartisan.NeoArtisan;
-import io.github.moyusowo.neoartisan.block.crop.internal.ArtisanCropStorageInternal;
+import io.github.moyusowo.neoartisan.block.storage.internal.ArtisanBlockStorageInternal;
 import io.github.moyusowo.neoartisan.util.ReflectionUtil;
+import io.github.moyusowo.neoartisanapi.api.block.ArtisanBlockState;
 import io.github.moyusowo.neoartisanapi.api.block.crop.CurrentCropStage;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelDuplexHandler;
@@ -41,15 +42,17 @@ public class BlockPacketHandler extends ChannelDuplexHandler {
             handleChunkUpdate(packet);
             promise.addListener(future -> {
                 if (future.isSuccess()) {
-                    Map<BlockPos, CurrentCropStage> data = ArtisanCropStorageInternal.getArtisanCropStorageManager().getChunkArtisanCrops(player.level(), packet.getX(), packet.getZ());
+                    Map<BlockPos, ArtisanBlockState> data = ArtisanBlockStorageInternal.getInternal().getChunkArtisanBlocks(player.level(), packet.getX(), packet.getZ());
                     int i = 0;
-                    for (Map.Entry<BlockPos, CurrentCropStage> entry : data.entrySet()) {
-                        ClientboundBlockUpdatePacket newPacket = new ClientboundBlockUpdatePacket(entry.getKey(), stateById(entry.getValue().getBlockState()));
-                        ctx.write(newPacket).addListener(f -> {
-                            if (!f.isSuccess()) {
-                                NeoArtisan.logger().severe("补充包 " + i + " 发送失败: " + f.cause());
-                            }
-                        });
+                    for (Map.Entry<BlockPos, ArtisanBlockState> entry : data.entrySet()) {
+                        if (entry.getValue() instanceof CurrentCropStage currentCropStage) {
+                            ClientboundBlockUpdatePacket newPacket = new ClientboundBlockUpdatePacket(entry.getKey(), stateById(currentCropStage.getBlockState()));
+                            ctx.write(newPacket).addListener(f -> {
+                                if (!f.isSuccess()) {
+                                    NeoArtisan.logger().severe("补充包 " + i + " 发送失败: " + f.cause());
+                                }
+                            });
+                        }
                     }
                     ctx.flush();
 
@@ -66,8 +69,8 @@ public class BlockPacketHandler extends ChannelDuplexHandler {
     private void handleSingleBlockUpdate(ClientboundBlockUpdatePacket packet) throws Exception {
         BlockPos blockPos = (BlockPos) ReflectionUtil.getField(packet, "pos");
         BlockState state = (BlockState) ReflectionUtil.getField(packet, "blockState");
-        if (ArtisanCropStorageInternal.getArtisanCropStorageManager().isArtisanCrop(player.level(), blockPos)) {
-            CurrentCropStage currentCropStage = ArtisanCropStorageInternal.getArtisanCropStorageManager().getArtisanCropStage(player.level(), blockPos);
+        if (ArtisanBlockStorageInternal.getInternal().isArtisanBlock(player.level(), blockPos)
+                && ArtisanBlockStorageInternal.getInternal().getArtisanBlock(player.level(), blockPos) instanceof CurrentCropStage currentCropStage) {
             BlockState toState = stateById(currentCropStage.getBlockState());
             ReflectionUtil.setField(packet, "blockState", toState);
         } else {
@@ -84,8 +87,8 @@ public class BlockPacketHandler extends ChannelDuplexHandler {
         BlockPos[] pos = toBlockPos(positions, sectionPos);
         BlockState[] states = (BlockState[]) ReflectionUtil.getField(packet, "states");
         for (int i = 0; i < states.length; i++) {
-            if (ArtisanCropStorageInternal.getArtisanCropStorageManager().isArtisanCrop(player.level(), pos[i])) {
-                CurrentCropStage currentCropStage = ArtisanCropStorageInternal.getArtisanCropStorageManager().getArtisanCropStage(player.level(), pos[i]);
+            if (ArtisanBlockStorageInternal.getInternal().isArtisanBlock(player.level(), pos[i])
+                    && ArtisanBlockStorageInternal.getInternal().getArtisanBlock(player.level(), pos[i]) instanceof CurrentCropStage currentCropStage) {
                 states[i] = stateById(currentCropStage.getBlockState());
             } else {
                 BlockState toState = BlockMappingsManager.getMappedState(states[i]);

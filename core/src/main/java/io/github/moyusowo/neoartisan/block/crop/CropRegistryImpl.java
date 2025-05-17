@@ -5,6 +5,7 @@ import io.github.moyusowo.neoartisan.block.network.BlockMappingsManager;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisanapi.api.block.crop.CropRegistry;
 import io.github.moyusowo.neoartisanapi.api.block.crop.CropStageProperty;
+import io.github.moyusowo.neoartisanapi.api.block.crop.CurrentCropStage;
 import net.minecraft.world.level.block.state.BlockState;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
@@ -45,6 +46,7 @@ class CropRegistryImpl implements CropRegistry {
         );
     }
 
+    @Override
     public void registerCrop(NamespacedKey cropId, int actualState, List<CropStageProperty> stages, int boneMealMinGrowth, int boneMealMaxGrowth) {
         for (CropStageProperty property : stages) {
             if (usedStates.contains(stateById(property.appearanceState()))) {
@@ -54,15 +56,23 @@ class CropRegistryImpl implements CropRegistry {
         registry.put(cropId, new ArtisanCropImpl(cropId, actualState, stages, boneMealMinGrowth, boneMealMaxGrowth));
     }
 
+    @Override
     public void registerCrop(NamespacedKey cropId, int actualState, List<CropStageProperty> stages, int boneMealGrowth) {
         registerCrop(cropId, actualState, stages, boneMealGrowth, boneMealGrowth);
     }
 
+    @Override
     public boolean isArtisanCrop(NamespacedKey cropId) {
         return registry.containsKey(cropId);
     }
 
+    @Override
     public ArtisanCropImpl getArtisanCrop(NamespacedKey cropId) {
         return registry.get(cropId);
+    }
+
+    @Override
+    public CurrentCropStage emptyCropStage(NamespacedKey cropId, int stage) {
+        return new CurrentCropStageImpl(cropId, stage);
     }
 }

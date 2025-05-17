@@ -1,11 +1,12 @@
 package io.github.moyusowo.neoartisan.block.crop;
 
+import io.github.moyusowo.neoartisanapi.api.block.ArtisanBlockState;
 import io.github.moyusowo.neoartisanapi.api.block.crop.CurrentCropStage;
 import io.github.moyusowo.neoartisanapi.api.item.ItemGenerator;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 
-record CurrentCropStageImpl(NamespacedKey cropId, int stage) implements CurrentCropStage {
+record CurrentCropStageImpl(NamespacedKey cropId, int stage) implements CurrentCropStage, ArtisanBlockState {
 
     @Override
     public int getBlockState() {

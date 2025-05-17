@@ -2,9 +2,10 @@ package io.github.moyusowo.neoartisan.block.crop;
 
 
 import io.github.moyusowo.neoartisan.NeoArtisan;
+import io.github.moyusowo.neoartisan.block.storage.internal.ArtisanBlockStorageInternal;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisanapi.NeoArtisanAPI;
-import io.github.moyusowo.neoartisanapi.api.block.crop.ArtisanCropStorage;
+import io.github.moyusowo.neoartisanapi.api.block.ArtisanBlockState;
 import io.github.moyusowo.neoartisanapi.api.block.crop.CropRegistry;
 import io.github.moyusowo.neoartisanapi.api.block.crop.CurrentCropStage;
 import io.github.moyusowo.neoartisanapi.api.item.ArtisanItem;
@@ -29,6 +30,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static io.github.moyusowo.neoartisan.block.BlockStateUtil.stateById;
@@ -60,67 +62,67 @@ final class ArtisanCropBehavior implements Listener {
 
     @EventHandler
     private static void onArtisanCropBreak(BlockBreakEvent event) {
-        if (!NeoArtisanAPI.getArtisanCropStorage().isArtisanCrop(event.getBlock())) return;
+        if (!NeoArtisanAPI.getArtisanBlockStorage().isArtisanBlock(event.getBlock())) return;
+        if (!(NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlock(event.getBlock()) instanceof CurrentCropStage currentCropStage)) return;
         if (event.isCancelled()) return;
         if (event.getPlayer().getGameMode() == GameMode.CREATIVE) {
-            ArtisanCropStorageImpl.getInstance().removeArtisanCrop(event.getBlock());
+            ArtisanBlockStorageInternal.getInternal().removeArtisanBlock(event.getBlock());
             return;
         }
         event.setCancelled(true);
         event.getBlock().setType(Material.AIR);
-        CurrentCropStage currentCropStage = NeoArtisanAPI.getArtisanCropStorage().getArtisanCropStage(event.getBlock());
         for (ItemStack drop : currentCropStage.getDrops()) {
             event.getBlock().getWorld().dropItemNaturally(event.getBlock().getLocation(), drop);
         }
-        ArtisanCropStorageImpl.getInstance().removeArtisanCrop(event.getBlock());
+        ArtisanBlockStorageInternal.getInternal().removeArtisanBlock(event.getBlock());
     }
 
     @EventHandler
     private static void onBlockBreakUnderCrop(BlockBreakEvent event) {
-        if (!NeoArtisanAPI.getArtisanCropStorage().isArtisanCrop(event.getBlock().getRelative(BlockFace.UP))) return;
+        if (!NeoArtisanAPI.getArtisanBlockStorage().isArtisanBlock(event.getBlock().getRelative(BlockFace.UP))) return;
+        if (!(NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlock(event.getBlock().getRelative(BlockFace.UP)) instanceof CurrentCropStage currentCropStage)) return;
         if (event.isCancelled()) return;
         event.setCancelled(true);
         event.getBlock().setType(Material.AIR);
         event.getBlock().getRelative(BlockFace.UP).setType(Material.AIR);
-        CurrentCropStage currentCropStage = NeoArtisanAPI.getArtisanCropStorage().getArtisanCropStage(event.getBlock().getRelative(BlockFace.UP));
         for (ItemStack drop : currentCropStage.getDrops()) {
             event.getBlock().getWorld().dropItemNaturally(event.getBlock().getRelative(BlockFace.UP).getLocation(), drop);
         }
-        ArtisanCropStorageImpl.getInstance().removeArtisanCrop(event.getBlock().getRelative(BlockFace.UP));
+        ArtisanBlockStorageInternal.getInternal().removeArtisanBlock(event.getBlock().getRelative(BlockFace.UP));
     }
 
     @EventHandler
     private static void onWaterFlowOverCustomCrop(BlockBreakBlockEvent event) {
-        if (!NeoArtisanAPI.getArtisanCropStorage().isArtisanCrop(event.getBlock())) return;
+        if (!NeoArtisanAPI.getArtisanBlockStorage().isArtisanBlock(event.getBlock())) return;
+        if (!(NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlock(event.getBlock()) instanceof CurrentCropStage currentCropStage)) return;
         while (!event.getDrops().isEmpty()) event.getDrops().removeFirst();
-        CurrentCropStage currentCropStage = NeoArtisanAPI.getArtisanCropStorage().getArtisanCropStage(event.getBlock());
         for (ItemStack drop : currentCropStage.getDrops()) {
             event.getDrops().add(drop);
         }
-        ArtisanCropStorageImpl.getInstance().removeArtisanCrop(event.getBlock());
+        ArtisanBlockStorageInternal.getInternal().removeArtisanBlock(event.getBlock());
     }
 
     @EventHandler
     private static void onEntityChangeFarmland(EntityChangeBlockEvent event) {
-        if (!NeoArtisanAPI.getArtisanCropStorage().isArtisanCrop(event.getBlock().getRelative(BlockFace.UP))) return;
+        if (!NeoArtisanAPI.getArtisanBlockStorage().isArtisanBlock(event.getBlock().getRelative(BlockFace.UP))) return;
+        if (!(NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlock(event.getBlock().getRelative(BlockFace.UP)) instanceof CurrentCropStage currentCropStage)) return;
         if (event.getBlock().getType() != Material.FARMLAND) return;
         if (event.isCancelled()) return;
         event.setCancelled(true);
         event.getBlock().getRelative(BlockFace.UP).setType(Material.AIR);
         event.getBlock().setType(Material.DIRT);
-        CurrentCropStage currentCropStage = NeoArtisanAPI.getArtisanCropStorage().getArtisanCropStage(event.getBlock().getRelative(BlockFace.UP));
         for (ItemStack drop: currentCropStage.getDrops()) {
             event.getBlock().getWorld().dropItemNaturally(event.getBlock().getRelative(BlockFace.UP).getLocation(), drop);
         }
-        ArtisanCropStorageImpl.getInstance().removeArtisanCrop(event.getBlock().getRelative(BlockFace.UP));
+        ArtisanBlockStorageInternal.getInternal().removeArtisanBlock(event.getBlock().getRelative(BlockFace.UP));
     }
 
     @EventHandler
     private static void onCustomCropGrow(BlockGrowEvent event) {
-        if (!NeoArtisanAPI.getArtisanCropStorage().isArtisanCrop(event.getBlock())) return;
+        if (!NeoArtisanAPI.getArtisanBlockStorage().isArtisanBlock(event.getBlock())) return;
+        if (!(NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlock(event.getBlock()) instanceof CurrentCropStage currentCropStage)) return;
         if (event.isCancelled()) return;
         event.setCancelled(true);
-        CurrentCropStage currentCropStage = NeoArtisanAPI.getArtisanCropStorage().getArtisanCropStage(event.getBlock());
         if (currentCropStage.hasNextStage()) {
             grownCrop.put(event.getBlock(), currentCropStage);
             new BukkitRunnable() {
@@ -137,14 +139,17 @@ final class ArtisanCropBehavior implements Listener {
     private static void onCustomCropFertilize(BlockFertilizeEvent event) {
         if (event.isCancelled()) return;
         for (BlockState blockState : event.getBlocks()) {
-            if (NeoArtisanAPI.getArtisanCropStorage().isArtisanCrop(blockState.getBlock())) {
-                replace(blockState.getBlock(), grownCrop.get(blockState.getBlock()));
-                grownCrop.remove(blockState.getBlock());
-                event.setCancelled(true);
-                CurrentCropStage currentCropStage = NeoArtisanAPI.getArtisanCropStorage().getArtisanCropStage(blockState.getBlock());
-                if (currentCropStage.hasNextStage()) {
-                    replace(blockState.getBlock(), currentCropStage.getNextFertilizeStage());
-                    playBoneMealEffects(blockState.getLocation());
+            if (NeoArtisanAPI.getArtisanBlockStorage().isArtisanBlock(blockState.getBlock())) {
+                Object object = NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlock(blockState.getBlock());
+                if (object instanceof CurrentCropStage) {
+                    CurrentCropStage currentCropStage = grownCrop.get(blockState.getBlock());
+                    replace(blockState.getBlock(), currentCropStage);
+                    grownCrop.remove(blockState.getBlock());
+                    event.setCancelled(true);
+                    if (currentCropStage.hasNextStage()) {
+                        replace(blockState.getBlock(), currentCropStage.getNextFertilizeStage());
+                        playBoneMealEffects(blockState.getLocation());
+                    }
                 }
             }
         }
@@ -154,7 +159,7 @@ final class ArtisanCropBehavior implements Listener {
         CraftWorld craftWorld = (CraftWorld) bukkitBlock.getWorld();
         Level nmsWorld = craftWorld.getHandle();
         BlockPos pos = new BlockPos(bukkitBlock.getX(), bukkitBlock.getY(), bukkitBlock.getZ());
-        ArtisanCropStorageImpl.getInstance().placeArtisanCrop(nmsWorld, pos, currentCropStage);
+        ArtisanBlockStorageInternal.getInternal().placeArtisanBlock(nmsWorld, pos, (ArtisanBlockState) currentCropStage);
         nmsWorld.setBlock(pos, stateById(NeoArtisanAPI.getCropRegistry().getArtisanCrop(currentCropStage.cropId()).getActualState()), 3);
     }
 
@@ -162,7 +167,7 @@ final class ArtisanCropBehavior implements Listener {
         CraftWorld craftWorld = (CraftWorld) bukkitBlock.getWorld();
         Level nmsWorld = craftWorld.getHandle();
         BlockPos pos = new BlockPos(bukkitBlock.getX(), bukkitBlock.getY(), bukkitBlock.getZ());
-        ArtisanCropStorageImpl.getInstance().replaceArtisanCrop(nmsWorld, pos, currentCropStage);
+        ArtisanBlockStorageInternal.getInternal().replaceArtisanBlock(nmsWorld, pos, (ArtisanBlockState) currentCropStage);
         nmsWorld.setBlock(pos, stateById(NeoArtisanAPI.getCropRegistry().getArtisanCrop(currentCropStage.cropId()).getActualState()), 3);
     }
 
