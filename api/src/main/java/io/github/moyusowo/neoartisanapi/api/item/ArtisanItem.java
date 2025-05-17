@@ -113,4 +113,6 @@ public interface ArtisanItem {
      * @return 此物品右键放置出的方块的命名空间ID，如果没有返回 {@code null}
      */
     @Nullable NamespacedKey getCropId();
+
+    @Nullable NamespacedKey getItemModel();
 }

@@ -34,6 +34,7 @@ class ArtisanItemImpl implements ArtisanItem {
     private final ArmorProperty armorProperty;
     private final AttributePropertyImpl attributeProperty;
     private final NamespacedKey cropId;
+    private final NamespacedKey itemModel;
     private final ItemStack cachedItemStack;
 
     protected ArtisanItemImpl(
@@ -48,7 +49,8 @@ class ArtisanItemImpl implements ArtisanItem {
             @Nullable Integer maxDurability,
             @NotNull ArmorProperty armorProperty,
             @NotNull AttributePropertyImpl attributeProperty,
-            @Nullable NamespacedKey cropId
+            @Nullable NamespacedKey cropId,
+            @Nullable NamespacedKey itemModel
     ) {
         this.registryId = registryId;
         this.rawMaterial = rawMaterial;
@@ -62,6 +64,7 @@ class ArtisanItemImpl implements ArtisanItem {
         this.armorProperty = armorProperty;
         this.attributeProperty = attributeProperty;
         this.cropId = cropId;
+        this.itemModel = itemModel;
         this.cachedItemStack = createNewItemStack();
     }
 
@@ -123,7 +126,7 @@ class ArtisanItemImpl implements ArtisanItem {
 
     @Override
     public @NotNull AttributeProperty getAttributeProperty() {
-        return (AttributeProperty) this.attributeProperty;
+        return this.attributeProperty;
     }
 
     @Override
@@ -133,7 +136,12 @@ class ArtisanItemImpl implements ArtisanItem {
 
     @Override
     public @Nullable NamespacedKey getCropId() {
-        return cropId;
+        return this.cropId;
+    }
+
+    @Override
+    public @Nullable NamespacedKey getItemModel() {
+        return this.itemModel;
     }
 
     private ItemStack createNewItemStack() {
@@ -263,6 +271,9 @@ class ArtisanItemImpl implements ArtisanItem {
         }
         if (this.maxDurability != null) {
             itemStack.setData(DataComponentTypes.MAX_DAMAGE, this.maxDurability);
+        }
+        if (this.itemModel != null) {
+            itemStack.setData(DataComponentTypes.ITEM_MODEL, this.itemModel);
         }
         itemStack.setData(DataComponentTypes.ATTRIBUTE_MODIFIERS, builder.build());
         ItemMeta itemMeta = itemStack.getItemMeta();

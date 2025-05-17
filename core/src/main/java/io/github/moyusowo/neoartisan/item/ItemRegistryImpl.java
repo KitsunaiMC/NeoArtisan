@@ -70,6 +70,7 @@ final class ItemRegistryImpl implements ItemRegistry {
         private ArmorProperty armorProperty;
         private AttributePropertyImpl attributeProperty;
         private NamespacedKey cropId;
+        private NamespacedKey itemModel;
 
         private BuilderImpl() {
             this.registryId = null;
@@ -84,6 +85,7 @@ final class ItemRegistryImpl implements ItemRegistry {
             this.armorProperty = ArmorProperty.EMPTY;
             this.attributeProperty = new AttributePropertyImpl();
             this.cropId = null;
+            this.itemModel = null;
         }
 
         @NotNull
@@ -184,6 +186,13 @@ final class ItemRegistryImpl implements ItemRegistry {
             return this;
         }
 
+        @NotNull
+        @Override
+        public Builder itemModel(NamespacedKey itemModel) {
+            this.itemModel = itemModel;
+            return this;
+        }
+
         @NotNull private ArtisanItemImpl build() {
             if (registryId == null || rawMaterial == null) {
                 throw new IllegalArgumentException("At least you should provide registryId and rawMaterial!");
@@ -200,7 +209,8 @@ final class ItemRegistryImpl implements ItemRegistry {
                     maxDurability,
                     armorProperty,
                     attributeProperty,
-                    cropId
+                    cropId,
+                    itemModel
             );
         }
 

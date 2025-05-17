@@ -166,6 +166,8 @@ public interface ItemRegistry {
 
         @NotNull Builder cropId(NamespacedKey blockKey);
 
+        @NotNull Builder itemModel(NamespacedKey itemModel);
+
     }
 
     /**
