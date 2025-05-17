@@ -1,5 +1,6 @@
 package io.github.moyusowo.neoartisanapi.api.item;
 
+import io.papermc.paper.datacomponent.item.CustomModelData;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -26,7 +27,7 @@ import java.util.List;
  * @see ArtisanItem
  * @see org.bukkit.plugin.ServicesManager
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "UnstableApiUsage"})
 public interface ItemRegistry {
 
     /**
@@ -76,7 +77,7 @@ public interface ItemRegistry {
          * @return 当前构建器实例
          * @throws IllegalArgumentException 如果customModelData ≤ 0
          */
-        @NotNull Builder customModelData(int customModelData);
+        @NotNull Builder customModelData(CustomModelData customModelData);
 
         /**
          * 设置物品的显示名称。
