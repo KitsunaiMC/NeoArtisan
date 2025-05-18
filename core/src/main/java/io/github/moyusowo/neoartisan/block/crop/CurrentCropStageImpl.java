@@ -3,10 +3,32 @@ package io.github.moyusowo.neoartisan.block.crop;
 import io.github.moyusowo.neoartisanapi.api.block.ArtisanBlockState;
 import io.github.moyusowo.neoartisanapi.api.block.crop.CurrentCropStage;
 import io.github.moyusowo.neoartisanapi.api.item.ItemGenerator;
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.craftbukkit.persistence.CraftPersistentDataContainer;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataContainer;
 
-record CurrentCropStageImpl(NamespacedKey cropId, int stage) implements CurrentCropStage, ArtisanBlockState {
+class CurrentCropStageImpl implements CurrentCropStage, ArtisanBlockState {
+
+    private final NamespacedKey cropId;
+    private final int stage;
+
+    public CurrentCropStageImpl(NamespacedKey cropId, int stage) {
+        this.cropId = cropId;
+        this.stage = stage;
+    }
+
+    @Override
+    public NamespacedKey cropId() {
+        return this.cropId;
+    }
+
+    @Override
+    public int stage() {
+        return this.stage;
+    }
 
     @Override
     public int getBlockState() {
