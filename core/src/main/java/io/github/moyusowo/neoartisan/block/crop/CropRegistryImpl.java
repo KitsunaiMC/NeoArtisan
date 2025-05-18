@@ -3,6 +3,7 @@ package io.github.moyusowo.neoartisan.block.crop;
 import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisan.block.network.BlockMappingsManager;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
+import io.github.moyusowo.neoartisan.util.init.InitPriority;
 import io.github.moyusowo.neoartisanapi.api.block.crop.CropRegistry;
 import io.github.moyusowo.neoartisanapi.api.block.crop.CropStageProperty;
 import io.github.moyusowo.neoartisanapi.api.block.crop.CurrentCropStage;
@@ -25,7 +26,7 @@ class CropRegistryImpl implements CropRegistry {
         return instance;
     }
 
-    @InitMethod
+    @InitMethod(order = InitPriority.HIGH)
     public static void init() {
         new CropRegistryImpl();
     }
