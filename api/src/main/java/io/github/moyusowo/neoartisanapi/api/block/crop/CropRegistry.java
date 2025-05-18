@@ -14,4 +14,6 @@ public interface CropRegistry {
     boolean isArtisanCrop(NamespacedKey cropId);
 
     ArtisanCrop getArtisanCrop(NamespacedKey cropId);
+
+    CurrentCropStage emptyCropStage(NamespacedKey cropId, int stage);
 }

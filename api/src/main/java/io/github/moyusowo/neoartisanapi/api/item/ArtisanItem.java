@@ -1,5 +1,6 @@
 package io.github.moyusowo.neoartisanapi.api.item;
 
+import io.papermc.paper.datacomponent.item.CustomModelData;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
@@ -18,7 +19,7 @@ import org.jetbrains.annotations.Nullable;
  * @see FoodProperty
  * @see ArmorProperty
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "UnstableApiUsage"})
 public interface ArtisanItem {
 
     /**
@@ -63,7 +64,8 @@ public interface ArtisanItem {
      *
      * @return 自定义模型数据值，如果没有设置返回null
      */
-    @Nullable Integer getCustomModelData();
+    @Nullable
+    CustomModelData getCustomModelData();
 
     /**
      * 获取此物品的食物属性配置。
@@ -111,4 +113,6 @@ public interface ArtisanItem {
      * @return 此物品右键放置出的方块的命名空间ID，如果没有返回 {@code null}
      */
     @Nullable NamespacedKey getCropId();
+
+    @Nullable NamespacedKey getItemModel();
 }

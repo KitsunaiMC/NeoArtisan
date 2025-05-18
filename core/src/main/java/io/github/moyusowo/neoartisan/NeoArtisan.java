@@ -1,6 +1,5 @@
 package io.github.moyusowo.neoartisan;
 
-import io.github.moyusowo.neoartisan.block.crop.CropDataSerializer;
 import io.github.moyusowo.neoartisan.util.init.Initializer;
 import io.github.moyusowo.neoartisan.util.terminate.Terminator;
 import org.bukkit.Bukkit;
@@ -70,11 +69,11 @@ public final class NeoArtisan extends JavaPlugin {
     public void onEnable() {
         Initializer.scanPackage(pkg);
         Initializer.executeEnable();
+        Terminator.scanPackage(pkg);
     }
 
     @Override
     public void onDisable() {
-        Terminator.scanPackage(pkg);
         Terminator.executeDisable();
     }
 }

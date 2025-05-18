@@ -4,14 +4,13 @@ import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisanapi.api.item.*;
 import io.github.moyusowo.neoartisan.util.NamespacedKeyDataType;
+import io.papermc.paper.datacomponent.item.CustomModelData;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.ServicePriority;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -57,11 +56,12 @@ final class ItemRegistryImpl implements ItemRegistry {
         registry.put(builderImpl.registryId, builderImpl.build());
     }
 
+    @SuppressWarnings("UnstableApiUsage")
     private static class BuilderImpl implements Builder {
         private NamespacedKey registryId;
         private Material rawMaterial;
         private boolean hasOriginalCraft;
-        private Integer customModelData;
+        private CustomModelData customModelData;
         private Component displayName;
         private List<Component> lore;
         private FoodProperty foodProperty;
@@ -70,6 +70,7 @@ final class ItemRegistryImpl implements ItemRegistry {
         private ArmorProperty armorProperty;
         private AttributePropertyImpl attributeProperty;
         private NamespacedKey cropId;
+        private NamespacedKey itemModel;
 
         private BuilderImpl() {
             this.registryId = null;
@@ -84,6 +85,7 @@ final class ItemRegistryImpl implements ItemRegistry {
             this.armorProperty = ArmorProperty.EMPTY;
             this.attributeProperty = new AttributePropertyImpl();
             this.cropId = null;
+            this.itemModel = null;
         }
 
         @NotNull
@@ -109,7 +111,7 @@ final class ItemRegistryImpl implements ItemRegistry {
 
         @NotNull
         @Override
-        public Builder customModelData(int customModelData) {
+        public Builder customModelData(CustomModelData customModelData) {
             this.customModelData = customModelData;
             return this;
         }
@@ -184,6 +186,13 @@ final class ItemRegistryImpl implements ItemRegistry {
             return this;
         }
 
+        @NotNull
+        @Override
+        public Builder itemModel(NamespacedKey itemModel) {
+            this.itemModel = itemModel;
+            return this;
+        }
+
         @NotNull private ArtisanItemImpl build() {
             if (registryId == null || rawMaterial == null) {
                 throw new IllegalArgumentException("At least you should provide registryId and rawMaterial!");
@@ -200,7 +209,8 @@ final class ItemRegistryImpl implements ItemRegistry {
                     maxDurability,
                     armorProperty,
                     attributeProperty,
-                    cropId
+                    cropId,
+                    itemModel
             );
         }
 
