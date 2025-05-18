@@ -85,8 +85,6 @@ final class ArtisanCropBehavior implements Listener {
         if (!NeoArtisanAPI.getArtisanBlockStorage().isArtisanBlock(event.getBlock().getRelative(BlockFace.UP))) return;
         if (!(NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlock(event.getBlock().getRelative(BlockFace.UP)) instanceof CurrentCropStage currentCropStage)) return;
         if (event.isCancelled()) return;
-        event.setCancelled(true);
-        event.getBlock().setType(Material.AIR);
         event.getBlock().getRelative(BlockFace.UP).setType(Material.AIR);
         for (ItemStack drop : currentCropStage.getDrops()) {
             event.getBlock().getWorld().dropItemNaturally(event.getBlock().getRelative(BlockFace.UP).getLocation(), drop);

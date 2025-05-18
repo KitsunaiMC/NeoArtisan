@@ -41,13 +41,12 @@ final class BlockDataSerializer {
                         Map<BlockPos, ArtisanBlockState> blockMap = chunkEntry.getValue();
                         out.writeInt(blockMap.size());
                         for (Map.Entry<BlockPos, ArtisanBlockState> blockEntry : blockMap.entrySet()) {
-                            if (blockEntry.getValue() instanceof CurrentCropStage) {
+                            if (blockEntry.getValue() instanceof CurrentCropStage currentCropStage) {
                                 out.writeUTF("crop");
                                 BlockPos pos = blockEntry.getKey();
                                 out.writeInt(pos.getX());
                                 out.writeInt(pos.getY());
                                 out.writeInt(pos.getZ());
-                                CurrentCropStage currentCropStage = blockEntry.getValue();
                                 out.writeUTF(currentCropStage.cropId().getNamespace());
                                 out.writeUTF(currentCropStage.cropId().getKey());
                                 out.writeInt(currentCropStage.stage());
