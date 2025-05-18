@@ -7,6 +7,6 @@ repositories {
 
 dependencies {
     CompileOnly 'com.github.MoYuSOwO:NeoArtisan:-SNAPSHOT:api'
-    // 或稳定版 CompileOnly 'com.github.MoYuSOwO:NeoArtisan:v0.21.0-alpha:api' 
+    // 或稳定版 CompileOnly 'com.github.MoYuSOwO:NeoArtisan:Realse版本号:api' 
 }
 ```
