@@ -69,11 +69,11 @@ public final class NeoArtisan extends JavaPlugin {
     public void onEnable() {
         Initializer.scanPackage(pkg);
         Initializer.executeEnable();
+        Terminator.scanPackage(pkg);
     }
 
     @Override
     public void onDisable() {
-        Terminator.scanPackage(pkg);
         Terminator.executeDisable();
     }
 }
