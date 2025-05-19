@@ -1,6 +1,7 @@
 package io.github.moyusowo.neoartisan.block.storage;
 
 import io.github.moyusowo.neoartisan.NeoArtisan;
+import io.github.moyusowo.neoartisan.block.internal.ArtisanBlockStateInternal;
 import io.github.moyusowo.neoartisan.util.terminate.TerminateMethod;
 import io.github.moyusowo.neoartisanapi.NeoArtisanAPI;
 import io.github.moyusowo.neoartisanapi.api.block.ArtisanBlockState;
@@ -12,6 +13,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.World;
 import org.bukkit.craftbukkit.CraftWorld;
+import org.bukkit.persistence.PersistentDataContainer;
 
 import java.io.*;
 import java.util.HashMap;
@@ -51,6 +53,9 @@ final class BlockDataSerializer {
                                 out.writeUTF(currentCropStage.cropId().getKey());
                                 out.writeInt(currentCropStage.stage());
                             }
+                            byte[] pdcByte = blockEntry.getValue().getPersistentDataContainer().serializeToBytes();
+                            out.writeInt(pdcByte.length);
+                            out.write(pdcByte);
                         }
                     }
                 }
@@ -96,8 +101,14 @@ final class BlockDataSerializer {
                                             new NamespacedKey(in.readUTF(), in.readUTF()),
                                             in.readInt()
                                     );
-                                    blockMap.put(blockPos, (ArtisanBlockState) currentCropStage);
+                                    int length = in.readInt();
+                                    byte[] pdcByte = in.readNBytes(length);
+                                    PersistentDataContainer persistentDataContainer = NeoArtisan.emptyPersistentDataContainer();
+                                    persistentDataContainer.readFromBytes(pdcByte, true);
+                                    ArtisanBlockStateInternal.asInternal(currentCropStage).setPersistentDataContainer(persistentDataContainer);
+                                    blockMap.put(blockPos, currentCropStage);
                                 }
+
                             }
                         }
                     }

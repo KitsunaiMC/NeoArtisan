@@ -72,6 +72,7 @@ final class ArtisanCropBehavior implements Listener {
             return;
         }
         event.setCancelled(true);
+        event.getBlock().getWorld
         event.getBlock().setType(Material.AIR);
         for (ItemStack drop : currentCropStage.getDrops()) {
             event.getBlock().getWorld().dropItemNaturally(event.getBlock().getLocation(), drop);
@@ -92,7 +93,7 @@ final class ArtisanCropBehavior implements Listener {
         ArtisanBlockStorageInternal.getInternal().removeArtisanBlock(event.getBlock().getRelative(BlockFace.UP));
     }
 
-    @EventHandler(priority = EventPriority.HIGH)
+    @EventHandler(priority = EventPriority.LOWEST)
     private static void onWaterFlowOverCustomCrop(BlockBreakBlockEvent event) {
         if (!NeoArtisanAPI.getArtisanBlockStorage().isArtisanBlock(event.getBlock())) return;
         if (!(NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlock(event.getBlock()) instanceof CurrentCropStage currentCropStage)) return;
@@ -109,7 +110,6 @@ final class ArtisanCropBehavior implements Listener {
         if (!NeoArtisanAPI.getArtisanBlockStorage().isArtisanBlock(event.getBlock().getRelative(BlockFace.UP))) return;
         if (!(NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlock(event.getBlock().getRelative(BlockFace.UP)) instanceof CurrentCropStage currentCropStage)) return;
         if (event.getBlock().getType() != Material.FARMLAND) return;
-        if (event.isCancelled()) return;
         event.setCancelled(true);
         event.getBlock().getRelative(BlockFace.UP).setType(Material.AIR);
         event.getBlock().setType(Material.DIRT);
@@ -124,7 +124,6 @@ final class ArtisanCropBehavior implements Listener {
         if (event.isCancelled()) return;
         if (!NeoArtisanAPI.getArtisanBlockStorage().isArtisanBlock(event.getBlock())) return;
         if (!(NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlock(event.getBlock()) instanceof CurrentCropStage currentCropStage)) return;
-        if (event.isCancelled()) return;
         event.setCancelled(true);
         if (currentCropStage.hasNextStage()) {
             grownCrop.put(event.getBlock(), currentCropStage);
