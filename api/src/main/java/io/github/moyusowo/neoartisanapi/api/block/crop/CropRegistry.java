@@ -1,19 +1,14 @@
 package io.github.moyusowo.neoartisanapi.api.block.crop;
 
-import org.bukkit.Bukkit;
+import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlock;
+import io.github.moyusowo.neoartisanapi.api.block.base.BlockRegistry;
 import org.bukkit.NamespacedKey;
 
 import java.util.List;
 
-public interface CropRegistry {
+public interface CropRegistry extends BlockRegistry {
 
-    void registerCrop(NamespacedKey cropId, int actualState, List<CropStageProperty> stages, int boneMealMinGrowth, int boneMealMaxGrowth);
+    boolean isArtisanBlock(NamespacedKey cropId);
 
-    void registerCrop(NamespacedKey cropId, int actualState, List<CropStageProperty> stages, int boneMealGrowth);
-
-    boolean isArtisanCrop(NamespacedKey cropId);
-
-    ArtisanCrop getArtisanCrop(NamespacedKey cropId);
-
-    CurrentCropStage emptyCropStage(NamespacedKey cropId, int stage);
+    ArtisanCrop getArtisanBlock(NamespacedKey cropId);
 }

@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 @SuppressWarnings("unused")
 public class NamespacedKeyDataType implements PersistentDataType<String, NamespacedKey> {
 
-    public static final NamespacedKeyDataType TYPE = new NamespacedKeyDataType();
+    public static final NamespacedKeyDataType NAMESPACED_KEY = new NamespacedKeyDataType();
 
     @Override
     public @NotNull Class<String> getPrimitiveType() {

@@ -81,7 +81,7 @@ class ArtisanItemImpl implements ArtisanItem {
     @Override
     public boolean equals(@NotNull ItemStack itemStack) {
         if (!itemStack.getItemMeta().getPersistentDataContainer().has(NeoArtisan.getArtisanItemIdKey())) return false;
-        return itemStack.getItemMeta().getPersistentDataContainer().get(NeoArtisan.getArtisanItemIdKey(), NamespacedKeyDataType.TYPE).equals(this.registryId);
+        return itemStack.getItemMeta().getPersistentDataContainer().get(NeoArtisan.getArtisanItemIdKey(), NamespacedKeyDataType.NAMESPACED_KEY).equals(this.registryId);
     }
 
     @Override
@@ -284,7 +284,7 @@ class ArtisanItemImpl implements ArtisanItem {
                 itemMeta.getPersistentDataContainer().set(key, PDCType, this.attributeProperty.getItemStackAttributeValue(key));
             }
         }
-        itemMeta.getPersistentDataContainer().set(NeoArtisan.getArtisanItemIdKey(), NamespacedKeyDataType.TYPE, this.registryId);
+        itemMeta.getPersistentDataContainer().set(NeoArtisan.getArtisanItemIdKey(), NamespacedKeyDataType.NAMESPACED_KEY, this.registryId);
         itemStack.setItemMeta(itemMeta);
         return itemStack;
     }

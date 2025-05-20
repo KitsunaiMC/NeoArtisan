@@ -244,7 +244,7 @@ final class ItemRegistryImpl implements ItemRegistry {
     @Override
     public @NotNull NamespacedKey getRegistryId(@NotNull ItemStack itemStack) {
         if (!itemStack.getItemMeta().getPersistentDataContainer().has(NeoArtisan.getArtisanItemIdKey())) return itemStack.getType().getKey();
-        NamespacedKey registryId = itemStack.getItemMeta().getPersistentDataContainer().get(NeoArtisan.getArtisanItemIdKey(), NamespacedKeyDataType.TYPE);
+        NamespacedKey registryId = itemStack.getItemMeta().getPersistentDataContainer().get(NeoArtisan.getArtisanItemIdKey(), NamespacedKeyDataType.NAMESPACED_KEY);
         return Objects.requireNonNull(registryId);
     }
 

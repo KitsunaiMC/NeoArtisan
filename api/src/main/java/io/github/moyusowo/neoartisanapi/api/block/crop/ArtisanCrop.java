@@ -1,21 +1,39 @@
 package io.github.moyusowo.neoartisanapi.api.block.crop;
 
+import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlock;
+import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlockState;
+import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.jetbrains.annotations.NotNull;
 
-public interface ArtisanCrop {
+import java.util.List;
 
-    @NotNull NamespacedKey getCropId();
+public interface ArtisanCrop extends ArtisanBlock {
 
-    @NotNull CropStageProperty getStage(int n);
+    static Builder builder() {
+        return Bukkit.getServicesManager().load(ArtisanCrop.Builder.class);
+    }
 
-    int getMaxStage();
-
-    int getActualState();
+    @NotNull ArtisanCropState getState(int n);
 
     int getBoneMealMinGrowth();
 
     int getBoneMealMaxGrowth();
 
     int generateBoneMealGrowth();
+
+    interface Builder {
+
+        Builder blockId(NamespacedKey blockId);
+
+        Builder stages(List<ArtisanCropState> stages);
+
+        Builder defaultState(int defaultState);
+
+        Builder boneMealMinGrowth(int boneMealMinGrowth);
+
+        Builder boneMealMaxGrowth(int boneMealMaxGrowth);
+
+        ArtisanBlock build();
+    }
 }
