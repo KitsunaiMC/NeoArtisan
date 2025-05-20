@@ -72,7 +72,7 @@ final class ArtisanCropBehavior implements Listener {
             return;
         }
         event.setCancelled(true);
-        event.getBlock().getWorld
+        event.getPlayer().giveExp(event.getExpToDrop());
         event.getBlock().setType(Material.AIR);
         for (ItemStack drop : currentCropStage.getDrops()) {
             event.getBlock().getWorld().dropItemNaturally(event.getBlock().getLocation(), drop);
