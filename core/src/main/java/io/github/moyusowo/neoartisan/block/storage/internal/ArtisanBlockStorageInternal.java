@@ -1,6 +1,6 @@
 package io.github.moyusowo.neoartisan.block.storage.internal;
 
-import io.github.moyusowo.neoartisanapi.api.block.ArtisanBlockState;
+import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlockData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
@@ -19,9 +19,9 @@ public interface ArtisanBlockStorageInternal {
         return Bukkit.getServicesManager().load(ArtisanBlockStorageInternal.class);
     }
 
-    void replaceArtisanBlock(Level level, BlockPos blockPos, ArtisanBlockState block);
+    void replaceArtisanBlock(Level level, BlockPos blockPos, ArtisanBlockData block);
 
-    void placeArtisanBlock(Level level, BlockPos blockPos, ArtisanBlockState block);
+    void placeArtisanBlock(Level level, BlockPos blockPos, ArtisanBlockData block);
 
     void removeArtisanBlock(Level level, BlockPos blockPos);
 
@@ -30,15 +30,15 @@ public interface ArtisanBlockStorageInternal {
     void removeArtisanBlock(Block block);
 
     @NotNull
-    ArtisanBlockState getArtisanBlock(Level level, BlockPos blockPos);
+    ArtisanBlockData getArtisanBlock(Level level, BlockPos blockPos);
 
-    ArtisanBlockState getArtisanBlock(Level level, int x, int y, int z);
+    ArtisanBlockData getArtisanBlock(Level level, int x, int y, int z);
 
-    Map<BlockPos, ArtisanBlockState> getChunkArtisanBlocks(Level level, ChunkPos chunkPos);
+    Map<BlockPos, ArtisanBlockData> getChunkArtisanBlocks(Level level, ChunkPos chunkPos);
 
-    Map<BlockPos, ArtisanBlockState> getChunkArtisanBlocks(Level level, int chunkX, int chunkZ);
+    Map<BlockPos, ArtisanBlockData> getChunkArtisanBlocks(Level level, int chunkX, int chunkZ);
 
-    Map<ChunkPos, Map<BlockPos, ArtisanBlockState>> getLevelArtisanBlocks(Level level);
+    Map<ChunkPos, Map<BlockPos, ArtisanBlockData>> getLevelArtisanBlocks(Level level);
 
     boolean isArtisanBlock(Level level, BlockPos blockPos);
 

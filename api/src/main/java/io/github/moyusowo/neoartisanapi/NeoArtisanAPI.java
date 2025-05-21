@@ -3,9 +3,10 @@ package io.github.moyusowo.neoartisanapi;
 import io.github.moyusowo.neoartisanapi.api.attribute.GlobalAttributeRegistry;
 import io.github.moyusowo.neoartisanapi.api.attribute.ItemStackAttributeRegistry;
 import io.github.moyusowo.neoartisanapi.api.attribute.PlayerAttributeRegistry;
-import io.github.moyusowo.neoartisanapi.api.block.crop.CropRegistry;
+import io.github.moyusowo.neoartisanapi.api.block.base.BlockRegistry;
 import io.github.moyusowo.neoartisanapi.api.block.storage.ArtisanBlockStorage;
 import io.github.moyusowo.neoartisanapi.api.item.ItemRegistry;
+import io.github.moyusowo.neoartisanapi.api.persistence.EmptyPersistentDataContainer;
 import io.github.moyusowo.neoartisanapi.api.recipe.RecipeRegistry;
 import org.bukkit.Bukkit;
 
@@ -24,8 +25,8 @@ public final class NeoArtisanAPI {
         return Bukkit.getServicesManager().load(PlayerAttributeRegistry.class);
     }
 
-    public static CropRegistry getCropRegistry() {
-        return Bukkit.getServicesManager().load(CropRegistry.class);
+    public static BlockRegistry getBlockRegistry() {
+        return Bukkit.getServicesManager().load(BlockRegistry.class);
     }
 
     public static ItemRegistry getItemRegistry() {
@@ -38,6 +39,10 @@ public final class NeoArtisanAPI {
 
     public static ArtisanBlockStorage getArtisanBlockStorage() {
         return Bukkit.getServicesManager().load(ArtisanBlockStorage.class);
+    }
+
+    public static EmptyPersistentDataContainer emptyPersistentDataContainer() {
+        return Bukkit.getServicesManager().load(EmptyPersistentDataContainer.class);
     }
 
 }

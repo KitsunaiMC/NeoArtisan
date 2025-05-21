@@ -1,19 +1,32 @@
-package io.github.moyusowo.neoartisanapi.api.block.crop;
+package io.github.moyusowo.neoartisanapi.api.block.base;
 
 import io.github.moyusowo.neoartisanapi.api.item.ItemGenerator;
-import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
 
-@SuppressWarnings("unused")
-public record CropStageProperty(int appearanceState, ItemGenerator[] generators) {
+public abstract class ArtisanBlockStateBase implements ArtisanBlockState {
 
-    public CropStageProperty(int appearanceState, ItemGenerator[] generators) {
+    private final int appearanceState, actualState;
+    private final ItemGenerator[] generators;
+
+    protected ArtisanBlockStateBase(int appearanceState, int actualState, ItemGenerator[] generators) {
         this.appearanceState = appearanceState;
+        this.actualState = actualState;
         this.generators = Arrays.copyOf(generators, generators.length);
     }
 
+    @Override
+    public int appearanceState() {
+        return this.appearanceState;
+    }
+
+    @Override
+    public int actualState() {
+        return this.actualState;
+    }
+
+    @Override
     public ItemStack[] drops() {
         ItemStack[] drops = new ItemStack[generators.length];
         for (int i = 0; i < drops.length; i++) {
@@ -22,7 +35,9 @@ public record CropStageProperty(int appearanceState, ItemGenerator[] generators)
         return drops;
     }
 
+    @Override
     public ItemGenerator[] generators() {
         return Arrays.copyOf(generators, generators.length);
     }
+
 }

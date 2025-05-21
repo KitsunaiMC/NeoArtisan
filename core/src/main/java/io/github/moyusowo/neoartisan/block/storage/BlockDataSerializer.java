@@ -1,10 +1,12 @@
 package io.github.moyusowo.neoartisan.block.storage;
 
 import io.github.moyusowo.neoartisan.NeoArtisan;
+import io.github.moyusowo.neoartisan.block.base.internal.ArtisanBlockDataInternal;
 import io.github.moyusowo.neoartisan.util.terminate.TerminateMethod;
 import io.github.moyusowo.neoartisanapi.NeoArtisanAPI;
-import io.github.moyusowo.neoartisanapi.api.block.ArtisanBlockState;
-import io.github.moyusowo.neoartisanapi.api.block.crop.CurrentCropStage;
+import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlockData;
+import io.github.moyusowo.neoartisanapi.api.block.crop.ArtisanCropData;
+import io.github.moyusowo.neoartisanapi.api.block.packetblock.ArtisanPacketBlockData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
@@ -12,6 +14,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.World;
 import org.bukkit.craftbukkit.CraftWorld;
+import org.bukkit.persistence.PersistentDataContainer;
 
 import java.io.*;
 import java.util.HashMap;
@@ -30,27 +33,39 @@ final class BlockDataSerializer {
             for (World world : Bukkit.getWorlds()) {
                 CraftWorld craftWorld = (CraftWorld) world;
                 Level level = craftWorld.getHandle();
-                Map<ChunkPos, Map<BlockPos, ArtisanBlockState>> chunkMap = ArtisanBlockStorageImpl.getInstance().getLevelArtisanBlocks(level);
+                Map<ChunkPos, Map<BlockPos, ArtisanBlockData>> chunkMap = ArtisanBlockStorageImpl.getInstance().getLevelArtisanBlocks(level);
                 File file = new File(dataFolder, world.getUID() + ".dat");
                 try (DataOutputStream out = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(file)))) {
                     out.writeInt(chunkMap.size());
-                    for (Map.Entry<ChunkPos, Map<BlockPos, ArtisanBlockState>> chunkEntry : chunkMap.entrySet()) {
+                    for (Map.Entry<ChunkPos, Map<BlockPos, ArtisanBlockData>> chunkEntry : chunkMap.entrySet()) {
                         ChunkPos chunkPos = chunkEntry.getKey();
                         out.writeInt(chunkPos.x);
                         out.writeInt(chunkPos.z);
-                        Map<BlockPos, ArtisanBlockState> blockMap = chunkEntry.getValue();
+                        Map<BlockPos, ArtisanBlockData> blockMap = chunkEntry.getValue();
                         out.writeInt(blockMap.size());
-                        for (Map.Entry<BlockPos, ArtisanBlockState> blockEntry : blockMap.entrySet()) {
-                            if (blockEntry.getValue() instanceof CurrentCropStage currentCropStage) {
+                        for (Map.Entry<BlockPos, ArtisanBlockData> blockEntry : blockMap.entrySet()) {
+                            if (blockEntry.getValue() instanceof ArtisanCropData artisanCropData) {
                                 out.writeUTF("crop");
                                 BlockPos pos = blockEntry.getKey();
                                 out.writeInt(pos.getX());
                                 out.writeInt(pos.getY());
                                 out.writeInt(pos.getZ());
-                                out.writeUTF(currentCropStage.cropId().getNamespace());
-                                out.writeUTF(currentCropStage.cropId().getKey());
-                                out.writeInt(currentCropStage.stage());
+                                out.writeUTF(artisanCropData.blockId().getNamespace());
+                                out.writeUTF(artisanCropData.blockId().getKey());
+                                out.writeInt(artisanCropData.stage());
+                            } else if (blockEntry.getValue() instanceof ArtisanPacketBlockData artisanPacketBlockData) {
+                                out.writeUTF("packet_block");
+                                BlockPos pos = blockEntry.getKey();
+                                out.writeInt(pos.getX());
+                                out.writeInt(pos.getY());
+                                out.writeInt(pos.getZ());
+                                out.writeUTF(artisanPacketBlockData.blockId().getNamespace());
+                                out.writeUTF(artisanPacketBlockData.blockId().getKey());
+                                out.writeInt(artisanPacketBlockData.stage());
                             }
+                            byte[] pdcByte = blockEntry.getValue().getPersistentDataContainer().serializeToBytes();
+                            out.writeInt(pdcByte.length);
+                            out.write(pdcByte);
                         }
                     }
                 }
@@ -61,7 +76,7 @@ final class BlockDataSerializer {
         }
     }
 
-    public static void load(Map<Level, Map<ChunkPos, Map<BlockPos, ArtisanBlockState>>> storage) {
+    public static void load(Map<Level, Map<ChunkPos, Map<BlockPos, ArtisanBlockData>>> storage) {
         try {
             File dataFolder = new File(NeoArtisan.instance().getDataFolder(), "block/storage");
             if (!dataFolder.exists()) return;
@@ -75,13 +90,13 @@ final class BlockDataSerializer {
                     CraftWorld craftWorld = (CraftWorld) world;
                     if (craftWorld == null) throw new IllegalArgumentException("UUID can not match!");
                     Level level = craftWorld.getHandle();
-                    Map<ChunkPos, Map<BlockPos, ArtisanBlockState>> chunkMap = new HashMap<>();
+                    Map<ChunkPos, Map<BlockPos, ArtisanBlockData>> chunkMap = new HashMap<>();
                     storage.put(level, chunkMap);
                     try (DataInputStream in = new DataInputStream(new BufferedInputStream(new FileInputStream(file)))) {
                         int chunkCount = in.readInt();
                         for (int i = 0; i < chunkCount; i++) {
                             ChunkPos chunkPos = new ChunkPos(in.readInt(), in.readInt());
-                            Map<BlockPos, ArtisanBlockState> blockMap = new HashMap<>();
+                            Map<BlockPos, ArtisanBlockData> blockMap = new HashMap<>();
                             chunkMap.put(chunkPos, blockMap);
                             int blockCount = in.readInt();
                             for (int j = 0; j < blockCount; j++) {
@@ -92,11 +107,32 @@ final class BlockDataSerializer {
                                             in.readInt(),
                                             in.readInt()
                                     );
-                                    CurrentCropStage currentCropStage = NeoArtisanAPI.getCropRegistry().emptyCropStage(
-                                            new NamespacedKey(in.readUTF(), in.readUTF()),
+                                    ArtisanCropData artisanCropData = ArtisanCropData.builder()
+                                            .blockId(new NamespacedKey(in.readUTF(), in.readUTF()))
+                                            .stage(in.readInt())
+                                            .build();
+                                    int length = in.readInt();
+                                    byte[] pdcByte = in.readNBytes(length);
+                                    PersistentDataContainer persistentDataContainer = NeoArtisanAPI.emptyPersistentDataContainer().emptyPersistentDataContainer();
+                                    persistentDataContainer.readFromBytes(pdcByte, true);
+                                    ArtisanBlockDataInternal.asInternal(artisanCropData).setPersistentDataContainer(persistentDataContainer);
+                                    blockMap.put(blockPos, artisanCropData);
+                                } else if (type.equals("packet_block")) {
+                                    BlockPos blockPos = new BlockPos(
+                                            in.readInt(),
+                                            in.readInt(),
                                             in.readInt()
                                     );
-                                    blockMap.put(blockPos, (ArtisanBlockState) currentCropStage);
+                                    ArtisanPacketBlockData artisanPacketBlockData = ArtisanPacketBlockData.builder()
+                                            .blockId(new NamespacedKey(in.readUTF(), in.readUTF()))
+                                            .stage(in.readInt())
+                                            .build();
+                                    int length = in.readInt();
+                                    byte[] pdcByte = in.readNBytes(length);
+                                    PersistentDataContainer persistentDataContainer = NeoArtisanAPI.emptyPersistentDataContainer().emptyPersistentDataContainer();
+                                    persistentDataContainer.readFromBytes(pdcByte, true);
+                                    ArtisanBlockDataInternal.asInternal(artisanPacketBlockData).setPersistentDataContainer(persistentDataContainer);
+                                    blockMap.put(blockPos, artisanPacketBlockData);
                                 }
                             }
                         }

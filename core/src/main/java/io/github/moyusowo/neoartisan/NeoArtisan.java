@@ -2,16 +2,22 @@ package io.github.moyusowo.neoartisan;
 
 import io.github.moyusowo.neoartisan.util.init.Initializer;
 import io.github.moyusowo.neoartisan.util.terminate.Terminator;
+import io.github.moyusowo.neoartisanapi.api.persistence.EmptyPersistentDataContainer;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Server;
 import org.bukkit.event.Listener;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.persistence.PersistentDataAdapterContext;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
 import java.util.logging.Logger;
 
-public final class NeoArtisan extends JavaPlugin {
+public final class NeoArtisan extends JavaPlugin implements EmptyPersistentDataContainer {
 
     private static final String pkg = "io.github.moyusowo.neoartisan";
     private static final boolean isDebugMode = true;
@@ -19,6 +25,7 @@ public final class NeoArtisan extends JavaPlugin {
     private static NeoArtisan instance;
     private static NamespacedKey artisanItemIdKey;
     private static NamespacedKey artisanItemAttackDamageKey, artisanItemAttackKnockbackKey, artisanItemAttackSpeedKey;
+    private static PersistentDataAdapterContext persistentDataAdapterContext;
 
     public NeoArtisan() {
         super();
@@ -65,8 +72,17 @@ public final class NeoArtisan extends JavaPlugin {
         return isDebugMode;
     }
 
+    public PersistentDataContainer emptyPersistentDataContainer() { return persistentDataAdapterContext.newPersistentDataContainer(); }
+
     @Override
     public void onEnable() {
+        persistentDataAdapterContext = ItemStack.of(Material.STICK).getItemMeta().getPersistentDataContainer().getAdapterContext();
+        Bukkit.getServicesManager().register(
+                EmptyPersistentDataContainer.class,
+                this,
+                this,
+                ServicePriority.Normal
+        );
         Initializer.scanPackage(pkg);
         Initializer.executeEnable();
         Terminator.scanPackage(pkg);

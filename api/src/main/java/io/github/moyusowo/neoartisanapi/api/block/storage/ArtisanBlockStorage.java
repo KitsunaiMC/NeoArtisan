@@ -1,16 +1,16 @@
 package io.github.moyusowo.neoartisanapi.api.block.storage;
 
-import io.github.moyusowo.neoartisanapi.api.block.ArtisanBlockState;
-import io.github.moyusowo.neoartisanapi.api.block.crop.CurrentCropStage;
+import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlockData;
+import io.github.moyusowo.neoartisanapi.api.block.crop.ArtisanCropData;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.jetbrains.annotations.ApiStatus;
 
 public interface ArtisanBlockStorage {
 
-    ArtisanBlockState getArtisanBlock(World world, int x, int y, int z);
+    ArtisanBlockData getArtisanBlock(World world, int x, int y, int z);
 
-    ArtisanBlockState getArtisanBlock(Block block);
+    ArtisanBlockData getArtisanBlock(Block block);
 
     boolean isArtisanBlock(Block block);
 
@@ -18,11 +18,11 @@ public interface ArtisanBlockStorage {
 
     @ApiStatus.Experimental
     default boolean isArtisanCrop(Block block) {
-        return this.isArtisanBlock(block.getWorld(), block.getX(), block.getY(), block.getZ());
+        return this.isArtisanCrop(block.getWorld(), block.getX(), block.getY(), block.getZ());
     }
 
     @ApiStatus.Experimental
     default boolean isArtisanCrop(World world, int x, int y, int z) {
-        return this.getArtisanBlock(world, x, y, z) instanceof CurrentCropStage;
+        return this.getArtisanBlock(world, x, y, z) instanceof ArtisanCropData;
     }
 }

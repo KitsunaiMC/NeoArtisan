@@ -3,8 +3,7 @@ package io.github.moyusowo.neoartisan.block.storage;
 import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisan.block.storage.internal.ArtisanBlockStorageInternal;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
-import io.github.moyusowo.neoartisanapi.api.block.ArtisanBlockState;
-import io.github.moyusowo.neoartisanapi.api.block.crop.CurrentCropStage;
+import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlockData;
 import io.github.moyusowo.neoartisanapi.api.block.storage.ArtisanBlockStorage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.ChunkPos;
@@ -61,11 +60,11 @@ final class ArtisanBlockStorageImpl implements ArtisanBlockStorage, ArtisanBlock
         );
     }
 
-    private final Map<Level, Map<ChunkPos, Map<BlockPos, ArtisanBlockState>>> storage;
+    private final Map<Level, Map<ChunkPos, Map<BlockPos, ArtisanBlockData>>> storage;
 
     private final ReentrantReadWriteLock lock;
 
-    public void replaceArtisanBlock(Level level, BlockPos blockPos, ArtisanBlockState block) {
+    public void replaceArtisanBlock(Level level, BlockPos blockPos, ArtisanBlockData block) {
         ChunkPos chunkPos = new ChunkPos(blockPos);
         lock.writeLock().lock();
         try {
@@ -75,7 +74,7 @@ final class ArtisanBlockStorageImpl implements ArtisanBlockStorage, ArtisanBlock
         }
     }
 
-    public void placeArtisanBlock(Level level, BlockPos blockPos, ArtisanBlockState block) {
+    public void placeArtisanBlock(Level level, BlockPos blockPos, ArtisanBlockData block) {
         ChunkPos chunkPos = new ChunkPos(blockPos);
         lock.writeLock().lock();
         try {
@@ -108,56 +107,56 @@ final class ArtisanBlockStorageImpl implements ArtisanBlockStorage, ArtisanBlock
         removeArtisanBlock(world.getHandle(), block.getX(), block.getY(), block.getZ());
     }
 
-    public @NotNull ArtisanBlockState getArtisanBlock(Level level, BlockPos blockPos) {
+    public @NotNull ArtisanBlockData getArtisanBlock(Level level, BlockPos blockPos) {
         ChunkPos chunkPos = new ChunkPos(blockPos);
         lock.readLock().lock();
         try {
-            ArtisanBlockState artisanBlockState = storage.get(level).get(chunkPos).get(blockPos);
-            if (artisanBlockState == null) throw new IllegalArgumentException("Please use is method to check first!");
-            else return artisanBlockState;
+            ArtisanBlockData artisanBlockData = storage.get(level).get(chunkPos).get(blockPos);
+            if (artisanBlockData == null) throw new IllegalArgumentException("Please use is method to check first!");
+            else return artisanBlockData;
         } finally {
             lock.readLock().unlock();
         }
     }
 
-    public ArtisanBlockState getArtisanBlock(Level level, int x, int y, int z) {
+    public ArtisanBlockData getArtisanBlock(Level level, int x, int y, int z) {
         BlockPos blockPos = new BlockPos(x, y, z);
         return getArtisanBlock(level, blockPos);
     }
 
     @Override
-    public ArtisanBlockState getArtisanBlock(World world, int x, int y, int z) {
+    public ArtisanBlockData getArtisanBlock(World world, int x, int y, int z) {
         BlockPos blockPos = new BlockPos(x, y, z);
         return getArtisanBlock(((CraftWorld) world).getHandle(), blockPos);
     }
 
     @Override
-    public ArtisanBlockState getArtisanBlock(Block block) {
+    public ArtisanBlockData getArtisanBlock(Block block) {
         CraftWorld world = (CraftWorld) block.getWorld();
         return getArtisanBlock(world.getHandle(), block.getX(), block.getY(), block.getZ());
     }
 
-    public Map<BlockPos, ArtisanBlockState> getChunkArtisanBlocks(Level level, ChunkPos chunkPos) {
+    public Map<BlockPos, ArtisanBlockData> getChunkArtisanBlocks(Level level, ChunkPos chunkPos) {
         lock.readLock().lock();
         try {
-            Map<ChunkPos, Map<BlockPos, ArtisanBlockState>> levelMap = storage.getOrDefault(level, null);
+            Map<ChunkPos, Map<BlockPos, ArtisanBlockData>> levelMap = storage.getOrDefault(level, null);
             if (levelMap == null) return Collections.emptyMap();
-            Map<BlockPos, ArtisanBlockState> chunkMap = levelMap.getOrDefault(chunkPos, null);
+            Map<BlockPos, ArtisanBlockData> chunkMap = levelMap.getOrDefault(chunkPos, null);
             return chunkMap != null ? Map.copyOf(chunkMap) : Collections.emptyMap();
         } finally {
             lock.readLock().unlock();
         }
     }
 
-    public Map<BlockPos, ArtisanBlockState> getChunkArtisanBlocks(Level level, int chunkX, int chunkZ) {
+    public Map<BlockPos, ArtisanBlockData> getChunkArtisanBlocks(Level level, int chunkX, int chunkZ) {
         ChunkPos chunkPos = new ChunkPos(chunkX, chunkZ);
         return getChunkArtisanBlocks(level, chunkPos);
     }
 
-    public Map<ChunkPos, Map<BlockPos, ArtisanBlockState>> getLevelArtisanBlocks(Level level) {
+    public Map<ChunkPos, Map<BlockPos, ArtisanBlockData>> getLevelArtisanBlocks(Level level) {
         lock.readLock().lock();
         try {
-            Map<ChunkPos, Map<BlockPos, ArtisanBlockState>> levelMap = storage.getOrDefault(level, null);
+            Map<ChunkPos, Map<BlockPos, ArtisanBlockData>> levelMap = storage.getOrDefault(level, null);
             return levelMap != null ? Map.copyOf(levelMap) : Collections.emptyMap();
         } finally {
             lock.readLock().unlock();

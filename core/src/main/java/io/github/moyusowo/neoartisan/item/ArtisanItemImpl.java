@@ -33,7 +33,7 @@ class ArtisanItemImpl implements ArtisanItem {
     private final Integer maxDurability;
     private final ArmorProperty armorProperty;
     private final AttributePropertyImpl attributeProperty;
-    private final NamespacedKey cropId;
+    private final NamespacedKey blockId;
     private final NamespacedKey itemModel;
     private final ItemStack cachedItemStack;
 
@@ -49,7 +49,7 @@ class ArtisanItemImpl implements ArtisanItem {
             @Nullable Integer maxDurability,
             @NotNull ArmorProperty armorProperty,
             @NotNull AttributePropertyImpl attributeProperty,
-            @Nullable NamespacedKey cropId,
+            @Nullable NamespacedKey blockId,
             @Nullable NamespacedKey itemModel
     ) {
         this.registryId = registryId;
@@ -63,7 +63,7 @@ class ArtisanItemImpl implements ArtisanItem {
         this.maxDurability = maxDurability;
         this.armorProperty = armorProperty;
         this.attributeProperty = attributeProperty;
-        this.cropId = cropId;
+        this.blockId = blockId;
         this.itemModel = itemModel;
         this.cachedItemStack = createNewItemStack();
     }
@@ -81,7 +81,7 @@ class ArtisanItemImpl implements ArtisanItem {
     @Override
     public boolean equals(@NotNull ItemStack itemStack) {
         if (!itemStack.getItemMeta().getPersistentDataContainer().has(NeoArtisan.getArtisanItemIdKey())) return false;
-        return itemStack.getItemMeta().getPersistentDataContainer().get(NeoArtisan.getArtisanItemIdKey(), NamespacedKeyDataType.TYPE).equals(this.registryId);
+        return itemStack.getItemMeta().getPersistentDataContainer().get(NeoArtisan.getArtisanItemIdKey(), NamespacedKeyDataType.NAMESPACED_KEY).equals(this.registryId);
     }
 
     @Override
@@ -135,8 +135,8 @@ class ArtisanItemImpl implements ArtisanItem {
     }
 
     @Override
-    public @Nullable NamespacedKey getCropId() {
-        return this.cropId;
+    public @Nullable NamespacedKey getBlockId() {
+        return this.blockId;
     }
 
     @Override
@@ -284,7 +284,7 @@ class ArtisanItemImpl implements ArtisanItem {
                 itemMeta.getPersistentDataContainer().set(key, PDCType, this.attributeProperty.getItemStackAttributeValue(key));
             }
         }
-        itemMeta.getPersistentDataContainer().set(NeoArtisan.getArtisanItemIdKey(), NamespacedKeyDataType.TYPE, this.registryId);
+        itemMeta.getPersistentDataContainer().set(NeoArtisan.getArtisanItemIdKey(), NamespacedKeyDataType.NAMESPACED_KEY, this.registryId);
         itemStack.setItemMeta(itemMeta);
         return itemStack;
     }

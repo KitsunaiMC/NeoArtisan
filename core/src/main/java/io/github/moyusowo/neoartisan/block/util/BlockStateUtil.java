@@ -1,4 +1,4 @@
-package io.github.moyusowo.neoartisan.block;
+package io.github.moyusowo.neoartisan.block.util;
 
 import io.github.moyusowo.neoartisan.NeoArtisan;
 import net.minecraft.core.registries.BuiltInRegistries;
