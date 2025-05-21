@@ -2,7 +2,6 @@ package io.github.moyusowo.neoartisanapi.api.item;
 
 import io.papermc.paper.datacomponent.item.CustomModelData;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
@@ -164,7 +163,7 @@ public interface ItemRegistry {
          */
         @NotNull Builder attributeProperty(AttributeProperty attributeProperty);
 
-        @NotNull Builder cropId(NamespacedKey blockKey);
+        @NotNull Builder blockId(NamespacedKey blockKey);
 
         @NotNull Builder itemModel(NamespacedKey itemModel);
 

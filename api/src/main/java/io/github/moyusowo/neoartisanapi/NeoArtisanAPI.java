@@ -4,7 +4,6 @@ import io.github.moyusowo.neoartisanapi.api.attribute.GlobalAttributeRegistry;
 import io.github.moyusowo.neoartisanapi.api.attribute.ItemStackAttributeRegistry;
 import io.github.moyusowo.neoartisanapi.api.attribute.PlayerAttributeRegistry;
 import io.github.moyusowo.neoartisanapi.api.block.base.BlockRegistry;
-import io.github.moyusowo.neoartisanapi.api.block.crop.CropRegistry;
 import io.github.moyusowo.neoartisanapi.api.block.storage.ArtisanBlockStorage;
 import io.github.moyusowo.neoartisanapi.api.item.ItemRegistry;
 import io.github.moyusowo.neoartisanapi.api.persistence.EmptyPersistentDataContainer;

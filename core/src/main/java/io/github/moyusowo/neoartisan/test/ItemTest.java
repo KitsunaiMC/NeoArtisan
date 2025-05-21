@@ -7,7 +7,6 @@ import io.github.moyusowo.neoartisanapi.NeoArtisanAPI;
 import io.github.moyusowo.neoartisanapi.api.item.*;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.bukkit.inventory.EquipmentSlot;
 
 import java.util.List;
 
@@ -18,7 +17,8 @@ final class ItemTest {
             magic_bread = new NamespacedKey(namespace, "magic_bread"),
             magic_diamond = new NamespacedKey(namespace, "magic_diamond"),
             magic_helmet = new NamespacedKey(namespace, "magic_helmet"),
-            magic_sword = new NamespacedKey(namespace, "magic_sword");
+            magic_sword = new NamespacedKey(namespace, "magic_sword"),
+            cooking_pot = new NamespacedKey(namespace, "cooking_pot");
 
     @InitMethod(order = InitPriority.LOW)
     private static void register() {
@@ -35,7 +35,7 @@ final class ItemTest {
                                             "但是似乎还能用"
                                     )
                             )
-                            .cropId(new NamespacedKey(NeoArtisan.instance(), "magic_crop"))
+                            .blockId(new NamespacedKey(NeoArtisan.instance(), "magic_crop"))
             );
             NeoArtisanAPI.getItemRegistry().registerItem(
                     NeoArtisanAPI.getItemRegistry().builder()
@@ -104,6 +104,14 @@ final class ItemTest {
                                     )
                             )
                             .maxDurability(5000)
+            );
+            NeoArtisanAPI.getItemRegistry().registerItem(
+                    NeoArtisanAPI.getItemRegistry().builder()
+                            .registryId(cooking_pot)
+                            .rawMaterial(Material.PAPER)
+                            .displayName("烹饪锅")
+                            .blockId(cooking_pot)
+                            .itemModel(cooking_pot)
             );
         }
     }

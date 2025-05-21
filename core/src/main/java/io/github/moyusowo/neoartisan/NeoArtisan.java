@@ -11,6 +11,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataAdapterContext;
 import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
@@ -76,6 +77,12 @@ public final class NeoArtisan extends JavaPlugin implements EmptyPersistentDataC
     @Override
     public void onEnable() {
         persistentDataAdapterContext = ItemStack.of(Material.STICK).getItemMeta().getPersistentDataContainer().getAdapterContext();
+        Bukkit.getServicesManager().register(
+                EmptyPersistentDataContainer.class,
+                this,
+                this,
+                ServicePriority.Normal
+        );
         Initializer.scanPackage(pkg);
         Initializer.executeEnable();
         Terminator.scanPackage(pkg);

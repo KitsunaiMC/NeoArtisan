@@ -4,13 +4,15 @@ import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
 import io.github.moyusowo.neoartisanapi.NeoArtisanAPI;
-import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlockState;
 import io.github.moyusowo.neoartisanapi.api.block.crop.ArtisanCrop;
 import io.github.moyusowo.neoartisanapi.api.block.crop.ArtisanCropState;
+import io.github.moyusowo.neoartisanapi.api.block.packetblock.ArtisanPacketBlock;
+import io.github.moyusowo.neoartisanapi.api.block.packetblock.ArtisanPacketBlockState;
 import io.github.moyusowo.neoartisanapi.api.item.ItemGenerator;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 
@@ -20,7 +22,8 @@ import static io.github.moyusowo.neoartisan.test.ItemTest.namespace;
 
 final class CropTest {
 
-    static final NamespacedKey magic_crop = new NamespacedKey(namespace, "magic_crop");
+    static final NamespacedKey magic_crop = new NamespacedKey(namespace, "magic_crop"),
+            cooking_pot = new NamespacedKey(namespace, "cooking_pot");
 
     @InitMethod(order = InitPriority.LOW)
     private static void register() {
@@ -109,6 +112,42 @@ final class CropTest {
                             )
                             .boneMealMinGrowth(0)
                             .boneMealMaxGrowth(2)
+                            .build()
+            );
+            NeoArtisanAPI.getBlockRegistry().register(
+                    ArtisanPacketBlock.builder()
+                            .blockId(cooking_pot)
+                            .defaultState(0)
+                            .states(
+                                    List.of(
+                                            ArtisanPacketBlockState.builder()
+                                                    .actualState(
+                                                            Block.getId(
+                                                                    Blocks.OAK_LEAVES.defaultBlockState()
+                                                                            .setValue(BlockStateProperties.DISTANCE, 7)
+                                                                            .setValue(BlockStateProperties.PERSISTENT, true)
+                                                                            .setValue(BlockStateProperties.WATERLOGGED, false)
+                                                            )
+                                                    )
+                                                    .appearanceState(
+                                                            Block.getId(
+                                                                    Blocks.OAK_LEAVES.defaultBlockState()
+                                                                            .setValue(BlockStateProperties.DISTANCE, 1)
+                                                                            .setValue(BlockStateProperties.PERSISTENT, false)
+                                                                            .setValue(BlockStateProperties.WATERLOGGED, false)
+                                                            )
+                                                    )
+                                                    .generators(
+                                                            new ItemGenerator[]{
+                                                                    ItemGenerator.simpleGenerator(
+                                                                            cooking_pot,
+                                                                            1
+                                                                    )
+                                                            }
+                                                    )
+                                                    .build()
+                                    )
+                            )
                             .build()
             );
         }

@@ -69,7 +69,7 @@ final class ItemRegistryImpl implements ItemRegistry {
         private Integer maxDurability;
         private ArmorProperty armorProperty;
         private AttributePropertyImpl attributeProperty;
-        private NamespacedKey cropId;
+        private NamespacedKey blockId;
         private NamespacedKey itemModel;
 
         private BuilderImpl() {
@@ -84,7 +84,7 @@ final class ItemRegistryImpl implements ItemRegistry {
             this.maxDurability = null;
             this.armorProperty = ArmorProperty.EMPTY;
             this.attributeProperty = new AttributePropertyImpl();
-            this.cropId = null;
+            this.blockId = null;
             this.itemModel = null;
         }
 
@@ -181,8 +181,8 @@ final class ItemRegistryImpl implements ItemRegistry {
 
         @NotNull
         @Override
-        public Builder cropId(NamespacedKey cropId) {
-            this.cropId = cropId;
+        public Builder blockId(NamespacedKey cropId) {
+            this.blockId = cropId;
             return this;
         }
 
@@ -209,7 +209,7 @@ final class ItemRegistryImpl implements ItemRegistry {
                     maxDurability,
                     armorProperty,
                     attributeProperty,
-                    cropId,
+                    blockId,
                     itemModel
             );
         }

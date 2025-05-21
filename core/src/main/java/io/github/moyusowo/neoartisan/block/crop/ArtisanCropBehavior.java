@@ -5,8 +5,9 @@ import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisan.block.storage.internal.ArtisanBlockStorageInternal;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisanapi.NeoArtisanAPI;
-import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlockData;
+import io.github.moyusowo.neoartisanapi.api.block.crop.ArtisanCrop;
 import io.github.moyusowo.neoartisanapi.api.block.crop.ArtisanCropData;
+import io.github.moyusowo.neoartisanapi.api.block.event.ArtisanBlockPlaceEvent;
 import io.github.moyusowo.neoartisanapi.api.item.ArtisanItem;
 import io.papermc.paper.event.block.BlockBreakBlockEvent;
 import net.minecraft.core.BlockPos;
@@ -16,6 +17,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 import org.bukkit.craftbukkit.CraftWorld;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -25,13 +27,14 @@ import org.bukkit.event.block.BlockFertilizeEvent;
 import org.bukkit.event.block.BlockGrowEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashMap;
 import java.util.concurrent.ThreadLocalRandom;
 
-import static io.github.moyusowo.neoartisan.block.BlockStateUtil.stateById;
+import static io.github.moyusowo.neoartisan.block.util.BlockStateUtil.stateById;
 
 final class ArtisanCropBehavior implements Listener {
 
@@ -44,18 +47,36 @@ final class ArtisanCropBehavior implements Listener {
         NeoArtisan.registerListener(new ArtisanCropBehavior());
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     private static void onArtisanCropPlace(PlayerInteractEvent event) throws Exception {
+        if (event.useInteractedBlock() == Event.Result.DENY) return;
+        if (event.useItemInHand() == Event.Result.DENY) return;
         if (event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
         if (!NeoArtisanAPI.getItemRegistry().isArtisanItem(event.getItem())) return;
         ArtisanItem artisanItem = NeoArtisanAPI.getItemRegistry().getArtisanItem(event.getItem());
-        if (artisanItem.getCropId() == null) return;
+        if (artisanItem.getBlockId() == null) return;
+        if (!NeoArtisanAPI.getBlockRegistry().isArtisanBlock(artisanItem.getBlockId())) return;
+        if (!(NeoArtisanAPI.getBlockRegistry().getArtisanBlock(artisanItem.getBlockId()) instanceof ArtisanCrop)) return;
         if (event.getClickedBlock().getType() != Material.FARMLAND) return;
         if (event.getBlockFace() != BlockFace.UP) return;
         if (event.getClickedBlock().getRelative(BlockFace.UP).getType() != Material.AIR) return;
         event.setCancelled(true);
-        place(event.getClickedBlock().getRelative(BlockFace.UP), new ArtisanCropDataImpl(artisanItem.getCropId(), NeoArtisanAPI.getBlockRegistry().getArtisanBlock(artisanItem.getCropId()).getDefaultState()));
-        event.getItem().setAmount(event.getItem().getAmount() - 1);
+        ArtisanBlockPlaceEvent artisanBlockPlaceEvent = new ArtisanBlockPlaceEvent(
+                event.getClickedBlock().getRelative(BlockFace.UP),
+                event.getClickedBlock().getRelative(BlockFace.UP).getState(),
+                event.getClickedBlock(),
+                event.getItem(),
+                event.getPlayer(),
+                true,
+                EquipmentSlot.HAND,
+                NeoArtisanAPI.getBlockRegistry().getArtisanBlock(artisanItem.getBlockId())
+        );
+        Bukkit.getPluginManager().callEvent(artisanBlockPlaceEvent);
+        if (artisanBlockPlaceEvent.isCancelled()) return;
+        place(event.getClickedBlock().getRelative(BlockFace.UP), new ArtisanCropDataImpl(artisanItem.getBlockId(), NeoArtisanAPI.getBlockRegistry().getArtisanBlock(artisanItem.getBlockId()).getDefaultState()));
+        if (event.getPlayer().getGameMode() != GameMode.CREATIVE) {
+            event.getItem().setAmount(event.getItem().getAmount() - 1);
+        }
     }
 
     @EventHandler
@@ -63,7 +84,6 @@ final class ArtisanCropBehavior implements Listener {
         if (event.isCancelled()) return;
         if (!NeoArtisanAPI.getArtisanBlockStorage().isArtisanBlock(event.getBlock())) return;
         if (!(NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlock(event.getBlock()) instanceof ArtisanCropData artisanCropData)) return;
-        if (event.isCancelled()) return;
         if (event.getPlayer().getGameMode() == GameMode.CREATIVE) {
             ArtisanBlockStorageInternal.getInternal().removeArtisanBlock(event.getBlock());
             return;

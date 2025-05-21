@@ -6,6 +6,7 @@ import io.github.moyusowo.neoartisan.util.terminate.TerminateMethod;
 import io.github.moyusowo.neoartisanapi.NeoArtisanAPI;
 import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlockData;
 import io.github.moyusowo.neoartisanapi.api.block.crop.ArtisanCropData;
+import io.github.moyusowo.neoartisanapi.api.block.packetblock.ArtisanPacketBlockData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
@@ -52,6 +53,15 @@ final class BlockDataSerializer {
                                 out.writeUTF(artisanCropData.blockId().getNamespace());
                                 out.writeUTF(artisanCropData.blockId().getKey());
                                 out.writeInt(artisanCropData.stage());
+                            } else if (blockEntry.getValue() instanceof ArtisanPacketBlockData artisanPacketBlockData) {
+                                out.writeUTF("packet_block");
+                                BlockPos pos = blockEntry.getKey();
+                                out.writeInt(pos.getX());
+                                out.writeInt(pos.getY());
+                                out.writeInt(pos.getZ());
+                                out.writeUTF(artisanPacketBlockData.blockId().getNamespace());
+                                out.writeUTF(artisanPacketBlockData.blockId().getKey());
+                                out.writeInt(artisanPacketBlockData.stage());
                             }
                             byte[] pdcByte = blockEntry.getValue().getPersistentDataContainer().serializeToBytes();
                             out.writeInt(pdcByte.length);
@@ -107,8 +117,23 @@ final class BlockDataSerializer {
                                     persistentDataContainer.readFromBytes(pdcByte, true);
                                     ArtisanBlockDataInternal.asInternal(artisanCropData).setPersistentDataContainer(persistentDataContainer);
                                     blockMap.put(blockPos, artisanCropData);
+                                } else if (type.equals("packet_block")) {
+                                    BlockPos blockPos = new BlockPos(
+                                            in.readInt(),
+                                            in.readInt(),
+                                            in.readInt()
+                                    );
+                                    ArtisanPacketBlockData artisanPacketBlockData = ArtisanPacketBlockData.builder()
+                                            .blockId(new NamespacedKey(in.readUTF(), in.readUTF()))
+                                            .stage(in.readInt())
+                                            .build();
+                                    int length = in.readInt();
+                                    byte[] pdcByte = in.readNBytes(length);
+                                    PersistentDataContainer persistentDataContainer = NeoArtisanAPI.emptyPersistentDataContainer().emptyPersistentDataContainer();
+                                    persistentDataContainer.readFromBytes(pdcByte, true);
+                                    ArtisanBlockDataInternal.asInternal(artisanPacketBlockData).setPersistentDataContainer(persistentDataContainer);
+                                    blockMap.put(blockPos, artisanPacketBlockData);
                                 }
-
                             }
                         }
                     }

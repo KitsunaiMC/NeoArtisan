@@ -16,7 +16,7 @@ class ArtisanCropDataImpl extends ArtisanBlockDataBase implements ArtisanCropDat
     @InitMethod(order = InitPriority.HIGH)
     private static void init() {
         Bukkit.getServicesManager().register(
-                ArtisanCropData.Builder.class,
+                Builder.class,
                 new BuilderImpl(),
                 NeoArtisan.instance(),
                 ServicePriority.Normal
