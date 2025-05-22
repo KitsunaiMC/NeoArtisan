@@ -105,14 +105,6 @@ final class ItemTest {
                             )
                             .maxDurability(5000)
             );
-            NeoArtisanAPI.getItemRegistry().registerItem(
-                    NeoArtisanAPI.getItemRegistry().builder()
-                            .registryId(cooking_pot)
-                            .rawMaterial(Material.PAPER)
-                            .displayName("烹饪锅")
-                            .blockId(cooking_pot)
-                            .itemModel(cooking_pot)
-            );
         }
     }
 }

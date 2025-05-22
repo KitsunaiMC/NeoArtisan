@@ -113,42 +113,6 @@ final class CropTest {
                             .boneMealMaxGrowth(2)
                             .build()
             );
-            NeoArtisanAPI.getBlockRegistry().register(
-                    ArtisanPacketBlock.builder()
-                            .blockId(cooking_pot)
-                            .defaultState(0)
-                            .states(
-                                    List.of(
-                                            ArtisanPacketBlockState.builder()
-                                                    .actualState(
-                                                            Block.getId(
-                                                                    Blocks.OAK_LEAVES.defaultBlockState()
-                                                                            .setValue(BlockStateProperties.DISTANCE, 7)
-                                                                            .setValue(BlockStateProperties.PERSISTENT, true)
-                                                                            .setValue(BlockStateProperties.WATERLOGGED, false)
-                                                            )
-                                                    )
-                                                    .appearanceState(
-                                                            Block.getId(
-                                                                    Blocks.OAK_LEAVES.defaultBlockState()
-                                                                            .setValue(BlockStateProperties.DISTANCE, 1)
-                                                                            .setValue(BlockStateProperties.PERSISTENT, false)
-                                                                            .setValue(BlockStateProperties.WATERLOGGED, false)
-                                                            )
-                                                    )
-                                                    .generators(
-                                                            new ItemGenerator[]{
-                                                                    ItemGenerator.simpleGenerator(
-                                                                            cooking_pot,
-                                                                            1
-                                                                    )
-                                                            }
-                                                    )
-                                                    .build()
-                                    )
-                            )
-                            .build()
-            );
         }
     }
 }
