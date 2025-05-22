@@ -2,10 +2,9 @@ package io.github.moyusowo.neoartisan.block.crop;
 
 import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlockDataBase;
-import io.github.moyusowo.neoartisan.block.base.internal.ArtisanBlockDataInternal;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
-import io.github.moyusowo.neoartisanapi.NeoArtisanAPI;
+import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
 import io.github.moyusowo.neoartisanapi.api.block.crop.ArtisanCropData;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;

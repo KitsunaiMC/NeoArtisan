@@ -2,7 +2,7 @@ package io.github.moyusowo.neoartisan.item;
 
 import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
-import io.github.moyusowo.neoartisanapi.NeoArtisanAPI;
+import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
 import io.github.moyusowo.neoartisanapi.api.item.AttributeProperty;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;

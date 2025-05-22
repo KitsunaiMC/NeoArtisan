@@ -1,6 +1,6 @@
 package io.github.moyusowo.neoartisanapi.api.block.base;
 
-import io.github.moyusowo.neoartisanapi.NeoArtisanAPI;
+import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
 import org.bukkit.NamespacedKey;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.jetbrains.annotations.ApiStatus;

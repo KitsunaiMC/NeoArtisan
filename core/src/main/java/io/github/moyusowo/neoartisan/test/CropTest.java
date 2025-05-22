@@ -3,7 +3,7 @@ package io.github.moyusowo.neoartisan.test;
 import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
-import io.github.moyusowo.neoartisanapi.NeoArtisanAPI;
+import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
 import io.github.moyusowo.neoartisanapi.api.block.crop.ArtisanCrop;
 import io.github.moyusowo.neoartisanapi.api.block.crop.ArtisanCropState;
 import io.github.moyusowo.neoartisanapi.api.block.packetblock.ArtisanPacketBlock;
@@ -12,7 +12,6 @@ import io.github.moyusowo.neoartisanapi.api.item.ItemGenerator;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 

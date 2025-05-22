@@ -1,4 +1,4 @@
-package io.github.moyusowo.neoartisanapi;
+package io.github.moyusowo.neoartisanapi.api;
 
 import io.github.moyusowo.neoartisanapi.api.attribute.GlobalAttributeRegistry;
 import io.github.moyusowo.neoartisanapi.api.attribute.ItemStackAttributeRegistry;
