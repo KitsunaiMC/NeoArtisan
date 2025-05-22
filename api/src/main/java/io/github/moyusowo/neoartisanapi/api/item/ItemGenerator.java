@@ -1,6 +1,6 @@
 package io.github.moyusowo.neoartisanapi.api.item;
 
-import io.github.moyusowo.neoartisanapi.NeoArtisanAPI;
+import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;

@@ -3,7 +3,7 @@ package io.github.moyusowo.neoartisan.block.storage;
 import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisan.block.base.internal.ArtisanBlockDataInternal;
 import io.github.moyusowo.neoartisan.util.terminate.TerminateMethod;
-import io.github.moyusowo.neoartisanapi.NeoArtisanAPI;
+import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
 import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlockData;
 import io.github.moyusowo.neoartisanapi.api.block.crop.ArtisanCropData;
 import io.github.moyusowo.neoartisanapi.api.block.packetblock.ArtisanPacketBlockData;

@@ -1,7 +1,7 @@
 package io.github.moyusowo.neoartisan.item;
 
 import io.github.moyusowo.neoartisan.NeoArtisan;
-import io.github.moyusowo.neoartisanapi.NeoArtisanAPI;
+import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
 import io.github.moyusowo.neoartisanapi.api.item.*;
 import io.github.moyusowo.neoartisan.util.NamespacedKeyDataType;
 import io.papermc.paper.datacomponent.DataComponentTypes;
