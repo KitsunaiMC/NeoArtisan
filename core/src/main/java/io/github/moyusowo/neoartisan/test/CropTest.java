@@ -6,12 +6,14 @@ import io.github.moyusowo.neoartisan.util.init.InitPriority;
 import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
 import io.github.moyusowo.neoartisanapi.api.block.crop.ArtisanCrop;
 import io.github.moyusowo.neoartisanapi.api.block.crop.ArtisanCropState;
-import io.github.moyusowo.neoartisanapi.api.block.packetblock.ArtisanPacketBlock;
-import io.github.moyusowo.neoartisanapi.api.block.packetblock.ArtisanPacketBlockState;
+import io.github.moyusowo.neoartisanapi.api.block.crop.TripwireAppearance;
+import io.github.moyusowo.neoartisanapi.api.block.thin.ArtisanThinBlock;
+import io.github.moyusowo.neoartisanapi.api.block.thin.ArtisanThinBlockState;
+import io.github.moyusowo.neoartisanapi.api.block.thin.ThinBlockAppearance;
+import io.github.moyusowo.neoartisanapi.api.block.transparent.TransparentAppearance;
+import io.github.moyusowo.neoartisanapi.api.block.transparent.ArtisanTransparentBlock;
+import io.github.moyusowo.neoartisanapi.api.block.transparent.ArtisanTransparentBlockState;
 import io.github.moyusowo.neoartisanapi.api.item.ItemGenerator;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 
@@ -24,27 +26,24 @@ final class CropTest {
     static final NamespacedKey magic_crop = new NamespacedKey(namespace, "magic_crop"),
             cooking_pot = new NamespacedKey(namespace, "cooking_pot");
 
-    @InitMethod(order = InitPriority.LOW)
+    @InitMethod(priority = InitPriority.REGISTER)
     private static void register() {
         if (NeoArtisan.isDebugMode()) {
             NeoArtisanAPI.getBlockRegistry().register(
                     ArtisanCrop.builder()
                             .blockId(magic_crop)
-                            .defaultState(0)
                             .stages(
                                     List.of(
                                             ArtisanCropState.builder()
-                                                    .actualState(Block.getId(Blocks.WHEAT.defaultBlockState().setValue(BlockStateProperties.AGE_7, 1)))
-                                                    .appearanceState(
-                                                            Block.getId(
-                                                                    Blocks.TRIPWIRE.defaultBlockState()
-                                                                            .setValue(BlockStateProperties.ATTACHED, false)
-                                                                            .setValue(BlockStateProperties.DISARMED, false)
-                                                                            .setValue(BlockStateProperties.EAST, false)
-                                                                            .setValue(BlockStateProperties.NORTH, false)
-                                                                            .setValue(BlockStateProperties.SOUTH, false)
-                                                                            .setValue(BlockStateProperties.WEST, false)
-                                                                            .setValue(BlockStateProperties.POWERED, false)
+                                                    .appearance(
+                                                            new TripwireAppearance(
+                                                                    false,
+                                                                    false,
+                                                                    false,
+                                                                    false,
+                                                                    false,
+                                                                    false,
+                                                                    false
                                                             )
                                                     )
                                                     .generators(
@@ -62,17 +61,15 @@ final class CropTest {
                                                     )
                                                     .build(),
                                             ArtisanCropState.builder()
-                                                    .actualState(Block.getId(Blocks.WHEAT.defaultBlockState().setValue(BlockStateProperties.AGE_7, 1)))
-                                                    .appearanceState(
-                                                            Block.getId(
-                                                                    Blocks.TRIPWIRE.defaultBlockState()
-                                                                            .setValue(BlockStateProperties.ATTACHED, true)
-                                                                            .setValue(BlockStateProperties.DISARMED, false)
-                                                                            .setValue(BlockStateProperties.EAST, false)
-                                                                            .setValue(BlockStateProperties.NORTH, false)
-                                                                            .setValue(BlockStateProperties.SOUTH, false)
-                                                                            .setValue(BlockStateProperties.WEST, false)
-                                                                            .setValue(BlockStateProperties.POWERED, false)
+                                                    .appearance(
+                                                            new TripwireAppearance(
+                                                                    true,
+                                                                    false,
+                                                                    false,
+                                                                    false,
+                                                                    false,
+                                                                    false,
+                                                                    false
                                                             )
                                                     )
                                                     .generators(
@@ -80,17 +77,15 @@ final class CropTest {
                                                     )
                                                     .build(),
                                             ArtisanCropState.builder()
-                                                    .actualState(Block.getId(Blocks.WHEAT.defaultBlockState().setValue(BlockStateProperties.AGE_7, 1)))
-                                                    .appearanceState(
-                                                            Block.getId(
-                                                                    Blocks.TRIPWIRE.defaultBlockState()
-                                                                            .setValue(BlockStateProperties.ATTACHED, false)
-                                                                            .setValue(BlockStateProperties.DISARMED, true)
-                                                                            .setValue(BlockStateProperties.EAST, false)
-                                                                            .setValue(BlockStateProperties.NORTH, false)
-                                                                            .setValue(BlockStateProperties.SOUTH, false)
-                                                                            .setValue(BlockStateProperties.WEST, false)
-                                                                            .setValue(BlockStateProperties.POWERED, false)
+                                                    .appearance(
+                                                            new TripwireAppearance(
+                                                                    false,
+                                                                    true,
+                                                                    false,
+                                                                    false,
+                                                                    false,
+                                                                    false,
+                                                                    false
                                                             )
                                                     )
                                                     .generators(
@@ -114,32 +109,49 @@ final class CropTest {
                             .build()
             );
             NeoArtisanAPI.getBlockRegistry().register(
-                    ArtisanPacketBlock.builder()
-                            .blockId(cooking_pot)
-                            .defaultState(0)
+                    ArtisanTransparentBlock.builder()
+                            .blockId(ItemTest.cooking_pot)
+                            .canBurn(false)
                             .states(
                                     List.of(
-                                            ArtisanPacketBlockState.builder()
-                                                    .actualState(
-                                                            Block.getId(
-                                                                    Blocks.OAK_LEAVES.defaultBlockState()
-                                                                            .setValue(BlockStateProperties.DISTANCE, 7)
-                                                                            .setValue(BlockStateProperties.PERSISTENT, true)
-                                                                            .setValue(BlockStateProperties.WATERLOGGED, false)
-                                                            )
-                                                    )
+                                            ArtisanTransparentBlockState.builder()
                                                     .appearanceState(
-                                                            Block.getId(
-                                                                    Blocks.OAK_LEAVES.defaultBlockState()
-                                                                            .setValue(BlockStateProperties.DISTANCE, 1)
-                                                                            .setValue(BlockStateProperties.PERSISTENT, false)
-                                                                            .setValue(BlockStateProperties.WATERLOGGED, false)
+                                                            new TransparentAppearance(
+                                                                    TransparentAppearance.LeavesAppearance.OAK_LEAVES,
+                                                                    1,
+                                                                    false,
+                                                                    false
                                                             )
                                                     )
                                                     .generators(
                                                             new ItemGenerator[]{
                                                                     ItemGenerator.simpleGenerator(
-                                                                            cooking_pot,
+                                                                            ItemTest.cooking_pot,
+                                                                            1
+                                                                    )
+                                                            }
+                                                    )
+                                                    .build()
+                                    )
+                            )
+                            .build()
+            );
+            NeoArtisanAPI.getBlockRegistry().register(
+                    ArtisanThinBlock.builder()
+                            .blockId(ItemTest.cutting_board)
+                            .states(
+                                    List.of(
+                                            ArtisanThinBlockState.builder()
+                                                    .appearanceState(
+                                                            new ThinBlockAppearance(
+                                                                    ThinBlockAppearance.PressurePlateAppearance.LIGHT_WEIGHTED_PRESSURE_PLATE,
+                                                                    2
+                                                            )
+                                                    )
+                                                    .generators(
+                                                            new ItemGenerator[]{
+                                                                    ItemGenerator.simpleGenerator(
+                                                                            ItemTest.cutting_board,
                                                                             1
                                                                     )
                                                             }

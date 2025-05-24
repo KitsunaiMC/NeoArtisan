@@ -37,15 +37,6 @@ final class ArtisanBlockStorageImpl implements ArtisanBlockStorage, ArtisanBlock
 
     private ArtisanBlockStorageImpl() {
         instance = this;
-        this.storage = new HashMap<>();
-        this.lock = new ReentrantReadWriteLock();
-        BlockDataSerializer.load(this.storage);
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                BlockDataSerializer.save();
-            }
-        }.runTaskLaterAsynchronously(NeoArtisan.instance(), 20L * 120);
         Bukkit.getServicesManager().register(
                 ArtisanBlockStorage.class,
                 ArtisanBlockStorageImpl.getInstance(),
@@ -58,6 +49,15 @@ final class ArtisanBlockStorageImpl implements ArtisanBlockStorage, ArtisanBlock
                 NeoArtisan.instance(),
                 ServicePriority.Normal
         );
+        this.storage = new HashMap<>();
+        this.lock = new ReentrantReadWriteLock();
+        BlockDataSerializer.load(this.storage);
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                BlockDataSerializer.save();
+            }
+        }.runTaskLaterAsynchronously(NeoArtisan.instance(), 20L * 120);
     }
 
     private final Map<Level, Map<ChunkPos, Map<BlockPos, ArtisanBlockData>>> storage;

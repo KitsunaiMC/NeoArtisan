@@ -2,6 +2,7 @@ package io.github.moyusowo.neoartisan.block.network;
 
 import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
+import io.github.moyusowo.neoartisan.util.init.InitPriority;
 import net.minecraft.server.level.ServerPlayer;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
@@ -13,7 +14,7 @@ public class AddPipeline implements Listener {
 
     private AddPipeline() {}
 
-    @InitMethod
+    @InitMethod(priority = InitPriority.LISTENER)
     static void init() {
         NeoArtisan.registerListener(new AddPipeline());
     }

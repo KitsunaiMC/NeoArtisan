@@ -2,6 +2,7 @@ package io.github.moyusowo.neoartisan.item;
 
 import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
+import io.github.moyusowo.neoartisan.util.init.InitPriority;
 import io.github.moyusowo.neoartisanapi.api.item.*;
 import io.github.moyusowo.neoartisan.util.NamespacedKeyDataType;
 import io.papermc.paper.datacomponent.item.CustomModelData;
@@ -39,7 +40,7 @@ final class ItemRegistryImpl implements ItemRegistry {
         );
     }
 
-    @InitMethod
+    @InitMethod(priority = InitPriority.REGISTRY)
     public static void init() {
         new ItemRegistryImpl();
     }

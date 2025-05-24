@@ -1,28 +1,29 @@
-package io.github.moyusowo.neoartisanapi.api.block.packetblock;
+package io.github.moyusowo.neoartisanapi.api.block.thin;
 
 import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlock;
+import io.github.moyusowo.neoartisanapi.api.block.gui.GUICreator;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public interface ArtisanPacketBlock extends ArtisanBlock {
+public interface ArtisanThinBlock extends ArtisanBlock {
 
     static Builder builder() {
         return Bukkit.getServicesManager().load(Builder.class);
     }
 
-    @NotNull ArtisanPacketBlockState getState(int n);
+    @NotNull ArtisanThinBlockState getState(int n);
 
     interface Builder {
 
         Builder blockId(NamespacedKey blockId);
 
-        Builder states(List<ArtisanPacketBlockState> states);
+        Builder states(List<ArtisanThinBlockState> states);
 
-        Builder defaultState(int defaultState);
+        Builder guiCreator(GUICreator creator);
 
-        ArtisanBlock build();
+        ArtisanThinBlock build();
     }
 }

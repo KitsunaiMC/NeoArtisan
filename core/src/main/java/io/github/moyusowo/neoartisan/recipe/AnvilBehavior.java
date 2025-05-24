@@ -13,7 +13,7 @@ final class AnvilBehavior implements Listener {
 
     private AnvilBehavior() {}
 
-    @InitMethod(order = InitPriority.NORMAL)
+    @InitMethod(priority = InitPriority.LISTENER)
     static void registerListener() {
         NeoArtisan.registerListener(new AnvilBehavior());
     }

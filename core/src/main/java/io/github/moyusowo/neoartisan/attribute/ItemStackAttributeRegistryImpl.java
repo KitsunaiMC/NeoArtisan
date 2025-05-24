@@ -20,7 +20,7 @@ public class ItemStackAttributeRegistryImpl implements ItemStackAttributeRegistr
 
     private static ItemStackAttributeRegistryImpl instance;
 
-    @InitMethod(order = InitPriority.HIGH)
+    @InitMethod(priority = InitPriority.REGISTRY)
     public static void init() {
         new ItemStackAttributeRegistryImpl();
     }

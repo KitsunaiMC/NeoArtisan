@@ -4,14 +4,17 @@ import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlockStateBase;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
-import io.github.moyusowo.neoartisanapi.api.block.crop.ArtisanCropState;
+import io.github.moyusowo.neoartisanapi.api.block.crop.*;
 import io.github.moyusowo.neoartisanapi.api.item.ItemGenerator;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.ServicePriority;
 
 class ArtisanCropStateImpl extends ArtisanBlockStateBase implements ArtisanCropState {
 
-    @InitMethod(order = InitPriority.HIGH)
+    @InitMethod(priority = InitPriority.REGISTRAR)
     private static void init() {
         Bukkit.getServicesManager().register(
                 ArtisanCropState.Builder.class,
@@ -26,25 +29,39 @@ class ArtisanCropStateImpl extends ArtisanBlockStateBase implements ArtisanCropS
     }
 
     public static class BuilderImpl implements ArtisanCropState.Builder {
-        protected int appearanceState;
+        protected CropAppearance cropAppearanceBlock;
         protected ItemGenerator[] generators;
-        protected int actualState;
+        protected static final int actualState = Block.getId(Blocks.WHEAT.defaultBlockState().setValue(BlockStateProperties.AGE_7, 1));
+
+        private int generateAppearanceState() {
+            if (this.cropAppearanceBlock instanceof TripwireAppearance tripwireAppearance) {
+                return Block.getId(
+                        Blocks.TRIPWIRE.defaultBlockState()
+                                .setValue(BlockStateProperties.ATTACHED, tripwireAppearance.get(TripwireAppearance.BlockStateProperty.ATTACHED))
+                                .setValue(BlockStateProperties.DISARMED, tripwireAppearance.get(TripwireAppearance.BlockStateProperty.DISARMED))
+                                .setValue(BlockStateProperties.EAST, tripwireAppearance.get(TripwireAppearance.BlockStateProperty.EAST))
+                                .setValue(BlockStateProperties.NORTH, tripwireAppearance.get(TripwireAppearance.BlockStateProperty.NORTH))
+                                .setValue(BlockStateProperties.SOUTH, tripwireAppearance.get(TripwireAppearance.BlockStateProperty.SOUTH))
+                                .setValue(BlockStateProperties.WEST, tripwireAppearance.get(TripwireAppearance.BlockStateProperty.WEST))
+                                .setValue(BlockStateProperties.POWERED, tripwireAppearance.get(TripwireAppearance.BlockStateProperty.POWERED))
+                );
+            } else {
+                SugarCaneAppearance sugarCaneAppearance = (SugarCaneAppearance) this.cropAppearanceBlock;
+                return Block.getId(
+                        Blocks.SUGAR_CANE.defaultBlockState()
+                                .setValue(BlockStateProperties.AGE_15, sugarCaneAppearance.get())
+                );
+            }
+        }
 
         public BuilderImpl() {
-            appearanceState = -1;
+            cropAppearanceBlock = null;
             generators = null;
-            actualState = -1;
         }
 
         @Override
-        public Builder appearanceState(int appearanceState) {
-            this.appearanceState = appearanceState;
-            return this;
-        }
-
-        @Override
-        public Builder actualState(int actualState) {
-            this.actualState = actualState;
+        public Builder appearance(CropAppearance cropAppearanceBlock) {
+            this.cropAppearanceBlock = cropAppearanceBlock;
             return this;
         }
 
@@ -56,8 +73,8 @@ class ArtisanCropStateImpl extends ArtisanBlockStateBase implements ArtisanCropS
 
         @Override
         public ArtisanCropState build() {
-            if (generators == null || actualState == -1 || appearanceState == -1) throw new IllegalArgumentException("You must fill all the param!");
-            return new ArtisanCropStateImpl(appearanceState, actualState, generators);
+            if (generators == null || cropAppearanceBlock == null) throw new IllegalArgumentException("You must fill all the param!");
+            return new ArtisanCropStateImpl(generateAppearanceState(), actualState, generators);
         }
     }
 

@@ -4,7 +4,6 @@ import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
 import io.github.moyusowo.neoartisanapi.api.attribute.GlobalAttributeRegistry;
-import io.github.moyusowo.neoartisanapi.api.attribute.PlayerAttributeRegistry;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.persistence.PersistentDataType;
@@ -18,7 +17,7 @@ public class GlobalAttributeRegistryImpl implements GlobalAttributeRegistry {
 
     private static GlobalAttributeRegistryImpl instance;
 
-    @InitMethod(order = InitPriority.HIGH)
+    @InitMethod(priority = InitPriority.REGISTRY)
     public static void init() {
         new GlobalAttributeRegistryImpl();
     }

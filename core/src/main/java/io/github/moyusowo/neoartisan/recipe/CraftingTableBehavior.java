@@ -23,7 +23,7 @@ final class CraftingTableBehavior implements Listener {
 
     private CraftingTableBehavior() {}
 
-    @InitMethod(order = InitPriority.NORMAL)
+    @InitMethod(priority = InitPriority.LISTENER)
     static void registerListener() {
         NeoArtisan.registerListener(new CraftingTableBehavior());
     }

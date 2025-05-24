@@ -18,9 +18,10 @@ final class ItemTest {
             magic_diamond = new NamespacedKey(namespace, "magic_diamond"),
             magic_helmet = new NamespacedKey(namespace, "magic_helmet"),
             magic_sword = new NamespacedKey(namespace, "magic_sword"),
-            cooking_pot = new NamespacedKey(namespace, "cooking_pot");
+            cooking_pot = new NamespacedKey(namespace, "cooking_pot"),
+            cutting_board = new NamespacedKey(namespace, "cutting_board");
 
-    @InitMethod(order = InitPriority.LOW)
+    @InitMethod(priority = InitPriority.REGISTER)
     private static void register() {
         if (NeoArtisan.isDebugMode()) {
             NeoArtisanAPI.getItemRegistry().registerItem(
@@ -112,6 +113,14 @@ final class ItemTest {
                             .displayName("烹饪锅")
                             .blockId(cooking_pot)
                             .itemModel(cooking_pot)
+            );
+            NeoArtisanAPI.getItemRegistry().registerItem(
+                    NeoArtisanAPI.getItemRegistry().builder()
+                            .registryId(cutting_board)
+                            .rawMaterial(Material.PAPER)
+                            .displayName("砧板")
+                            .blockId(cutting_board)
+                            .itemModel(cutting_board)
             );
         }
     }
