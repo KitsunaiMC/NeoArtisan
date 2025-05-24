@@ -5,6 +5,7 @@ import io.github.moyusowo.neoartisan.block.storage.internal.ArtisanBlockStorageI
 import io.github.moyusowo.neoartisan.util.ReflectionUtil;
 import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlockData;
 import io.github.moyusowo.neoartisanapi.api.block.crop.ArtisanCropData;
+import io.github.moyusowo.neoartisanapi.api.block.thin.ArtisanThinBlockData;
 import io.github.moyusowo.neoartisanapi.api.block.transparent.ArtisanTransparentBlockData;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelDuplexHandler;
@@ -60,6 +61,13 @@ public class BlockPacketHandler extends ChannelDuplexHandler {
                                     NeoArtisan.logger().severe("补充包 " + i + " 发送失败: " + f.cause());
                                 }
                             });
+                        } else if (entry.getValue() instanceof ArtisanThinBlockData artisanThinBlockData) {
+                            ClientboundBlockUpdatePacket newPacket = new ClientboundBlockUpdatePacket(entry.getKey(), stateById(artisanThinBlockData.getArtisanBlockState().appearanceState()));
+                            ctx.write(newPacket).addListener(f -> {
+                                if (!f.isSuccess()) {
+                                    NeoArtisan.logger().severe("补充包 " + i + " 发送失败: " + f.cause());
+                                }
+                            });
                         }
                     }
                     ctx.flush();
@@ -84,6 +92,10 @@ public class BlockPacketHandler extends ChannelDuplexHandler {
                 && ArtisanBlockStorageInternal.getInternal().getArtisanBlock(player.level(), blockPos) instanceof ArtisanTransparentBlockData artisanTransparentBlockData) {
             BlockState toState = stateById(artisanTransparentBlockData.getArtisanBlockState().appearanceState());
             ReflectionUtil.setField(packet, "blockState", toState);
+        } else if (ArtisanBlockStorageInternal.getInternal().isArtisanBlock(player.level(), blockPos)
+                && ArtisanBlockStorageInternal.getInternal().getArtisanBlock(player.level(), blockPos) instanceof ArtisanThinBlockData artisanThinBlockData) {
+            BlockState toState = stateById(artisanThinBlockData.getArtisanBlockState().appearanceState());
+            ReflectionUtil.setField(packet, "blockState", toState);
         } else {
             BlockState toState = BlockMappingsManager.getMappedState(state);
             if (toState != null) {
@@ -104,6 +116,9 @@ public class BlockPacketHandler extends ChannelDuplexHandler {
             } else if (ArtisanBlockStorageInternal.getInternal().isArtisanBlock(player.level(), pos[i])
                     && ArtisanBlockStorageInternal.getInternal().getArtisanBlock(player.level(), pos[i]) instanceof ArtisanTransparentBlockData artisanTransparentBlockData) {
                 states[i] = stateById(artisanTransparentBlockData.getArtisanBlockState().appearanceState());
+            } else if (ArtisanBlockStorageInternal.getInternal().isArtisanBlock(player.level(), pos[i])
+                    && ArtisanBlockStorageInternal.getInternal().getArtisanBlock(player.level(), pos[i]) instanceof ArtisanThinBlockData artisanThinBlockData) {
+                states[i] = stateById(artisanThinBlockData.getArtisanBlockState().appearanceState());
             } else {
                 BlockState toState = BlockMappingsManager.getMappedState(states[i]);
                 if (toState != null) {

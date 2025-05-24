@@ -20,10 +20,6 @@ public abstract class ArtisanBlockBase implements ArtisanBlock {
     private final List<ArtisanBlockState> stages;
     private final GUICreator creator;
 
-    protected ArtisanBlockBase(NamespacedKey blockId, List<? extends ArtisanBlockState> stages) {
-        this(blockId, stages, null);
-    }
-
     protected ArtisanBlockBase(NamespacedKey blockId, List<? extends ArtisanBlockState> stages, GUICreator creator) {
         this.blockId = blockId;
         this.creator = creator;

@@ -7,6 +7,7 @@ import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
 import io.github.moyusowo.neoartisanapi.api.item.*;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.checkerframework.checker.units.qual.N;
 
 import java.util.List;
 
@@ -18,7 +19,8 @@ final class ItemTest {
             magic_diamond = new NamespacedKey(namespace, "magic_diamond"),
             magic_helmet = new NamespacedKey(namespace, "magic_helmet"),
             magic_sword = new NamespacedKey(namespace, "magic_sword"),
-            cooking_pot = new NamespacedKey(namespace, "cooking_pot");
+            cooking_pot = new NamespacedKey(namespace, "cooking_pot"),
+            cutting_board = new NamespacedKey(namespace, "cutting_board");
 
     @InitMethod(order = InitPriority.LOW)
     private static void register() {
@@ -112,6 +114,14 @@ final class ItemTest {
                             .displayName("烹饪锅")
                             .blockId(cooking_pot)
                             .itemModel(cooking_pot)
+            );
+            NeoArtisanAPI.getItemRegistry().registerItem(
+                    NeoArtisanAPI.getItemRegistry().builder()
+                            .registryId(cutting_board)
+                            .rawMaterial(Material.PAPER)
+                            .displayName("砧板")
+                            .blockId(cutting_board)
+                            .itemModel(cutting_board)
             );
         }
     }

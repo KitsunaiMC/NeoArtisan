@@ -1,7 +1,6 @@
 package io.github.moyusowo.neoartisan.block.crop;
 
 import io.github.moyusowo.neoartisan.NeoArtisan;
-import io.github.moyusowo.neoartisan.util.Util;
 import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlockStateBase;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
@@ -30,12 +29,12 @@ class ArtisanCropStateImpl extends ArtisanBlockStateBase implements ArtisanCropS
     }
 
     public static class BuilderImpl implements ArtisanCropState.Builder {
-        protected Appearance appearanceBlock;
+        protected CropAppearance cropAppearanceBlock;
         protected ItemGenerator[] generators;
         protected static final int actualState = Block.getId(Blocks.WHEAT.defaultBlockState().setValue(BlockStateProperties.AGE_7, 1));
 
         private int generateAppearanceState() {
-            if (this.appearanceBlock instanceof TripwireAppearance tripwireAppearance) {
+            if (this.cropAppearanceBlock instanceof TripwireAppearance tripwireAppearance) {
                 return Block.getId(
                         Blocks.TRIPWIRE.defaultBlockState()
                                 .setValue(BlockStateProperties.ATTACHED, tripwireAppearance.get(TripwireAppearance.BlockStateProperty.ATTACHED))
@@ -47,7 +46,7 @@ class ArtisanCropStateImpl extends ArtisanBlockStateBase implements ArtisanCropS
                                 .setValue(BlockStateProperties.POWERED, tripwireAppearance.get(TripwireAppearance.BlockStateProperty.POWERED))
                 );
             } else {
-                SugarCaneAppearance sugarCaneAppearance = (SugarCaneAppearance) this.appearanceBlock;
+                SugarCaneAppearance sugarCaneAppearance = (SugarCaneAppearance) this.cropAppearanceBlock;
                 return Block.getId(
                         Blocks.SUGAR_CANE.defaultBlockState()
                                 .setValue(BlockStateProperties.AGE_15, sugarCaneAppearance.get())
@@ -56,13 +55,13 @@ class ArtisanCropStateImpl extends ArtisanBlockStateBase implements ArtisanCropS
         }
 
         public BuilderImpl() {
-            appearanceBlock = null;
+            cropAppearanceBlock = null;
             generators = null;
         }
 
         @Override
-        public Builder appearance(Appearance appearanceBlock) {
-            this.appearanceBlock = appearanceBlock;
+        public Builder appearance(CropAppearance cropAppearanceBlock) {
+            this.cropAppearanceBlock = cropAppearanceBlock;
             return this;
         }
 
@@ -74,7 +73,7 @@ class ArtisanCropStateImpl extends ArtisanBlockStateBase implements ArtisanCropS
 
         @Override
         public ArtisanCropState build() {
-            if (generators == null || appearanceBlock == null) throw new IllegalArgumentException("You must fill all the param!");
+            if (generators == null || cropAppearanceBlock == null) throw new IllegalArgumentException("You must fill all the param!");
             return new ArtisanCropStateImpl(generateAppearanceState(), actualState, generators);
         }
     }

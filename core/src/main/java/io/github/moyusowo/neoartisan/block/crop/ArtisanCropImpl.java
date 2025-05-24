@@ -54,7 +54,7 @@ class ArtisanCropImpl extends ArtisanBlockBase implements ArtisanCrop {
     private final int boneMealMinGrowth, boneMealMaxGrowth;
 
     public ArtisanCropImpl(NamespacedKey cropId, List<ArtisanCropState> stages, int boneMealMinGrowth, int boneMealMaxGrowth) {
-        super(cropId, stages);
+        super(cropId, stages, null);
         this.boneMealMinGrowth = boneMealMinGrowth;
         this.boneMealMaxGrowth = boneMealMaxGrowth;
     }
@@ -167,7 +167,7 @@ class ArtisanCropImpl extends ArtisanBlockBase implements ArtisanCrop {
             }
         }
 
-        @EventHandler
+        @EventHandler(priority = EventPriority.HIGHEST)
         private static void onBreak(BlockBreakEvent event) {
             if (event.isCancelled()) return;
             if (!NeoArtisanAPI.getArtisanBlockStorage().isArtisanBlock(event.getBlock())) return;
@@ -185,7 +185,7 @@ class ArtisanCropImpl extends ArtisanBlockBase implements ArtisanCrop {
             ArtisanBlockStorageInternal.getInternal().removeArtisanBlock(event.getBlock());
         }
 
-        @EventHandler
+        @EventHandler(priority = EventPriority.HIGHEST)
         private static void onBlockBreakUnderCrop(BlockBreakEvent event) {
             if (event.isCancelled()) return;
             if (!NeoArtisanAPI.getArtisanBlockStorage().isArtisanBlock(event.getBlock().getRelative(BlockFace.UP))) return;
@@ -197,7 +197,7 @@ class ArtisanCropImpl extends ArtisanBlockBase implements ArtisanCrop {
             ArtisanBlockStorageInternal.getInternal().removeArtisanBlock(event.getBlock().getRelative(BlockFace.UP));
         }
 
-        @EventHandler
+        @EventHandler(priority = EventPriority.HIGHEST)
         private static void onPistonBreakOrMoveUnderCrop(BlockPistonExtendEvent event) {
             if (event.isCancelled()) return;
             for (Block block : event.getBlocks()) {
@@ -222,7 +222,7 @@ class ArtisanCropImpl extends ArtisanBlockBase implements ArtisanCrop {
             ArtisanBlockStorageInternal.getInternal().removeArtisanBlock(event.getBlock());
         }
 
-        @EventHandler
+        @EventHandler(priority = EventPriority.HIGHEST)
         private static void onEntityChangeFarmland(EntityChangeBlockEvent event) {
             if (event.isCancelled()) return;
             if (!NeoArtisanAPI.getArtisanBlockStorage().isArtisanBlock(event.getBlock().getRelative(BlockFace.UP))) return;
@@ -237,7 +237,7 @@ class ArtisanCropImpl extends ArtisanBlockBase implements ArtisanCrop {
             ArtisanBlockStorageInternal.getInternal().removeArtisanBlock(event.getBlock().getRelative(BlockFace.UP));
         }
 
-        @EventHandler
+        @EventHandler(priority = EventPriority.HIGHEST)
         private static void onGrow(BlockGrowEvent event) {
             if (event.isCancelled()) return;
             if (!NeoArtisanAPI.getArtisanBlockStorage().isArtisanBlock(event.getBlock())) return;
@@ -255,7 +255,7 @@ class ArtisanCropImpl extends ArtisanBlockBase implements ArtisanCrop {
             }
         }
 
-        @EventHandler
+        @EventHandler(priority = EventPriority.HIGHEST)
         private static void onFertilize(BlockFertilizeEvent event) {
             if (event.isCancelled()) return;
             for (BlockState blockState : event.getBlocks()) {

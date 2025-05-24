@@ -20,7 +20,7 @@ public interface ArtisanTransparentBlockData extends ArtisanBlockData {
         return Bukkit.getServicesManager().load(Builder.class);
     }
 
-    interface Builder {
+    interface Builder extends BaseBuilder {
 
         Builder location(Location location);
 

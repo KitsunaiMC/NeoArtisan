@@ -16,16 +16,12 @@ public abstract class ArtisanBlockDataBase implements ArtisanBlockData {
     private final PersistentDataContainer persistentDataContainer;
     private final ArtisanBlockGUI artisanBlockGUI;
 
-    protected ArtisanBlockDataBase(NamespacedKey blockId, int stage, ArtisanBlockGUI artisanBlockGUI, Location location) {
+    protected ArtisanBlockDataBase(NamespacedKey blockId, int stage, Location location) {
         this.blockId = blockId;
         this.stage = stage;
         this.location = location;
         this.persistentDataContainer = NeoArtisanAPI.emptyPersistentDataContainer().emptyPersistentDataContainer();
         this.artisanBlockGUI = this.getArtisanBlock().createGUI(location);
-    }
-
-    protected ArtisanBlockDataBase(NamespacedKey blockId, int stage, Location location) {
-        this(blockId, stage, null, location);
     }
 
     @Override

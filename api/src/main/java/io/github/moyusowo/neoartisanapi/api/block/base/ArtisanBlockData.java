@@ -24,4 +24,8 @@ public interface ArtisanBlockData {
     ArtisanBlockState getArtisanBlockState();
 
     PersistentDataContainer getPersistentDataContainer();
+
+    interface BaseBuilder {
+
+    }
 }

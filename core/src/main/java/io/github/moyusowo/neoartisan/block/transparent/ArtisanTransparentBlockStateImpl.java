@@ -4,7 +4,7 @@ import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
 import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlockStateBase;
-import io.github.moyusowo.neoartisanapi.api.block.transparent.Appearance;
+import io.github.moyusowo.neoartisanapi.api.block.transparent.TransparentAppearance;
 import io.github.moyusowo.neoartisanapi.api.block.transparent.ArtisanTransparentBlockState;
 import io.github.moyusowo.neoartisanapi.api.item.ItemGenerator;
 import net.minecraft.world.level.block.Block;
@@ -31,7 +31,7 @@ class ArtisanTransparentBlockStateImpl extends ArtisanBlockStateBase implements 
     }
 
     public static class BuilderImpl implements Builder {
-        protected Appearance appearance;
+        protected TransparentAppearance transparentAppearance;
         protected ItemGenerator[] generators;
         private static final int actualState = Block.getId(
                 Blocks.OAK_LEAVES.defaultBlockState()
@@ -42,7 +42,7 @@ class ArtisanTransparentBlockStateImpl extends ArtisanBlockStateBase implements 
 
         private int generateAppearanceState() {
             BlockState blockState;
-            switch (this.appearance.leavesAppearance) {
+            switch (this.transparentAppearance.leavesAppearance) {
                 case BIRCH_LEAVES -> blockState = Blocks.BIRCH_LEAVES.defaultBlockState();
                 case ACACIA_LEAVES -> blockState = Blocks.ACACIA_LEAVES.defaultBlockState();
                 case AZALEA_LEAVES -> blockState = Blocks.AZALEA_LEAVES.defaultBlockState();
@@ -56,21 +56,21 @@ class ArtisanTransparentBlockStateImpl extends ArtisanBlockStateBase implements 
                 case null, default -> blockState = Blocks.OAK_LEAVES.defaultBlockState();
             }
             return Block.getId(
-                    blockState.setValue(BlockStateProperties.DISTANCE, this.appearance.distance)
-                            .setValue(BlockStateProperties.PERSISTENT, this.appearance.persistent)
-                            .setValue(BlockStateProperties.WATERLOGGED, this.appearance.waterlogged)
+                    blockState.setValue(BlockStateProperties.DISTANCE, this.transparentAppearance.distance)
+                            .setValue(BlockStateProperties.PERSISTENT, this.transparentAppearance.persistent)
+                            .setValue(BlockStateProperties.WATERLOGGED, this.transparentAppearance.waterlogged)
             );
         }
 
         public BuilderImpl() {
-            appearance = null;
+            transparentAppearance = null;
             generators = null;
         }
 
 
         @Override
-        public Builder appearanceState(Appearance appearance) {
-            this.appearance = appearance;
+        public Builder appearanceState(TransparentAppearance transparentAppearance) {
+            this.transparentAppearance = transparentAppearance;
             return this;
         }
 
@@ -82,7 +82,7 @@ class ArtisanTransparentBlockStateImpl extends ArtisanBlockStateBase implements 
 
         @Override
         public ArtisanTransparentBlockState build() {
-            if (generators == null || appearance == null) throw new IllegalArgumentException("You must fill all the param!");
+            if (generators == null || transparentAppearance == null) throw new IllegalArgumentException("You must fill all the param!");
             return new ArtisanTransparentBlockStateImpl(generateAppearanceState(), actualState, generators);
         }
     }

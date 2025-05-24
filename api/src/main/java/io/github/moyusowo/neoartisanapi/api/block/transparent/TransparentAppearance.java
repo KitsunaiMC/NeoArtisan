@@ -2,14 +2,14 @@ package io.github.moyusowo.neoartisanapi.api.block.transparent;
 
 import org.jetbrains.annotations.NotNull;
 
-public final class Appearance {
+public final class TransparentAppearance {
 
     public final @NotNull LeavesAppearance leavesAppearance;
     public final int distance;
     public final boolean persistent;
     public final boolean waterlogged;
 
-    public Appearance(@NotNull LeavesAppearance leavesAppearance, int distance, boolean persistent, boolean waterlogged) {
+    public TransparentAppearance(@NotNull LeavesAppearance leavesAppearance, int distance, boolean persistent, boolean waterlogged) {
         if (distance == 7 && persistent) throw new IllegalArgumentException();
         this.leavesAppearance = leavesAppearance;
         this.distance = distance;

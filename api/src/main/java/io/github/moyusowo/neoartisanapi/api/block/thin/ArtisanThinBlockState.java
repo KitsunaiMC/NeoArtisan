@@ -1,10 +1,10 @@
-package io.github.moyusowo.neoartisanapi.api.block.transparent;
+package io.github.moyusowo.neoartisanapi.api.block.thin;
 
 import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlockState;
 import io.github.moyusowo.neoartisanapi.api.item.ItemGenerator;
 import org.bukkit.Bukkit;
 
-public interface ArtisanTransparentBlockState extends ArtisanBlockState {
+public interface ArtisanThinBlockState extends ArtisanBlockState {
 
     static Builder builder() {
         return Bukkit.getServicesManager().load(Builder.class);
@@ -12,10 +12,10 @@ public interface ArtisanTransparentBlockState extends ArtisanBlockState {
 
     interface Builder {
 
-        Builder appearanceState(TransparentAppearance transparentAppearance);
+        Builder appearanceState(ThinBlockAppearance thinBlockAppearance);
 
         Builder generators(ItemGenerator[] generators);
 
-        ArtisanTransparentBlockState build();
+        ArtisanThinBlockState build();
     }
 }

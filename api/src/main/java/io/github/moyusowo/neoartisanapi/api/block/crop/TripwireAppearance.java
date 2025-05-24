@@ -1,6 +1,6 @@
 package io.github.moyusowo.neoartisanapi.api.block.crop;
 
-public class TripwireAppearance implements Appearance {
+public class TripwireAppearance implements CropAppearance {
 
     private final boolean[] b;
 

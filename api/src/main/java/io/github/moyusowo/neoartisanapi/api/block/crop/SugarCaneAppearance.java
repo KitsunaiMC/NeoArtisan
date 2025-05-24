@@ -1,6 +1,6 @@
 package io.github.moyusowo.neoartisanapi.api.block.crop;
 
-public class SugarCaneAppearance implements Appearance {
+public class SugarCaneAppearance implements CropAppearance {
 
     private final int age;
 

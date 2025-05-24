@@ -7,13 +7,13 @@ import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
 import io.github.moyusowo.neoartisanapi.api.block.crop.ArtisanCrop;
 import io.github.moyusowo.neoartisanapi.api.block.crop.ArtisanCropState;
 import io.github.moyusowo.neoartisanapi.api.block.crop.TripwireAppearance;
-import io.github.moyusowo.neoartisanapi.api.block.transparent.Appearance;
+import io.github.moyusowo.neoartisanapi.api.block.thin.ArtisanThinBlock;
+import io.github.moyusowo.neoartisanapi.api.block.thin.ArtisanThinBlockState;
+import io.github.moyusowo.neoartisanapi.api.block.thin.ThinBlockAppearance;
+import io.github.moyusowo.neoartisanapi.api.block.transparent.TransparentAppearance;
 import io.github.moyusowo.neoartisanapi.api.block.transparent.ArtisanTransparentBlock;
 import io.github.moyusowo.neoartisanapi.api.block.transparent.ArtisanTransparentBlockState;
 import io.github.moyusowo.neoartisanapi.api.item.ItemGenerator;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 
@@ -116,8 +116,8 @@ final class CropTest {
                                     List.of(
                                             ArtisanTransparentBlockState.builder()
                                                     .appearanceState(
-                                                            new Appearance(
-                                                                    Appearance.LeavesAppearance.OAK_LEAVES,
+                                                            new TransparentAppearance(
+                                                                    TransparentAppearance.LeavesAppearance.OAK_LEAVES,
                                                                     1,
                                                                     false,
                                                                     false
@@ -127,6 +127,31 @@ final class CropTest {
                                                             new ItemGenerator[]{
                                                                     ItemGenerator.simpleGenerator(
                                                                             ItemTest.cooking_pot,
+                                                                            1
+                                                                    )
+                                                            }
+                                                    )
+                                                    .build()
+                                    )
+                            )
+                            .build()
+            );
+            NeoArtisanAPI.getBlockRegistry().register(
+                    ArtisanThinBlock.builder()
+                            .blockId(ItemTest.cutting_board)
+                            .states(
+                                    List.of(
+                                            ArtisanThinBlockState.builder()
+                                                    .appearanceState(
+                                                            new ThinBlockAppearance(
+                                                                    ThinBlockAppearance.PressurePlateAppearance.LIGHT_WEIGHTED_PRESSURE_PLATE,
+                                                                    2
+                                                            )
+                                                    )
+                                                    .generators(
+                                                            new ItemGenerator[]{
+                                                                    ItemGenerator.simpleGenerator(
+                                                                            ItemTest.cutting_board,
                                                                             1
                                                                     )
                                                             }

@@ -12,7 +12,7 @@ public interface ArtisanCropState extends ArtisanBlockState {
     }
 
     interface Builder {
-        Builder appearance(Appearance appearance);
+        Builder appearance(CropAppearance cropAppearance);
 
         Builder generators(ItemGenerator[] generators);
 
