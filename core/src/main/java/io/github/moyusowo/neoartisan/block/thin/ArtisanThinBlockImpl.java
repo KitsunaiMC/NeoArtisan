@@ -45,6 +45,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 import static io.github.moyusowo.neoartisan.block.util.BlockStateUtil.stateById;
+import static io.github.moyusowo.neoartisan.block.util.BoundingBoxUtil.overlap;
 
 public class ArtisanThinBlockImpl extends ArtisanBlockBase implements ArtisanThinBlock {
 

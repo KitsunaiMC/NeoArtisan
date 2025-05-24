@@ -42,6 +42,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 import static io.github.moyusowo.neoartisan.block.util.BlockStateUtil.stateById;
+import static io.github.moyusowo.neoartisan.block.util.BoundingBoxUtil.overlap;
 
 class ArtisanTransparentBlockImpl extends ArtisanBlockBase implements ArtisanTransparentBlock {
 
@@ -138,6 +139,7 @@ class ArtisanTransparentBlockImpl extends ArtisanBlockBase implements ArtisanTra
             if (!NeoArtisanAPI.getBlockRegistry().isArtisanBlock(artisanItem.getBlockId())) return;
             if (!(NeoArtisanAPI.getBlockRegistry().getArtisanBlock(artisanItem.getBlockId()) instanceof ArtisanTransparentBlock)) return;
             if ((!event.getPlayer().isSneaking()) && InteractionUtil.isInteractable(event.getClickedBlock())) return;
+            if (overlap(event.getPlayer(), event.getClickedBlock())) return;
             event.setCancelled(true);
             ArtisanBlockPlaceEvent artisanBlockPlaceEvent = new ArtisanBlockPlaceEvent(
                     event.getClickedBlock().getRelative(event.getBlockFace()),
