@@ -11,6 +11,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.World;
 import org.bukkit.craftbukkit.CraftWorld;
@@ -113,6 +114,7 @@ final class BlockDataSerializer {
                                     ArtisanCropData artisanCropData = ArtisanCropData.builder()
                                             .blockId(new NamespacedKey(in.readUTF(), in.readUTF()))
                                             .stage(in.readInt())
+                                            .location(new Location(world, blockPos.getX(), blockPos.getY(), blockPos.getZ()))
                                             .build();
                                     int length = in.readInt();
                                     byte[] pdcByte = in.readNBytes(length);
@@ -129,6 +131,7 @@ final class BlockDataSerializer {
                                     ArtisanTransparentBlockData artisanTransparentBlockData = ArtisanTransparentBlockData.builder()
                                             .blockId(new NamespacedKey(in.readUTF(), in.readUTF()))
                                             .stage(in.readInt())
+                                            .location(new Location(world, blockPos.getX(), blockPos.getY(), blockPos.getZ()))
                                             .build();
                                     int length = in.readInt();
                                     byte[] pdcByte = in.readNBytes(length);

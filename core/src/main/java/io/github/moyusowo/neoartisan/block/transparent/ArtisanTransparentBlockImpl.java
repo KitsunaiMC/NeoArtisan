@@ -8,7 +8,6 @@ import io.github.moyusowo.neoartisan.util.init.InitPriority;
 import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
 import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlockBase;
 import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlockState;
-import io.github.moyusowo.neoartisanapi.api.block.crop.ArtisanCropData;
 import io.github.moyusowo.neoartisanapi.api.block.event.ArtisanBlockPlaceEvent;
 import io.github.moyusowo.neoartisanapi.api.block.transparent.ArtisanTransparentBlock;
 import io.github.moyusowo.neoartisanapi.api.block.transparent.ArtisanTransparentBlockData;
@@ -145,6 +144,7 @@ class ArtisanTransparentBlockImpl extends ArtisanBlockBase implements ArtisanTra
                     ArtisanTransparentBlockData.builder()
                             .blockId(artisanItem.getBlockId())
                             .stage(0)
+                            .location(event.getClickedBlock().getRelative(event.getBlockFace()).getLocation())
                             .build()
             );
             if (event.getPlayer().getGameMode() != GameMode.CREATIVE) {

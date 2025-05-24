@@ -8,6 +8,7 @@ import io.github.moyusowo.neoartisan.util.init.InitPriority;
 import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
 import io.github.moyusowo.neoartisanapi.api.block.crop.ArtisanCropData;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.ServicePriority;
 
@@ -23,8 +24,8 @@ class ArtisanCropDataImpl extends ArtisanBlockDataBase implements ArtisanCropDat
         );
     }
 
-    public ArtisanCropDataImpl(NamespacedKey cropId, int stage) {
-        super(cropId, stage);
+    public ArtisanCropDataImpl(NamespacedKey cropId, int stage, Location location) {
+        super(cropId, stage, location);
     }
 
     @Override
@@ -35,23 +36,25 @@ class ArtisanCropDataImpl extends ArtisanBlockDataBase implements ArtisanCropDat
     @Override
     public ArtisanCropData getNextStage() {
         if (!hasNextStage()) throw new IllegalCallerException("use has to check the existence before get!");
-        return new ArtisanCropDataImpl(super.blockId(), super.stage() + 1);
+        return new ArtisanCropDataImpl(super.blockId(), super.stage() + 1, super.getLocation());
     }
 
     @Override
     public ArtisanCropData getNextFertilizeStage() {
         if (!hasNextStage()) throw new IllegalCallerException("use has to check the existence before get!");
         int growth = ((ArtisanCropImpl) NeoArtisanAPI.getBlockRegistry().getArtisanBlock(super.blockId())).generateBoneMealGrowth();
-        return new ArtisanCropDataImpl(super.blockId(), Math.min(super.stage() + growth, super.getArtisanBlock().getTotalStates()));
+        return new ArtisanCropDataImpl(super.blockId(), Math.min(super.stage() + growth, super.getArtisanBlock().getTotalStates()), super.getLocation());
     }
 
     public static class BuilderImpl implements Builder {
 
         private NamespacedKey blockId;
         private int stage;
+        private Location location;
 
         public BuilderImpl() {
             blockId = null;
+            location = null;
             stage = -1;
         }
 
@@ -68,9 +71,15 @@ class ArtisanCropDataImpl extends ArtisanBlockDataBase implements ArtisanCropDat
         }
 
         @Override
+        public Builder location(Location location) {
+            this.location = location;
+            return this;
+        }
+
+        @Override
         public ArtisanCropData build() {
-            if (blockId == null || stage == -1) throw new IllegalArgumentException("You must fill all the param!");
-            return new ArtisanCropDataImpl(blockId, stage);
+            if (blockId == null || stage == -1 || location == null) throw new IllegalArgumentException("You must fill all the param!");
+            return new ArtisanCropDataImpl(blockId, stage, location);
         }
     }
 }

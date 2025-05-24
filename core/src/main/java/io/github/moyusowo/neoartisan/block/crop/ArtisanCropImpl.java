@@ -161,7 +161,7 @@ class ArtisanCropImpl extends ArtisanBlockBase implements ArtisanCrop {
             );
             Bukkit.getPluginManager().callEvent(artisanBlockPlaceEvent);
             if (artisanBlockPlaceEvent.isCancelled()) return;
-            place(event.getClickedBlock().getRelative(BlockFace.UP), new ArtisanCropDataImpl(artisanItem.getBlockId(), 0));
+            place(event.getClickedBlock().getRelative(BlockFace.UP), new ArtisanCropDataImpl(artisanItem.getBlockId(), 0, event.getClickedBlock().getRelative(BlockFace.UP).getLocation()));
             if (event.getPlayer().getGameMode() != GameMode.CREATIVE) {
                 event.getItem().setAmount(event.getItem().getAmount() - 1);
             }

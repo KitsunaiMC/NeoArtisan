@@ -8,6 +8,7 @@ import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlockDataBase;
 import io.github.moyusowo.neoartisanapi.api.block.transparent.ArtisanTransparentBlock;
 import io.github.moyusowo.neoartisanapi.api.block.transparent.ArtisanTransparentBlockData;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.ServicePriority;
 
@@ -23,8 +24,8 @@ class ArtisanTransparentBlockDataImpl extends ArtisanBlockDataBase implements Ar
         );
     }
 
-    protected ArtisanTransparentBlockDataImpl(NamespacedKey blockId, int stage) {
-        super(blockId, stage);
+    protected ArtisanTransparentBlockDataImpl(NamespacedKey blockId, int stage, Location location) {
+        super(blockId, stage, location);
     }
 
     @Override
@@ -36,9 +37,11 @@ class ArtisanTransparentBlockDataImpl extends ArtisanBlockDataBase implements Ar
 
         private NamespacedKey blockId;
         private int stage;
+        private Location location;
 
         public BuilderImpl() {
             blockId = null;
+            location = null;
             stage = -1;
         }
 
@@ -55,9 +58,15 @@ class ArtisanTransparentBlockDataImpl extends ArtisanBlockDataBase implements Ar
         }
 
         @Override
+        public Builder location(Location location) {
+            this.location = location;
+            return this;
+        }
+
+        @Override
         public ArtisanTransparentBlockData build() {
-            if (blockId == null || stage < 0) throw new IllegalArgumentException("You must fill all the param!");
-            return new ArtisanTransparentBlockDataImpl(blockId, stage);
+            if (blockId == null || stage < 0 || location == null) throw new IllegalArgumentException("You must fill all the param!");
+            return new ArtisanTransparentBlockDataImpl(blockId, stage, location);
         }
     }
 }

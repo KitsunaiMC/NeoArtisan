@@ -2,6 +2,7 @@ package io.github.moyusowo.neoartisanapi.api.block.crop;
 
 import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlockData;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 
 @SuppressWarnings("unused")
@@ -18,6 +19,9 @@ public interface ArtisanCropData extends ArtisanBlockData {
     ArtisanCropData getNextFertilizeStage();
 
     interface Builder {
+
+        Builder location(Location location);
+
         Builder blockId(NamespacedKey blockId);
 
         Builder stage(int stage);
