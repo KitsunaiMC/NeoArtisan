@@ -6,7 +6,9 @@ import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlockDataBase;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
 import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
+import io.github.moyusowo.neoartisanapi.api.block.crop.ArtisanCrop;
 import io.github.moyusowo.neoartisanapi.api.block.crop.ArtisanCropData;
+import io.github.moyusowo.neoartisanapi.api.block.crop.ArtisanCropState;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
@@ -26,6 +28,16 @@ class ArtisanCropDataImpl extends ArtisanBlockDataBase implements ArtisanCropDat
 
     public ArtisanCropDataImpl(NamespacedKey cropId, int stage, Location location) {
         super(cropId, stage, location);
+    }
+
+    @Override
+    public ArtisanCrop getArtisanBlock() {
+        return (ArtisanCrop) super.getArtisanBlock();
+    }
+
+    @Override
+    public ArtisanCropState getArtisanBlockState() {
+        return (ArtisanCropState) super.getArtisanBlockState();
     }
 
     @Override

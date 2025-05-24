@@ -7,6 +7,7 @@ import io.github.moyusowo.neoartisan.util.init.InitPriority;
 import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlockDataBase;
 import io.github.moyusowo.neoartisanapi.api.block.transparent.ArtisanTransparentBlock;
 import io.github.moyusowo.neoartisanapi.api.block.transparent.ArtisanTransparentBlockData;
+import io.github.moyusowo.neoartisanapi.api.block.transparent.ArtisanTransparentBlockState;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
@@ -31,6 +32,11 @@ class ArtisanTransparentBlockDataImpl extends ArtisanBlockDataBase implements Ar
     @Override
     public ArtisanTransparentBlock getArtisanBlock() {
         return (ArtisanTransparentBlock) super.getArtisanBlock();
+    }
+
+    @Override
+    public ArtisanTransparentBlockState getArtisanBlockState() {
+        return (ArtisanTransparentBlockState) super.getArtisanBlockState();
     }
 
     public static class BuilderImpl implements Builder {
