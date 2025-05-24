@@ -46,7 +46,7 @@ import static io.github.moyusowo.neoartisan.block.util.BoundingBoxUtil.overlap;
 
 class ArtisanTransparentBlockImpl extends ArtisanBlockBase implements ArtisanTransparentBlock {
 
-    @InitMethod(order = InitPriority.HIGH)
+    @InitMethod(priority = InitPriority.REGISTRAR)
     private static void init() {
         Bukkit.getServicesManager().register(
                 Builder.class,
@@ -123,7 +123,7 @@ class ArtisanTransparentBlockImpl extends ArtisanBlockBase implements ArtisanTra
 
         private ArtisanTransparentBlockBehavior() {}
 
-        @InitMethod
+        @InitMethod(priority = InitPriority.LISTENER)
         static void init() {
             NeoArtisan.registerListener(new ArtisanTransparentBlockBehavior());
         }

@@ -16,7 +16,7 @@ import org.bukkit.plugin.ServicePriority;
 
 public class ArtisanThinBlockStateImpl extends ArtisanBlockStateBase implements ArtisanThinBlockState {
 
-    @InitMethod(order = InitPriority.HIGH)
+    @InitMethod(priority = InitPriority.REGISTRAR)
     private static void init() {
         Bukkit.getServicesManager().register(
                 Builder.class,

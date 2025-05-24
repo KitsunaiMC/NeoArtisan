@@ -16,7 +16,7 @@ import org.bukkit.plugin.ServicePriority;
 
 class ArtisanTransparentBlockStateImpl extends ArtisanBlockStateBase implements ArtisanTransparentBlockState {
 
-    @InitMethod(order = InitPriority.HIGH)
+    @InitMethod(priority = InitPriority.REGISTRAR)
     private static void init() {
         Bukkit.getServicesManager().register(
                 Builder.class,

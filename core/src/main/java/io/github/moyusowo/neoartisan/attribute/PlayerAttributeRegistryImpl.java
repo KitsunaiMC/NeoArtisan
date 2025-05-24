@@ -19,7 +19,7 @@ public class PlayerAttributeRegistryImpl implements PlayerAttributeRegistry {
 
     private static PlayerAttributeRegistryImpl instance;
 
-    @InitMethod(order = InitPriority.HIGH)
+    @InitMethod(priority = InitPriority.REGISTRY)
     public static void init() {
         new PlayerAttributeRegistryImpl();
     }

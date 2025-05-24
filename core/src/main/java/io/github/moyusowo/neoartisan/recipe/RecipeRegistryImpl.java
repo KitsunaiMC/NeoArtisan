@@ -27,7 +27,7 @@ final class RecipeRegistryImpl implements Listener, RecipeRegistry {
         return instance;
     }
 
-    @InitMethod(order = InitPriority.NORMAL)
+    @InitMethod(priority = InitPriority.REGISTRY)
     public static void init() {
         new RecipeRegistryImpl();
     }

@@ -15,7 +15,7 @@ import org.bukkit.plugin.ServicePriority;
 
 class ArtisanCropDataImpl extends ArtisanBlockDataBaseInternal implements ArtisanCropData {
 
-    @InitMethod(order = InitPriority.HIGH)
+    @InitMethod(priority = InitPriority.BLOCKDATA)
     private static void init() {
         Bukkit.getServicesManager().register(
                 Builder.class,

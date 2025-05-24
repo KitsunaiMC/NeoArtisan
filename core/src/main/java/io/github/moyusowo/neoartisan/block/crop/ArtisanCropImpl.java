@@ -45,7 +45,7 @@ import static io.github.moyusowo.neoartisan.block.util.BlockStateUtil.stateById;
 
 class ArtisanCropImpl extends ArtisanBlockBase implements ArtisanCrop {
 
-    @InitMethod(order = InitPriority.HIGH)
+    @InitMethod(priority = InitPriority.REGISTRAR)
     private static void init() {
         Bukkit.getServicesManager().register(
                 Builder.class,
@@ -134,7 +134,7 @@ class ArtisanCropImpl extends ArtisanBlockBase implements ArtisanCrop {
 
         private ArtisanCropBehavior() {}
 
-        @InitMethod
+        @InitMethod(priority = InitPriority.LISTENER)
         static void init() {
             NeoArtisan.registerListener(new ArtisanCropBehavior());
         }

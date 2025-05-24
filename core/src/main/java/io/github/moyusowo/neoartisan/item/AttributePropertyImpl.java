@@ -2,6 +2,7 @@ package io.github.moyusowo.neoartisan.item;
 
 import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
+import io.github.moyusowo.neoartisan.util.init.InitPriority;
 import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
 import io.github.moyusowo.neoartisanapi.api.item.AttributeProperty;
 import org.bukkit.Bukkit;
@@ -21,7 +22,7 @@ class AttributePropertyImpl implements AttributeProperty {
         this.itemstackAttributeValues = new HashMap<>();
     }
 
-    @InitMethod
+    @InitMethod(priority = InitPriority.REGISTRAR)
     static void init() {
         Bukkit.getServicesManager().register(
                 AttributeProperty.class,

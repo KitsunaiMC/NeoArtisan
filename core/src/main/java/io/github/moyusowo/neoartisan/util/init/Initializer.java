@@ -25,7 +25,7 @@ public final class Initializer {
     }
 
     public static void executeEnable() {
-        ENABLE_METHODS.sort(Comparator.comparingInt(m -> m.getAnnotation(InitMethod.class).order().priority()));
+        ENABLE_METHODS.sort(Comparator.comparingInt(m -> m.getAnnotation(InitMethod.class).priority().priority()));
 
         ENABLE_METHODS.forEach(method -> {
             try {

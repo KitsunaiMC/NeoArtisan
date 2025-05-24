@@ -14,7 +14,7 @@ import org.bukkit.plugin.ServicePriority;
 
 class ArtisanTransparentBlockDataImpl extends ArtisanBlockDataBaseInternal implements ArtisanTransparentBlockData {
 
-    @InitMethod(order = InitPriority.HIGH)
+    @InitMethod(priority = InitPriority.BLOCKDATA)
     private static void init() {
         Bukkit.getServicesManager().register(
                 Builder.class,

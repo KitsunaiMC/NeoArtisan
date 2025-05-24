@@ -18,7 +18,7 @@ final class BlockRegistry implements io.github.moyusowo.neoartisanapi.api.block.
         return instance;
     }
 
-    @InitMethod(order = InitPriority.HIGH)
+    @InitMethod(priority = InitPriority.REGISTRY)
     public static void init() {
         new BlockRegistry();
     }

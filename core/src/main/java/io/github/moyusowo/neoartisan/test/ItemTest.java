@@ -7,7 +7,6 @@ import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
 import io.github.moyusowo.neoartisanapi.api.item.*;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.checkerframework.checker.units.qual.N;
 
 import java.util.List;
 
@@ -22,7 +21,7 @@ final class ItemTest {
             cooking_pot = new NamespacedKey(namespace, "cooking_pot"),
             cutting_board = new NamespacedKey(namespace, "cutting_board");
 
-    @InitMethod(order = InitPriority.LOW)
+    @InitMethod(priority = InitPriority.REGISTER)
     private static void register() {
         if (NeoArtisan.isDebugMode()) {
             NeoArtisanAPI.getItemRegistry().registerItem(

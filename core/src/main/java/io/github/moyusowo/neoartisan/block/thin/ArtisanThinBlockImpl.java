@@ -45,11 +45,10 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 import static io.github.moyusowo.neoartisan.block.util.BlockStateUtil.stateById;
-import static io.github.moyusowo.neoartisan.block.util.BoundingBoxUtil.overlap;
 
 public class ArtisanThinBlockImpl extends ArtisanBlockBase implements ArtisanThinBlock {
 
-    @InitMethod(order = InitPriority.HIGH)
+    @InitMethod(priority = InitPriority.REGISTRAR)
     private static void init() {
         Bukkit.getServicesManager().register(
                 Builder.class,
@@ -110,7 +109,7 @@ public class ArtisanThinBlockImpl extends ArtisanBlockBase implements ArtisanThi
 
         private BlockBehavior() {}
 
-        @InitMethod
+        @InitMethod(priority = InitPriority.LISTENER)
         static void init() {
             NeoArtisan.registerListener(new BlockBehavior());
         }
