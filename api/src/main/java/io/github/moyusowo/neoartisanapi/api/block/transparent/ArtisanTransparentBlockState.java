@@ -1,11 +1,10 @@
-package io.github.moyusowo.neoartisanapi.api.block.packetblock;
+package io.github.moyusowo.neoartisanapi.api.block.transparent;
 
 import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlockState;
-import io.github.moyusowo.neoartisanapi.api.block.crop.ArtisanCropState;
 import io.github.moyusowo.neoartisanapi.api.item.ItemGenerator;
 import org.bukkit.Bukkit;
 
-public interface ArtisanPacketBlockState extends ArtisanBlockState {
+public interface ArtisanTransparentBlockState extends ArtisanBlockState {
 
     static Builder builder() {
         return Bukkit.getServicesManager().load(Builder.class);
@@ -13,12 +12,10 @@ public interface ArtisanPacketBlockState extends ArtisanBlockState {
 
     interface Builder {
 
-        Builder actualState(int actualState);
-
-        Builder appearanceState(int appearanceState);
+        Builder appearanceState(Appearance appearance);
 
         Builder generators(ItemGenerator[] generators);
 
-        ArtisanPacketBlockState build();
+        ArtisanTransparentBlockState build();
     }
 }

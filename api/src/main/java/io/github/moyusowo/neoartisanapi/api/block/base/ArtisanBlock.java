@@ -17,7 +17,5 @@ public interface ArtisanBlock {
 
     int getTotalStates();
 
-    int getDefaultState();
-
 }
 

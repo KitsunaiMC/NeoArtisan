@@ -6,8 +6,10 @@ import io.github.moyusowo.neoartisan.util.init.InitPriority;
 import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
 import io.github.moyusowo.neoartisanapi.api.block.crop.ArtisanCrop;
 import io.github.moyusowo.neoartisanapi.api.block.crop.ArtisanCropState;
-import io.github.moyusowo.neoartisanapi.api.block.packetblock.ArtisanPacketBlock;
-import io.github.moyusowo.neoartisanapi.api.block.packetblock.ArtisanPacketBlockState;
+import io.github.moyusowo.neoartisanapi.api.block.crop.TripwireAppearance;
+import io.github.moyusowo.neoartisanapi.api.block.transparent.Appearance;
+import io.github.moyusowo.neoartisanapi.api.block.transparent.ArtisanTransparentBlock;
+import io.github.moyusowo.neoartisanapi.api.block.transparent.ArtisanTransparentBlockState;
 import io.github.moyusowo.neoartisanapi.api.item.ItemGenerator;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -30,21 +32,18 @@ final class CropTest {
             NeoArtisanAPI.getBlockRegistry().register(
                     ArtisanCrop.builder()
                             .blockId(magic_crop)
-                            .defaultState(0)
                             .stages(
                                     List.of(
                                             ArtisanCropState.builder()
-                                                    .actualState(Block.getId(Blocks.WHEAT.defaultBlockState().setValue(BlockStateProperties.AGE_7, 1)))
-                                                    .appearanceState(
-                                                            Block.getId(
-                                                                    Blocks.TRIPWIRE.defaultBlockState()
-                                                                            .setValue(BlockStateProperties.ATTACHED, false)
-                                                                            .setValue(BlockStateProperties.DISARMED, false)
-                                                                            .setValue(BlockStateProperties.EAST, false)
-                                                                            .setValue(BlockStateProperties.NORTH, false)
-                                                                            .setValue(BlockStateProperties.SOUTH, false)
-                                                                            .setValue(BlockStateProperties.WEST, false)
-                                                                            .setValue(BlockStateProperties.POWERED, false)
+                                                    .appearance(
+                                                            new TripwireAppearance(
+                                                                    false,
+                                                                    false,
+                                                                    false,
+                                                                    false,
+                                                                    false,
+                                                                    false,
+                                                                    false
                                                             )
                                                     )
                                                     .generators(
@@ -62,17 +61,15 @@ final class CropTest {
                                                     )
                                                     .build(),
                                             ArtisanCropState.builder()
-                                                    .actualState(Block.getId(Blocks.WHEAT.defaultBlockState().setValue(BlockStateProperties.AGE_7, 1)))
-                                                    .appearanceState(
-                                                            Block.getId(
-                                                                    Blocks.TRIPWIRE.defaultBlockState()
-                                                                            .setValue(BlockStateProperties.ATTACHED, true)
-                                                                            .setValue(BlockStateProperties.DISARMED, false)
-                                                                            .setValue(BlockStateProperties.EAST, false)
-                                                                            .setValue(BlockStateProperties.NORTH, false)
-                                                                            .setValue(BlockStateProperties.SOUTH, false)
-                                                                            .setValue(BlockStateProperties.WEST, false)
-                                                                            .setValue(BlockStateProperties.POWERED, false)
+                                                    .appearance(
+                                                            new TripwireAppearance(
+                                                                    true,
+                                                                    false,
+                                                                    false,
+                                                                    false,
+                                                                    false,
+                                                                    false,
+                                                                    false
                                                             )
                                                     )
                                                     .generators(
@@ -80,17 +77,15 @@ final class CropTest {
                                                     )
                                                     .build(),
                                             ArtisanCropState.builder()
-                                                    .actualState(Block.getId(Blocks.WHEAT.defaultBlockState().setValue(BlockStateProperties.AGE_7, 1)))
-                                                    .appearanceState(
-                                                            Block.getId(
-                                                                    Blocks.TRIPWIRE.defaultBlockState()
-                                                                            .setValue(BlockStateProperties.ATTACHED, false)
-                                                                            .setValue(BlockStateProperties.DISARMED, true)
-                                                                            .setValue(BlockStateProperties.EAST, false)
-                                                                            .setValue(BlockStateProperties.NORTH, false)
-                                                                            .setValue(BlockStateProperties.SOUTH, false)
-                                                                            .setValue(BlockStateProperties.WEST, false)
-                                                                            .setValue(BlockStateProperties.POWERED, false)
+                                                    .appearance(
+                                                            new TripwireAppearance(
+                                                                    false,
+                                                                    true,
+                                                                    false,
+                                                                    false,
+                                                                    false,
+                                                                    false,
+                                                                    false
                                                             )
                                                     )
                                                     .generators(
@@ -111,6 +106,34 @@ final class CropTest {
                             )
                             .boneMealMinGrowth(0)
                             .boneMealMaxGrowth(2)
+                            .build()
+            );
+            NeoArtisanAPI.getBlockRegistry().register(
+                    ArtisanTransparentBlock.builder()
+                            .blockId(ItemTest.cooking_pot)
+                            .canBurn(false)
+                            .states(
+                                    List.of(
+                                            ArtisanTransparentBlockState.builder()
+                                                    .appearanceState(
+                                                            new Appearance(
+                                                                    Appearance.LeavesAppearance.OAK_LEAVES,
+                                                                    1,
+                                                                    false,
+                                                                    false
+                                                            )
+                                                    )
+                                                    .generators(
+                                                            new ItemGenerator[]{
+                                                                    ItemGenerator.simpleGenerator(
+                                                                            ItemTest.cooking_pot,
+                                                                            1
+                                                                    )
+                                                            }
+                                                    )
+                                                    .build()
+                                    )
+                            )
                             .build()
             );
         }

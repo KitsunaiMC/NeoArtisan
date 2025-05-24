@@ -6,7 +6,7 @@ import io.github.moyusowo.neoartisan.util.terminate.TerminateMethod;
 import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
 import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlockData;
 import io.github.moyusowo.neoartisanapi.api.block.crop.ArtisanCropData;
-import io.github.moyusowo.neoartisanapi.api.block.packetblock.ArtisanPacketBlockData;
+import io.github.moyusowo.neoartisanapi.api.block.transparent.ArtisanTransparentBlockData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
@@ -24,6 +24,9 @@ import java.util.UUID;
 final class BlockDataSerializer {
 
     private BlockDataSerializer() {}
+
+    private static final String CROP_BLOCK = "crop";
+    private static final String TRANSPARENT_BLOCK = "transparent_block";
 
     @TerminateMethod
     public static void save() {
@@ -45,7 +48,7 @@ final class BlockDataSerializer {
                         out.writeInt(blockMap.size());
                         for (Map.Entry<BlockPos, ArtisanBlockData> blockEntry : blockMap.entrySet()) {
                             if (blockEntry.getValue() instanceof ArtisanCropData artisanCropData) {
-                                out.writeUTF("crop");
+                                out.writeUTF(CROP_BLOCK);
                                 BlockPos pos = blockEntry.getKey();
                                 out.writeInt(pos.getX());
                                 out.writeInt(pos.getY());
@@ -53,15 +56,15 @@ final class BlockDataSerializer {
                                 out.writeUTF(artisanCropData.blockId().getNamespace());
                                 out.writeUTF(artisanCropData.blockId().getKey());
                                 out.writeInt(artisanCropData.stage());
-                            } else if (blockEntry.getValue() instanceof ArtisanPacketBlockData artisanPacketBlockData) {
-                                out.writeUTF("packet_block");
+                            } else if (blockEntry.getValue() instanceof ArtisanTransparentBlockData artisanTransparentBlockData) {
+                                out.writeUTF(TRANSPARENT_BLOCK);
                                 BlockPos pos = blockEntry.getKey();
                                 out.writeInt(pos.getX());
                                 out.writeInt(pos.getY());
                                 out.writeInt(pos.getZ());
-                                out.writeUTF(artisanPacketBlockData.blockId().getNamespace());
-                                out.writeUTF(artisanPacketBlockData.blockId().getKey());
-                                out.writeInt(artisanPacketBlockData.stage());
+                                out.writeUTF(artisanTransparentBlockData.blockId().getNamespace());
+                                out.writeUTF(artisanTransparentBlockData.blockId().getKey());
+                                out.writeInt(artisanTransparentBlockData.stage());
                             }
                             byte[] pdcByte = blockEntry.getValue().getPersistentDataContainer().serializeToBytes();
                             out.writeInt(pdcByte.length);
@@ -101,7 +104,7 @@ final class BlockDataSerializer {
                             int blockCount = in.readInt();
                             for (int j = 0; j < blockCount; j++) {
                                 String type = in.readUTF();
-                                if (type.equals("crop")) {
+                                if (type.equals(CROP_BLOCK)) {
                                     BlockPos blockPos = new BlockPos(
                                             in.readInt(),
                                             in.readInt(),
@@ -117,13 +120,13 @@ final class BlockDataSerializer {
                                     persistentDataContainer.readFromBytes(pdcByte, true);
                                     ArtisanBlockDataInternal.asInternal(artisanCropData).setPersistentDataContainer(persistentDataContainer);
                                     blockMap.put(blockPos, artisanCropData);
-                                } else if (type.equals("packet_block")) {
+                                } else if (type.equals(TRANSPARENT_BLOCK)) {
                                     BlockPos blockPos = new BlockPos(
                                             in.readInt(),
                                             in.readInt(),
                                             in.readInt()
                                     );
-                                    ArtisanPacketBlockData artisanPacketBlockData = ArtisanPacketBlockData.builder()
+                                    ArtisanTransparentBlockData artisanTransparentBlockData = ArtisanTransparentBlockData.builder()
                                             .blockId(new NamespacedKey(in.readUTF(), in.readUTF()))
                                             .stage(in.readInt())
                                             .build();
@@ -131,8 +134,8 @@ final class BlockDataSerializer {
                                     byte[] pdcByte = in.readNBytes(length);
                                     PersistentDataContainer persistentDataContainer = NeoArtisanAPI.emptyPersistentDataContainer().emptyPersistentDataContainer();
                                     persistentDataContainer.readFromBytes(pdcByte, true);
-                                    ArtisanBlockDataInternal.asInternal(artisanPacketBlockData).setPersistentDataContainer(persistentDataContainer);
-                                    blockMap.put(blockPos, artisanPacketBlockData);
+                                    ArtisanBlockDataInternal.asInternal(artisanTransparentBlockData).setPersistentDataContainer(persistentDataContainer);
+                                    blockMap.put(blockPos, artisanTransparentBlockData);
                                 }
                             }
                         }

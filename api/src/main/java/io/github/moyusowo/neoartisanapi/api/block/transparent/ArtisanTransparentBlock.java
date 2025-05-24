@@ -1,4 +1,4 @@
-package io.github.moyusowo.neoartisanapi.api.block.packetblock;
+package io.github.moyusowo.neoartisanapi.api.block.transparent;
 
 import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlock;
 import org.bukkit.Bukkit;
@@ -7,22 +7,24 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public interface ArtisanPacketBlock extends ArtisanBlock {
+public interface ArtisanTransparentBlock extends ArtisanBlock {
 
     static Builder builder() {
         return Bukkit.getServicesManager().load(Builder.class);
     }
 
-    @NotNull ArtisanPacketBlockState getState(int n);
+    boolean canBurn();
+
+    @NotNull ArtisanTransparentBlockState getState(int n);
 
     interface Builder {
 
         Builder blockId(NamespacedKey blockId);
 
-        Builder states(List<ArtisanPacketBlockState> states);
+        Builder states(List<ArtisanTransparentBlockState> states);
 
-        Builder defaultState(int defaultState);
+        Builder canBurn(boolean canBurn);
 
-        ArtisanBlock build();
+        ArtisanTransparentBlock build();
     }
 }

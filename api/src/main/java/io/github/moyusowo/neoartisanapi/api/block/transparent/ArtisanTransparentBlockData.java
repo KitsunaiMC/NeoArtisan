@@ -1,10 +1,14 @@
-package io.github.moyusowo.neoartisanapi.api.block.packetblock;
+package io.github.moyusowo.neoartisanapi.api.block.transparent;
 
+import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlock;
 import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlockData;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 
-public interface ArtisanPacketBlockData extends ArtisanBlockData {
+public interface ArtisanTransparentBlockData extends ArtisanBlockData {
+
+    @Override
+    ArtisanTransparentBlock getArtisanBlock();
 
     static Builder builder() {
         return Bukkit.getServicesManager().load(Builder.class);
@@ -16,6 +20,6 @@ public interface ArtisanPacketBlockData extends ArtisanBlockData {
 
         Builder stage(int stage);
 
-        ArtisanPacketBlockData build();
+        ArtisanTransparentBlockData build();
     }
 }

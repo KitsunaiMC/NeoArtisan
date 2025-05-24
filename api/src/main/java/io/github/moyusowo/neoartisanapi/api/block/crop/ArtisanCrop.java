@@ -28,8 +28,6 @@ public interface ArtisanCrop extends ArtisanBlock {
 
         Builder stages(List<ArtisanCropState> stages);
 
-        Builder defaultState(int defaultState);
-
         Builder boneMealMinGrowth(int boneMealMinGrowth);
 
         Builder boneMealMaxGrowth(int boneMealMaxGrowth);
