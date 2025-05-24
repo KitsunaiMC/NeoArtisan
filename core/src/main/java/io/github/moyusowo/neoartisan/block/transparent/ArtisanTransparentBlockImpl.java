@@ -8,6 +8,7 @@ import io.github.moyusowo.neoartisan.util.init.InitPriority;
 import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
 import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlockBase;
 import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlockState;
+import io.github.moyusowo.neoartisanapi.api.block.event.ArtisanBlockBreakEvent;
 import io.github.moyusowo.neoartisanapi.api.block.event.ArtisanBlockPlaceEvent;
 import io.github.moyusowo.neoartisanapi.api.block.gui.GUICreator;
 import io.github.moyusowo.neoartisanapi.api.block.transparent.ArtisanTransparentBlock;
@@ -23,6 +24,8 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.CraftWorld;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.ExperienceOrb;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -171,10 +174,25 @@ class ArtisanTransparentBlockImpl extends ArtisanBlockBase implements ArtisanTra
                 return;
             }
             event.setCancelled(true);
-            event.getPlayer().giveExp(event.getExpToDrop());
+            ArtisanBlockBreakEvent artisanBlockBreakEvent = new ArtisanBlockBreakEvent(
+                    event.getBlock(),
+                    event.getPlayer(),
+                    artisanTransparentBlockData.getArtisanBlock()
+            );
+            artisanBlockBreakEvent.callEvent();
+            if (artisanBlockBreakEvent.isCancelled()) return;
+            if (artisanBlockBreakEvent.getExpToDrop() > 0) {
+                ExperienceOrb orb = (ExperienceOrb) event.getBlock().getWorld().spawnEntity(
+                        event.getBlock().getLocation(),
+                        EntityType.EXPERIENCE_ORB
+                );
+                orb.setExperience(artisanBlockBreakEvent.getExpToDrop());
+            }
             event.getBlock().setType(Material.AIR);
-            for (ItemStack drop : artisanTransparentBlockData.getArtisanBlockState().drops()) {
-                event.getBlock().getWorld().dropItemNaturally(event.getBlock().getLocation(), drop);
+            if (artisanBlockBreakEvent.isDropItems()) {
+                for (ItemStack drop : artisanTransparentBlockData.getArtisanBlockState().drops()) {
+                    event.getBlock().getWorld().dropItemNaturally(event.getBlock().getLocation(), drop);
+                }
             }
             ArtisanBlockStorageInternal.getInternal().removeArtisanBlock(event.getBlock());
         }
