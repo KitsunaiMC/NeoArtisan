@@ -139,7 +139,7 @@ class ArtisanTransparentBlockImpl extends ArtisanBlockBase implements ArtisanTra
             if (!NeoArtisanAPI.getBlockRegistry().isArtisanBlock(artisanItem.getBlockId())) return;
             if (!(NeoArtisanAPI.getBlockRegistry().getArtisanBlock(artisanItem.getBlockId()) instanceof ArtisanTransparentBlock)) return;
             if ((!event.getPlayer().isSneaking()) && InteractionUtil.isInteractable(event.getClickedBlock())) return;
-            if (overlap(event.getPlayer(), event.getClickedBlock())) return;
+            if (overlap(event.getPlayer(), event.getClickedBlock().getRelative(event.getBlockFace()))) return;
             event.setCancelled(true);
             ArtisanBlockPlaceEvent artisanBlockPlaceEvent = new ArtisanBlockPlaceEvent(
                     event.getClickedBlock().getRelative(event.getBlockFace()),
