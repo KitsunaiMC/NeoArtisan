@@ -22,6 +22,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.*;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
+import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.ServicePriority;
@@ -157,7 +158,22 @@ class ArtisanCropImpl extends ArtisanBlockBase implements ArtisanCrop {
 
         @EventHandler(priority = EventPriority.HIGHEST)
         private static void onPistonBreakOrMoveUnderCrop(BlockPistonExtendEvent event) {
-            BlockEventUtil.onBelowBlockPistonBreakOrMoveBasicLogic(event, ArtisanCropData.class);
+            BlockEventUtil.onBelowBlockPistonBreakOrMove(event, ArtisanCropData.class);
+        }
+
+        @EventHandler
+        private static void onBlockExplode(BlockExplodeEvent event) {
+            BlockEventUtil.onBlockExplode(event, ArtisanCropData.class);
+        }
+
+        @EventHandler
+        private static void onEntityExplode(EntityExplodeEvent event) {
+            BlockEventUtil.onEntityExplode(event, ArtisanCropData.class);
+        }
+
+        @EventHandler
+        private static void onEntityChangeBlock(EntityChangeBlockEvent event) {
+            BlockEventUtil.onEntityChangeBlock(event, ArtisanCropData.class);
         }
 
         @EventHandler(priority = EventPriority.LOWEST)

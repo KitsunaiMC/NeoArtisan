@@ -8,6 +8,7 @@ import io.github.moyusowo.neoartisan.util.init.InitPriority;
 import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
 import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlockBase;
 import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlockState;
+import io.github.moyusowo.neoartisanapi.api.block.crop.ArtisanCropData;
 import io.github.moyusowo.neoartisanapi.api.block.gui.GUICreator;
 import io.github.moyusowo.neoartisanapi.api.block.thin.ArtisanThinBlock;
 import io.github.moyusowo.neoartisanapi.api.block.thin.ArtisanThinBlockData;
@@ -21,6 +22,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.*;
+import org.bukkit.event.entity.EntityChangeBlockEvent;
+import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.plugin.ServicePriority;
 import org.jetbrains.annotations.NotNull;
@@ -99,7 +102,6 @@ public class ArtisanThinBlockImpl extends ArtisanBlockBase implements ArtisanThi
         private static void onPlace(PlayerInteractEvent event) throws Exception {
             if (BlockEventUtil.canNotPlaceBasicCheck(event, ArtisanThinBlock.class)) return;
             if (event.getBlockFace() != BlockFace.UP) return;
-            if ((!event.getPlayer().isSneaking()) && InteractionUtil.isInteractable(event.getClickedBlock())) return;
             ArtisanItem artisanItem = NeoArtisanAPI.getItemRegistry().getArtisanItem(event.getItem());
             BlockEventUtil.onPlaceBasicLogic(
                     event,
@@ -127,13 +129,28 @@ public class ArtisanThinBlockImpl extends ArtisanBlockBase implements ArtisanThi
 
         @EventHandler(priority = EventPriority.HIGHEST)
         private static void onBelowBlockPistonBreakOrMove(BlockPistonExtendEvent event) {
-            BlockEventUtil.onBelowBlockPistonBreakOrMoveBasicLogic(event, ArtisanThinBlockData.class);
+            BlockEventUtil.onBelowBlockPistonBreakOrMove(event, ArtisanThinBlockData.class);
         }
 
         @EventHandler(priority = EventPriority.LOWEST)
         private static void onWaterOrPistonBreak(BlockBreakBlockEvent event) {
             if (BlockEventUtil.isNotTypedArtisanBlock(event.getBlock(), ArtisanThinBlockData.class)) return;
             BlockEventUtil.onWaterOrPistonBreakBasicLogic(event);
+        }
+
+        @EventHandler
+        private static void onBlockExplode(BlockExplodeEvent event) {
+            BlockEventUtil.onBlockExplode(event, ArtisanThinBlockData.class);
+        }
+
+        @EventHandler
+        private static void onEntityExplode(EntityExplodeEvent event) {
+            BlockEventUtil.onEntityExplode(event, ArtisanThinBlockData.class);
+        }
+
+        @EventHandler
+        private static void onEntityChangeBlock(EntityChangeBlockEvent event) {
+            BlockEventUtil.onEntityChangeBlock(event, ArtisanThinBlockData.class);
         }
 
         @EventHandler(priority = EventPriority.LOWEST)

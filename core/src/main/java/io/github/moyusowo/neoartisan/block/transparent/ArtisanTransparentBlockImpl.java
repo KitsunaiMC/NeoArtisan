@@ -8,7 +8,9 @@ import io.github.moyusowo.neoartisan.util.init.InitPriority;
 import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
 import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlockBase;
 import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlockState;
+import io.github.moyusowo.neoartisanapi.api.block.crop.ArtisanCropData;
 import io.github.moyusowo.neoartisanapi.api.block.gui.GUICreator;
+import io.github.moyusowo.neoartisanapi.api.block.thin.ArtisanThinBlockData;
 import io.github.moyusowo.neoartisanapi.api.block.transparent.ArtisanTransparentBlock;
 import io.github.moyusowo.neoartisanapi.api.block.transparent.ArtisanTransparentBlockData;
 import io.github.moyusowo.neoartisanapi.api.block.transparent.ArtisanTransparentBlockState;
@@ -21,6 +23,9 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockBurnEvent;
+import org.bukkit.event.block.BlockExplodeEvent;
+import org.bukkit.event.entity.EntityChangeBlockEvent;
+import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.plugin.ServicePriority;
 import org.jetbrains.annotations.NotNull;
@@ -117,7 +122,6 @@ class ArtisanTransparentBlockImpl extends ArtisanBlockBase implements ArtisanTra
         private static void onPlace(PlayerInteractEvent event) throws Exception {
             if (BlockEventUtil.canNotPlaceBasicCheck(event, ArtisanTransparentBlock.class)) return;
             ArtisanItem artisanItem = NeoArtisanAPI.getItemRegistry().getArtisanItem(event.getItem());
-            if ((!event.getPlayer().isSneaking()) && InteractionUtil.isInteractable(event.getClickedBlock())) return;
             if (overlap(event.getPlayer(), event.getClickedBlock().getRelative(event.getBlockFace()))) return;
             BlockEventUtil.onPlaceBasicLogic(
                     event,
@@ -137,6 +141,27 @@ class ArtisanTransparentBlockImpl extends ArtisanBlockBase implements ArtisanTra
             BlockEventUtil.onBreakBasicLogic(event);
         }
 
+        @EventHandler(priority = EventPriority.LOWEST)
+        private static void onPistonBreak(BlockBreakBlockEvent event) {
+            if (BlockEventUtil.isNotTypedArtisanBlock(event.getBlock(), ArtisanTransparentBlockData.class)) return;
+            BlockEventUtil.onWaterOrPistonBreakBasicLogic(event);
+        }
+
+        @EventHandler
+        private static void onBlockExplode(BlockExplodeEvent event) {
+            BlockEventUtil.onBlockExplode(event, ArtisanTransparentBlockData.class);
+        }
+
+        @EventHandler
+        private static void onEntityExplode(EntityExplodeEvent event) {
+            BlockEventUtil.onEntityExplode(event, ArtisanTransparentBlockData.class);
+        }
+
+        @EventHandler
+        private static void onEntityChangeBlock(EntityChangeBlockEvent event) {
+            BlockEventUtil.onEntityChangeBlock(event, ArtisanTransparentBlockData.class);
+        }
+
         @EventHandler
         private static void onBurn(BlockBurnEvent event) {
             if (event.isCancelled()) return;
@@ -144,12 +169,6 @@ class ArtisanTransparentBlockImpl extends ArtisanBlockBase implements ArtisanTra
             if (!(NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlock(event.getBlock()) instanceof ArtisanTransparentBlockData artisanTransparentBlockData)) return;
             if (artisanTransparentBlockData.getArtisanBlock().canBurn()) return;
             event.setCancelled(true);
-        }
-
-        @EventHandler(priority = EventPriority.LOWEST)
-        private static void onPistonBreak(BlockBreakBlockEvent event) {
-            if (BlockEventUtil.isNotTypedArtisanBlock(event.getBlock(), ArtisanTransparentBlockData.class)) return;
-            BlockEventUtil.onWaterOrPistonBreakBasicLogic(event);
         }
     }
 }

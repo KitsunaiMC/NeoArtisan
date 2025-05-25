@@ -1,5 +1,6 @@
 package io.github.moyusowo.neoartisan.block.util;
 
+import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisan.block.storage.internal.ArtisanBlockStorageInternal;
 import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
 import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlock;
@@ -18,13 +19,20 @@ import org.bukkit.craftbukkit.CraftWorld;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.ExperienceOrb;
 import org.bukkit.event.Event;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.block.BlockPistonExtendEvent;
+import org.bukkit.event.entity.EntityChangeBlockEvent;
+import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static io.github.moyusowo.neoartisan.block.util.BlockStateUtil.stateById;
@@ -40,6 +48,7 @@ public final class BlockEventUtil {
         if (artisanItem.getBlockId() == null) return true;
         if (!NeoArtisanAPI.getBlockRegistry().isArtisanBlock(artisanItem.getBlockId())) return true;
         if (!artisanBlockClass.isInstance(NeoArtisanAPI.getBlockRegistry().getArtisanBlock(artisanItem.getBlockId()))) return true;
+        if ((!event.getPlayer().isSneaking()) && InteractionUtil.isInteractable(event.getClickedBlock())) return true;
         return false;
     }
 
@@ -126,7 +135,7 @@ public final class BlockEventUtil {
         ArtisanBlockStorageInternal.getInternal().removeArtisanBlock(event.getBlock().getRelative(BlockFace.UP));
     }
 
-    public static <D extends ArtisanBlockData> void onBelowBlockPistonBreakOrMoveBasicLogic(BlockPistonExtendEvent event, Class<D> artisanBlockDataClass) {
+    public static <D extends ArtisanBlockData> void onBelowBlockPistonBreakOrMove(BlockPistonExtendEvent event, Class<D> artisanBlockDataClass) {
         if (event.isCancelled()) return;
         for (Block block : event.getBlocks()) {
             if (isNotTypedArtisanBlock(block.getRelative(BlockFace.UP), artisanBlockDataClass)) return;
@@ -160,6 +169,62 @@ public final class BlockEventUtil {
             event.getDrops().add(drop);
         }
         ArtisanBlockStorageInternal.getInternal().removeArtisanBlock(event.getBlock());
+    }
+
+    public static <D extends ArtisanBlockData> void onBlockExplode(BlockExplodeEvent event, Class<D> artisanBlockDataClass) {
+        NeoArtisan.logger().info("onBlockExplode");
+        if (event.isCancelled()) return;
+        final List<Block> artisanBlocks = new ArrayList<>();
+        final Iterator<Block> iterator = event.blockList().iterator();
+        while (iterator.hasNext()) {
+            Block block = iterator.next();
+            if (isNotTypedArtisanBlock(block, artisanBlockDataClass)) continue;
+            artisanBlocks.add(block);
+            iterator.remove();
+        }
+        for (Block artisanBlock : artisanBlocks) {
+            ArtisanBlockData artisanBlockData = NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlock(artisanBlock);
+            if (ThreadLocalRandom.current().nextDouble() < event.getYield()) {
+                for (ItemStack drop : artisanBlockData.getArtisanBlockState().drops()) {
+                    artisanBlock.getWorld().dropItemNaturally(artisanBlock.getLocation(), drop);
+                }
+            }
+            artisanBlock.setType(Material.AIR);
+            ArtisanBlockStorageInternal.getInternal().removeArtisanBlock(artisanBlock);
+        }
+    }
+
+    public static <D extends ArtisanBlockData> void onEntityExplode(EntityExplodeEvent event, Class<D> artisanBlockDataClass) {
+        if (event.isCancelled()) return;
+        final List<Block> artisanBlocks = new ArrayList<>();
+        final Iterator<Block> iterator = event.blockList().iterator();
+        while (iterator.hasNext()) {
+            Block block = iterator.next();
+            if (isNotTypedArtisanBlock(block, artisanBlockDataClass)) continue;
+            artisanBlocks.add(block);
+            iterator.remove();
+        }
+        for (Block artisanBlock : artisanBlocks) {
+            ArtisanBlockData artisanBlockData = NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlock(artisanBlock);
+            if (ThreadLocalRandom.current().nextDouble() < event.getYield()) {
+                for (ItemStack drop : artisanBlockData.getArtisanBlockState().drops()) {
+                    artisanBlock.getWorld().dropItemNaturally(artisanBlock.getLocation(), drop);
+                }
+            }
+            artisanBlock.setType(Material.AIR);
+            ArtisanBlockStorageInternal.getInternal().removeArtisanBlock(artisanBlock);
+        }
+    }
+
+    public static <D extends ArtisanBlockData> void onEntityChangeBlock(EntityChangeBlockEvent event, Class<D> artisanBlockDataClass) {
+        if (event.isCancelled()) return;
+        if (isNotTypedArtisanBlock(event.getBlock(), artisanBlockDataClass)) return;
+        if (event.getEntityType() == EntityType.ENDERMAN) {
+            event.setCancelled(true);
+        } else if (event.getEntityType() == EntityType.WITHER) {
+            event.getBlock().setType(Material.AIR);
+            ArtisanBlockStorageInternal.getInternal().removeArtisanBlock(event.getBlock());
+        }
     }
 
     public static <D extends ArtisanBlockData> void place(Block bukkitBlock, D artisanBlockData) throws Exception {
