@@ -8,7 +8,7 @@ import org.bukkit.Material;
 
 final class RecipeTest {
 
-    @InitMethod(priority = InitPriority.REGISTER)
+    @NeoArtisanAPI.Register
     private static void register() {
         if (NeoArtisan.isDebugMode()) {
             NeoArtisanAPI.getRecipeRegistry().createShapedRecipe("A B", "", "")

@@ -15,7 +15,7 @@ final class AttributeTest {
                     itemstack = new NamespacedKey(namespace, "itemstack"),
                     player = new NamespacedKey(namespace, "player");
 
-    @InitMethod(priority = InitPriority.REGISTER)
+    @NeoArtisanAPI.Register
     private static void register() {
         if (NeoArtisan.isDebugMode()) {
             NeoArtisanAPI.getGlobalAttributeRegistry().registerAttribute(

@@ -1,6 +1,7 @@
 package io.github.moyusowo.neoartisan.item;
 
 import io.github.moyusowo.neoartisan.NeoArtisan;
+import io.github.moyusowo.neoartisan.RegisterManager;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
 import io.github.moyusowo.neoartisanapi.api.item.*;
@@ -40,7 +41,7 @@ final class ItemRegistryImpl implements ItemRegistry {
         );
     }
 
-    @InitMethod(priority = InitPriority.REGISTRY)
+    @InitMethod(priority = InitPriority.REGISTRY_LOAD)
     public static void init() {
         new ItemRegistryImpl();
     }
@@ -53,8 +54,16 @@ final class ItemRegistryImpl implements ItemRegistry {
 
     @Override
     public void registerItem(@NotNull Builder builder) {
-        BuilderImpl builderImpl = (BuilderImpl) builder;
-        registry.put(builderImpl.registryId, builderImpl.build());
+        try {
+            if (RegisterManager.isOpen()) {
+                BuilderImpl builderImpl = (BuilderImpl) builder;
+                registry.put(builderImpl.registryId, builderImpl.build());
+            } else {
+                throw RegisterManager.RegisterException.exception();
+            }
+        } catch (RegisterManager.RegisterException e) {
+            NeoArtisan.logger().info(RegisterManager.eTips);
+        }
     }
 
     @SuppressWarnings("UnstableApiUsage")

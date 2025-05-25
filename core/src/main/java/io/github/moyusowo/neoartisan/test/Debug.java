@@ -3,6 +3,7 @@ package io.github.moyusowo.neoartisan.test;
 import io.github.moyusowo.neoartisan.NeoArtisan;
 
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
+import io.github.moyusowo.neoartisan.util.init.InitPriority;
 import io.github.moyusowo.neoartisanapi.api.item.ItemRegistry;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
@@ -15,7 +16,7 @@ public class Debug implements Listener {
 
     private Debug() {}
 
-    @InitMethod
+    @InitMethod(priority = InitPriority.LISTENER)
     public static void init() {
         if (NeoArtisan.isDebugMode()) {
             NeoArtisan.registerListener(new Debug());

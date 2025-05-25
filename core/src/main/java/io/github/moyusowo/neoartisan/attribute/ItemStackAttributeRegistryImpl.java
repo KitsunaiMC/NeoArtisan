@@ -1,6 +1,7 @@
 package io.github.moyusowo.neoartisan.attribute;
 
 import io.github.moyusowo.neoartisan.NeoArtisan;
+import io.github.moyusowo.neoartisan.RegisterManager;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
 import io.github.moyusowo.neoartisanapi.api.attribute.ItemStackAttributeRegistry;
@@ -20,7 +21,7 @@ public class ItemStackAttributeRegistryImpl implements ItemStackAttributeRegistr
 
     private static ItemStackAttributeRegistryImpl instance;
 
-    @InitMethod(priority = InitPriority.REGISTRY)
+    @InitMethod(priority = InitPriority.REGISTRY_LOAD)
     public static void init() {
         new ItemStackAttributeRegistryImpl();
     }
@@ -44,7 +45,15 @@ public class ItemStackAttributeRegistryImpl implements ItemStackAttributeRegistr
 
     @Override
     public void registerAttribute(@NotNull NamespacedKey attributeKey, @NotNull PersistentDataType<?, ?> pdcType) {
-        ItemStackAttributeRegistry.put(attributeKey, pdcType);
+        try {
+            if (RegisterManager.isOpen()) {
+                ItemStackAttributeRegistry.put(attributeKey, pdcType);
+            } else {
+                throw RegisterManager.RegisterException.exception();
+            }
+        } catch (RegisterManager.RegisterException e) {
+            NeoArtisan.logger().info(RegisterManager.eTips);
+        }
     }
 
     @Override
