@@ -11,16 +11,12 @@ import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlock;
 import io.github.moyusowo.neoartisanapi.api.block.crop.ArtisanCrop;
 import io.github.moyusowo.neoartisanapi.api.block.crop.ArtisanCropData;
 import io.github.moyusowo.neoartisanapi.api.block.crop.ArtisanCropState;
-import io.github.moyusowo.neoartisanapi.api.block.event.ArtisanBlockBreakEvent;
-import io.github.moyusowo.neoartisanapi.api.block.event.ArtisanBlockLoseSupportEvent;
 import io.github.moyusowo.neoartisanapi.api.item.ArtisanItem;
 import io.papermc.paper.event.block.BlockBreakBlockEvent;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.ExperienceOrb;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -149,101 +145,25 @@ class ArtisanCropImpl extends ArtisanBlockBase implements ArtisanCrop {
 
         @EventHandler(priority = EventPriority.HIGHEST)
         private static void onBreak(BlockBreakEvent event) {
-            if (event.isCancelled()) return;
-            if (!NeoArtisanAPI.getArtisanBlockStorage().isArtisanBlock(event.getBlock())) return;
-            if (!(NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlock(event.getBlock()) instanceof ArtisanCropData artisanCropData)) return;
-            if (event.getPlayer().getGameMode() == GameMode.CREATIVE) {
-                ArtisanBlockStorageInternal.getInternal().removeArtisanBlock(event.getBlock());
-                return;
-            }
-            event.setCancelled(true);
-            ArtisanBlockBreakEvent artisanBlockBreakEvent = new ArtisanBlockBreakEvent(
-                    event.getBlock(),
-                    event.getPlayer(),
-                    artisanCropData.getArtisanBlock()
-            );
-            artisanBlockBreakEvent.setExpToDrop(event.getExpToDrop());
-            artisanBlockBreakEvent.callEvent();
-            if (artisanBlockBreakEvent.isCancelled()) return;
-            if (artisanBlockBreakEvent.getExpToDrop() > 0) {
-                ExperienceOrb orb = (ExperienceOrb) event.getBlock().getWorld().spawnEntity(
-                        event.getBlock().getLocation(),
-                        EntityType.EXPERIENCE_ORB
-                );
-                orb.setExperience(artisanBlockBreakEvent.getExpToDrop());
-            }
-            event.getBlock().setType(Material.AIR);
-            if (artisanBlockBreakEvent.isDropItems()) {
-                for (ItemStack drop : artisanCropData.getArtisanBlockState().drops()) {
-                    event.getBlock().getWorld().dropItemNaturally(event.getBlock().getLocation(), drop);
-                }
-            }
-            ArtisanBlockStorageInternal.getInternal().removeArtisanBlock(event.getBlock());
+            if (BlockEventUtil.isNotTypedArtisanBlock(event.getBlock(), ArtisanCropData.class)) return;
+            BlockEventUtil.onBreakBasicLogic(event);
         }
 
         @EventHandler(priority = EventPriority.HIGHEST)
         private static void onBlockBreakUnderCrop(BlockBreakEvent event) {
-            if (event.isCancelled()) return;
-            if (!NeoArtisanAPI.getArtisanBlockStorage().isArtisanBlock(event.getBlock().getRelative(BlockFace.UP))) return;
-            if (!(NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlock(event.getBlock().getRelative(BlockFace.UP)) instanceof ArtisanCropData artisanCropData)) return;
-            event.getBlock().getRelative(BlockFace.UP).setType(Material.AIR);
-            ArtisanBlockLoseSupportEvent artisanBlockLoseSupportEvent = new ArtisanBlockLoseSupportEvent(
-                    event.getBlock(),
-                    artisanCropData.getArtisanBlock()
-            );
-            artisanBlockLoseSupportEvent.callEvent();
-            if (artisanBlockLoseSupportEvent.getExpToDrop() > 0) {
-                ExperienceOrb orb = (ExperienceOrb) event.getBlock().getWorld().spawnEntity(
-                        event.getBlock().getLocation(),
-                        EntityType.EXPERIENCE_ORB
-                );
-                orb.setExperience(artisanBlockLoseSupportEvent.getExpToDrop());
-            }
-            if (artisanBlockLoseSupportEvent.isDropItems()) {
-                for (ItemStack drop : artisanCropData.getArtisanBlockState().drops()) {
-                    event.getBlock().getWorld().dropItemNaturally(event.getBlock().getRelative(BlockFace.UP).getLocation(), drop);
-                }
-            }
-            ArtisanBlockStorageInternal.getInternal().removeArtisanBlock(event.getBlock().getRelative(BlockFace.UP));
+            if (BlockEventUtil.isNotTypedArtisanBlock(event.getBlock().getRelative(BlockFace.UP), ArtisanCropData.class)) return;
+            BlockEventUtil.onBelowBlockBreakBasicLogic(event);
         }
 
         @EventHandler(priority = EventPriority.HIGHEST)
         private static void onPistonBreakOrMoveUnderCrop(BlockPistonExtendEvent event) {
-            if (event.isCancelled()) return;
-            for (Block block : event.getBlocks()) {
-                if (!NeoArtisanAPI.getArtisanBlockStorage().isArtisanBlock(block.getRelative(BlockFace.UP))) continue;
-                if (!(NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlock(block.getRelative(BlockFace.UP)) instanceof ArtisanCropData artisanCropData)) continue;
-                block.getRelative(BlockFace.UP).setType(Material.AIR);
-                ArtisanBlockLoseSupportEvent artisanBlockLoseSupportEvent = new ArtisanBlockLoseSupportEvent(
-                        event.getBlock(),
-                        artisanCropData.getArtisanBlock()
-                );
-                artisanBlockLoseSupportEvent.callEvent();
-                if (artisanBlockLoseSupportEvent.getExpToDrop() > 0) {
-                    ExperienceOrb orb = (ExperienceOrb) event.getBlock().getWorld().spawnEntity(
-                            event.getBlock().getLocation(),
-                            EntityType.EXPERIENCE_ORB
-                    );
-                    orb.setExperience(artisanBlockLoseSupportEvent.getExpToDrop());
-                }
-                if (artisanBlockLoseSupportEvent.isDropItems()) {
-                    for (ItemStack drop : artisanCropData.getArtisanBlockState().drops()) {
-                        event.getBlock().getWorld().dropItemNaturally(event.getBlock().getRelative(BlockFace.UP).getLocation(), drop);
-                    }
-                }
-                ArtisanBlockStorageInternal.getInternal().removeArtisanBlock(block.getRelative(BlockFace.UP));
-            }
+            BlockEventUtil.onBelowBlockPistonBreakOrMoveBasicLogic(event, ArtisanCropData.class);
         }
 
         @EventHandler(priority = EventPriority.LOWEST)
         private static void onWaterOrPistonBreak(BlockBreakBlockEvent event) {
-            if (!NeoArtisanAPI.getArtisanBlockStorage().isArtisanBlock(event.getBlock())) return;
-            if (!(NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlock(event.getBlock()) instanceof ArtisanCropData artisanCropData)) return;
-            while (!event.getDrops().isEmpty()) event.getDrops().removeFirst();
-            for (ItemStack drop : artisanCropData.getArtisanBlockState().drops()) {
-                event.getDrops().add(drop);
-            }
-            ArtisanBlockStorageInternal.getInternal().removeArtisanBlock(event.getBlock());
+            if (BlockEventUtil.isNotTypedArtisanBlock(event.getBlock(), ArtisanCropData.class)) return;
+            BlockEventUtil.onWaterOrPistonBreakBasicLogic(event);
         }
 
         @EventHandler(priority = EventPriority.HIGHEST)
