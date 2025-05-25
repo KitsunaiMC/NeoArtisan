@@ -2,6 +2,7 @@ package io.github.moyusowo.neoartisan.block.crop;
 
 import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisan.block.storage.internal.ArtisanBlockStorageInternal;
+import io.github.moyusowo.neoartisan.block.util.BlockEventUtil;
 import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
 import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlockBase;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
@@ -12,26 +13,20 @@ import io.github.moyusowo.neoartisanapi.api.block.crop.ArtisanCropData;
 import io.github.moyusowo.neoartisanapi.api.block.crop.ArtisanCropState;
 import io.github.moyusowo.neoartisanapi.api.block.event.ArtisanBlockBreakEvent;
 import io.github.moyusowo.neoartisanapi.api.block.event.ArtisanBlockLoseSupportEvent;
-import io.github.moyusowo.neoartisanapi.api.block.event.ArtisanBlockPlaceEvent;
 import io.github.moyusowo.neoartisanapi.api.item.ArtisanItem;
 import io.papermc.paper.event.block.BlockBreakBlockEvent;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.Level;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
-import org.bukkit.craftbukkit.CraftWorld;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.ExperienceOrb;
-import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.*;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -40,8 +35,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
-
-import static io.github.moyusowo.neoartisan.block.util.BlockStateUtil.stateById;
 
 class ArtisanCropImpl extends ArtisanBlockBase implements ArtisanCrop {
 
@@ -141,34 +134,17 @@ class ArtisanCropImpl extends ArtisanBlockBase implements ArtisanCrop {
 
         @EventHandler(priority = EventPriority.HIGHEST)
         private static void onPlace(PlayerInteractEvent event) throws Exception {
-            if (event.useInteractedBlock() == Event.Result.DENY) return;
-            if (event.useItemInHand() == Event.Result.DENY) return;
-            if (event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
-            if (!NeoArtisanAPI.getItemRegistry().isArtisanItem(event.getItem())) return;
-            ArtisanItem artisanItem = NeoArtisanAPI.getItemRegistry().getArtisanItem(event.getItem());
-            if (artisanItem.getBlockId() == null) return;
-            if (!NeoArtisanAPI.getBlockRegistry().isArtisanBlock(artisanItem.getBlockId())) return;
-            if (!(NeoArtisanAPI.getBlockRegistry().getArtisanBlock(artisanItem.getBlockId()) instanceof ArtisanCrop)) return;
+            if (BlockEventUtil.canNotPlaceBasicCheck(event, ArtisanCrop.class)) return;
             if (event.getClickedBlock().getType() != Material.FARMLAND) return;
             if (event.getBlockFace() != BlockFace.UP) return;
             if (event.getClickedBlock().getRelative(BlockFace.UP).getType() != Material.AIR) return;
-            event.setCancelled(true);
-            ArtisanBlockPlaceEvent artisanBlockPlaceEvent = new ArtisanBlockPlaceEvent(
+            ArtisanItem artisanItem = NeoArtisanAPI.getItemRegistry().getArtisanItem(event.getItem());
+            BlockEventUtil.onPlaceBasicLogic(
+                    event,
                     event.getClickedBlock().getRelative(BlockFace.UP),
-                    event.getClickedBlock().getRelative(BlockFace.UP).getState(),
                     event.getClickedBlock(),
-                    event.getItem(),
-                    event.getPlayer(),
-                    true,
-                    EquipmentSlot.HAND,
-                    NeoArtisanAPI.getBlockRegistry().getArtisanBlock(artisanItem.getBlockId())
+                    new ArtisanCropDataImpl(artisanItem.getBlockId(), 0, event.getClickedBlock().getRelative(BlockFace.UP).getLocation())
             );
-            Bukkit.getPluginManager().callEvent(artisanBlockPlaceEvent);
-            if (artisanBlockPlaceEvent.isCancelled()) return;
-            place(event.getClickedBlock().getRelative(BlockFace.UP), new ArtisanCropDataImpl(artisanItem.getBlockId(), 0, event.getClickedBlock().getRelative(BlockFace.UP).getLocation()));
-            if (event.getPlayer().getGameMode() != GameMode.CREATIVE) {
-                event.getItem().setAmount(event.getItem().getAmount() - 1);
-            }
         }
 
         @EventHandler(priority = EventPriority.HIGHEST)
@@ -299,7 +275,7 @@ class ArtisanCropImpl extends ArtisanBlockBase implements ArtisanCrop {
                         grownCrop.remove(event.getBlock());
                     }
                 }.runTaskLater(NeoArtisan.instance(), 0L);
-                replace(event.getBlock(), artisanCropData.getNextStage());
+                BlockEventUtil.replace(event.getBlock(), artisanCropData.getNextStage());
             }
         }
 
@@ -311,53 +287,16 @@ class ArtisanCropImpl extends ArtisanBlockBase implements ArtisanCrop {
                     Object object = NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlock(blockState.getBlock());
                     if (object instanceof ArtisanCropData) {
                         ArtisanCropData artisanCropData = grownCrop.get(blockState.getBlock());
-                        replace(blockState.getBlock(), artisanCropData);
+                        BlockEventUtil.replace(blockState.getBlock(), artisanCropData);
                         grownCrop.remove(blockState.getBlock());
                         event.setCancelled(true);
                         if (artisanCropData.hasNextStage()) {
-                            replace(blockState.getBlock(), artisanCropData.getNextFertilizeStage());
-                            playBoneMealEffects(blockState.getLocation());
+                            BlockEventUtil.replace(blockState.getBlock(), artisanCropData.getNextFertilizeStage());
+                            BlockEventUtil.playBoneMealEffects(blockState.getLocation());
                         }
                     }
                 }
             }
-        }
-
-        private static void place(Block bukkitBlock, ArtisanCropData artisanCropData) throws Exception {
-            CraftWorld craftWorld = (CraftWorld) bukkitBlock.getWorld();
-            Level nmsWorld = craftWorld.getHandle();
-            BlockPos pos = new BlockPos(bukkitBlock.getX(), bukkitBlock.getY(), bukkitBlock.getZ());
-            ArtisanBlockStorageInternal.getInternal().placeArtisanBlock(nmsWorld, pos, artisanCropData);
-            nmsWorld.setBlock(pos, stateById(artisanCropData.getArtisanBlockState().actualState()), 3);
-        }
-
-        private static void replace(Block bukkitBlock, ArtisanCropData artisanCropData) {
-            CraftWorld craftWorld = (CraftWorld) bukkitBlock.getWorld();
-            Level nmsWorld = craftWorld.getHandle();
-            BlockPos pos = new BlockPos(bukkitBlock.getX(), bukkitBlock.getY(), bukkitBlock.getZ());
-            ArtisanBlockStorageInternal.getInternal().replaceArtisanBlock(nmsWorld, pos, artisanCropData);
-            nmsWorld.setBlock(pos, stateById(artisanCropData.getArtisanBlockState().actualState()), 3);
-        }
-
-        private static void playBoneMealEffects(Location loc) {
-            World world = loc.getWorld();
-            world.spawnParticle(
-                    Particle.HAPPY_VILLAGER,
-                    loc.clone().add(0.5, 0.5, 0.5),
-                    20, 0.3, 0.3, 0.3, 0.5
-            );
-            for (int i = 0; i < 5; i++) {
-                world.spawnParticle(
-                        Particle.HAPPY_VILLAGER,
-                        loc.clone().add(
-                                0.5 + ThreadLocalRandom.current().nextGaussian() * 0.3,
-                                0.1,
-                                0.5 + ThreadLocalRandom.current().nextGaussian() * 0.3
-                        ),
-                        2, 0, 0.1, 0, 0.2
-                );
-            }
-            world.playSound(loc, Sound.ITEM_BONE_MEAL_USE, 1.0f, 1.2f);
         }
     }
 

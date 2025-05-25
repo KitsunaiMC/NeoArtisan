@@ -2,6 +2,7 @@ package io.github.moyusowo.neoartisan.block.transparent;
 
 import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisan.block.storage.internal.ArtisanBlockStorageInternal;
+import io.github.moyusowo.neoartisan.block.util.BlockEventUtil;
 import io.github.moyusowo.neoartisan.block.util.InteractionUtil;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
@@ -9,7 +10,6 @@ import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
 import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlockBase;
 import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlockState;
 import io.github.moyusowo.neoartisanapi.api.block.event.ArtisanBlockBreakEvent;
-import io.github.moyusowo.neoartisanapi.api.block.event.ArtisanBlockPlaceEvent;
 import io.github.moyusowo.neoartisanapi.api.block.gui.GUICreator;
 import io.github.moyusowo.neoartisanapi.api.block.transparent.ArtisanTransparentBlock;
 import io.github.moyusowo.neoartisanapi.api.block.transparent.ArtisanTransparentBlockData;
@@ -26,15 +26,12 @@ import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.CraftWorld;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.ExperienceOrb;
-import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockBurnEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.ServicePriority;
 import org.jetbrains.annotations.NotNull;
@@ -130,40 +127,20 @@ class ArtisanTransparentBlockImpl extends ArtisanBlockBase implements ArtisanTra
 
         @EventHandler(priority = EventPriority.HIGHEST)
         private static void onPlace(PlayerInteractEvent event) throws Exception {
-            if (event.useInteractedBlock() == Event.Result.DENY) return;
-            if (event.useItemInHand() == Event.Result.DENY) return;
-            if (event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
-            if (!NeoArtisanAPI.getItemRegistry().isArtisanItem(event.getItem())) return;
+            if (BlockEventUtil.canNotPlaceBasicCheck(event, ArtisanTransparentBlock.class)) return;
             ArtisanItem artisanItem = NeoArtisanAPI.getItemRegistry().getArtisanItem(event.getItem());
-            if (artisanItem.getBlockId() == null) return;
-            if (!NeoArtisanAPI.getBlockRegistry().isArtisanBlock(artisanItem.getBlockId())) return;
-            if (!(NeoArtisanAPI.getBlockRegistry().getArtisanBlock(artisanItem.getBlockId()) instanceof ArtisanTransparentBlock)) return;
             if ((!event.getPlayer().isSneaking()) && InteractionUtil.isInteractable(event.getClickedBlock())) return;
             if (overlap(event.getPlayer(), event.getClickedBlock().getRelative(event.getBlockFace()))) return;
-            event.setCancelled(true);
-            ArtisanBlockPlaceEvent artisanBlockPlaceEvent = new ArtisanBlockPlaceEvent(
+            BlockEventUtil.onPlaceBasicLogic(
+                    event,
                     event.getClickedBlock().getRelative(event.getBlockFace()),
-                    event.getClickedBlock().getRelative(event.getBlockFace()).getState(),
                     event.getClickedBlock(),
-                    event.getItem(),
-                    event.getPlayer(),
-                    true,
-                    EquipmentSlot.HAND,
-                    NeoArtisanAPI.getBlockRegistry().getArtisanBlock(artisanItem.getBlockId())
-            );
-            Bukkit.getPluginManager().callEvent(artisanBlockPlaceEvent);
-            if (artisanBlockPlaceEvent.isCancelled()) return;
-            place(
-                    event.getClickedBlock().getRelative(event.getBlockFace()),
                     ArtisanTransparentBlockData.builder()
                             .blockId(artisanItem.getBlockId())
                             .stage(0)
                             .location(event.getClickedBlock().getRelative(event.getBlockFace()).getLocation())
                             .build()
             );
-            if (event.getPlayer().getGameMode() != GameMode.CREATIVE) {
-                event.getItem().setAmount(event.getItem().getAmount() - 1);
-            }
         }
 
         @EventHandler(priority = EventPriority.HIGHEST)
