@@ -7,6 +7,7 @@ import com.mojang.brigadier.tree.LiteralCommandNode;
 import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
+import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
 import io.papermc.paper.command.brigadier.argument.ArgumentTypes;
@@ -37,7 +38,11 @@ final class ItemCommandRegistrar {
                                             ctx -> {
                                                 if (ctx.getSource().getSender() instanceof Player player) {
                                                     NamespacedKey registryId = ctx.getArgument("registryId", NamespacedKey.class);
-                                                    player.give(((ArtisanItemImpl) ItemRegistryImpl.getInstance().getArtisanItem(registryId)).getItemStack());
+                                                    if (NeoArtisanAPI.getItemRegistry().isArtisanItem(registryId)) {
+                                                        player.give(((ArtisanItemImpl) ItemRegistryImpl.getInstance().getArtisanItem(registryId)).getItemStack());
+                                                    } else {
+                                                        player.sendMessage((ComponentLike) Component.literal("该物品ID不存在！").withStyle(ChatFormatting.RED));
+                                                    }
                                                     return 1;
                                                 }
                                                 ctx.getSource().getSender().sendMessage(
@@ -54,7 +59,11 @@ final class ItemCommandRegistrar {
                                                         if (ctx.getSource().getSender() instanceof Player player) {
                                                             NamespacedKey registryId = ctx.getArgument("registryId", NamespacedKey.class);
                                                             int count = IntegerArgumentType.getInteger(ctx, "count");
-                                                            player.give(((ArtisanItemImpl) ItemRegistryImpl.getInstance().getArtisanItem(registryId)).getItemStack(count));
+                                                            if (NeoArtisanAPI.getItemRegistry().isArtisanItem(registryId)) {
+                                                                player.give(((ArtisanItemImpl) ItemRegistryImpl.getInstance().getArtisanItem(registryId)).getItemStack(count));
+                                                            } else {
+                                                                player.sendMessage((ComponentLike) Component.literal("该物品ID不存在！").withStyle(ChatFormatting.RED));
+                                                            }
                                                             return 1;
                                                         }
                                                         ctx.getSource().getSender().sendMessage(
