@@ -114,7 +114,7 @@ public final class BlockEventUtil {
         if (event.isCancelled()) return;
         event.getBlock().getRelative(BlockFace.UP).setType(Material.AIR);
         ArtisanBlockLoseSupportEvent artisanBlockLoseSupportEvent = new ArtisanBlockLoseSupportEvent(
-                event.getBlock(),
+                event.getBlock().getRelative(BlockFace.UP),
                 artisanBlockData.getArtisanBlock()
         );
         artisanBlockLoseSupportEvent.callEvent();
