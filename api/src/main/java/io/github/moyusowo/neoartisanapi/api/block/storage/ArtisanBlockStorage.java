@@ -87,7 +87,7 @@ public interface ArtisanBlockStorage {
      */
     @ApiStatus.Experimental
     default boolean isArtisanCrop(World world, int x, int y, int z) {
-        return this.getArtisanBlock(world, x, y, z) instanceof ArtisanCropData;
+        return this.isArtisanBlock(world, x, y, z) && (this.getArtisanBlock(world, x, y, z) instanceof ArtisanCropData);
     }
 
     /**
@@ -112,7 +112,7 @@ public interface ArtisanBlockStorage {
      */
     @ApiStatus.Experimental
     default boolean isArtisanThinBlock(@NotNull World world, int x, int y, int z) {
-        return this.getArtisanBlock(world, x, y, z) instanceof ArtisanThinBlockData;
+        return this.isArtisanBlock(world, x, y, z) && (this.getArtisanBlock(world, x, y, z) instanceof ArtisanThinBlockData);
     }
 
     /**
@@ -137,6 +137,6 @@ public interface ArtisanBlockStorage {
      */
     @ApiStatus.Experimental
     default boolean isArtisanTransparentBlock(@NotNull World world, int x, int y, int z) {
-        return this.getArtisanBlock(world, x, y, z) instanceof ArtisanTransparentBlockData;
+        return this.isArtisanBlock(world, x, y, z) && (this.getArtisanBlock(world, x, y, z) instanceof ArtisanTransparentBlockData);
     }
 }
