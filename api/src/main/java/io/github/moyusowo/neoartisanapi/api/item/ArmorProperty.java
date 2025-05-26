@@ -9,18 +9,18 @@ import org.jetbrains.annotations.Nullable;
  * <p>使用示例：
  * <pre>{@code
  * // 创建钻石胸甲属性
- * ArmorProperty diamondChestplate = new ArmorProperty(8, 2, EquipmentSlot.CHEST);
+     * ArmorProperty diamondChestPlate = new ArmorProperty(8, 2, EquipmentSlot.CHEST);
  * }</pre>
  *
  * @param armor 护甲值（可选，null表示无护甲加成）
  * @param armorToughness 护甲韧性（可选，null表示无韧性加成）
  * @param slot 装备槽位（必选）
+ * @since 1.0.0
  */
 @SuppressWarnings("unused")
 public record ArmorProperty(@NotNull Integer armor, @NotNull Integer armorToughness, @Nullable EquipmentSlot slot) {
     /**
      * 空护甲属性配置，表示物品无护甲特性。
-     * <p>等效于 {@code new ArmorProperty(null, null, null)}
      */
     public static final ArmorProperty EMPTY = new ArmorProperty(null, null, null);
 }

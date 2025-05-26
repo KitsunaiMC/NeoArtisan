@@ -1,5 +1,16 @@
 package io.github.moyusowo.neoartisanapi.api.block.crop;
 
+/**
+ * 绊线型作物外观配置
+ * <p>
+ * <b>状态组合规则：</b>
+ * <ul>
+ *   <li>disarmed与powered不能同为true，因为原版外观需要正确映射</li>
+ *   <li>其他方向连接状态可自由组合</li>
+ * </ul>
+ *
+ * @implNote 需确保资源包中对应状态有特殊纹理
+ */
 public class TripwireAppearance implements CropAppearance {
 
     private final boolean[] b;

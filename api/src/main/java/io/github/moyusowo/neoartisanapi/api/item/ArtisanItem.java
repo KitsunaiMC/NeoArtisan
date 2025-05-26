@@ -13,11 +13,11 @@ import org.jetbrains.annotations.Nullable;
  * <p>此接口代表一个在系统中注册的自定义物品实例，包含物品的基础信息
  * 和各种扩展属性。所有自定义物品都应有唯一的 {@link NamespacedKey} 标识。</p>
  *
- * @apiNote 不保证API的线程安全
  * @see AttributeProperty
  * @see WeaponProperty
  * @see FoodProperty
  * @see ArmorProperty
+ * @since 1.0.0
  */
 @SuppressWarnings({"unused", "UnstableApiUsage"})
 public interface ArtisanItem {

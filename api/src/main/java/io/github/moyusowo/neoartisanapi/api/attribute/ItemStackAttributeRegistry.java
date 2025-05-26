@@ -2,9 +2,15 @@ package io.github.moyusowo.neoartisanapi.api.attribute;
 
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * 物品堆属性注册表API，用于管理自定义物品堆属性。
+ *
+ * @since 1.0.0
+ */
 public interface ItemStackAttributeRegistry extends AttributeRegistryBase {
     /**
      * 读取物品堆上的动态属性值。

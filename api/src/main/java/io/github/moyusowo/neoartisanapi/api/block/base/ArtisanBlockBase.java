@@ -4,23 +4,33 @@ import io.github.moyusowo.neoartisanapi.api.block.gui.ArtisanBlockGUI;
 import io.github.moyusowo.neoartisanapi.api.block.gui.GUICreator;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
-import org.bukkit.block.data.Openable;
-import org.bukkit.block.data.type.*;
-import org.bukkit.inventory.InventoryHolder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
+/**
+ * 自定义方块的抽象基类，提供 {@link ArtisanBlock} 接口的通用实现。
+ * <p>
+ * <b>重要设计规范：</b>
+ * <ol>
+ *   <li>所有具体自定义方块实现 <strong>必须</strong> 继承此类，而非直接实现 {@link ArtisanBlock} 接口</li>
+ *   <li>子类应通过构造函数注入所有必要组件，确保实例不可变</li>
+ *   <li>状态列表 ({@code stages}) 应在构造时完全初始化，后续不可修改，最好是不可变列表</li>
+ * </ol>
+ *
+ * @see ArtisanBlock 基础接口定义
+ * @see #ArtisanBlockBase(NamespacedKey, List, GUICreator) 唯一允许的构造方式
+ * @since 1.0.0
+ */
 public abstract class ArtisanBlockBase implements ArtisanBlock {
 
     private final NamespacedKey blockId;
     private final List<ArtisanBlockState> stages;
     private final GUICreator creator;
 
-    protected ArtisanBlockBase(NamespacedKey blockId, List<? extends ArtisanBlockState> stages, GUICreator creator) {
+    protected ArtisanBlockBase(@NotNull NamespacedKey blockId, @NotNull List<? extends ArtisanBlockState> stages, @Nullable GUICreator creator) {
         this.blockId = blockId;
         this.creator = creator;
         this.stages = new ArrayList<>();

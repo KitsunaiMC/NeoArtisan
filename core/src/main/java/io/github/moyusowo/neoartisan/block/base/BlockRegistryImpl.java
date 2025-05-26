@@ -9,6 +9,7 @@ import io.github.moyusowo.neoartisanapi.api.block.base.BlockRegistry;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.ServicePriority;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -39,7 +40,7 @@ final class BlockRegistryImpl implements BlockRegistry {
     private final ConcurrentHashMap<NamespacedKey, ArtisanBlock> registry;
 
     @Override
-    public void register(ArtisanBlock artisanBlock) {
+    public void register(@NotNull ArtisanBlock artisanBlock) {
         try {
             if (RegisterManager.isOpen()) {
                 registry.put(artisanBlock.getBlockId(), artisanBlock);
@@ -57,7 +58,7 @@ final class BlockRegistryImpl implements BlockRegistry {
     }
 
     @Override
-    public ArtisanBlock getArtisanBlock(NamespacedKey blockId) {
+    public @NotNull ArtisanBlock getArtisanBlock(@NotNull NamespacedKey blockId) {
         return registry.get(blockId);
     }
 }
