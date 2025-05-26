@@ -8,14 +8,36 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
+/**
+ * 表示薄型外观自定义方块的接口。
+ * <p>
+ * 扩展 {@link ArtisanBlock} 并添加薄型方块特有行为，所有实例应通过 {@link Builder} 构建。
+ * </p>
+ *
+ * @see ArtisanBlock 基础方块接口
+ * @since 1.0.0
+ */
 public interface ArtisanThinBlock extends ArtisanBlock {
 
+    /**
+     * 获取薄型方块建造器实例
+     * @return 通过服务管理器加载的建造器
+     * @throws IllegalStateException 如果服务未注册
+     */
     static Builder builder() {
         return Bukkit.getServicesManager().load(Builder.class);
     }
 
+    /**
+     * 获取特定状态下的薄型方块状态
+     * @param n 状态索引
+     * @return 对应的不可变状态实例
+     */
     @NotNull ArtisanThinBlockState getState(int n);
 
+    /**
+     * 薄型方块建造器接口
+     */
     interface Builder {
 
         Builder blockId(NamespacedKey blockId);

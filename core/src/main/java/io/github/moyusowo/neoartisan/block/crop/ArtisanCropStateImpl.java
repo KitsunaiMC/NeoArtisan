@@ -11,6 +11,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.ServicePriority;
+import org.jetbrains.annotations.NotNull;
 
 class ArtisanCropStateImpl extends ArtisanBlockStateBase implements ArtisanCropState {
 
@@ -60,7 +61,7 @@ class ArtisanCropStateImpl extends ArtisanBlockStateBase implements ArtisanCropS
         }
 
         @Override
-        public Builder appearance(CropAppearance cropAppearanceBlock) {
+        public Builder appearance(@NotNull CropAppearance cropAppearanceBlock) {
             this.cropAppearanceBlock = cropAppearanceBlock;
             return this;
         }

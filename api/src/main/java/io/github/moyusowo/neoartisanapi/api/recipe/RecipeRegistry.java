@@ -17,6 +17,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @see ArtisanShapedRecipe
  * @see ArtisanShapelessRecipe
+ * @since 1.0.0
  */
 @SuppressWarnings("unused")
 public interface RecipeRegistry {

@@ -1,34 +1,37 @@
 package io.github.moyusowo.neoartisan.block.base;
 
 import io.github.moyusowo.neoartisan.NeoArtisan;
+import io.github.moyusowo.neoartisan.RegisterManager;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
 import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlock;
+import io.github.moyusowo.neoartisanapi.api.block.base.BlockRegistry;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.ServicePriority;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.ConcurrentHashMap;
 
-final class BlockRegistry implements io.github.moyusowo.neoartisanapi.api.block.base.BlockRegistry {
+final class BlockRegistryImpl implements BlockRegistry {
 
-    private static BlockRegistry instance;
+    private static BlockRegistryImpl instance;
 
-    public static BlockRegistry getInstance() {
+    public static BlockRegistryImpl getInstance() {
         return instance;
     }
 
-    @InitMethod(priority = InitPriority.REGISTRY)
+    @InitMethod(priority = InitPriority.REGISTRY_LOAD)
     public static void init() {
-        new BlockRegistry();
+        new BlockRegistryImpl();
     }
 
-    private BlockRegistry() {
+    private BlockRegistryImpl() {
         instance = this;
         registry = new ConcurrentHashMap<>();
         Bukkit.getServicesManager().register(
                 io.github.moyusowo.neoartisanapi.api.block.base.BlockRegistry.class,
-                BlockRegistry.getInstance(),
+                BlockRegistryImpl.getInstance(),
                 NeoArtisan.instance(),
                 ServicePriority.Normal
         );
@@ -37,8 +40,16 @@ final class BlockRegistry implements io.github.moyusowo.neoartisanapi.api.block.
     private final ConcurrentHashMap<NamespacedKey, ArtisanBlock> registry;
 
     @Override
-    public void register(ArtisanBlock artisanBlock) {
-        registry.put(artisanBlock.getBlockId(), artisanBlock);
+    public void register(@NotNull ArtisanBlock artisanBlock) {
+        try {
+            if (RegisterManager.isOpen()) {
+                registry.put(artisanBlock.getBlockId(), artisanBlock);
+            } else {
+                throw RegisterManager.RegisterException.exception();
+            }
+        } catch (RegisterManager.RegisterException e) {
+            NeoArtisan.logger().info(RegisterManager.eTips);
+        }
     }
 
     @Override
@@ -47,7 +58,7 @@ final class BlockRegistry implements io.github.moyusowo.neoartisanapi.api.block.
     }
 
     @Override
-    public ArtisanBlock getArtisanBlock(NamespacedKey blockId) {
+    public @NotNull ArtisanBlock getArtisanBlock(@NotNull NamespacedKey blockId) {
         return registry.get(blockId);
     }
 }

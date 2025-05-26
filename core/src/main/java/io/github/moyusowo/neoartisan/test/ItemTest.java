@@ -21,7 +21,7 @@ final class ItemTest {
             cooking_pot = new NamespacedKey(namespace, "cooking_pot"),
             cutting_board = new NamespacedKey(namespace, "cutting_board");
 
-    @InitMethod(priority = InitPriority.REGISTER)
+    @NeoArtisanAPI.Register
     private static void register() {
         if (NeoArtisan.isDebugMode()) {
             NeoArtisanAPI.getItemRegistry().registerItem(

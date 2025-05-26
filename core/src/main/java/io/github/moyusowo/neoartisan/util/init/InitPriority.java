@@ -1,17 +1,19 @@
 package io.github.moyusowo.neoartisan.util.init;
 
 public enum InitPriority {
-    REGISTRY(1),
+    REGISTRY_LOAD(1),
     REGISTRAR(2),
-    REGISTER(3),
-    BLOCKDATA(4),
-    HIGHEST(5),
-    HIGH(6),
-    DEFAULT(7),
-    LOW(8),
-    LOWEST(9),
-    LISTENER(10),
-    COMMANDS(11);
+    REGISTRY_OPEN(3),
+    REGISTER(4),
+    REGISTRY_CLOSED(5),
+    BLOCKDATA(6),
+    HIGHEST(7),
+    HIGH(8),
+    DEFAULT(9),
+    LOW(10),
+    LOWEST(11),
+    LISTENER(12),
+    COMMANDS(13);
 
     private final int priority;
 

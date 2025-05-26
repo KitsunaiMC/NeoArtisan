@@ -1,6 +1,7 @@
 package io.github.moyusowo.neoartisan.recipe;
 
 import io.github.moyusowo.neoartisan.NeoArtisan;
+import io.github.moyusowo.neoartisan.RegisterManager;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
 import io.github.moyusowo.neoartisan.util.ArrayKey;
@@ -27,7 +28,7 @@ final class RecipeRegistryImpl implements Listener, RecipeRegistry {
         return instance;
     }
 
-    @InitMethod(priority = InitPriority.REGISTRY)
+    @InitMethod(priority = InitPriority.REGISTRY_LOAD)
     public static void init() {
         new RecipeRegistryImpl();
     }
@@ -51,19 +52,46 @@ final class RecipeRegistryImpl implements Listener, RecipeRegistry {
     @Override
     @NotNull
     public ArtisanShapedRecipe createShapedRecipe(@NotNull String line1, @NotNull String line2, @NotNull String line3) {
-        return new ArtisanShapedRecipeImpl(line1, line2, line3);
+        try {
+            if (RegisterManager.isOpen()) {
+                return new ArtisanShapedRecipeImpl(line1, line2, line3);
+            } else {
+                throw RegisterManager.RegisterException.exception();
+            }
+        } catch (RegisterManager.RegisterException e) {
+            NeoArtisan.logger().info(RegisterManager.eTips);
+        }
+        return null;
     }
 
     @Override
     @NotNull
     public ArtisanShapelessRecipe createShapelessRecipe() {
-        return new ArtisanShapelessRecipeImpl();
+        try {
+            if (RegisterManager.isOpen()) {
+                return new ArtisanShapelessRecipeImpl();
+            } else {
+                throw RegisterManager.RegisterException.exception();
+            }
+        } catch (RegisterManager.RegisterException e) {
+            NeoArtisan.logger().info(RegisterManager.eTips);
+        }
+        return null;
     }
 
     @Override
     @NotNull
     public ArtisanShapelessRecipe createShapelessRecipe(NamespacedKey result, int count) {
-        return new ArtisanShapelessRecipeImpl(result, count);
+        try {
+            if (RegisterManager.isOpen()) {
+                return new ArtisanShapelessRecipeImpl(result, count);
+            } else {
+                throw RegisterManager.RegisterException.exception();
+            }
+        } catch (RegisterManager.RegisterException e) {
+            NeoArtisan.logger().info(RegisterManager.eTips);
+        }
+        return null;
     }
 
     public void registerListener() {

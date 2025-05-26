@@ -18,12 +18,12 @@ import org.jetbrains.annotations.NotNull;
  * @param nutrition 营养值（不能为null）
  * @param saturation 饱和度（不能为null）
  * @param canAlwaysEat 是否在饱食时仍可食用
+ * @since 1.0.0
  */
 @SuppressWarnings("unused")
 public record FoodProperty(@NotNull Integer nutrition, @NotNull Float saturation, boolean canAlwaysEat) {
     /**
      * 空食物属性配置，表示物品不可食用。
-     * <p>等效于 {@code new FoodProperty(null, null, false)}
      */
     public static final FoodProperty EMPTY = new FoodProperty(null, null, false);
 }

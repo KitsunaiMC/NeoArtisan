@@ -20,8 +20,12 @@ import org.jetbrains.annotations.Nullable;
  * @param speed 攻击速度（不可为null）
  * @param knockback 击退强度（可可为null）
  * @param damage 基础伤害值（可为null）
+ * @since 1.0.0
  */
 @SuppressWarnings("unused")
 public record WeaponProperty(@NotNull Float speed, @NotNull Float knockback, @NotNull Float damage) {
+    /**
+     * 空武器属性，表示物品不是武器。
+     */
     public static final WeaponProperty EMPTY = new WeaponProperty(null, null, null);
 }

@@ -17,7 +17,6 @@ import java.util.List;
  * <ul>
  *   <li>自定义物品的注册与配置</li>
  *   <li>物品实例的获取与验证</li>
- *   <li>物品属性的动态读写</li>
  * </ul>
  *
  * <p>通过 {@link org.bukkit.Bukkit#getServicesManager()} 获取实例。</p>
@@ -25,6 +24,7 @@ import java.util.List;
  * @apiNote 部分方法涉及持久化操作，请在主线程调用
  * @see ArtisanItem
  * @see org.bukkit.plugin.ServicesManager
+ * @since 1.0.0
  */
 @SuppressWarnings({"unused", "UnstableApiUsage"})
 public interface ItemRegistry {
@@ -177,7 +177,7 @@ public interface ItemRegistry {
     @NotNull Builder builder();
 
     /**
-     * 通过构建器直接注册物品（推荐使用）。
+     * 通过构建器直接注册物品。
      *
      * @param builder 物品构建器实例（不能为null）
      * @throws IllegalArgumentException 如果builder为null或包含无效参数

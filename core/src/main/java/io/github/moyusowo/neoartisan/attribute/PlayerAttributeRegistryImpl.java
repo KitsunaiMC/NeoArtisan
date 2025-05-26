@@ -1,6 +1,7 @@
 package io.github.moyusowo.neoartisan.attribute;
 
 import io.github.moyusowo.neoartisan.NeoArtisan;
+import io.github.moyusowo.neoartisan.RegisterManager;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
 import io.github.moyusowo.neoartisanapi.api.attribute.PlayerAttributeRegistry;
@@ -19,7 +20,7 @@ public class PlayerAttributeRegistryImpl implements PlayerAttributeRegistry {
 
     private static PlayerAttributeRegistryImpl instance;
 
-    @InitMethod(priority = InitPriority.REGISTRY)
+    @InitMethod(priority = InitPriority.REGISTRY_LOAD)
     public static void init() {
         new PlayerAttributeRegistryImpl();
     }
@@ -44,7 +45,15 @@ public class PlayerAttributeRegistryImpl implements PlayerAttributeRegistry {
 
     @Override
     public void registerAttribute(@NotNull NamespacedKey attributeKey, @NotNull PersistentDataType<?, ?> pdcType) {
-        playerAttributeRegistry.put(attributeKey, pdcType);
+        try {
+            if (RegisterManager.isOpen()) {
+                playerAttributeRegistry.put(attributeKey, pdcType);
+            } else {
+                throw RegisterManager.RegisterException.exception();
+            }
+        } catch (RegisterManager.RegisterException e) {
+            NeoArtisan.logger().info(RegisterManager.eTips);
+        }
     }
 
     @Override

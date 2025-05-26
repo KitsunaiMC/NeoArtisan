@@ -26,7 +26,7 @@ final class CropTest {
     static final NamespacedKey magic_crop = new NamespacedKey(namespace, "magic_crop"),
             cooking_pot = new NamespacedKey(namespace, "cooking_pot");
 
-    @InitMethod(priority = InitPriority.REGISTER)
+    @NeoArtisanAPI.Register
     private static void register() {
         if (NeoArtisan.isDebugMode()) {
             NeoArtisanAPI.getBlockRegistry().register(

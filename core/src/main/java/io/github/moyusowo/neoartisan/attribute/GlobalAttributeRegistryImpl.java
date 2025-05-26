@@ -1,6 +1,7 @@
 package io.github.moyusowo.neoartisan.attribute;
 
 import io.github.moyusowo.neoartisan.NeoArtisan;
+import io.github.moyusowo.neoartisan.RegisterManager;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
 import io.github.moyusowo.neoartisanapi.api.attribute.GlobalAttributeRegistry;
@@ -17,7 +18,7 @@ public class GlobalAttributeRegistryImpl implements GlobalAttributeRegistry {
 
     private static GlobalAttributeRegistryImpl instance;
 
-    @InitMethod(priority = InitPriority.REGISTRY)
+    @InitMethod(priority = InitPriority.REGISTRY_LOAD)
     public static void init() {
         new GlobalAttributeRegistryImpl();
     }
@@ -42,7 +43,15 @@ public class GlobalAttributeRegistryImpl implements GlobalAttributeRegistry {
 
     @Override
     public void registerAttribute(@NotNull NamespacedKey attributeKey, @NotNull PersistentDataType<?, ?> pdcType) {
-        globalAttributeRegistry.put(attributeKey, pdcType);
+        try {
+            if (RegisterManager.isOpen()) {
+                globalAttributeRegistry.put(attributeKey, pdcType);
+            } else {
+                throw RegisterManager.RegisterException.exception();
+            }
+        } catch (RegisterManager.RegisterException e) {
+            NeoArtisan.logger().info(RegisterManager.eTips);
+        }
     }
 
     @Override

@@ -2,8 +2,10 @@ package io.github.moyusowo.neoartisanapi.api.attribute;
 
 import org.bukkit.NamespacedKey;
 import org.bukkit.persistence.PersistentDataType;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
+@ApiStatus.AvailableSince(value = "1.0.0")
 interface AttributeRegistryBase {
 
     /**
@@ -24,7 +26,24 @@ interface AttributeRegistryBase {
      */
     boolean hasAttribute(@NotNull NamespacedKey attributeKey);
 
+    /**
+     * 获取属性对应的Java原生类型。
+     *
+     * @param attributeKey 要查询的属性键（不可为null）
+     * @return 属性的Java类型（不会返回null）
+     * @throws IllegalArgumentException 如果属性未注册
+     */
     @NotNull Class<?> getAttributeJavaType(@NotNull NamespacedKey attributeKey);
 
+    /**
+     * 获取属性对应的持久化数据类型。
+     * <p>
+     * 返回的 {@link PersistentDataType} 必须与注册时提供的类型严格一致。
+     *
+     * @param attributeKey 要查询的属性键（不可为null）
+     * @return 属性的持久化数据类型实例（不会返回null）
+     * @throws IllegalArgumentException 如果属性未注册
+     * @see PersistentDataType
+     */
     @NotNull PersistentDataType<?, ?> getAttributePDCType(@NotNull NamespacedKey attributeKey);
 }

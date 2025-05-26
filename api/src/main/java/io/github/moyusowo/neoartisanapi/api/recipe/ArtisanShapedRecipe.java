@@ -14,6 +14,7 @@ import org.jetbrains.annotations.NotNull;
  * </ul>
  *
  * @see RecipeRegistry#createShapedRecipe(String, String, String)
+ * @since 1.0.0
  */
 @SuppressWarnings("unused")
 public interface ArtisanShapedRecipe {

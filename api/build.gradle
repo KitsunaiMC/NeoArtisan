@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'maven-publish'
+    id 'org.ajoberstar.git-publish' version '3.0.0'
 }
 
 repositories {
@@ -23,6 +24,23 @@ javadoc {
     include 'io/github/moyusowo/neoartisanapi/api/**'
     include 'io/github/moyusowo/neoartisanapi/record/**'
     failOnError = false
+    options.encoding = 'UTF-8'
+    if (JavaVersion.current().isJava9Compatible()) {
+        options.addBooleanOption('html5', true)
+    }
+}
+
+gitPublish {
+    repoUri = 'git@github.com:MoYuSOwO/NeoArtisan.git' // 替换为你的仓库SSH地址
+    branch = 'NeoArtisanDocs' // 专门用于托管文档的分支
+
+    contents {
+        from javadoc // 上传Javadoc
+        into 'javadoc' // 存放在gh-pages分支的/javadoc目录下
+    }
+
+    // 提交信息
+    commitMessage = '发布Javadoc [skip ci]'
 }
 
 tasks.register('apiJar', Jar) {
