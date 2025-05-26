@@ -3,6 +3,7 @@ package io.github.moyusowo.neoartisanapi.api.block.event;
 import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlock;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.jetbrains.annotations.NotNull;
 
@@ -17,6 +18,8 @@ import org.jetbrains.annotations.NotNull;
  * @since 1.0.0
  */
 public class ArtisanBlockBreakEvent extends BlockBreakEvent {
+
+    private static final HandlerList handlers = new HandlerList();
 
     protected ArtisanBlock artisanBlock;
 
@@ -39,6 +42,16 @@ public class ArtisanBlockBreakEvent extends BlockBreakEvent {
      */
     public @NotNull ArtisanBlock getArtisanBlock() {
         return this.artisanBlock;
+    }
+
+    @Override
+    public @NotNull HandlerList getHandlers() {
+        return handlers;
+    }
+
+    @NotNull
+    public static HandlerList getHandlerList() {
+        return handlers;
     }
 
 }

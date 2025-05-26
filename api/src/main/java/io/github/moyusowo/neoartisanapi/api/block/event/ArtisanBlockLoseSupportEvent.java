@@ -2,6 +2,7 @@ package io.github.moyusowo.neoartisanapi.api.block.event;
 
 import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlock;
 import org.bukkit.block.Block;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.block.BlockExpEvent;
 import org.jetbrains.annotations.NotNull;
 
@@ -17,6 +18,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class ArtisanBlockLoseSupportEvent extends BlockExpEvent {
 
+    private static final HandlerList handlers = new HandlerList();
     private final ArtisanBlock artisanBlock;
     private boolean dropItems;
 
@@ -57,5 +59,15 @@ public class ArtisanBlockLoseSupportEvent extends BlockExpEvent {
      */
     public @NotNull ArtisanBlock getArtisanBlock() {
         return this.artisanBlock;
+    }
+
+    @Override
+    public @NotNull HandlerList getHandlers() {
+        return handlers;
+    }
+
+    @NotNull
+    public static HandlerList getHandlerList() {
+        return handlers;
     }
 }

@@ -4,6 +4,7 @@ import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlock;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
@@ -20,6 +21,8 @@ import org.jetbrains.annotations.NotNull;
  * @since 1.0.0
  */
 public class ArtisanBlockPlaceEvent extends BlockPlaceEvent {
+
+    private static final HandlerList handlers = new HandlerList();
 
     protected ArtisanBlock artisanBlock;
 
@@ -47,5 +50,15 @@ public class ArtisanBlockPlaceEvent extends BlockPlaceEvent {
      */
     public @NotNull ArtisanBlock getArtisanBlock() {
         return this.artisanBlock;
+    }
+
+    @Override
+    public @NotNull HandlerList getHandlers() {
+        return handlers;
+    }
+
+    @NotNull
+    public static HandlerList getHandlerList() {
+        return handlers;
     }
 }
