@@ -82,10 +82,6 @@ public final class BlockEventUtil {
     public static void onBreakBasicLogic(BlockBreakEvent event) {
         if (event.isCancelled()) return;
         ArtisanBlockData artisanBlockData = NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlock(event.getBlock());
-        if (event.getPlayer().getGameMode() == GameMode.CREATIVE) {
-            ArtisanBlockStorageInternal.getInternal().removeArtisanBlock(event.getBlock());
-            return;
-        }
         event.setCancelled(true);
         ArtisanBlockBreakEvent artisanBlockBreakEvent = new ArtisanBlockBreakEvent(
                 event.getBlock(),
@@ -103,9 +99,11 @@ public final class BlockEventUtil {
             orb.setExperience(artisanBlockBreakEvent.getExpToDrop());
         }
         event.getBlock().setType(Material.AIR);
-        if (artisanBlockBreakEvent.isDropItems()) {
-            for (ItemStack drop : artisanBlockData.getArtisanBlockState().drops()) {
-                event.getBlock().getWorld().dropItemNaturally(event.getBlock().getLocation(), drop);
+        if (event.getPlayer().getGameMode() != GameMode.CREATIVE) {
+            if (artisanBlockBreakEvent.isDropItems()) {
+                for (ItemStack drop : artisanBlockData.getArtisanBlockState().drops()) {
+                    event.getBlock().getWorld().dropItemNaturally(event.getBlock().getLocation(), drop);
+                }
             }
         }
         ArtisanBlockStorageInternal.getInternal().removeArtisanBlock(event.getBlock());
