@@ -1,4 +1,0 @@
-rootProject.name = "NeoArtisan"
-
-include("core")
-include("api")

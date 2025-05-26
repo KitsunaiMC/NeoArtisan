@@ -1,6 +1,0 @@
-name: NeoArtisan
-version: ${version}
-main: io.github.moyusowo.neoartisan.NeoArtisan
-api-version: '1.21.4'
-authors: [ MoYuOwO ]
-description: aaa
