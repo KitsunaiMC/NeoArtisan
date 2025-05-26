@@ -1,63 +1,65 @@
-# NeoArtisan - Minecraft 高版本自定义内容框架
+Here's the English version of your README with the Chinese link:
+
+# NeoArtisan - High-Version Minecraft Custom Content Framework
 
 ![License](https://img.shields.io/badge/license-GPL3-green)
 ![Minecraft](https://img.shields.io/badge/Minecraft-1.21.4-blue)
 ![API](https://img.shields.io/badge/API-Paper%20Compatible-orange)
 
-[English Version Documentation](README_EN.md)
+[中文文档](README.md)
 
-## 项目概述
+## Project Overview
 
-NeoArtisan 是一个面向 Minecraft 1.21.4+ 的自定义内容框架，基于 GPL3 协议开源，专注于为插件开发者提供灵活的内容创建能力，同时保持与 PaperAPI 的良好兼容性。
+NeoArtisan is a custom content framework for Minecraft 1.21.4+, licensed under GPL3, focused on providing flexible content creation capabilities for plugin developers while maintaining good compatibility with PaperAPI.
 
-## 核心设计理念
+## Core Design Philosophy
 
-### 🧩 纯粹的基础框架
-- **不包含默认内容**：仅提供框架和工具，不实现任何具体物品/方块
-- **非全功能API**：专注于核心功能，保持精简
-- **PaperAPI实现**：兼容性较好，不过度使用NMS
-- **扩展友好**：完善的扩展点设计，支持开发内容包插件
+### 🧩 Pure Foundation Framework
+- **No Default Content**: Only provides framework and tools
+- **Non-Comprehensive API**: Focused on core functionality
+- **PaperAPI Implementation**: Good compatibility, minimal NMS usage
+- **Extension-Friendly**: Well-designed extension points
 
-### 🧱 自定义方块系统
-- **多类型支持**：普通方块、作物、薄型方块、（半）透明方块
-- **状态管理**：每个方块支持多状态切换(如作物生长阶段)
-- **NMS优化**：基于NMSBlockState重映射技术，直接内部修改发包
-- **事件体系**：放置/破坏/交互事件支持
+### 🧱 Custom Block System
+- Multiple block types supported
+- State management with multi-state transitions
+- NMS-optimized packet handling
+- Complete event system
 
-### 🛡️ 自定义物品系统
-- **属性系统**：全局属性、物品堆属性和玩家属性三级架构
-- **类型支持**：武器、防具、食物等全品类物品
-- **NBT集成**：完善的持久化数据容器支持
+### 🛡️ Custom Item System
+- Three-tier attribute system
+- Full category support (weapons, armor, food, etc.)
+- NBT integration
 
-### 🔮 自定义配方系统
-- **扩展性强**：目前支持合成台，以后可支持熔炉、铁砧、锻造台等
-- **独立架构**：不依赖原版配方系统，避免冲突
+### 🔮 Custom Recipe System
+- Extensible design (currently only crafting table)
+- Independent architecture
 
-### 🛠️ 开发者体验
-- **建造者模式**：简化内容对象创建
-- **清晰文档**：完整的Javadoc和示例
-- **事件系统**：覆盖方块生命周期关键事件
+### 🛠️ Developer Experience
+- Builder pattern
+- Comprehensive documentation
+- Lifecycle event system
 
-## 快速开始
+## Quick Start
 
-### 添加依赖
+### Add Dependency
 
-```Gradle
+```gradle
 repositories {
     mavenCentral()
     maven { url 'https://jitpack.io' }
 }
 
 dependencies {
-    CompileOnly 'com.github.MoYuSOwO:NeoArtisan:1.0:api'
+    compileOnly 'com.github.MoYuSOwO:NeoArtisan:1.0:api'
 }
 ```
 
-### 创建自定义物品和方块示例
+### Example Usage
 
 ```java
-// 注册到服务器
-@NeoArtisanAPI.Register 
+// register to server
+@NeoArtisanAPI.Register
 public void registerContent() {
     NeoArtisanAPI.getBlockRegistry().register(
             ArtisanTransparentBlock.builder()
@@ -138,59 +140,41 @@ public void registerContent() {
 }
 ```
 
-## 架构优势
+## Architectural Advantages
 
-1. **清晰的扩展点**
-    - 内容注册接口标准化
-    - 存在扩展性强的事件监听机制
+1. Clear extension points
+2. Paper-friendly integration
+3. Collaborative development support
 
-2. **Paper友好集成**
-    - 基于Paper事件系统构建
-    - 使用ServicesManager实现服务发现
+## Development Recommendations
 
-3. **协作开发支持**
-    - 模块化内容包设计
-    - 避免ID冲突的命名空间管理
-    - 建造者模式简化对象创建
-    - 完善的Javadoc文档
+1. Develop content packs as separate plugins
+2. Extend `ArtisanBlockGUI` for custom GUIs
+3. Currently only guarantees 1.21.4 compatibility
 
-## 开发建议
+## Future Plans
 
-1. **内容包开发**
-    - 建议每个内容包作为独立插件
-    - 通过服务接口与其他插件交互
+- Develop more block types
+- Add support for non-crafting table recipes (furnace, anvil, etc.)
+- Implement API extensions for technical content (logistics, electricity systems)
+- More features under consideration
 
-2. **GUI实现**
-    - 继承`ArtisanBlockGUI`简化开发
-    - 自动处理库存事件
+## Contribution
 
-3. **版本兼容**
-    - 目前项目处于起步阶段，仅保证1.21.4兼容性，可能随版本更新而更新
+We welcome:
+- Content pack development
+- Core improvements
+- Documentation enhancements
 
-## 一些计划
+Requirements:
+1. Follow GPL3 license
+2. Maintain API simplicity
+3. Provide proper documentation
 
-- 开发更多的方块类型
-- 加入除工作台配方外的合成管理
-- 加入物流、电力等科技相关内容的API扩展
-- 还有更多还在想
+## License
 
-## 贡献与协作
+GNU General Public License v3.0 - See LICENSE file
 
-我们欢迎各种形式的贡献：
-- 内容包插件开发
-- 核心框架改进
-- 文档和示例补充
-- ~~作者作者你写的代码就是一坨，看我出招！~~
-
-请遵循：
-1. GPL3协议要求
-2. 保持API精简性
-3. 完善的文档说明
-
-## 许可证
-
-GNU General Public License v3.0 - 详情见LICENSE文件
-
-## 联系
+## Contact
 
 MoYuOwO@outlook.com
