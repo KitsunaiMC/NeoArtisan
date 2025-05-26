@@ -35,6 +35,9 @@ public final class RegisterManager {
 
     @InitMethod(priority = InitPriority.REGISTER)
     static void register() {
+        if (NeoArtisan.isDebugMode()) {
+            NeoArtisan.logger().info(Arrays.toString(Bukkit.getPluginManager().getPlugins()));
+        }
         for (
                 Plugin plugin : Arrays.stream(Bukkit.getPluginManager().getPlugins())
                 .filter(
@@ -46,11 +49,14 @@ public final class RegisterManager {
                 .toList()
         ) {
             String pkg = plugin.getClass().getPackageName();
+            if (NeoArtisan.isDebugMode()) {
+                NeoArtisan.logger().info(pkg);
+            }
             Reflections reflections = new Reflections(
                     new ConfigurationBuilder()
-                            .forPackage(pkg)
-                            .setScanners(Scanners.MethodsAnnotated)
+                            .forPackage(pkg, plugin.getClass().getClassLoader())
                             .addClassLoaders(plugin.getClass().getClassLoader())
+                            .setScanners(Scanners.MethodsAnnotated)
             );
             Set<Method> methods = reflections.getMethodsAnnotatedWith(NeoArtisanAPI.Register.class);
             for (Method method : methods) {
