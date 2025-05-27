@@ -1,6 +1,7 @@
 io.github.moyusowo.neoartisanapi.api
 io.github.moyusowo.neoartisanapi.api.attribute
 io.github.moyusowo.neoartisanapi.api.block.base
+io.github.moyusowo.neoartisanapi.api.block.base.sound
 io.github.moyusowo.neoartisanapi.api.block.crop
 io.github.moyusowo.neoartisanapi.api.block.event
 io.github.moyusowo.neoartisanapi.api.block.gui
