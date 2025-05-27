@@ -125,13 +125,13 @@ final class ArtisanBlockStorageImpl implements ArtisanBlockStorage, ArtisanBlock
     }
 
     @Override
-    public ArtisanBlockData getArtisanBlock(@NotNull World world, int x, int y, int z) {
+    public ArtisanBlockData getArtisanBlockData(@NotNull World world, int x, int y, int z) {
         BlockPos blockPos = new BlockPos(x, y, z);
         return getArtisanBlock(((CraftWorld) world).getHandle(), blockPos);
     }
 
     @Override
-    public ArtisanBlockData getArtisanBlock(@NotNull Block block) {
+    public ArtisanBlockData getArtisanBlockData(@NotNull Block block) {
         CraftWorld world = (CraftWorld) block.getWorld();
         return getArtisanBlock(world.getHandle(), block.getX(), block.getY(), block.getZ());
     }

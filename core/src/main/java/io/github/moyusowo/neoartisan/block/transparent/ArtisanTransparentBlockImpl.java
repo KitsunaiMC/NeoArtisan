@@ -181,7 +181,7 @@ class ArtisanTransparentBlockImpl extends ArtisanBlockBase implements ArtisanTra
         private static void onBurn(BlockBurnEvent event) {
             if (event.isCancelled()) return;
             if (!NeoArtisanAPI.getArtisanBlockStorage().isArtisanBlock(event.getBlock())) return;
-            if (!(NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlock(event.getBlock()) instanceof ArtisanTransparentBlockData artisanTransparentBlockData)) return;
+            if (!(NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlockData(event.getBlock()) instanceof ArtisanTransparentBlockData artisanTransparentBlockData)) return;
             if (artisanTransparentBlockData.getArtisanBlock().canBurn()) return;
             event.setCancelled(true);
         }

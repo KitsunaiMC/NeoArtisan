@@ -205,7 +205,7 @@ class ArtisanCropImpl extends ArtisanBlockBase implements ArtisanCrop {
         private static void onEntityChangeFarmland(EntityChangeBlockEvent event) {
             if (event.isCancelled()) return;
             if (!NeoArtisanAPI.getArtisanBlockStorage().isArtisanBlock(event.getBlock().getRelative(BlockFace.UP))) return;
-            if (!(NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlock(event.getBlock().getRelative(BlockFace.UP)) instanceof ArtisanCropData artisanCropData)) return;
+            if (!(NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlockData(event.getBlock().getRelative(BlockFace.UP)) instanceof ArtisanCropData artisanCropData)) return;
             if (event.getBlock().getType() != Material.FARMLAND) return;
             event.setCancelled(true);
             event.getBlock().getRelative(BlockFace.UP).setType(Material.AIR);
@@ -220,7 +220,7 @@ class ArtisanCropImpl extends ArtisanBlockBase implements ArtisanCrop {
         private static void onGrow(BlockGrowEvent event) {
             if (event.isCancelled()) return;
             if (!NeoArtisanAPI.getArtisanBlockStorage().isArtisanBlock(event.getBlock())) return;
-            if (!(NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlock(event.getBlock()) instanceof ArtisanCropData artisanCropData)) return;
+            if (!(NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlockData(event.getBlock()) instanceof ArtisanCropData artisanCropData)) return;
             event.setCancelled(true);
             if (artisanCropData.hasNextStage()) {
                 grownCrop.put(event.getBlock(), artisanCropData);
@@ -239,7 +239,7 @@ class ArtisanCropImpl extends ArtisanBlockBase implements ArtisanCrop {
             if (event.isCancelled()) return;
             for (BlockState blockState : event.getBlocks()) {
                 if (NeoArtisanAPI.getArtisanBlockStorage().isArtisanBlock(blockState.getBlock())) {
-                    Object object = NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlock(blockState.getBlock());
+                    Object object = NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlockData(blockState.getBlock());
                     if (object instanceof ArtisanCropData) {
                         ArtisanCropData artisanCropData = grownCrop.get(blockState.getBlock());
                         BlockEventUtil.replace(blockState.getBlock(), artisanCropData);

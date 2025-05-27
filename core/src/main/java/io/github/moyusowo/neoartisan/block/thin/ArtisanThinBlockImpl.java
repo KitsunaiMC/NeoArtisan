@@ -172,7 +172,7 @@ public class ArtisanThinBlockImpl extends ArtisanBlockBase implements ArtisanThi
         @EventHandler(priority = EventPriority.LOWEST)
         private static void onStep(BlockRedstoneEvent event) {
             if (!NeoArtisanAPI.getArtisanBlockStorage().isArtisanBlock(event.getBlock())) return;
-            if (!(NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlock(event.getBlock()) instanceof ArtisanThinBlockData)) return;
+            if (!(NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlockData(event.getBlock()) instanceof ArtisanThinBlockData)) return;
             event.setNewCurrent(0);
         }
 

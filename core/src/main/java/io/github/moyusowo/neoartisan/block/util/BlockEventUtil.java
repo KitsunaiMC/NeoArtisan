@@ -75,13 +75,13 @@ public final class BlockEventUtil {
 
     public static <D extends ArtisanBlockData> boolean isNotTypedArtisanBlock(Block block, Class<D> artisanBlockDataClass) {
         if (!NeoArtisanAPI.getArtisanBlockStorage().isArtisanBlock(block)) return true;
-        if (!artisanBlockDataClass.isInstance(NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlock(block))) return true;
+        if (!artisanBlockDataClass.isInstance(NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlockData(block))) return true;
         return false;
     }
 
     public static void onBreakBasicLogic(BlockBreakEvent event) {
         if (event.isCancelled()) return;
-        ArtisanBlockData artisanBlockData = NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlock(event.getBlock());
+        ArtisanBlockData artisanBlockData = NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlockData(event.getBlock());
         event.setCancelled(true);
         ArtisanBlockBreakEvent artisanBlockBreakEvent = new ArtisanBlockBreakEvent(
                 event.getBlock(),
@@ -118,7 +118,7 @@ public final class BlockEventUtil {
     }
 
     public static void onBelowBlockBreakBasicLogic(BlockBreakEvent event) {
-        ArtisanBlockData artisanBlockData = NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlock(event.getBlock().getRelative(BlockFace.UP));
+        ArtisanBlockData artisanBlockData = NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlockData(event.getBlock().getRelative(BlockFace.UP));
         if (event.isCancelled()) return;
         event.getBlock().getRelative(BlockFace.UP).setType(Material.AIR);
         ArtisanBlockLoseSupportEvent artisanBlockLoseSupportEvent = new ArtisanBlockLoseSupportEvent(
@@ -145,7 +145,7 @@ public final class BlockEventUtil {
         if (event.isCancelled()) return;
         for (Block block : event.getBlocks()) {
             if (isNotTypedArtisanBlock(block.getRelative(BlockFace.UP), artisanBlockDataClass)) return;
-            ArtisanBlockData artisanBlockData = NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlock(event.getBlock().getRelative(BlockFace.UP));
+            ArtisanBlockData artisanBlockData = NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlockData(event.getBlock().getRelative(BlockFace.UP));
             block.getRelative(BlockFace.UP).setType(Material.AIR);
             ArtisanBlockLoseSupportEvent artisanBlockLoseSupportEvent = new ArtisanBlockLoseSupportEvent(
                     event.getBlock(),
@@ -169,7 +169,7 @@ public final class BlockEventUtil {
     }
 
     public static void onWaterOrPistonBreakBasicLogic(BlockBreakBlockEvent event) {
-        ArtisanBlockData artisanBlockData = NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlock(event.getBlock());
+        ArtisanBlockData artisanBlockData = NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlockData(event.getBlock());
         while (!event.getDrops().isEmpty()) event.getDrops().removeFirst();
         for (ItemStack drop : artisanBlockData.getArtisanBlockState().drops()) {
             event.getDrops().add(drop);
@@ -189,7 +189,7 @@ public final class BlockEventUtil {
             iterator.remove();
         }
         for (Block artisanBlock : artisanBlocks) {
-            ArtisanBlockData artisanBlockData = NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlock(artisanBlock);
+            ArtisanBlockData artisanBlockData = NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlockData(artisanBlock);
             if (ThreadLocalRandom.current().nextDouble() < event.getYield()) {
                 for (ItemStack drop : artisanBlockData.getArtisanBlockState().drops()) {
                     artisanBlock.getWorld().dropItemNaturally(artisanBlock.getLocation(), drop);
@@ -211,7 +211,7 @@ public final class BlockEventUtil {
             iterator.remove();
         }
         for (Block artisanBlock : artisanBlocks) {
-            ArtisanBlockData artisanBlockData = NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlock(artisanBlock);
+            ArtisanBlockData artisanBlockData = NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlockData(artisanBlock);
             if (ThreadLocalRandom.current().nextDouble() < event.getYield()) {
                 for (ItemStack drop : artisanBlockData.getArtisanBlockState().drops()) {
                     artisanBlock.getWorld().dropItemNaturally(artisanBlock.getLocation(), drop);

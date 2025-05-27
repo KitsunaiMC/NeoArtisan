@@ -1,6 +1,7 @@
 package io.github.moyusowo.neoartisanapi.api.block.storage;
 
 import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlockData;
+import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlockType;
 import io.github.moyusowo.neoartisanapi.api.block.crop.ArtisanCropData;
 import io.github.moyusowo.neoartisanapi.api.block.thin.ArtisanThinBlockData;
 import io.github.moyusowo.neoartisanapi.api.block.transparent.ArtisanTransparentBlockData;
@@ -33,7 +34,7 @@ public interface ArtisanBlockStorage {
      * @throws IllegalArgumentException 如果不存在
      * @apiNote 使用该方法前应先调用 {@link #isArtisanBlock(World, int, int, int)} 检查
      */
-    ArtisanBlockData getArtisanBlock(@NotNull World world, int x, int y, int z);
+    ArtisanBlockData getArtisanBlockData(@NotNull World world, int x, int y, int z);
 
     /**
      * 通过方块实例获取自定义方块数据
@@ -43,7 +44,7 @@ public interface ArtisanBlockStorage {
      * @throws IllegalArgumentException 如果不存在
      * @apiNote 使用该方法前应先调用 {@link #isArtisanBlock(Block)} 检查
      */
-    ArtisanBlockData getArtisanBlock(@NotNull Block block);
+    ArtisanBlockData getArtisanBlockData(@NotNull Block block);
 
     /**
      * 检查方块是否为已注册的自定义方块
@@ -71,6 +72,7 @@ public interface ArtisanBlockStorage {
      * @param block 待检查方块（非null）
      * @return 如果是则返回true
      */
+    @Deprecated(since = "1.0.1", forRemoval = true)
     @ApiStatus.Experimental
     default boolean isArtisanCrop(@NotNull Block block) {
         return this.isArtisanCrop(block.getWorld(), block.getX(), block.getY(), block.getZ());
@@ -85,9 +87,10 @@ public interface ArtisanBlockStorage {
      * @param z Z坐标
      * @return 如果是则返回true
      */
+    @Deprecated(since = "1.0.1", forRemoval = true)
     @ApiStatus.Experimental
     default boolean isArtisanCrop(World world, int x, int y, int z) {
-        return this.isArtisanBlock(world, x, y, z) && (this.getArtisanBlock(world, x, y, z) instanceof ArtisanCropData);
+        return this.isArtisanBlock(world, x, y, z) && (this.getArtisanBlockData(world, x, y, z) instanceof ArtisanCropData);
     }
 
     /**
@@ -96,6 +99,7 @@ public interface ArtisanBlockStorage {
      * @param block 待检查方块（非null）
      * @return 如果是则返回true
      */
+    @Deprecated(since = "1.0.1", forRemoval = true)
     @ApiStatus.Experimental
     default boolean isArtisanThinBlock(@NotNull Block block) {
         return this.isArtisanThinBlock(block.getWorld(), block.getX(), block.getY(), block.getZ());
@@ -110,9 +114,10 @@ public interface ArtisanBlockStorage {
      * @param z Z坐标
      * @return 如果是则返回true
      */
+    @Deprecated(since = "1.0.1", forRemoval = true)
     @ApiStatus.Experimental
     default boolean isArtisanThinBlock(@NotNull World world, int x, int y, int z) {
-        return this.isArtisanBlock(world, x, y, z) && (this.getArtisanBlock(world, x, y, z) instanceof ArtisanThinBlockData);
+        return this.isArtisanBlock(world, x, y, z) && (this.getArtisanBlockData(world, x, y, z) instanceof ArtisanThinBlockData);
     }
 
     /**
@@ -121,6 +126,7 @@ public interface ArtisanBlockStorage {
      * @param block 待检查方块（非null）
      * @return 如果是则返回true
      */
+    @Deprecated(since = "1.0.1", forRemoval = true)
     @ApiStatus.Experimental
     default boolean isArtisanTransparentBlock(@NotNull Block block) {
         return this.isArtisanTransparentBlock(block.getWorld(), block.getX(), block.getY(), block.getZ());
@@ -135,8 +141,9 @@ public interface ArtisanBlockStorage {
      * @param z Z坐标
      * @return 如果是则返回true
      */
+    @Deprecated(since = "1.0.1", forRemoval = true)
     @ApiStatus.Experimental
     default boolean isArtisanTransparentBlock(@NotNull World world, int x, int y, int z) {
-        return this.isArtisanBlock(world, x, y, z) && (this.getArtisanBlock(world, x, y, z) instanceof ArtisanTransparentBlockData);
+        return this.isArtisanBlock(world, x, y, z) && (this.getArtisanBlockData(world, x, y, z) instanceof ArtisanTransparentBlockData);
     }
 }
