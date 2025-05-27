@@ -51,7 +51,7 @@ public final class BlockEventUtil {
         return false;
     }
 
-    public static <D extends ArtisanBlockData> void onPlaceBasicLogic(PlayerInteractEvent event, Block blockWillPlace, Block blockPlaceAgainst, D newArtisanBlockData) throws Exception {
+    public static void onPlaceBasicLogic(PlayerInteractEvent event, Block blockWillPlace, Block blockPlaceAgainst, ArtisanBlockData newArtisanBlockData) throws Exception {
         event.setCancelled(true);
         ArtisanItem artisanItem = NeoArtisanAPI.getItemRegistry().getArtisanItem(event.getItem());
         ArtisanBlockPlaceEvent artisanBlockPlaceEvent = new ArtisanBlockPlaceEvent(
@@ -62,11 +62,12 @@ public final class BlockEventUtil {
                 event.getPlayer(),
                 true,
                 EquipmentSlot.HAND,
-                NeoArtisanAPI.getBlockRegistry().getArtisanBlock(artisanItem.getBlockId())
+                NeoArtisanAPI.getBlockRegistry().getArtisanBlock(artisanItem.getBlockId()),
+                newArtisanBlockData
         );
-        Bukkit.getPluginManager().callEvent(artisanBlockPlaceEvent);
+        artisanBlockPlaceEvent.callEvent();
         if (artisanBlockPlaceEvent.isCancelled()) return;
-        place(blockWillPlace, newArtisanBlockData);
+        place(blockWillPlace, artisanBlockPlaceEvent.getPlacedArtisanBlockData());
         if (event.getPlayer().getGameMode() != GameMode.CREATIVE) {
             event.getItem().setAmount(event.getItem().getAmount() - 1);
         }
@@ -232,7 +233,7 @@ public final class BlockEventUtil {
         }
     }
 
-    public static <D extends ArtisanBlockData> void place(Block bukkitBlock, D artisanBlockData) throws Exception {
+    public static void place(Block bukkitBlock, ArtisanBlockData artisanBlockData) throws Exception {
         CraftWorld craftWorld = (CraftWorld) bukkitBlock.getWorld();
         Level nmsWorld = craftWorld.getHandle();
         BlockPos pos = new BlockPos(bukkitBlock.getX(), bukkitBlock.getY(), bukkitBlock.getZ());
@@ -248,7 +249,7 @@ public final class BlockEventUtil {
         }
     }
 
-    public static <D extends ArtisanBlockData> void replace(Block bukkitBlock, D artisanBlockData) {
+    public static void replace(Block bukkitBlock, ArtisanBlockData artisanBlockData) {
         CraftWorld craftWorld = (CraftWorld) bukkitBlock.getWorld();
         Level nmsWorld = craftWorld.getHandle();
         BlockPos pos = new BlockPos(bukkitBlock.getX(), bukkitBlock.getY(), bukkitBlock.getZ());
