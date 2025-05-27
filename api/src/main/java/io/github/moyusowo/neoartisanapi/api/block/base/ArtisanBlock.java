@@ -87,5 +87,13 @@ public interface ArtisanBlock {
      */
     @Nullable SoundProperty getBreakSoundProperty();
 
+    /**
+     * 获取此方块在API的方块类型。
+     *
+     * @return 方块类型
+     * @since 1.0.1
+     */
+    @NotNull ArtisanBlockType getArtisanBlockType();
+
 }
 

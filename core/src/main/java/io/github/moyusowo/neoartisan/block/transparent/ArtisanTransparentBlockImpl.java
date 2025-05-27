@@ -5,6 +5,7 @@ import io.github.moyusowo.neoartisan.block.util.BlockEventUtil;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
 import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
+import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlockType;
 import io.github.moyusowo.neoartisanapi.api.block.base.sound.SoundProperty;
 import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlockBase;
 import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlockState;
@@ -46,8 +47,8 @@ class ArtisanTransparentBlockImpl extends ArtisanBlockBase implements ArtisanTra
 
     private final boolean canBurn;
 
-    protected ArtisanTransparentBlockImpl(NamespacedKey blockId, List<? extends ArtisanBlockState> stages, GUICreator creator, boolean canBurn, SoundProperty placeSound, SoundProperty breakSound) {
-        super(blockId, stages, creator, placeSound, breakSound);
+    protected ArtisanTransparentBlockImpl(NamespacedKey blockId, List<? extends ArtisanBlockState> stages, GUICreator creator, boolean canBurn, SoundProperty placeSound, SoundProperty breakSound, ArtisanBlockType artisanBlockType) {
+        super(blockId, stages, artisanBlockType, creator, placeSound, breakSound);
         this.canBurn = canBurn;
     }
 
@@ -119,7 +120,7 @@ class ArtisanTransparentBlockImpl extends ArtisanBlockBase implements ArtisanTra
         @Override
         public ArtisanTransparentBlock build() {
             if (blockId == null || stages == null) throw new IllegalArgumentException("You must fill all the param!");
-            return new ArtisanTransparentBlockImpl(blockId, stages, creator, canBurn, placeSound, breakSound);
+            return new ArtisanTransparentBlockImpl(blockId, stages, creator, canBurn, placeSound, breakSound, ArtisanBlockType.TRANSPARENT_BLOCK);
         }
     }
 

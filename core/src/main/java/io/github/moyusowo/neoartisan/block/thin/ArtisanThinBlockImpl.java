@@ -5,6 +5,7 @@ import io.github.moyusowo.neoartisan.block.util.BlockEventUtil;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
 import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
+import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlockType;
 import io.github.moyusowo.neoartisanapi.api.block.base.sound.SoundProperty;
 import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlockBase;
 import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlockState;
@@ -41,8 +42,8 @@ public class ArtisanThinBlockImpl extends ArtisanBlockBase implements ArtisanThi
         );
     }
 
-    protected ArtisanThinBlockImpl(NamespacedKey blockId, List<? extends ArtisanBlockState> stages, GUICreator creator, SoundProperty placeSound, SoundProperty breakSound) {
-        super(blockId, stages, creator, placeSound, breakSound);
+    protected ArtisanThinBlockImpl(NamespacedKey blockId, List<? extends ArtisanBlockState> stages, GUICreator creator, SoundProperty placeSound, SoundProperty breakSound, ArtisanBlockType artisanBlockType) {
+        super(blockId, stages, artisanBlockType, creator, placeSound, breakSound);
     }
 
     @Override
@@ -100,7 +101,7 @@ public class ArtisanThinBlockImpl extends ArtisanBlockBase implements ArtisanThi
         @Override
         public ArtisanThinBlock build() {
             if (blockId == null || stages == null) throw new IllegalArgumentException("You must fill all the param!");
-            return new ArtisanThinBlockImpl(blockId, stages, creator, placeSound, breakSound);
+            return new ArtisanThinBlockImpl(blockId, stages, creator, placeSound, breakSound, ArtisanBlockType.THIN_BLOCK);
         }
     }
 

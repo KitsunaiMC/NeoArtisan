@@ -22,19 +22,21 @@ import java.util.List;
  * </ol>
  *
  * @see ArtisanBlock 基础接口定义
- * @see #ArtisanBlockBase(NamespacedKey, List, GUICreator, SoundProperty, SoundProperty) 唯一允许的构造方式
+ * @see #ArtisanBlockBase(NamespacedKey, List, ArtisanBlockType, GUICreator, SoundProperty, SoundProperty) 唯一允许的构造方式
  * @since 1.0.0
  */
 public abstract class ArtisanBlockBase implements ArtisanBlock {
 
     private final NamespacedKey blockId;
+    private final ArtisanBlockType artisanBlockType;
     private final List<ArtisanBlockState> stages;
     private final GUICreator creator;
     private final SoundProperty placeSound;
     private final SoundProperty breakSound;
 
-    protected ArtisanBlockBase(@NotNull NamespacedKey blockId, @NotNull List<? extends ArtisanBlockState> stages, @Nullable GUICreator creator, SoundProperty placeSound, SoundProperty breakSound) {
+    protected ArtisanBlockBase(@NotNull NamespacedKey blockId, @NotNull List<? extends ArtisanBlockState> stages, ArtisanBlockType artisanBlockType, @Nullable GUICreator creator, SoundProperty placeSound, SoundProperty breakSound) {
         this.blockId = blockId;
+        this.artisanBlockType = artisanBlockType;
         this.creator = creator;
         this.placeSound = placeSound;
         this.breakSound = breakSound;
@@ -72,5 +74,10 @@ public abstract class ArtisanBlockBase implements ArtisanBlock {
 
     @Override
     public SoundProperty getBreakSoundProperty() { return this.breakSound; }
+
+    @Override
+    public @NotNull ArtisanBlockType getArtisanBlockType() {
+        return this.artisanBlockType;
+    }
 
 }

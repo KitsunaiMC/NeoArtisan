@@ -4,6 +4,7 @@ import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisan.block.storage.internal.ArtisanBlockStorageInternal;
 import io.github.moyusowo.neoartisan.block.util.BlockEventUtil;
 import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
+import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlockType;
 import io.github.moyusowo.neoartisanapi.api.block.base.sound.SoundProperty;
 import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlockBase;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
@@ -48,8 +49,8 @@ class ArtisanCropImpl extends ArtisanBlockBase implements ArtisanCrop {
 
     private final int boneMealMinGrowth, boneMealMaxGrowth;
 
-    public ArtisanCropImpl(NamespacedKey cropId, List<ArtisanCropState> stages, int boneMealMinGrowth, int boneMealMaxGrowth, SoundProperty placeSound, SoundProperty breakSound) {
-        super(cropId, stages, null, placeSound, breakSound);
+    public ArtisanCropImpl(NamespacedKey cropId, List<ArtisanCropState> stages, int boneMealMinGrowth, int boneMealMaxGrowth, SoundProperty placeSound, SoundProperty breakSound, ArtisanBlockType artisanBlockType) {
+        super(cropId, stages, artisanBlockType, null, placeSound, breakSound);
         this.boneMealMinGrowth = boneMealMinGrowth;
         this.boneMealMaxGrowth = boneMealMaxGrowth;
     }
@@ -132,7 +133,7 @@ class ArtisanCropImpl extends ArtisanBlockBase implements ArtisanCrop {
         public ArtisanBlock build() {
             if (blockId == null || stages == null || boneMealMinGrowth == -1 || boneMealMaxGrowth == -1) throw new IllegalArgumentException("You must fill all the param!");
             if (boneMealMinGrowth < 0 || boneMealMinGrowth > boneMealMaxGrowth) throw new IllegalArgumentException("min can't larger than max!");
-            return new ArtisanCropImpl(blockId, stages, boneMealMinGrowth, boneMealMaxGrowth, placeSound, breakSound);
+            return new ArtisanCropImpl(blockId, stages, boneMealMinGrowth, boneMealMaxGrowth, placeSound, breakSound, ArtisanBlockType.CROP_BLOCK);
         }
     }
 
