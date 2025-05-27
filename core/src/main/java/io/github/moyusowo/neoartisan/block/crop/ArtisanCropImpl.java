@@ -179,17 +179,17 @@ class ArtisanCropImpl extends ArtisanBlockBase implements ArtisanCrop {
             BlockEventUtil.onBelowBlockPistonBreakOrMove(event, ArtisanCropData.class);
         }
 
-        @EventHandler
+        @EventHandler(priority = EventPriority.HIGHEST)
         private static void onBlockExplode(BlockExplodeEvent event) {
             BlockEventUtil.onBlockExplode(event, ArtisanCropData.class);
         }
 
-        @EventHandler
+        @EventHandler(priority = EventPriority.HIGHEST)
         private static void onEntityExplode(EntityExplodeEvent event) {
             BlockEventUtil.onEntityExplode(event, ArtisanCropData.class);
         }
 
-        @EventHandler
+        @EventHandler(priority = EventPriority.HIGHEST)
         private static void onEntityChangeBlock(EntityChangeBlockEvent event) {
             BlockEventUtil.onEntityChangeBlock(event, ArtisanCropData.class);
         }

@@ -163,22 +163,22 @@ class ArtisanTransparentBlockImpl extends ArtisanBlockBase implements ArtisanTra
             BlockEventUtil.onWaterOrPistonBreakBasicLogic(event);
         }
 
-        @EventHandler
+        @EventHandler(priority = EventPriority.HIGHEST)
         private static void onBlockExplode(BlockExplodeEvent event) {
             BlockEventUtil.onBlockExplode(event, ArtisanTransparentBlockData.class);
         }
 
-        @EventHandler
+        @EventHandler(priority = EventPriority.HIGHEST)
         private static void onEntityExplode(EntityExplodeEvent event) {
             BlockEventUtil.onEntityExplode(event, ArtisanTransparentBlockData.class);
         }
 
-        @EventHandler
+        @EventHandler(priority = EventPriority.HIGHEST)
         private static void onEntityChangeBlock(EntityChangeBlockEvent event) {
             BlockEventUtil.onEntityChangeBlock(event, ArtisanTransparentBlockData.class);
         }
 
-        @EventHandler
+        @EventHandler(priority = EventPriority.HIGHEST)
         private static void onBurn(BlockBurnEvent event) {
             if (event.isCancelled()) return;
             if (!NeoArtisanAPI.getArtisanBlockStorage().isArtisanBlock(event.getBlock())) return;

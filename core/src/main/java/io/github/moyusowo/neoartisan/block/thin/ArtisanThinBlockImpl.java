@@ -130,7 +130,7 @@ public class ArtisanThinBlockImpl extends ArtisanBlockBase implements ArtisanThi
             );
         }
 
-        @EventHandler
+        @EventHandler(priority = EventPriority.HIGHEST)
         private static void onBreak(BlockBreakEvent event) {
             if (BlockEventUtil.isNotTypedArtisanBlock(event.getBlock(), ArtisanThinBlockData.class)) return;
             BlockEventUtil.onBreakBasicLogic(event);
@@ -153,17 +153,17 @@ public class ArtisanThinBlockImpl extends ArtisanBlockBase implements ArtisanThi
             BlockEventUtil.onWaterOrPistonBreakBasicLogic(event);
         }
 
-        @EventHandler
+        @EventHandler(priority = EventPriority.HIGHEST)
         private static void onBlockExplode(BlockExplodeEvent event) {
             BlockEventUtil.onBlockExplode(event, ArtisanThinBlockData.class);
         }
 
-        @EventHandler
+        @EventHandler(priority = EventPriority.HIGHEST)
         private static void onEntityExplode(EntityExplodeEvent event) {
             BlockEventUtil.onEntityExplode(event, ArtisanThinBlockData.class);
         }
 
-        @EventHandler
+        @EventHandler(priority = EventPriority.HIGHEST)
         private static void onEntityChangeBlock(EntityChangeBlockEvent event) {
             BlockEventUtil.onEntityChangeBlock(event, ArtisanThinBlockData.class);
         }
