@@ -1,4 +1,4 @@
-package io.github.moyusowo.neoartisanapi.api.block;
+package io.github.moyusowo.neoartisanapi.api.block.base.sound;
 
 import org.bukkit.Registry;
 import org.bukkit.Sound;

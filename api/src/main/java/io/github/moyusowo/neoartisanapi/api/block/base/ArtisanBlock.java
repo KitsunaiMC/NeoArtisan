@@ -1,6 +1,6 @@
 package io.github.moyusowo.neoartisanapi.api.block.base;
 
-import io.github.moyusowo.neoartisanapi.api.block.SoundProperty;
+import io.github.moyusowo.neoartisanapi.api.block.base.sound.SoundProperty;
 import io.github.moyusowo.neoartisanapi.api.block.gui.ArtisanBlockGUI;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;

@@ -5,7 +5,7 @@ import io.github.moyusowo.neoartisan.block.util.BlockEventUtil;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
 import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
-import io.github.moyusowo.neoartisanapi.api.block.SoundProperty;
+import io.github.moyusowo.neoartisanapi.api.block.base.sound.SoundProperty;
 import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlockBase;
 import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlockState;
 import io.github.moyusowo.neoartisanapi.api.block.gui.GUICreator;

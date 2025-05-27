@@ -1,11 +1,10 @@
 package io.github.moyusowo.neoartisanapi.api.block.thin;
 
-import io.github.moyusowo.neoartisanapi.api.block.SoundProperty;
+import io.github.moyusowo.neoartisanapi.api.block.base.sound.SoundProperty;
 import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlock;
 import io.github.moyusowo.neoartisanapi.api.block.gui.GUICreator;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
-import org.bukkit.Sound;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
