@@ -4,6 +4,8 @@ import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisan.block.storage.internal.ArtisanBlockStorageInternal;
 import io.github.moyusowo.neoartisan.block.util.BlockEventUtil;
 import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
+import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlockType;
+import io.github.moyusowo.neoartisanapi.api.block.base.sound.SoundProperty;
 import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlockBase;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
@@ -47,8 +49,8 @@ class ArtisanCropImpl extends ArtisanBlockBase implements ArtisanCrop {
 
     private final int boneMealMinGrowth, boneMealMaxGrowth;
 
-    public ArtisanCropImpl(NamespacedKey cropId, List<ArtisanCropState> stages, int boneMealMinGrowth, int boneMealMaxGrowth) {
-        super(cropId, stages, null);
+    public ArtisanCropImpl(NamespacedKey cropId, List<ArtisanCropState> stages, int boneMealMinGrowth, int boneMealMaxGrowth, SoundProperty placeSound, SoundProperty breakSound, ArtisanBlockType artisanBlockType) {
+        super(cropId, stages, artisanBlockType, null, placeSound, breakSound);
         this.boneMealMinGrowth = boneMealMinGrowth;
         this.boneMealMaxGrowth = boneMealMaxGrowth;
     }
@@ -79,34 +81,50 @@ class ArtisanCropImpl extends ArtisanBlockBase implements ArtisanCrop {
         protected List<ArtisanCropState> stages;
         protected int boneMealMinGrowth;
         protected int boneMealMaxGrowth;
+        protected SoundProperty placeSound;
+        protected SoundProperty breakSound;
 
         public BuilderImpl() {
             blockId = null;
             stages = null;
+            placeSound = null;
+            breakSound = null;
             boneMealMaxGrowth = -1;
             boneMealMinGrowth = -1;
         }
 
         @Override
-        public Builder blockId(NamespacedKey blockId) {
+        public @NotNull Builder blockId(@NotNull NamespacedKey blockId) {
             this.blockId = blockId;
             return this;
         }
 
         @Override
-        public Builder stages(List<ArtisanCropState> stages) {
+        public @NotNull Builder stages(@NotNull List<ArtisanCropState> stages) {
             this.stages = stages;
             return this;
         }
 
         @Override
-        public Builder boneMealMinGrowth(int boneMealMinGrowth) {
+        public @NotNull Builder placeSound(@NotNull SoundProperty placeSoundProperty) {
+            this.placeSound = placeSoundProperty;
+            return this;
+        }
+
+        @Override
+        public @NotNull Builder breakSound(@NotNull SoundProperty breakSoundProperty) {
+            this.breakSound = breakSoundProperty;
+            return this;
+        }
+
+        @Override
+        public @NotNull Builder boneMealMinGrowth(int boneMealMinGrowth) {
             this.boneMealMinGrowth = boneMealMinGrowth;
             return this;
         }
 
         @Override
-        public Builder boneMealMaxGrowth(int boneMealMaxGrowth) {
+        public @NotNull Builder boneMealMaxGrowth(int boneMealMaxGrowth) {
             this.boneMealMaxGrowth = boneMealMaxGrowth;
             return this;
         }
@@ -115,7 +133,7 @@ class ArtisanCropImpl extends ArtisanBlockBase implements ArtisanCrop {
         public ArtisanBlock build() {
             if (blockId == null || stages == null || boneMealMinGrowth == -1 || boneMealMaxGrowth == -1) throw new IllegalArgumentException("You must fill all the param!");
             if (boneMealMinGrowth < 0 || boneMealMinGrowth > boneMealMaxGrowth) throw new IllegalArgumentException("min can't larger than max!");
-            return new ArtisanCropImpl(blockId, stages, boneMealMinGrowth, boneMealMaxGrowth);
+            return new ArtisanCropImpl(blockId, stages, boneMealMinGrowth, boneMealMaxGrowth, placeSound, breakSound, ArtisanBlockType.CROP_BLOCK);
         }
     }
 
@@ -162,17 +180,17 @@ class ArtisanCropImpl extends ArtisanBlockBase implements ArtisanCrop {
             BlockEventUtil.onBelowBlockPistonBreakOrMove(event, ArtisanCropData.class);
         }
 
-        @EventHandler
+        @EventHandler(priority = EventPriority.HIGHEST)
         private static void onBlockExplode(BlockExplodeEvent event) {
             BlockEventUtil.onBlockExplode(event, ArtisanCropData.class);
         }
 
-        @EventHandler
+        @EventHandler(priority = EventPriority.HIGHEST)
         private static void onEntityExplode(EntityExplodeEvent event) {
             BlockEventUtil.onEntityExplode(event, ArtisanCropData.class);
         }
 
-        @EventHandler
+        @EventHandler(priority = EventPriority.HIGHEST)
         private static void onEntityChangeBlock(EntityChangeBlockEvent event) {
             BlockEventUtil.onEntityChangeBlock(event, ArtisanCropData.class);
         }
@@ -187,7 +205,7 @@ class ArtisanCropImpl extends ArtisanBlockBase implements ArtisanCrop {
         private static void onEntityChangeFarmland(EntityChangeBlockEvent event) {
             if (event.isCancelled()) return;
             if (!NeoArtisanAPI.getArtisanBlockStorage().isArtisanBlock(event.getBlock().getRelative(BlockFace.UP))) return;
-            if (!(NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlock(event.getBlock().getRelative(BlockFace.UP)) instanceof ArtisanCropData artisanCropData)) return;
+            if (!(NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlockData(event.getBlock().getRelative(BlockFace.UP)) instanceof ArtisanCropData artisanCropData)) return;
             if (event.getBlock().getType() != Material.FARMLAND) return;
             event.setCancelled(true);
             event.getBlock().getRelative(BlockFace.UP).setType(Material.AIR);
@@ -202,7 +220,7 @@ class ArtisanCropImpl extends ArtisanBlockBase implements ArtisanCrop {
         private static void onGrow(BlockGrowEvent event) {
             if (event.isCancelled()) return;
             if (!NeoArtisanAPI.getArtisanBlockStorage().isArtisanBlock(event.getBlock())) return;
-            if (!(NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlock(event.getBlock()) instanceof ArtisanCropData artisanCropData)) return;
+            if (!(NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlockData(event.getBlock()) instanceof ArtisanCropData artisanCropData)) return;
             event.setCancelled(true);
             if (artisanCropData.hasNextStage()) {
                 grownCrop.put(event.getBlock(), artisanCropData);
@@ -221,7 +239,7 @@ class ArtisanCropImpl extends ArtisanBlockBase implements ArtisanCrop {
             if (event.isCancelled()) return;
             for (BlockState blockState : event.getBlocks()) {
                 if (NeoArtisanAPI.getArtisanBlockStorage().isArtisanBlock(blockState.getBlock())) {
-                    Object object = NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlock(blockState.getBlock());
+                    Object object = NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlockData(blockState.getBlock());
                     if (object instanceof ArtisanCropData) {
                         ArtisanCropData artisanCropData = grownCrop.get(blockState.getBlock());
                         BlockEventUtil.replace(blockState.getBlock(), artisanCropData);

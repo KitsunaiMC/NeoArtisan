@@ -14,7 +14,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.ServicePriority;
 
-public class ArtisanThinBlockStateImpl extends ArtisanBlockStateBase implements ArtisanThinBlockState {
+class ArtisanThinBlockStateImpl extends ArtisanBlockStateBase implements ArtisanThinBlockState {
 
     @InitMethod(priority = InitPriority.REGISTRAR)
     private static void init() {

@@ -1,5 +1,3 @@
-Here's the English version of your README with the Chinese link:
-
 # NeoArtisan - High-Version Minecraft Custom Content Framework
 
 ![License](https://img.shields.io/badge/license-GPL3-green)

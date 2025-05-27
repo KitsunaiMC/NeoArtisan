@@ -19,7 +19,6 @@ import org.bukkit.craftbukkit.CraftWorld;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.ExperienceOrb;
 import org.bukkit.event.Event;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockExplodeEvent;
@@ -52,7 +51,7 @@ public final class BlockEventUtil {
         return false;
     }
 
-    public static <D extends ArtisanBlockData> void onPlaceBasicLogic(PlayerInteractEvent event, Block blockWillPlace, Block blockPlaceAgainst, D newArtisanBlockData) throws Exception {
+    public static void onPlaceBasicLogic(PlayerInteractEvent event, Block blockWillPlace, Block blockPlaceAgainst, ArtisanBlockData newArtisanBlockData) throws Exception {
         event.setCancelled(true);
         ArtisanItem artisanItem = NeoArtisanAPI.getItemRegistry().getArtisanItem(event.getItem());
         ArtisanBlockPlaceEvent artisanBlockPlaceEvent = new ArtisanBlockPlaceEvent(
@@ -63,11 +62,12 @@ public final class BlockEventUtil {
                 event.getPlayer(),
                 true,
                 EquipmentSlot.HAND,
-                NeoArtisanAPI.getBlockRegistry().getArtisanBlock(artisanItem.getBlockId())
+                NeoArtisanAPI.getBlockRegistry().getArtisanBlock(artisanItem.getBlockId()),
+                newArtisanBlockData
         );
-        Bukkit.getPluginManager().callEvent(artisanBlockPlaceEvent);
+        artisanBlockPlaceEvent.callEvent();
         if (artisanBlockPlaceEvent.isCancelled()) return;
-        place(blockWillPlace, newArtisanBlockData);
+        place(blockWillPlace, artisanBlockPlaceEvent.getPlacedArtisanBlockData());
         if (event.getPlayer().getGameMode() != GameMode.CREATIVE) {
             event.getItem().setAmount(event.getItem().getAmount() - 1);
         }
@@ -75,17 +75,13 @@ public final class BlockEventUtil {
 
     public static <D extends ArtisanBlockData> boolean isNotTypedArtisanBlock(Block block, Class<D> artisanBlockDataClass) {
         if (!NeoArtisanAPI.getArtisanBlockStorage().isArtisanBlock(block)) return true;
-        if (!artisanBlockDataClass.isInstance(NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlock(block))) return true;
+        if (!artisanBlockDataClass.isInstance(NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlockData(block))) return true;
         return false;
     }
 
     public static void onBreakBasicLogic(BlockBreakEvent event) {
         if (event.isCancelled()) return;
-        ArtisanBlockData artisanBlockData = NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlock(event.getBlock());
-        if (event.getPlayer().getGameMode() == GameMode.CREATIVE) {
-            ArtisanBlockStorageInternal.getInternal().removeArtisanBlock(event.getBlock());
-            return;
-        }
+        ArtisanBlockData artisanBlockData = NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlockData(event.getBlock());
         event.setCancelled(true);
         ArtisanBlockBreakEvent artisanBlockBreakEvent = new ArtisanBlockBreakEvent(
                 event.getBlock(),
@@ -103,20 +99,30 @@ public final class BlockEventUtil {
             orb.setExperience(artisanBlockBreakEvent.getExpToDrop());
         }
         event.getBlock().setType(Material.AIR);
-        if (artisanBlockBreakEvent.isDropItems()) {
-            for (ItemStack drop : artisanBlockData.getArtisanBlockState().drops()) {
-                event.getBlock().getWorld().dropItemNaturally(event.getBlock().getLocation(), drop);
+        if (event.getPlayer().getGameMode() != GameMode.CREATIVE) {
+            if (artisanBlockBreakEvent.isDropItems()) {
+                for (ItemStack drop : artisanBlockData.getArtisanBlockState().drops()) {
+                    event.getBlock().getWorld().dropItemNaturally(event.getBlock().getLocation(), drop);
+                }
             }
         }
         ArtisanBlockStorageInternal.getInternal().removeArtisanBlock(event.getBlock());
+        if (artisanBlockData.getArtisanBlock().getPlaceSoundProperty() != null) {
+            event.getBlock().getWorld().playSound(
+                    event.getBlock().getLocation().toBlockLocation(),
+                    artisanBlockData.getArtisanBlock().getPlaceSoundProperty().key,
+                    artisanBlockData.getArtisanBlock().getPlaceSoundProperty().volume,
+                    artisanBlockData.getArtisanBlock().getPlaceSoundProperty().pitch
+            );
+        }
     }
 
     public static void onBelowBlockBreakBasicLogic(BlockBreakEvent event) {
-        ArtisanBlockData artisanBlockData = NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlock(event.getBlock().getRelative(BlockFace.UP));
+        ArtisanBlockData artisanBlockData = NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlockData(event.getBlock().getRelative(BlockFace.UP));
         if (event.isCancelled()) return;
         event.getBlock().getRelative(BlockFace.UP).setType(Material.AIR);
         ArtisanBlockLoseSupportEvent artisanBlockLoseSupportEvent = new ArtisanBlockLoseSupportEvent(
-                event.getBlock(),
+                event.getBlock().getRelative(BlockFace.UP),
                 artisanBlockData.getArtisanBlock()
         );
         artisanBlockLoseSupportEvent.callEvent();
@@ -139,7 +145,7 @@ public final class BlockEventUtil {
         if (event.isCancelled()) return;
         for (Block block : event.getBlocks()) {
             if (isNotTypedArtisanBlock(block.getRelative(BlockFace.UP), artisanBlockDataClass)) return;
-            ArtisanBlockData artisanBlockData = NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlock(event.getBlock().getRelative(BlockFace.UP));
+            ArtisanBlockData artisanBlockData = NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlockData(event.getBlock().getRelative(BlockFace.UP));
             block.getRelative(BlockFace.UP).setType(Material.AIR);
             ArtisanBlockLoseSupportEvent artisanBlockLoseSupportEvent = new ArtisanBlockLoseSupportEvent(
                     event.getBlock(),
@@ -163,7 +169,7 @@ public final class BlockEventUtil {
     }
 
     public static void onWaterOrPistonBreakBasicLogic(BlockBreakBlockEvent event) {
-        ArtisanBlockData artisanBlockData = NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlock(event.getBlock());
+        ArtisanBlockData artisanBlockData = NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlockData(event.getBlock());
         while (!event.getDrops().isEmpty()) event.getDrops().removeFirst();
         for (ItemStack drop : artisanBlockData.getArtisanBlockState().drops()) {
             event.getDrops().add(drop);
@@ -183,7 +189,7 @@ public final class BlockEventUtil {
             iterator.remove();
         }
         for (Block artisanBlock : artisanBlocks) {
-            ArtisanBlockData artisanBlockData = NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlock(artisanBlock);
+            ArtisanBlockData artisanBlockData = NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlockData(artisanBlock);
             if (ThreadLocalRandom.current().nextDouble() < event.getYield()) {
                 for (ItemStack drop : artisanBlockData.getArtisanBlockState().drops()) {
                     artisanBlock.getWorld().dropItemNaturally(artisanBlock.getLocation(), drop);
@@ -205,7 +211,7 @@ public final class BlockEventUtil {
             iterator.remove();
         }
         for (Block artisanBlock : artisanBlocks) {
-            ArtisanBlockData artisanBlockData = NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlock(artisanBlock);
+            ArtisanBlockData artisanBlockData = NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlockData(artisanBlock);
             if (ThreadLocalRandom.current().nextDouble() < event.getYield()) {
                 for (ItemStack drop : artisanBlockData.getArtisanBlockState().drops()) {
                     artisanBlock.getWorld().dropItemNaturally(artisanBlock.getLocation(), drop);
@@ -227,15 +233,23 @@ public final class BlockEventUtil {
         }
     }
 
-    public static <D extends ArtisanBlockData> void place(Block bukkitBlock, D artisanBlockData) throws Exception {
+    public static void place(Block bukkitBlock, ArtisanBlockData artisanBlockData) throws Exception {
         CraftWorld craftWorld = (CraftWorld) bukkitBlock.getWorld();
         Level nmsWorld = craftWorld.getHandle();
         BlockPos pos = new BlockPos(bukkitBlock.getX(), bukkitBlock.getY(), bukkitBlock.getZ());
         ArtisanBlockStorageInternal.getInternal().placeArtisanBlock(nmsWorld, pos, artisanBlockData);
         nmsWorld.setBlock(pos, stateById(artisanBlockData.getArtisanBlockState().actualState()), 3);
+        if (artisanBlockData.getArtisanBlock().getPlaceSoundProperty() != null) {
+            bukkitBlock.getWorld().playSound(
+                    bukkitBlock.getLocation().toBlockLocation(),
+                    artisanBlockData.getArtisanBlock().getPlaceSoundProperty().key,
+                    artisanBlockData.getArtisanBlock().getPlaceSoundProperty().volume,
+                    artisanBlockData.getArtisanBlock().getPlaceSoundProperty().pitch
+            );
+        }
     }
 
-    public static <D extends ArtisanBlockData> void replace(Block bukkitBlock, D artisanBlockData) {
+    public static void replace(Block bukkitBlock, ArtisanBlockData artisanBlockData) {
         CraftWorld craftWorld = (CraftWorld) bukkitBlock.getWorld();
         Level nmsWorld = craftWorld.getHandle();
         BlockPos pos = new BlockPos(bukkitBlock.getX(), bukkitBlock.getY(), bukkitBlock.getZ());

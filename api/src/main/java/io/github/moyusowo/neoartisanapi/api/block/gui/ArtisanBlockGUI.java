@@ -120,7 +120,7 @@ public abstract class ArtisanBlockGUI implements BlockInventoryHolder, Listener 
      * @return 该位置的自定义方块数据
      */
     public ArtisanBlockData getArtisanBlockData() {
-        return NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlock(this.location.getBlock());
+        return NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlockData(this.location.getBlock());
     }
 
     /**

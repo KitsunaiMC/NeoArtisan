@@ -1,5 +1,6 @@
 package io.github.moyusowo.neoartisanapi.api.block.thin;
 
+import io.github.moyusowo.neoartisanapi.api.block.base.sound.SoundProperty;
 import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlock;
 import io.github.moyusowo.neoartisanapi.api.block.gui.GUICreator;
 import org.bukkit.Bukkit;
@@ -40,11 +41,15 @@ public interface ArtisanThinBlock extends ArtisanBlock {
      */
     interface Builder {
 
-        Builder blockId(NamespacedKey blockId);
+        @NotNull Builder blockId(@NotNull NamespacedKey blockId);
 
-        Builder states(List<ArtisanThinBlockState> states);
+        @NotNull Builder states(@NotNull List<ArtisanThinBlockState> states);
 
-        Builder guiCreator(GUICreator creator);
+        @NotNull Builder placeSound(@NotNull SoundProperty placeSoundProperty);
+
+        @NotNull Builder breakSound(@NotNull SoundProperty breakSoundProperty);
+
+        @NotNull Builder guiCreator(@NotNull GUICreator creator);
 
         ArtisanThinBlock build();
     }

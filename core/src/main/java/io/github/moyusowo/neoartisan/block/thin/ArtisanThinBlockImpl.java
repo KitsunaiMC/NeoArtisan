@@ -2,13 +2,13 @@ package io.github.moyusowo.neoartisan.block.thin;
 
 import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisan.block.util.BlockEventUtil;
-import io.github.moyusowo.neoartisan.block.util.InteractionUtil;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
 import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
+import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlockType;
+import io.github.moyusowo.neoartisanapi.api.block.base.sound.SoundProperty;
 import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlockBase;
 import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlockState;
-import io.github.moyusowo.neoartisanapi.api.block.crop.ArtisanCropData;
 import io.github.moyusowo.neoartisanapi.api.block.gui.GUICreator;
 import io.github.moyusowo.neoartisanapi.api.block.thin.ArtisanThinBlock;
 import io.github.moyusowo.neoartisanapi.api.block.thin.ArtisanThinBlockData;
@@ -30,7 +30,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class ArtisanThinBlockImpl extends ArtisanBlockBase implements ArtisanThinBlock {
+class ArtisanThinBlockImpl extends ArtisanBlockBase implements ArtisanThinBlock {
 
     @InitMethod(priority = InitPriority.REGISTRAR)
     private static void init() {
@@ -42,8 +42,8 @@ public class ArtisanThinBlockImpl extends ArtisanBlockBase implements ArtisanThi
         );
     }
 
-    protected ArtisanThinBlockImpl(NamespacedKey blockId, List<? extends ArtisanBlockState> stages, GUICreator creator) {
-        super(blockId, stages, creator);
+    protected ArtisanThinBlockImpl(NamespacedKey blockId, List<? extends ArtisanBlockState> stages, GUICreator creator, SoundProperty placeSound, SoundProperty breakSound, ArtisanBlockType artisanBlockType) {
+        super(blockId, stages, artisanBlockType, creator, placeSound, breakSound);
     }
 
     @Override
@@ -57,27 +57,43 @@ public class ArtisanThinBlockImpl extends ArtisanBlockBase implements ArtisanThi
         protected NamespacedKey blockId;
         protected List<ArtisanThinBlockState> stages;
         protected GUICreator creator;
+        protected SoundProperty placeSound;
+        protected SoundProperty breakSound;
 
         public BuilderImpl() {
+            placeSound = null;
+            breakSound = null;
             blockId = null;
             stages = null;
             creator = null;
         }
 
         @Override
-        public Builder blockId(NamespacedKey blockId) {
+        public @NotNull Builder blockId(@NotNull NamespacedKey blockId) {
             this.blockId = blockId;
             return this;
         }
 
         @Override
-        public Builder states(List<ArtisanThinBlockState> states) {
+        public @NotNull Builder states(@NotNull List<ArtisanThinBlockState> states) {
             this.stages = states;
             return this;
         }
 
         @Override
-        public Builder guiCreator(GUICreator creator) {
+        public @NotNull Builder placeSound(@NotNull SoundProperty placeSoundProperty) {
+            this.placeSound = placeSoundProperty;
+            return this;
+        }
+
+        @Override
+        public @NotNull Builder breakSound(@NotNull SoundProperty breakSoundProperty) {
+            this.breakSound = breakSoundProperty;
+            return this;
+        }
+
+        @Override
+        public @NotNull Builder guiCreator(@NotNull GUICreator creator) {
             this.creator = creator;
             return this;
         }
@@ -85,7 +101,7 @@ public class ArtisanThinBlockImpl extends ArtisanBlockBase implements ArtisanThi
         @Override
         public ArtisanThinBlock build() {
             if (blockId == null || stages == null) throw new IllegalArgumentException("You must fill all the param!");
-            return new ArtisanThinBlockImpl(blockId, stages, creator);
+            return new ArtisanThinBlockImpl(blockId, stages, creator, placeSound, breakSound, ArtisanBlockType.THIN_BLOCK);
         }
     }
 
@@ -115,7 +131,7 @@ public class ArtisanThinBlockImpl extends ArtisanBlockBase implements ArtisanThi
             );
         }
 
-        @EventHandler
+        @EventHandler(priority = EventPriority.HIGHEST)
         private static void onBreak(BlockBreakEvent event) {
             if (BlockEventUtil.isNotTypedArtisanBlock(event.getBlock(), ArtisanThinBlockData.class)) return;
             BlockEventUtil.onBreakBasicLogic(event);
@@ -138,17 +154,17 @@ public class ArtisanThinBlockImpl extends ArtisanBlockBase implements ArtisanThi
             BlockEventUtil.onWaterOrPistonBreakBasicLogic(event);
         }
 
-        @EventHandler
+        @EventHandler(priority = EventPriority.HIGHEST)
         private static void onBlockExplode(BlockExplodeEvent event) {
             BlockEventUtil.onBlockExplode(event, ArtisanThinBlockData.class);
         }
 
-        @EventHandler
+        @EventHandler(priority = EventPriority.HIGHEST)
         private static void onEntityExplode(EntityExplodeEvent event) {
             BlockEventUtil.onEntityExplode(event, ArtisanThinBlockData.class);
         }
 
-        @EventHandler
+        @EventHandler(priority = EventPriority.HIGHEST)
         private static void onEntityChangeBlock(EntityChangeBlockEvent event) {
             BlockEventUtil.onEntityChangeBlock(event, ArtisanThinBlockData.class);
         }
@@ -156,7 +172,7 @@ public class ArtisanThinBlockImpl extends ArtisanBlockBase implements ArtisanThi
         @EventHandler(priority = EventPriority.LOWEST)
         private static void onStep(BlockRedstoneEvent event) {
             if (!NeoArtisanAPI.getArtisanBlockStorage().isArtisanBlock(event.getBlock())) return;
-            if (!(NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlock(event.getBlock()) instanceof ArtisanThinBlockData)) return;
+            if (!(NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlockData(event.getBlock()) instanceof ArtisanThinBlockData)) return;
             event.setNewCurrent(0);
         }
 

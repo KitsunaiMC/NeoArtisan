@@ -12,7 +12,7 @@ import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.ServicePriority;
 
-public class ArtisanThinBlockDataImpl extends ArtisanBlockDataBaseInternal implements ArtisanThinBlockData {
+class ArtisanThinBlockDataImpl extends ArtisanBlockDataBaseInternal implements ArtisanThinBlockData {
 
     @InitMethod(priority = InitPriority.BLOCKDATA)
     private static void init() {
