@@ -1,5 +1,6 @@
 package io.github.moyusowo.neoartisanapi.api.block.base;
 
+import io.github.moyusowo.neoartisanapi.api.block.SoundProperty;
 import io.github.moyusowo.neoartisanapi.api.block.gui.ArtisanBlockGUI;
 import io.github.moyusowo.neoartisanapi.api.block.gui.GUICreator;
 import org.bukkit.Location;
@@ -21,7 +22,7 @@ import java.util.List;
  * </ol>
  *
  * @see ArtisanBlock 基础接口定义
- * @see #ArtisanBlockBase(NamespacedKey, List, GUICreator) 唯一允许的构造方式
+ * @see #ArtisanBlockBase(NamespacedKey, List, GUICreator, String, String) 唯一允许的构造方式
  * @since 1.0.0
  */
 public abstract class ArtisanBlockBase implements ArtisanBlock {
@@ -29,10 +30,14 @@ public abstract class ArtisanBlockBase implements ArtisanBlock {
     private final NamespacedKey blockId;
     private final List<ArtisanBlockState> stages;
     private final GUICreator creator;
+    private final SoundProperty placeSound;
+    private final SoundProperty breakSound;
 
-    protected ArtisanBlockBase(@NotNull NamespacedKey blockId, @NotNull List<? extends ArtisanBlockState> stages, @Nullable GUICreator creator) {
+    protected ArtisanBlockBase(@NotNull NamespacedKey blockId, @NotNull List<? extends ArtisanBlockState> stages, @Nullable GUICreator creator, SoundProperty placeSound, SoundProperty breakSound) {
         this.blockId = blockId;
         this.creator = creator;
+        this.placeSound = placeSound;
+        this.breakSound = breakSound;
         this.stages = new ArrayList<>();
         this.stages.addAll(stages);
     }
@@ -61,5 +66,11 @@ public abstract class ArtisanBlockBase implements ArtisanBlock {
     public int getTotalStates() {
         return this.stages.size() - 1;
     }
+
+    @Override
+    public SoundProperty getPlaceSoundProperty() { return this.placeSound; }
+
+    @Override
+    public SoundProperty getBreakSoundProperty() { return this.breakSound; }
 
 }

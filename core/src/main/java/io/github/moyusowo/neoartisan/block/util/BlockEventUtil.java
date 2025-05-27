@@ -19,7 +19,6 @@ import org.bukkit.craftbukkit.CraftWorld;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.ExperienceOrb;
 import org.bukkit.event.Event;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockExplodeEvent;
@@ -107,6 +106,14 @@ public final class BlockEventUtil {
             }
         }
         ArtisanBlockStorageInternal.getInternal().removeArtisanBlock(event.getBlock());
+        if (artisanBlockData.getArtisanBlock().getPlaceSoundProperty() != null) {
+            event.getBlock().getWorld().playSound(
+                    event.getBlock().getLocation().toBlockLocation(),
+                    artisanBlockData.getArtisanBlock().getPlaceSoundProperty().key,
+                    artisanBlockData.getArtisanBlock().getPlaceSoundProperty().volume,
+                    artisanBlockData.getArtisanBlock().getPlaceSoundProperty().pitch
+            );
+        }
     }
 
     public static void onBelowBlockBreakBasicLogic(BlockBreakEvent event) {
@@ -231,6 +238,14 @@ public final class BlockEventUtil {
         BlockPos pos = new BlockPos(bukkitBlock.getX(), bukkitBlock.getY(), bukkitBlock.getZ());
         ArtisanBlockStorageInternal.getInternal().placeArtisanBlock(nmsWorld, pos, artisanBlockData);
         nmsWorld.setBlock(pos, stateById(artisanBlockData.getArtisanBlockState().actualState()), 3);
+        if (artisanBlockData.getArtisanBlock().getPlaceSoundProperty() != null) {
+            bukkitBlock.getWorld().playSound(
+                    bukkitBlock.getLocation().toBlockLocation(),
+                    artisanBlockData.getArtisanBlock().getPlaceSoundProperty().key,
+                    artisanBlockData.getArtisanBlock().getPlaceSoundProperty().volume,
+                    artisanBlockData.getArtisanBlock().getPlaceSoundProperty().pitch
+            );
+        }
     }
 
     public static <D extends ArtisanBlockData> void replace(Block bukkitBlock, D artisanBlockData) {

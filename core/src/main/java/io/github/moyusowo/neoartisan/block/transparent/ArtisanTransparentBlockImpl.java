@@ -2,15 +2,13 @@ package io.github.moyusowo.neoartisan.block.transparent;
 
 import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisan.block.util.BlockEventUtil;
-import io.github.moyusowo.neoartisan.block.util.InteractionUtil;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
 import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
+import io.github.moyusowo.neoartisanapi.api.block.SoundProperty;
 import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlockBase;
 import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlockState;
-import io.github.moyusowo.neoartisanapi.api.block.crop.ArtisanCropData;
 import io.github.moyusowo.neoartisanapi.api.block.gui.GUICreator;
-import io.github.moyusowo.neoartisanapi.api.block.thin.ArtisanThinBlockData;
 import io.github.moyusowo.neoartisanapi.api.block.transparent.ArtisanTransparentBlock;
 import io.github.moyusowo.neoartisanapi.api.block.transparent.ArtisanTransparentBlockData;
 import io.github.moyusowo.neoartisanapi.api.block.transparent.ArtisanTransparentBlockState;
@@ -18,6 +16,8 @@ import io.github.moyusowo.neoartisanapi.api.item.ArtisanItem;
 import io.papermc.paper.event.block.BlockBreakBlockEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
+import org.bukkit.Registry;
+import org.bukkit.Sound;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -48,8 +48,8 @@ class ArtisanTransparentBlockImpl extends ArtisanBlockBase implements ArtisanTra
 
     private final boolean canBurn;
 
-    protected ArtisanTransparentBlockImpl(NamespacedKey blockId, List<? extends ArtisanBlockState> stages, GUICreator creator, boolean canBurn) {
-        super(blockId, stages, creator);
+    protected ArtisanTransparentBlockImpl(NamespacedKey blockId, List<? extends ArtisanBlockState> stages, GUICreator creator, boolean canBurn, SoundProperty placeSound, SoundProperty breakSound) {
+        super(blockId, stages, creator, placeSound, breakSound);
         this.canBurn = canBurn;
     }
 
@@ -70,8 +70,12 @@ class ArtisanTransparentBlockImpl extends ArtisanBlockBase implements ArtisanTra
         protected List<ArtisanTransparentBlockState> stages;
         protected boolean canBurn;
         protected GUICreator creator;
+        protected SoundProperty placeSound;
+        protected SoundProperty breakSound;
 
         public BuilderImpl() {
+            placeSound = null;
+            breakSound = null;
             blockId = null;
             stages = null;
             creator = null;
@@ -79,33 +83,45 @@ class ArtisanTransparentBlockImpl extends ArtisanBlockBase implements ArtisanTra
         }
 
         @Override
-        public Builder blockId(NamespacedKey blockId) {
+        public @NotNull Builder blockId(@NotNull NamespacedKey blockId) {
             this.blockId = blockId;
             return this;
         }
 
         @Override
-        public Builder states(List<ArtisanTransparentBlockState> states) {
+        public @NotNull Builder states(@NotNull List<ArtisanTransparentBlockState> states) {
             this.stages = states;
             return this;
         }
 
         @Override
-        public Builder canBurn(boolean canBurn) {
+        public @NotNull Builder canBurn(boolean canBurn) {
             this.canBurn = canBurn;
             return this;
         }
 
         @Override
-        public Builder guiCreator(GUICreator creator) {
+        public @NotNull Builder guiCreator(@NotNull GUICreator creator) {
             this.creator = creator;
+            return this;
+        }
+
+        @Override
+        public @NotNull Builder placeSound(@NotNull SoundProperty placeSoundProperty) {
+            this.placeSound = placeSoundProperty;
+            return this;
+        }
+
+        @Override
+        public @NotNull Builder breakSound(@NotNull SoundProperty breakSoundProperty) {
+            this.breakSound = breakSoundProperty;
             return this;
         }
 
         @Override
         public ArtisanTransparentBlock build() {
             if (blockId == null || stages == null) throw new IllegalArgumentException("You must fill all the param!");
-            return new ArtisanTransparentBlockImpl(blockId, stages, creator, canBurn);
+            return new ArtisanTransparentBlockImpl(blockId, stages, creator, canBurn, placeSound, breakSound);
         }
     }
 

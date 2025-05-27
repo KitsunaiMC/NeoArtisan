@@ -1,5 +1,6 @@
 package io.github.moyusowo.neoartisanapi.api.block.base;
 
+import io.github.moyusowo.neoartisanapi.api.block.SoundProperty;
 import io.github.moyusowo.neoartisanapi.api.block.gui.ArtisanBlockGUI;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
@@ -69,6 +70,20 @@ public interface ArtisanBlock {
      * @implNote 该值在生命周期内必须恒定不变
      */
     int getTotalStates();
+
+    /**
+     * 以字符串形式获取自定义方块放置方块时音效的键
+     *
+     * @return 对应自定义方块被放置时音效的命名空间键，如果没有则为空
+     */
+    @Nullable SoundProperty getPlaceSoundProperty();
+
+    /**
+     * 以字符串形式获取自定义方块被破坏时音效的键
+     *
+     * @return 对应自定义方块被破坏时音效的命名空间键，如果没有则为空
+     */
+    @Nullable SoundProperty getBreakSoundProperty();
 
 }
 

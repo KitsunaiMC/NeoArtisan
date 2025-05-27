@@ -4,6 +4,7 @@ import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisan.block.storage.internal.ArtisanBlockStorageInternal;
 import io.github.moyusowo.neoartisan.block.util.BlockEventUtil;
 import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
+import io.github.moyusowo.neoartisanapi.api.block.SoundProperty;
 import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlockBase;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
@@ -47,8 +48,8 @@ class ArtisanCropImpl extends ArtisanBlockBase implements ArtisanCrop {
 
     private final int boneMealMinGrowth, boneMealMaxGrowth;
 
-    public ArtisanCropImpl(NamespacedKey cropId, List<ArtisanCropState> stages, int boneMealMinGrowth, int boneMealMaxGrowth) {
-        super(cropId, stages, null);
+    public ArtisanCropImpl(NamespacedKey cropId, List<ArtisanCropState> stages, int boneMealMinGrowth, int boneMealMaxGrowth, SoundProperty placeSound, SoundProperty breakSound) {
+        super(cropId, stages, null, placeSound, breakSound);
         this.boneMealMinGrowth = boneMealMinGrowth;
         this.boneMealMaxGrowth = boneMealMaxGrowth;
     }
@@ -79,34 +80,50 @@ class ArtisanCropImpl extends ArtisanBlockBase implements ArtisanCrop {
         protected List<ArtisanCropState> stages;
         protected int boneMealMinGrowth;
         protected int boneMealMaxGrowth;
+        protected SoundProperty placeSound;
+        protected SoundProperty breakSound;
 
         public BuilderImpl() {
             blockId = null;
             stages = null;
+            placeSound = null;
+            breakSound = null;
             boneMealMaxGrowth = -1;
             boneMealMinGrowth = -1;
         }
 
         @Override
-        public Builder blockId(NamespacedKey blockId) {
+        public @NotNull Builder blockId(@NotNull NamespacedKey blockId) {
             this.blockId = blockId;
             return this;
         }
 
         @Override
-        public Builder stages(List<ArtisanCropState> stages) {
+        public @NotNull Builder stages(@NotNull List<ArtisanCropState> stages) {
             this.stages = stages;
             return this;
         }
 
         @Override
-        public Builder boneMealMinGrowth(int boneMealMinGrowth) {
+        public @NotNull Builder placeSound(@NotNull SoundProperty placeSoundProperty) {
+            this.placeSound = placeSoundProperty;
+            return this;
+        }
+
+        @Override
+        public @NotNull Builder breakSound(@NotNull SoundProperty breakSoundProperty) {
+            this.breakSound = breakSoundProperty;
+            return this;
+        }
+
+        @Override
+        public @NotNull Builder boneMealMinGrowth(int boneMealMinGrowth) {
             this.boneMealMinGrowth = boneMealMinGrowth;
             return this;
         }
 
         @Override
-        public Builder boneMealMaxGrowth(int boneMealMaxGrowth) {
+        public @NotNull Builder boneMealMaxGrowth(int boneMealMaxGrowth) {
             this.boneMealMaxGrowth = boneMealMaxGrowth;
             return this;
         }
@@ -115,7 +132,7 @@ class ArtisanCropImpl extends ArtisanBlockBase implements ArtisanCrop {
         public ArtisanBlock build() {
             if (blockId == null || stages == null || boneMealMinGrowth == -1 || boneMealMaxGrowth == -1) throw new IllegalArgumentException("You must fill all the param!");
             if (boneMealMinGrowth < 0 || boneMealMinGrowth > boneMealMaxGrowth) throw new IllegalArgumentException("min can't larger than max!");
-            return new ArtisanCropImpl(blockId, stages, boneMealMinGrowth, boneMealMaxGrowth);
+            return new ArtisanCropImpl(blockId, stages, boneMealMinGrowth, boneMealMaxGrowth, placeSound, breakSound);
         }
     }
 

@@ -1,9 +1,11 @@
 package io.github.moyusowo.neoartisanapi.api.block.crop;
 
+import io.github.moyusowo.neoartisanapi.api.block.SoundProperty;
 import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlock;
 import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlockState;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
+import org.bukkit.Sound;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -72,13 +74,17 @@ public interface ArtisanCrop extends ArtisanBlock {
      */
     interface Builder {
 
-        Builder blockId(NamespacedKey blockId);
+        @NotNull Builder blockId(@NotNull NamespacedKey blockId);
 
-        Builder stages(List<ArtisanCropState> stages);
+        @NotNull Builder stages(@NotNull List<ArtisanCropState> stages);
 
-        Builder boneMealMinGrowth(int boneMealMinGrowth);
+        @NotNull Builder placeSound(@NotNull SoundProperty placeSoundProperty);
 
-        Builder boneMealMaxGrowth(int boneMealMaxGrowth);
+        @NotNull Builder breakSound(@NotNull SoundProperty breakSoundProperty);
+
+        @NotNull Builder boneMealMinGrowth(int boneMealMinGrowth);
+
+        @NotNull Builder boneMealMaxGrowth(int boneMealMaxGrowth);
 
         /**
          * 构建不可变的作物实例
