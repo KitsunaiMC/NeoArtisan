@@ -55,8 +55,21 @@ public class ArtisanBlockPlaceEvent extends BlockPlaceEvent {
         return this.artisanBlock;
     }
 
+    /**
+     * 获取即将被储存的自定义方块BlockData
+     *
+     * @return 即将被储存的自定义方块BlockData
+     * @see ArtisanBlockData
+     * @since 1.0.1
+     */
     public ArtisanBlockData getPlacedArtisanBlockData() { return this.placedArtisanBlockData; }
 
+    /**
+     * 设置即将被储存的自定义方块BlockData
+     *
+     * @see ArtisanBlockData
+     * @since 1.0.1
+     */
     public void setPlacedArtisanBlockData(ArtisanBlockData placedArtisanBlockData) { this.placedArtisanBlockData = placedArtisanBlockData; }
 
     @Override

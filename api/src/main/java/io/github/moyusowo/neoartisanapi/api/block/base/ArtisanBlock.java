@@ -75,6 +75,7 @@ public interface ArtisanBlock {
      * 以字符串形式获取自定义方块放置方块时音效的键
      *
      * @return 对应自定义方块被放置时音效的命名空间键，如果没有则为空
+     * @since 1.0.1
      */
     @Nullable SoundProperty getPlaceSoundProperty();
 
@@ -82,6 +83,7 @@ public interface ArtisanBlock {
      * 以字符串形式获取自定义方块被破坏时音效的键
      *
      * @return 对应自定义方块被破坏时音效的命名空间键，如果没有则为空
+     * @since 1.0.1
      */
     @Nullable SoundProperty getBreakSoundProperty();
 
