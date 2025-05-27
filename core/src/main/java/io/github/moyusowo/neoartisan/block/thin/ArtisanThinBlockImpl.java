@@ -30,7 +30,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class ArtisanThinBlockImpl extends ArtisanBlockBase implements ArtisanThinBlock {
+class ArtisanThinBlockImpl extends ArtisanBlockBase implements ArtisanThinBlock {
 
     @InitMethod(priority = InitPriority.REGISTRAR)
     private static void init() {
