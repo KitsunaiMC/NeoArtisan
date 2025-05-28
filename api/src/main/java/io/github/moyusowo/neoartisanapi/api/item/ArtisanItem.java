@@ -23,6 +23,12 @@ import org.jetbrains.annotations.Nullable;
 public interface ArtisanItem {
 
     /**
+     * 空命名空间键，物品为空时的物品注册ID
+     *
+     */
+    NamespacedKey EMPTY = new NamespacedKey("neoartisan", "empty_item_registry_id");
+
+    /**
      * 通过物品堆判断是否为此自定义物品。
      *
      * @param itemStack 要比较的物品堆（不能为null）

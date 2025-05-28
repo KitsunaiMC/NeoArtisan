@@ -3,6 +3,7 @@ package io.github.moyusowo.neoartisan.recipe;
 import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisan.util.ArrayKey;
 import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
+import io.github.moyusowo.neoartisanapi.api.item.ArtisanItem;
 import io.github.moyusowo.neoartisanapi.api.recipe.ArtisanShapedRecipe;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
@@ -24,7 +25,7 @@ class ArtisanShapedRecipeImpl implements ArtisanShapedRecipe {
             if (matrix[i] != null) {
                 matrixKeys[i] = NeoArtisanAPI.getItemRegistry().getRegistryId(matrix[i]);
             } else {
-                matrixKeys[i] = RecipeRegistryImpl.EMPTY;
+                matrixKeys[i] = ArtisanItem.EMPTY;
             }
         }
         return ArrayKey.from(matrixKeys);
@@ -79,7 +80,7 @@ class ArtisanShapedRecipeImpl implements ArtisanShapedRecipe {
         NamespacedKey[] builtRecipe = new NamespacedKey[9];
         for (int i = 0; i < 9; i++) {
             if (recipe[i] != ' ') builtRecipe[i] = toRegistryId.get(recipe[i]);
-            else builtRecipe[i] = RecipeRegistryImpl.EMPTY;
+            else builtRecipe[i] = ArtisanItem.EMPTY;
         }
         RecipeRegistryImpl.getInstance().register(ArrayKey.from(builtRecipe), this);
         this.built = true;

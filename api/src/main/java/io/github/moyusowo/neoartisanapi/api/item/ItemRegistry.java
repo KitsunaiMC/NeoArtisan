@@ -189,10 +189,12 @@ public interface ItemRegistry {
      *
      * <p>minecraft原版物品会返回原版物品的命名空间ID。</p>
      *
-     * @param itemStack 目标物品堆（不能为null）
+     * <p>空物品会返回 {@link ArtisanItem#EMPTY}。</p>
+     *
+     * @param itemStack 目标物品堆（可为null）
      * @return 对应的注册ID（不会为null）
      */
-    @NotNull NamespacedKey getRegistryId(@NotNull ItemStack itemStack);
+    @NotNull NamespacedKey getRegistryId(@Nullable ItemStack itemStack);
 
     /**
      * 检查指定ID的自定义物品是否已注册。

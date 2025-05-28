@@ -19,9 +19,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 final class RecipeRegistryImpl implements Listener, RecipeRegistry {
 
-    private static final String EMPTY_KEY = "empty_item_registry_id";
-    public static final NamespacedKey EMPTY = new NamespacedKey(NeoArtisan.instance(), EMPTY_KEY);
-
     private static RecipeRegistryImpl instance;
 
     public static RecipeRegistryImpl getInstance() {
