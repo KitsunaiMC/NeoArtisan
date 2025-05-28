@@ -12,9 +12,9 @@ import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
 import io.papermc.paper.command.brigadier.argument.ArgumentTypes;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
-import net.kyori.adventure.text.ComponentLike;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextColor;
 import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.Component;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 
@@ -41,12 +41,12 @@ final class ItemCommandRegistrar {
                                                     if (NeoArtisanAPI.getItemRegistry().isArtisanItem(registryId)) {
                                                         player.give(((ArtisanItemImpl) ItemRegistryImpl.getInstance().getArtisanItem(registryId)).getItemStack());
                                                     } else {
-                                                        player.sendMessage((ComponentLike) Component.literal("该物品ID不存在！").withStyle(ChatFormatting.RED));
+                                                        player.sendMessage(Component.text("该物品ID不存在！").color(TextColor.color(255, 0, 0)));
                                                     }
                                                     return 1;
                                                 }
                                                 ctx.getSource().getSender().sendMessage(
-                                                        (ComponentLike) Component.literal("你必须是一名玩家！").withStyle(ChatFormatting.RED)
+                                                        Component.text("你必须是一名玩家！").color(TextColor.color(255, 0, 0))
                                                 );
                                                 return 0;
                                             }
@@ -62,12 +62,12 @@ final class ItemCommandRegistrar {
                                                             if (NeoArtisanAPI.getItemRegistry().isArtisanItem(registryId)) {
                                                                 player.give(((ArtisanItemImpl) ItemRegistryImpl.getInstance().getArtisanItem(registryId)).getItemStack(count));
                                                             } else {
-                                                                player.sendMessage((ComponentLike) Component.literal("该物品ID不存在！").withStyle(ChatFormatting.RED));
+                                                                player.sendMessage(Component.text("该物品ID不存在！").color(TextColor.color(255, 0, 0)));
                                                             }
                                                             return 1;
                                                         }
                                                         ctx.getSource().getSender().sendMessage(
-                                                                (ComponentLike) Component.literal("你必须是一名玩家！").withStyle(ChatFormatting.RED)
+                                                                Component.text("你必须是一名玩家！").color(TextColor.color(255, 0, 0))
                                                         );
                                                         return 0;
                                                     }
