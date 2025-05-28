@@ -128,7 +128,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">修饰符和类型</div>
 <div class="table-header col-second">字段</div>
 <div class="table-header col-last">说明</div>
-<div class="col-first even-row-color"><code>final <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="java.lang中的类或接口" class="external-link">String</a></code></div>
+<div class="col-first even-row-color"><code>final <a href="https://jd.papermc.io/paper/1.21.5/org/bukkit/NamespacedKey.html" title="org.bukkit中的类或接口" class="external-link">NamespacedKey</a></code></div>
 <div class="col-second even-row-color"><code><a href="#key" class="member-name-link">key</a></code></div>
 <div class="col-last even-row-color">
 <div class="block">音效资源键</div>
@@ -158,12 +158,12 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">方法</div>
 <div class="table-header col-last">说明</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static @NotNull <a href="SoundProperty.html" title="io.github.moyusowo.neoartisanapi.api.block.base.sound中的类">SoundProperty</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#of(java.lang.String)" class="member-name-link">of</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="java.lang中的类或接口" class="external-link">String</a>&nbsp;key)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#of(org.bukkit.NamespacedKey)" class="member-name-link">of</a><wbr>(@NotNull <a href="https://jd.papermc.io/paper/1.21.5/org/bukkit/NamespacedKey.html" title="org.bukkit中的类或接口" class="external-link">NamespacedKey</a>&nbsp;key)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">从字符串键创建音效属性（默认音量1.0，音调1.0）</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static @NotNull <a href="SoundProperty.html" title="io.github.moyusowo.neoartisanapi.api.block.base.sound中的类">SoundProperty</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#of(java.lang.String,float,float)" class="member-name-link">of</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="java.lang中的类或接口" class="external-link">String</a>&nbsp;key,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#of(org.bukkit.NamespacedKey,float,float)" class="member-name-link">of</a><wbr>(@NotNull <a href="https://jd.papermc.io/paper/1.21.5/org/bukkit/NamespacedKey.html" title="org.bukkit中的类或接口" class="external-link">NamespacedKey</a>&nbsp;key,
  float&nbsp;volume,
  float&nbsp;pitch)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
@@ -201,10 +201,10 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="key">
 <h3>key</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="java.lang中的类或接口" class="external-link">String</a></span>&nbsp;<span class="element-name">key</span></div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="https://jd.papermc.io/paper/1.21.5/org/bukkit/NamespacedKey.html" title="org.bukkit中的类或接口" class="external-link">NamespacedKey</a></span>&nbsp;<span class="element-name">key</span></div>
 <div class="block">音效资源键
  <p>
- - 对于原版音效，格式为Minecraft命名空间键（如"entity.player.levelup"）<br>
+ - 对于原版音效，格式为Minecraft命名空间键（如"minecraft:entity.player.levelup"）<br>
  - 对于自定义音效，需与资源包中的sounds.json定义一致
  </p></div>
 </section>
@@ -261,11 +261,11 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="of(java.lang.String,float,float)">
+<section class="detail" id="of(org.bukkit.NamespacedKey,float,float)">
 <h3>of</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public static</span>&nbsp;<span class="return-type">@NotNull <a href="SoundProperty.html" title="io.github.moyusowo.neoartisanapi.api.block.base.sound中的类">SoundProperty</a></span>&nbsp;<span class="element-name">of</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="java.lang中的类或接口" class="external-link">String</a>&nbsp;key,
+ @NotNull <a href="https://jd.papermc.io/paper/1.21.5/org/bukkit/NamespacedKey.html" title="org.bukkit中的类或接口" class="external-link">NamespacedKey</a>&nbsp;key,
  float&nbsp;volume,
  float&nbsp;pitch)</span></div>
 <div class="block">从字符串键创建音效属性</div>
@@ -295,11 +295,11 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="of(java.lang.String)">
+<section class="detail" id="of(org.bukkit.NamespacedKey)">
 <h3>of</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public static</span>&nbsp;<span class="return-type">@NotNull <a href="SoundProperty.html" title="io.github.moyusowo.neoartisanapi.api.block.base.sound中的类">SoundProperty</a></span>&nbsp;<span class="element-name">of</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="java.lang中的类或接口" class="external-link">String</a>&nbsp;key)</span></div>
+ @NotNull <a href="https://jd.papermc.io/paper/1.21.5/org/bukkit/NamespacedKey.html" title="org.bukkit中的类或接口" class="external-link">NamespacedKey</a>&nbsp;key)</span></div>
 <div class="block">从字符串键创建音效属性（默认音量1.0，音调1.0）</div>
 <dl class="notes">
 <dt>参数:</dt>

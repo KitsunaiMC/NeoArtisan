@@ -110,6 +110,7 @@ implements <a href="https://jd.papermc.io/paper/1.21.5/org/bukkit/inventory/Bloc
  <ol>
    <li>必须实现 <a href="#setItemInInventory()"><code>setItemInInventory()</code></a> 设置初始物品</li>
    <li>可通过重写和增加事件方法扩展交互逻辑</li>
+   <li>在构造函数中不能直接调用getArtisanBlockData方法，因为此刻数据可能还没有加载到内存中，必须使用BukkitRunnable调度</li>
  </ol></div>
 <dl class="notes">
 <dt>从以下版本开始:</dt>
@@ -213,15 +214,25 @@ implements <a href="https://jd.papermc.io/paper/1.21.5/org/bukkit/inventory/Bloc
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">获取绑定的库存实例</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected void</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#onClick(org.bukkit.event.inventory.InventoryClickEvent)" class="member-name-link">onClick</a><wbr>(<a href="https://jd.papermc.io/paper/1.21.5/org/bukkit/event/inventory/InventoryClickEvent.html" title="org.bukkit.event.inventory中的类或接口" class="external-link">InventoryClickEvent</a>&nbsp;event)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">库存点击事件处理（默认取消所有操作）</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#onInteract(org.bukkit.event.player.PlayerInteractEvent)" class="member-name-link">onInteract</a><wbr>(<a href="https://jd.papermc.io/paper/1.21.5/org/bukkit/event/player/PlayerInteractEvent.html" title="org.bukkit.event.player中的类或接口" class="external-link">PlayerInteractEvent</a>&nbsp;event)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#onDrag(org.bukkit.event.inventory.InventoryDragEvent)" class="member-name-link">onDrag</a><wbr>(<a href="https://jd.papermc.io/paper/1.21.5/org/bukkit/event/inventory/InventoryDragEvent.html" title="org.bukkit.event.inventory中的类或接口" class="external-link">InventoryDragEvent</a>&nbsp;event)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">库存点击事件处理（默认取消所有操作）</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#onInteract(org.bukkit.event.player.PlayerInteractEvent)" class="member-name-link">onInteract</a><wbr>(<a href="https://jd.papermc.io/paper/1.21.5/org/bukkit/event/player/PlayerInteractEvent.html" title="org.bukkit.event.player中的类或接口" class="external-link">PlayerInteractEvent</a>&nbsp;event)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">方块交互事件处理（默认打开GUI）</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#onTerminate()" class="member-name-link">onTerminate</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">该GUI绑定的BlockData销毁时的逻辑，由插件实现调用。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>protected abstract void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#setItemInInventory()" class="member-name-link">setItemInInventory</a>()</code></div>
@@ -381,26 +392,48 @@ implements <a href="https://jd.papermc.io/paper/1.21.5/org/bukkit/inventory/Bloc
 </section>
 </li>
 <li>
+<section class="detail" id="onTerminate()">
+<h3>onTerminate</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">onTerminate</span>()</div>
+<div class="block">该GUI绑定的BlockData销毁时的逻辑，由插件实现调用。
+
+ <p>监听器必须注销！否则会残留GUI对方块的绑定！</p></div>
+<dl class="notes">
+<dt>从以下版本开始:</dt>
+<dd>1.2.0</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="setItemInInventory()">
 <h3>setItemInInventory</h3>
 <div class="member-signature"><span class="modifiers">protected abstract</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setItemInInventory</span>()</div>
 <div class="block">抽象方法：初始化库存物品
  <p>
  子类必须实现此方法，在构造时设置库存的初始物品布局。
- </p></div>
+ </p>
+
+ <p>该方法中可以安全的调用getArtisanBlockData方法，因为该方法会在数据加载完之后执行。</p></div>
 </section>
 </li>
 <li>
 <section class="detail" id="onClick(org.bukkit.event.inventory.InventoryClickEvent)">
 <h3>onClick</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">onClick</span><wbr><span class="parameters">(<a href="https://jd.papermc.io/paper/1.21.5/org/bukkit/event/inventory/InventoryClickEvent.html" title="org.bukkit.event.inventory中的类或接口" class="external-link">InventoryClickEvent</a>&nbsp;event)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">onClick</span><wbr><span class="parameters">(<a href="https://jd.papermc.io/paper/1.21.5/org/bukkit/event/inventory/InventoryClickEvent.html" title="org.bukkit.event.inventory中的类或接口" class="external-link">InventoryClickEvent</a>&nbsp;event)</span></div>
+<div class="block">库存点击事件处理（默认取消所有操作）</div>
+</section>
+</li>
+<li>
+<section class="detail" id="onDrag(org.bukkit.event.inventory.InventoryDragEvent)">
+<h3>onDrag</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">onDrag</span><wbr><span class="parameters">(<a href="https://jd.papermc.io/paper/1.21.5/org/bukkit/event/inventory/InventoryDragEvent.html" title="org.bukkit.event.inventory中的类或接口" class="external-link">InventoryDragEvent</a>&nbsp;event)</span></div>
 <div class="block">库存点击事件处理（默认取消所有操作）</div>
 </section>
 </li>
 <li>
 <section class="detail" id="onInteract(org.bukkit.event.player.PlayerInteractEvent)">
 <h3>onInteract</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">onInteract</span><wbr><span class="parameters">(<a href="https://jd.papermc.io/paper/1.21.5/org/bukkit/event/player/PlayerInteractEvent.html" title="org.bukkit.event.player中的类或接口" class="external-link">PlayerInteractEvent</a>&nbsp;event)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">onInteract</span><wbr><span class="parameters">(<a href="https://jd.papermc.io/paper/1.21.5/org/bukkit/event/player/PlayerInteractEvent.html" title="org.bukkit.event.player中的类或接口" class="external-link">PlayerInteractEvent</a>&nbsp;event)</span></div>
 <div class="block">方块交互事件处理（默认打开GUI）</div>
 </section>
 </li>

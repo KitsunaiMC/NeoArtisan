@@ -495,6 +495,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">空护甲属性配置，表示物品无护甲特性。</div>
 </dd>
+<dt><a href="io/github/moyusowo/neoartisanapi/api/item/ArtisanItem.html#EMPTY" class="member-name-link">EMPTY</a> - 接口中的静态变量 io.github.moyusowo.neoartisanapi.api.item.<a href="io/github/moyusowo/neoartisanapi/api/item/ArtisanItem.html" title="io.github.moyusowo.neoartisanapi.api.item中的接口">ArtisanItem</a></dt>
+<dd>
+<div class="block">空命名空间键，物品为空时的物品注册ID</div>
+</dd>
 <dt><a href="io/github/moyusowo/neoartisanapi/api/item/FoodProperty.html#EMPTY" class="member-name-link">EMPTY</a> - 记录类中的静态变量 io.github.moyusowo.neoartisanapi.api.item.<a href="io/github/moyusowo/neoartisanapi/api/item/FoodProperty.html" title="io.github.moyusowo.neoartisanapi.api.item中的类">FoodProperty</a></dt>
 <dd>
 <div class="block">空食物属性配置，表示物品不可食用。</div>
@@ -1124,11 +1128,11 @@ loadScripts(document, 'script');</script>
 <dl class="index">
 <dt><a href="io/github/moyusowo/neoartisanapi/api/block/transparent/TransparentAppearance.LeavesAppearance.html#OAK_LEAVES" class="member-name-link">OAK_LEAVES</a> - 枚举类 中的枚举常量 io.github.moyusowo.neoartisanapi.api.block.transparent.<a href="io/github/moyusowo/neoartisanapi/api/block/transparent/TransparentAppearance.LeavesAppearance.html" title="io.github.moyusowo.neoartisanapi.api.block.transparent 中的枚举类">TransparentAppearance.LeavesAppearance</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="io/github/moyusowo/neoartisanapi/api/block/base/sound/SoundProperty.html#of(java.lang.String)" class="member-name-link">of(String)</a> - 类中的静态方法 io.github.moyusowo.neoartisanapi.api.block.base.sound.<a href="io/github/moyusowo/neoartisanapi/api/block/base/sound/SoundProperty.html" title="io.github.moyusowo.neoartisanapi.api.block.base.sound中的类">SoundProperty</a></dt>
+<dt><a href="io/github/moyusowo/neoartisanapi/api/block/base/sound/SoundProperty.html#of(org.bukkit.NamespacedKey)" class="member-name-link">of(NamespacedKey)</a> - 类中的静态方法 io.github.moyusowo.neoartisanapi.api.block.base.sound.<a href="io/github/moyusowo/neoartisanapi/api/block/base/sound/SoundProperty.html" title="io.github.moyusowo.neoartisanapi.api.block.base.sound中的类">SoundProperty</a></dt>
 <dd>
 <div class="block">从字符串键创建音效属性（默认音量1.0，音调1.0）</div>
 </dd>
-<dt><a href="io/github/moyusowo/neoartisanapi/api/block/base/sound/SoundProperty.html#of(java.lang.String,float,float)" class="member-name-link">of(String, float, float)</a> - 类中的静态方法 io.github.moyusowo.neoartisanapi.api.block.base.sound.<a href="io/github/moyusowo/neoartisanapi/api/block/base/sound/SoundProperty.html" title="io.github.moyusowo.neoartisanapi.api.block.base.sound中的类">SoundProperty</a></dt>
+<dt><a href="io/github/moyusowo/neoartisanapi/api/block/base/sound/SoundProperty.html#of(org.bukkit.NamespacedKey,float,float)" class="member-name-link">of(NamespacedKey, float, float)</a> - 类中的静态方法 io.github.moyusowo.neoartisanapi.api.block.base.sound.<a href="io/github/moyusowo/neoartisanapi/api/block/base/sound/SoundProperty.html" title="io.github.moyusowo.neoartisanapi.api.block.base.sound中的类">SoundProperty</a></dt>
 <dd>
 <div class="block">从字符串键创建音效属性</div>
 </dd>
@@ -1144,9 +1148,17 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">库存点击事件处理（默认取消所有操作）</div>
 </dd>
+<dt><a href="io/github/moyusowo/neoartisanapi/api/block/gui/ArtisanBlockGUI.html#onDrag(org.bukkit.event.inventory.InventoryDragEvent)" class="member-name-link">onDrag(InventoryDragEvent)</a> - 类中的方法 io.github.moyusowo.neoartisanapi.api.block.gui.<a href="io/github/moyusowo/neoartisanapi/api/block/gui/ArtisanBlockGUI.html" title="io.github.moyusowo.neoartisanapi.api.block.gui中的类">ArtisanBlockGUI</a></dt>
+<dd>
+<div class="block">库存点击事件处理（默认取消所有操作）</div>
+</dd>
 <dt><a href="io/github/moyusowo/neoartisanapi/api/block/gui/ArtisanBlockGUI.html#onInteract(org.bukkit.event.player.PlayerInteractEvent)" class="member-name-link">onInteract(PlayerInteractEvent)</a> - 类中的方法 io.github.moyusowo.neoartisanapi.api.block.gui.<a href="io/github/moyusowo/neoartisanapi/api/block/gui/ArtisanBlockGUI.html" title="io.github.moyusowo.neoartisanapi.api.block.gui中的类">ArtisanBlockGUI</a></dt>
 <dd>
 <div class="block">方块交互事件处理（默认打开GUI）</div>
+</dd>
+<dt><a href="io/github/moyusowo/neoartisanapi/api/block/gui/ArtisanBlockGUI.html#onTerminate()" class="member-name-link">onTerminate()</a> - 类中的方法 io.github.moyusowo.neoartisanapi.api.block.gui.<a href="io/github/moyusowo/neoartisanapi/api/block/gui/ArtisanBlockGUI.html" title="io.github.moyusowo.neoartisanapi.api.block.gui中的类">ArtisanBlockGUI</a></dt>
+<dd>
+<div class="block">该GUI绑定的BlockData销毁时的逻辑，由插件实现调用。</div>
 </dd>
 </dl>
 <h2 class="title" id="I:P">P</h2>

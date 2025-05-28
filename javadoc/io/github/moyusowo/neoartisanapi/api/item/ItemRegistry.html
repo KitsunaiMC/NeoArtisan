@@ -166,7 +166,7 @@ loadScripts(document, 'script');</script>
 <div class="block">创建指定数量的指定命名空间ID的物品堆。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="https://jd.papermc.io/paper/1.21.5/org/bukkit/NamespacedKey.html" title="org.bukkit中的类或接口" class="external-link">NamespacedKey</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#getRegistryId(org.bukkit.inventory.ItemStack)" class="member-name-link">getRegistryId</a><wbr>(@NotNull <a href="https://jd.papermc.io/paper/1.21.5/org/bukkit/inventory/ItemStack.html" title="org.bukkit.inventory中的类或接口" class="external-link">ItemStack</a>&nbsp;itemStack)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#getRegistryId(org.bukkit.inventory.ItemStack)" class="member-name-link">getRegistryId</a><wbr>(@Nullable <a href="https://jd.papermc.io/paper/1.21.5/org/bukkit/inventory/ItemStack.html" title="org.bukkit.inventory中的类或接口" class="external-link">ItemStack</a>&nbsp;itemStack)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">从物品堆解析注册ID。</div>
 </div>
@@ -234,14 +234,16 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="getRegistryId(org.bukkit.inventory.ItemStack)">
 <h3>getRegistryId</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="return-type">@NotNull <a href="https://jd.papermc.io/paper/1.21.5/org/bukkit/NamespacedKey.html" title="org.bukkit中的类或接口" class="external-link">NamespacedKey</a></span>&nbsp;<span class="element-name">getRegistryId</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="https://jd.papermc.io/paper/1.21.5/org/bukkit/inventory/ItemStack.html" title="org.bukkit.inventory中的类或接口" class="external-link">ItemStack</a>&nbsp;itemStack)</span></div>
+</span><span class="return-type">@NotNull <a href="https://jd.papermc.io/paper/1.21.5/org/bukkit/NamespacedKey.html" title="org.bukkit中的类或接口" class="external-link">NamespacedKey</a></span>&nbsp;<span class="element-name">getRegistryId</span><wbr><span class="parameters">(@Nullable
+ @Nullable <a href="https://jd.papermc.io/paper/1.21.5/org/bukkit/inventory/ItemStack.html" title="org.bukkit.inventory中的类或接口" class="external-link">ItemStack</a>&nbsp;itemStack)</span></div>
 <div class="block">从物品堆解析注册ID。
 
- <p>minecraft原版物品会返回原版物品的命名空间ID。</p></div>
+ <p>minecraft原版物品会返回原版物品的命名空间ID。</p>
+
+ <p>空物品会返回 <a href="ArtisanItem.html#EMPTY"><code>ArtisanItem.EMPTY</code></a>。</p></div>
 <dl class="notes">
 <dt>参数:</dt>
-<dd><code>itemStack</code> - 目标物品堆（不能为null）</dd>
+<dd><code>itemStack</code> - 目标物品堆（可为null）</dd>
 <dt>返回:</dt>
 <dd>对应的注册ID（不会为null）</dd>
 </dl>
