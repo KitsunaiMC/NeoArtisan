@@ -23,6 +23,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockBurnEvent;
 import org.bukkit.event.block.BlockExplodeEvent;
+import org.bukkit.event.block.BlockIgniteEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -179,6 +180,15 @@ class ArtisanTransparentBlockImpl extends ArtisanBlockBase implements ArtisanTra
 
         @EventHandler(priority = EventPriority.HIGHEST)
         private static void onBurn(BlockBurnEvent event) {
+            if (event.isCancelled()) return;
+            if (!NeoArtisanAPI.getArtisanBlockStorage().isArtisanBlock(event.getBlock())) return;
+            if (!(NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlockData(event.getBlock()) instanceof ArtisanTransparentBlockData artisanTransparentBlockData)) return;
+            if (artisanTransparentBlockData.getArtisanBlock().canBurn()) return;
+            event.setCancelled(true);
+        }
+
+        @EventHandler(priority = EventPriority.HIGHEST)
+        public static void onIgnite(BlockIgniteEvent event) {
             if (event.isCancelled()) return;
             if (!NeoArtisanAPI.getArtisanBlockStorage().isArtisanBlock(event.getBlock())) return;
             if (!(NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlockData(event.getBlock()) instanceof ArtisanTransparentBlockData artisanTransparentBlockData)) return;
