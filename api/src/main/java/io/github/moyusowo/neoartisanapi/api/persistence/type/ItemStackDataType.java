@@ -38,7 +38,11 @@ public class ItemStackDataType implements PersistentDataType<byte[], ItemStack> 
     /**
      * 全局唯一实例
      */
-    public static ItemStackDataType ITEM_STACK = new ItemStackDataType();
+    public static ItemStackDataType ITEM_STACK;
+
+    static {
+        ITEM_STACK = new ItemStackDataType();
+    }
 
     private ItemStackDataType() {}
 
