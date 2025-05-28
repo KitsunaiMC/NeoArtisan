@@ -2,6 +2,7 @@ package io.github.moyusowo.neoartisanapi.api.block.gui;
 
 import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
 import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlockData;
+import io.github.moyusowo.neoartisanapi.api.block.event.ArtisanBlockBreakEvent;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
@@ -9,7 +10,9 @@ import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -124,6 +127,18 @@ public abstract class ArtisanBlockGUI implements BlockInventoryHolder, Listener 
     }
 
     /**
+     * 该GUI绑定的BlockData销毁时的逻辑，由插件实现调用。
+     *
+     * <p>监听器必须注销！否则会残留GUI对方块的绑定！</p>
+     *
+     * @implNote 若该方法耗时太长，可能堵塞方块数据储存
+     * @since 1.2.0
+     */
+    public void onTerminate() {
+        HandlerList.unregisterAll(this);
+    }
+
+    /**
      * 抽象方法：初始化库存物品
      * <p>
      * 子类必须实现此方法，在构造时设置库存的初始物品布局。
@@ -135,7 +150,8 @@ public abstract class ArtisanBlockGUI implements BlockInventoryHolder, Listener 
      * 库存点击事件处理（默认取消所有操作）
      */
     @EventHandler
-    protected void onClick(InventoryClickEvent event) {
+    public void onClick(InventoryClickEvent event) {
+        if (event.getClickedInventory() == null) return;
         if (!(event.getClickedInventory().getHolder(false) instanceof ArtisanBlockGUI)) return;
         event.setCancelled(true);
     }
@@ -144,7 +160,9 @@ public abstract class ArtisanBlockGUI implements BlockInventoryHolder, Listener 
      * 方块交互事件处理（默认打开GUI）
      */
     @EventHandler(priority = EventPriority.LOWEST)
-    protected void onInteract(PlayerInteractEvent event) {
+    public void onInteract(PlayerInteractEvent event) {
+        if (event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
+        if (event.getClickedBlock() == null) return;
         if (!event.getClickedBlock().getLocation().equals(this.location)) return;
         event.setCancelled(true);
         event.getPlayer().openInventory(this.inventory);
