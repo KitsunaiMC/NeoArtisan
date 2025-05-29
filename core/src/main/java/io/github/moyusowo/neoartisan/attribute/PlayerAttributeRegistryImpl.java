@@ -52,7 +52,7 @@ public class PlayerAttributeRegistryImpl implements PlayerAttributeRegistry {
                 throw RegisterManager.RegisterException.exception();
             }
         } catch (RegisterManager.RegisterException e) {
-            NeoArtisan.logger().info(RegisterManager.eTips);
+            NeoArtisan.logger().severe(RegisterManager.eTips);
         }
     }
 

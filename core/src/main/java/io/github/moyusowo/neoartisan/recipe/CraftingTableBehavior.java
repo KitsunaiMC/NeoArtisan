@@ -28,7 +28,7 @@ final class CraftingTableBehavior implements Listener {
         NeoArtisan.registerListener(new CraftingTableBehavior());
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     private void onPrepareItemCraft(PrepareItemCraftEvent event) {
         CraftingInventory inventory = event.getInventory();
         ItemStack[] matrix = inventory.getMatrix();
@@ -58,7 +58,7 @@ final class CraftingTableBehavior implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.LOWEST)
+    @EventHandler(priority = EventPriority.HIGHEST)
     private void onItemCraft(InventoryClickEvent event) {
         if (event.isCancelled()) return;
         if (!(event.getClickedInventory() instanceof CraftingInventory inventory)) return;

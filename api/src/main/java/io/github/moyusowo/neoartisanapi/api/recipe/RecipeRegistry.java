@@ -68,4 +68,18 @@ public interface RecipeRegistry {
     @NotNull
     ArtisanShapelessRecipe createShapelessRecipe(NamespacedKey result, int count);
 
+    /**
+     * 创建预设结果的熔炉配方模板。
+     *
+     * @param input 合成材料ID（不能为null）
+     * @param result 合成结果物品ID（不能为null）
+     * @param count 产出数量（不能超过堆叠上限）
+     * @return 配方构建器实例（不会为null）
+     * @throws IllegalArgumentException 如果数量超出范围或物品未注册
+     * @see ArtisanShapelessRecipe
+     * @apiNote 不能再使用原版的MaterialChoice去注册熔炉配方！
+     */
+    @NotNull
+    ArtisanFurnaceRecipe createFurnaceRecipe(@NotNull NamespacedKey input, @NotNull NamespacedKey result, int count, int cookTime, int exp);
+
 }

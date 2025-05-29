@@ -6,15 +6,22 @@ import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
 import io.github.moyusowo.neoartisan.util.ArrayKey;
 import io.github.moyusowo.neoartisan.util.terminate.TerminateMethod;
+import io.github.moyusowo.neoartisanapi.api.recipe.ArtisanFurnaceRecipe;
 import io.github.moyusowo.neoartisanapi.api.recipe.ArtisanShapedRecipe;
 import io.github.moyusowo.neoartisanapi.api.recipe.ArtisanShapelessRecipe;
 import io.github.moyusowo.neoartisanapi.api.recipe.RecipeRegistry;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.event.Listener;
+import org.bukkit.inventory.FurnaceRecipe;
+import org.bukkit.inventory.Recipe;
+import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.plugin.ServicePriority;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 final class RecipeRegistryImpl implements Listener, RecipeRegistry {
@@ -34,6 +41,8 @@ final class RecipeRegistryImpl implements Listener, RecipeRegistry {
         instance = this;
         shapedRegistry = new ConcurrentHashMap<>();
         shapelessRegistry = new ConcurrentHashMap<>();
+        furnaceRegistry = new ConcurrentHashMap<>();
+        registerMinecraftFurnaceRecipe();
         registerListener();
         Bukkit.getServicesManager().register(
                 RecipeRegistry.class,
@@ -43,8 +52,27 @@ final class RecipeRegistryImpl implements Listener, RecipeRegistry {
         );
     }
 
+    private void registerMinecraftFurnaceRecipe() {
+        List<NamespacedKey> remove = new ArrayList<>();
+        var it = Bukkit.recipeIterator();
+        while (it.hasNext()) {
+            Recipe recipe = it.next();
+            if (recipe instanceof FurnaceRecipe furnaceRecipe) {
+                if (furnaceRecipe.getInputChoice() instanceof RecipeChoice.MaterialChoice materialChoice) {
+                    for (Material material : materialChoice.getChoices()) {
+                        NeoArtisan.logger().info(material.getKey().asString() + " " + furnaceRecipe.getResult().getType().getKey().asString() + " " + furnaceRecipe.getResult().getAmount() + " " + furnaceRecipe.getCookingTime() + " " + furnaceRecipe.getExperience());
+                        register(material.getKey(), new ArtisanFurnaceRecipeImpl(material.getKey(), furnaceRecipe.getResult().getType().getKey(), furnaceRecipe.getResult().getAmount(), furnaceRecipe.getCookingTime(), furnaceRecipe.getExperience()));
+                    }
+                    remove.add(furnaceRecipe.getKey());
+                }
+            }
+        }
+        remove.forEach(Bukkit::removeRecipe);
+    }
+
     final ConcurrentHashMap<ArrayKey, ArtisanShapedRecipe> shapedRegistry;
     final ConcurrentHashMap<ArrayKey, ArtisanShapelessRecipe> shapelessRegistry;
+    final ConcurrentHashMap<NamespacedKey, ArtisanFurnaceRecipe> furnaceRegistry;
 
     @Override
     @NotNull
@@ -56,7 +84,7 @@ final class RecipeRegistryImpl implements Listener, RecipeRegistry {
                 throw RegisterManager.RegisterException.exception();
             }
         } catch (RegisterManager.RegisterException e) {
-            NeoArtisan.logger().info(RegisterManager.eTips);
+            NeoArtisan.logger().severe(RegisterManager.eTips);
         }
         return null;
     }
@@ -71,7 +99,7 @@ final class RecipeRegistryImpl implements Listener, RecipeRegistry {
                 throw RegisterManager.RegisterException.exception();
             }
         } catch (RegisterManager.RegisterException e) {
-            NeoArtisan.logger().info(RegisterManager.eTips);
+            NeoArtisan.logger().severe(RegisterManager.eTips);
         }
         return null;
     }
@@ -86,7 +114,21 @@ final class RecipeRegistryImpl implements Listener, RecipeRegistry {
                 throw RegisterManager.RegisterException.exception();
             }
         } catch (RegisterManager.RegisterException e) {
-            NeoArtisan.logger().info(RegisterManager.eTips);
+            NeoArtisan.logger().severe(RegisterManager.eTips);
+        }
+        return null;
+    }
+
+    @Override
+    public @NotNull ArtisanFurnaceRecipe createFurnaceRecipe(@NotNull NamespacedKey input, @NotNull NamespacedKey result, int count, int cookTime, int exp) {
+        try {
+            if (RegisterManager.isOpen()) {
+                return new ArtisanFurnaceRecipeImpl(input, result, count, cookTime, exp);
+            } else {
+                throw RegisterManager.RegisterException.exception();
+            }
+        } catch (RegisterManager.RegisterException e) {
+            NeoArtisan.logger().severe(RegisterManager.eTips);
         }
         return null;
     }
@@ -101,6 +143,10 @@ final class RecipeRegistryImpl implements Listener, RecipeRegistry {
 
     void register(ArrayKey identifier, ArtisanShapelessRecipe r) {
         shapelessRegistry.put(identifier, r);
+    }
+
+    void register(NamespacedKey identifier, ArtisanFurnaceRecipe r) {
+        furnaceRegistry.put(identifier, r);
     }
 
     @TerminateMethod

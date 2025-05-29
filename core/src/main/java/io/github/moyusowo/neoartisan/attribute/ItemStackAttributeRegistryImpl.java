@@ -52,7 +52,7 @@ public class ItemStackAttributeRegistryImpl implements ItemStackAttributeRegistr
                 throw RegisterManager.RegisterException.exception();
             }
         } catch (RegisterManager.RegisterException e) {
-            NeoArtisan.logger().info(RegisterManager.eTips);
+            NeoArtisan.logger().severe(RegisterManager.eTips);
         }
     }
 
