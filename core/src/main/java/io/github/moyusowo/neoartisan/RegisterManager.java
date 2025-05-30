@@ -64,9 +64,9 @@ public final class RegisterManager {
                 try {
                     method.invoke(null);
                 } catch (InvocationTargetException | IllegalAccessException e) {
-                    NeoArtisan.logger().info("注册方法 " + method.getDeclaringClass().getPackageName() + "." + method.getDeclaringClass().getName() + " 执行失败：" + e.getLocalizedMessage());
+                    NeoArtisan.logger().info("注册方法 "  + method.getDeclaringClass().getName() + "." + method.getName() + " 执行失败：" + e.getLocalizedMessage());
                 }
-                NeoArtisan.logger().info("成功执行注册方法：" + method.getDeclaringClass().getPackageName() + "." + method.getDeclaringClass().getName());
+                NeoArtisan.logger().info("成功执行注册方法："  + method.getDeclaringClass().getName() + "." + method.getName());
             }
         }
     }
