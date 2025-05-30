@@ -84,7 +84,7 @@ final class RecipeRegistryImpl implements Listener, RecipeRegistry, RecipeRegist
     private final ConcurrentHashMap<ArrayKey, ArtisanRecipe> recipeRegistry;
 
     @Override
-    public void register(ArtisanRecipe recipe) {
+    public void register(@NotNull ArtisanRecipe recipe) {
         try {
             if (RegisterManager.isOpen()) {
                 ArrayKey arrayKey = ArrayKey.from(recipe.getInputs());
@@ -104,7 +104,7 @@ final class RecipeRegistryImpl implements Listener, RecipeRegistry, RecipeRegist
     }
 
     @Override
-    public ArtisanRecipe getRecipe(NamespacedKey key) {
+    public @NotNull ArtisanRecipe getRecipe(@NotNull NamespacedKey key) {
         return recipeRegistry.get(toKey.get(key));
     }
 
