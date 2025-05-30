@@ -1,24 +1,20 @@
-package io.github.moyusowo.neoartisan.recipe;
+package io.github.moyusowo.neoartisan.recipe.behavior;
 
 import io.github.moyusowo.neoartisan.NeoArtisan;
+import io.github.moyusowo.neoartisan.recipe.internal.RecipeRegistryInternal;
+import io.github.moyusowo.neoartisan.util.ArrayKey;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
 import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
-import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
+import io.github.moyusowo.neoartisanapi.api.recipe.ArtisanFurnaceRecipe;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
-import org.bukkit.block.Furnace;
-import org.bukkit.craftbukkit.block.CraftFurnace;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.FurnaceBurnEvent;
-import org.bukkit.event.inventory.FurnaceSmeltEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.*;
 
-import java.security.Timestamp;
-import java.util.Timer;
 import java.util.UUID;
 
 final class FurnaceBehavior implements Listener {
@@ -51,19 +47,18 @@ final class FurnaceBehavior implements Listener {
         final ItemStack itemStack = event.getCursor();
         if (itemStack.isEmpty()) return;
         if (!hasRecipe(itemStack)) {
-            NamespacedKey registryId = NeoArtisanAPI.getItemRegistry().getRegistryId(itemStack);
-            System.out.println(registryId.asString());
-            if (RecipeRegistryImpl.getInstance().furnaceRegistry.containsKey(registryId)) {
-                System.out.println("contains");
-                ArtisanFurnaceRecipeImpl artisanFurnaceRecipe = (ArtisanFurnaceRecipeImpl) RecipeRegistryImpl.getInstance().furnaceRegistry.get(registryId);
-                FurnaceRecipe r = new FurnaceRecipe(
-                        new NamespacedKey(registryId.namespace(), registryId.getKey() + "_" + System.currentTimeMillis() + "_" + UUID.randomUUID().toString().toLowerCase()),
-                        NeoArtisanAPI.getItemRegistry().getItemStack(artisanFurnaceRecipe.getResult()),
+            ArrayKey furnaceKey = ArrayKeyUtil.toFurnaceKey(itemStack);
+            NeoArtisan.logger().info(furnaceKey.toString());
+            RecipeRegistryInternal registryInternal = (RecipeRegistryInternal) NeoArtisanAPI.getRecipeRegistry();
+            if (registryInternal.has(furnaceKey) && registryInternal.get(furnaceKey) instanceof ArtisanFurnaceRecipe r) {
+                FurnaceRecipe recipe = new FurnaceRecipe(
+                        new NamespacedKey(r.getKey().namespace(), r.getKey().getKey() + "_" + System.currentTimeMillis() + "_" + UUID.randomUUID().toString().toLowerCase()),
+                        r.getResultGenerator().generate(),
                         new RecipeChoice.ExactChoice(itemStack),
-                        artisanFurnaceRecipe.getExp(),
-                        artisanFurnaceRecipe.getCookTime()
+                        r.getExp(),
+                        r.getCookTime()
                 );
-                Bukkit.addRecipe(r);
+                Bukkit.addRecipe(recipe);
             }
         }
     }

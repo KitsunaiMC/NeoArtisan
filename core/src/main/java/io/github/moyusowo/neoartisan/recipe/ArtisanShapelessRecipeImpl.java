@@ -2,105 +2,126 @@ package io.github.moyusowo.neoartisan.recipe;
 
 import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisan.util.ArrayKey;
+import io.github.moyusowo.neoartisan.util.init.InitMethod;
+import io.github.moyusowo.neoartisan.util.init.InitPriority;
 import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
 import io.github.moyusowo.neoartisanapi.api.item.ArtisanItem;
+import io.github.moyusowo.neoartisanapi.api.item.ItemGenerator;
 import io.github.moyusowo.neoartisanapi.api.recipe.ArtisanShapelessRecipe;
+import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.ServicePriority;
+import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 class ArtisanShapelessRecipeImpl implements ArtisanShapelessRecipe {
+    private final NamespacedKey key;
     private final NamespacedKey[] recipe;
-    private NamespacedKey result;
-    private int count;
-    private int i;
-    private boolean built;
+    private final ItemGenerator resultGenerator;
 
-    static ArrayKey toRegistryKey(ItemStack[] matrix) {
-        NamespacedKey[] matrixKeys = new NamespacedKey[9];
+    @InitMethod(priority = InitPriority.REGISTRAR)
+    public static void init() {
+        Bukkit.getServicesManager().register(
+                Builder.class,
+                new BuilderImpl(),
+                NeoArtisan.instance(),
+                ServicePriority.Normal
+        );
+    }
+
+    public ArtisanShapelessRecipeImpl(NamespacedKey key, List<NamespacedKey> recipe, ItemGenerator resultGenerator) {
+        this.key = key;
+        this.recipe = new NamespacedKey[9];
         for (int i = 0; i < 9; i++) {
-            if (matrix[i] != null) {
-                matrixKeys[i] = NeoArtisanAPI.getItemRegistry().getRegistryId(matrix[i]);
+            if (i < recipe.size()) {
+                this.recipe[i] = recipe.get(i);
             } else {
-                matrixKeys[i] = ArtisanItem.EMPTY;
+                this.recipe[i] = ArtisanItem.EMPTY;
             }
         }
-        Arrays.sort(matrixKeys);
-        return ArrayKey.from(matrixKeys);
-    }
-
-    public ArtisanShapelessRecipeImpl() {
-        this.recipe = new NamespacedKey[9];
-        this.i = 0;
-        this.built = false;
-        Arrays.fill(recipe, ArtisanItem.EMPTY);
-    }
-
-    public ArtisanShapelessRecipeImpl(NamespacedKey result, int count) {
-        this();
-        this.result = result;
-        this.count = count;
+        Arrays.sort(this.recipe);
+        NeoArtisan.logger().info(Arrays.toString(this.recipe));
+        this.resultGenerator = resultGenerator;
     }
 
     @Override
-    public ArtisanShapelessRecipe add(NamespacedKey registryId) {
-        try {
-            if (built) throw new IllegalAccessException("It's already registered!");
-        } catch (IllegalAccessException e) {
-            NeoArtisan.logger().severe(e.getLocalizedMessage());
-        }
-        if (i == recipe.length) throw new ArrayIndexOutOfBoundsException("You can no longer add!");
-        recipe[i++] = registryId;
-        return this;
+    public @NotNull NamespacedKey getKey() {
+        return key;
     }
 
     @Override
-    @SuppressWarnings("unused")
-    public ArtisanShapelessRecipe add(NamespacedKey... registryIds) {
-        try {
-            if (built) throw new IllegalAccessException("It's already registered!");
-        } catch (IllegalAccessException e) {
-            NeoArtisan.logger().severe(e.getLocalizedMessage());
-        }
-        if (registryIds.length + i > recipe.length) throw new ArrayIndexOutOfBoundsException("You can no long add!");
-        for (NamespacedKey registryId : registryIds) {
-            recipe[i++] = registryId;
-        }
-        return this;
+    public @NotNull NamespacedKey[] getInputs() {
+        return Arrays.copyOf(recipe, recipe.length);
     }
 
     @Override
-    @SuppressWarnings("unused")
-    public ArtisanShapelessRecipe setResult(NamespacedKey registryId, int count) {
-        try {
-            if (built) throw new IllegalAccessException("It's already registered!");
-        } catch (IllegalAccessException e) {
-            NeoArtisan.logger().severe(e.getLocalizedMessage());
+    public @NotNull ItemGenerator getResultGenerator() {
+        return resultGenerator;
+    }
+
+    public static final class BuilderImpl implements Builder {
+        private NamespacedKey key;
+        private final List<NamespacedKey> itemIds;
+        private ItemGenerator resultGenerator;
+
+        public BuilderImpl() {
+            this.itemIds = new ArrayList<>();
+            this.key = null;
+            this.resultGenerator = null;
         }
-        result = registryId;
-        this.count = count;
-        return this;
-    }
 
-    @Override
-    public void build() {
-        try {
-            if (built) throw new IllegalAccessException("It's already registered!");
-        } catch (IllegalAccessException e) {
-            NeoArtisan.logger().severe(e.getLocalizedMessage());
+        @Override
+        public @NotNull Builder key(NamespacedKey key) {
+            this.key = key;
+            return this;
         }
-        NamespacedKey[] builtRecipe = Arrays.copyOf(recipe, recipe.length);
-        Arrays.sort(builtRecipe);
-        RecipeRegistryImpl.getInstance().register(ArrayKey.from(builtRecipe), this);
-        built = true;
-    }
 
-    protected NamespacedKey getResult() {
-        return result;
-    }
+        @Override
+        public @NotNull Builder add(@NotNull NamespacedKey itemId) {
+            if (itemIds.size() + 1 > 9) {
+                throw new ArrayIndexOutOfBoundsException("You can no long add!");
+            } else {
+                itemIds.add(itemId);
+            }
+            return this;
+        }
 
-    protected int getCount() {
-        return count;
+        @Override
+        public @NotNull Builder add(@NotNull NamespacedKey... itemIds) {
+            if (this.itemIds.size() + itemIds.length > 9) {
+                throw new ArrayIndexOutOfBoundsException("You can no long add!");
+            } else {
+                this.itemIds.addAll(Arrays.stream(itemIds).toList());
+            }
+            return this;
+        }
+
+        @Override
+        public @NotNull Builder add(@NotNull NamespacedKey itemId, int count) {
+            if (this.itemIds.size() + count > 9) {
+                throw new ArrayIndexOutOfBoundsException("You can no long add!");
+            } else {
+                for (int i = 0; i < count; i++) {
+                    this.itemIds.add(itemId);
+                }
+            }
+            return this;
+        }
+
+        @Override
+        public @NotNull Builder resultGenerator(ItemGenerator resultGenerator) {
+            this.resultGenerator = resultGenerator;
+            return this;
+        }
+
+        @Override
+        public @NotNull ArtisanShapelessRecipe build() {
+            if (key == null || resultGenerator == null) throw new IllegalCallerException("You have to fill all the params before build!");
+            return new ArtisanShapelessRecipeImpl(key, itemIds, resultGenerator);
+        }
     }
 }
