@@ -5,6 +5,7 @@ import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
 import io.github.moyusowo.neoartisanapi.api.item.ItemGenerator;
 import io.github.moyusowo.neoartisanapi.api.recipe.ArtisanFurnaceRecipe;
+import io.github.moyusowo.neoartisanapi.api.recipe.RecipeType;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.ServicePriority;
@@ -49,6 +50,11 @@ class ArtisanFurnaceRecipeImpl implements ArtisanFurnaceRecipe {
     @Override
     public @NotNull NamespacedKey getKey() {
         return key;
+    }
+
+    @Override
+    public @NotNull RecipeType getType() {
+        return RecipeType.FURNACE;
     }
 
     @Override

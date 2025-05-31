@@ -29,6 +29,14 @@ public interface ArtisanRecipe {
     @NotNull NamespacedKey getKey();
 
     /**
+     * 获取配方类型
+     *
+     * @return 非null的配方类型
+     * @see RecipeType
+     */
+    @NotNull RecipeType getType();
+
+    /**
      * 获取配方所需的输入材料数组
      *
      * <p><b>注意事项：</b></p>

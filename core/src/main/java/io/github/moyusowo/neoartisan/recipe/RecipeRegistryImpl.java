@@ -87,7 +87,7 @@ final class RecipeRegistryImpl implements Listener, RecipeRegistry, RecipeRegist
     public void register(@NotNull ArtisanRecipe recipe) {
         try {
             if (RegisterManager.isOpen()) {
-                ArrayKey arrayKey = ArrayKey.from(recipe.getInputs());
+                ArrayKey arrayKey = ArrayKey.from(recipe.getInputs(), recipe.getType());
                 toKey.put(recipe.getKey(), arrayKey);
                 recipeRegistry.put(arrayKey, recipe);
             } else {

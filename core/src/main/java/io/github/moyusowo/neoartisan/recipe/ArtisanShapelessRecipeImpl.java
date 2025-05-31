@@ -1,16 +1,14 @@
 package io.github.moyusowo.neoartisan.recipe;
 
 import io.github.moyusowo.neoartisan.NeoArtisan;
-import io.github.moyusowo.neoartisan.util.ArrayKey;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
-import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
 import io.github.moyusowo.neoartisanapi.api.item.ArtisanItem;
 import io.github.moyusowo.neoartisanapi.api.item.ItemGenerator;
 import io.github.moyusowo.neoartisanapi.api.recipe.ArtisanShapelessRecipe;
+import io.github.moyusowo.neoartisanapi.api.recipe.RecipeType;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.ServicePriority;
 import org.jetbrains.annotations.NotNull;
 
@@ -44,13 +42,17 @@ class ArtisanShapelessRecipeImpl implements ArtisanShapelessRecipe {
             }
         }
         Arrays.sort(this.recipe);
-        NeoArtisan.logger().info(Arrays.toString(this.recipe));
         this.resultGenerator = resultGenerator;
     }
 
     @Override
     public @NotNull NamespacedKey getKey() {
         return key;
+    }
+
+    @Override
+    public @NotNull RecipeType getType() {
+        return RecipeType.SHAPELESS;
     }
 
     @Override

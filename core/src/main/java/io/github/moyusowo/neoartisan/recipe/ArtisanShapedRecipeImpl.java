@@ -1,17 +1,14 @@
 package io.github.moyusowo.neoartisan.recipe;
 
 import io.github.moyusowo.neoartisan.NeoArtisan;
-import io.github.moyusowo.neoartisan.util.ArrayKey;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
-import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
 import io.github.moyusowo.neoartisanapi.api.item.ArtisanItem;
 import io.github.moyusowo.neoartisanapi.api.item.ItemGenerator;
 import io.github.moyusowo.neoartisanapi.api.recipe.ArtisanShapedRecipe;
-import io.github.moyusowo.neoartisanapi.api.recipe.RecipeRegistry;
+import io.github.moyusowo.neoartisanapi.api.recipe.RecipeType;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.ServicePriority;
 import org.jetbrains.annotations.NotNull;
 
@@ -43,6 +40,11 @@ class ArtisanShapedRecipeImpl implements ArtisanShapedRecipe {
     @Override
     public @NotNull NamespacedKey getKey() {
         return key;
+    }
+
+    @Override
+    public @NotNull RecipeType getType() {
+        return RecipeType.SHAPED;
     }
 
     @Override

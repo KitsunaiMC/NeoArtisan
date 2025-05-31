@@ -50,13 +50,11 @@ final class CraftingTableBehavior implements Listener {
             }
         }
         ArrayKey shapedKey = ArrayKeyUtil.toShapedKey(matrix);
-        NeoArtisan.logger().info(shapedKey.toString());
         RecipeRegistryInternal registryInternal = (RecipeRegistryInternal) NeoArtisanAPI.getRecipeRegistry();
         if (registryInternal.has(shapedKey) && registryInternal.get(shapedKey) instanceof ArtisanShapedRecipe r) {
             event.getInventory().setResult(r.getResultGenerator().generate());
         } else {
             ArrayKey shapelessKey = ArrayKeyUtil.toShapelessKey(matrix);
-            NeoArtisan.logger().info(shapelessKey.toString());
             if (registryInternal.has(shapelessKey) && registryInternal.get(shapelessKey) instanceof ArtisanShapelessRecipe r) {
                 event.getInventory().setResult(r.getResultGenerator().generate());
             }

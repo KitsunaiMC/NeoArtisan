@@ -3,6 +3,7 @@ package io.github.moyusowo.neoartisan.recipe.behavior;
 import io.github.moyusowo.neoartisan.util.ArrayKey;
 import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
 import io.github.moyusowo.neoartisanapi.api.item.ArtisanItem;
+import io.github.moyusowo.neoartisanapi.api.recipe.RecipeType;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 
@@ -19,7 +20,7 @@ public final class ArrayKeyUtil {
                 matrixKeys[i] = ArtisanItem.EMPTY;
             }
         }
-        return ArrayKey.from(matrixKeys);
+        return ArrayKey.from(matrixKeys, RecipeType.SHAPED);
     }
 
     public static ArrayKey toShapelessKey(ItemStack[] matrix) {
@@ -32,11 +33,11 @@ public final class ArrayKeyUtil {
             }
         }
         Arrays.sort(matrixKeys);
-        return ArrayKey.from(matrixKeys);
+        return ArrayKey.from(matrixKeys, RecipeType.SHAPELESS);
     }
 
     public static ArrayKey toFurnaceKey(ItemStack itemStack) {
         NamespacedKey key = NeoArtisanAPI.getItemRegistry().getRegistryId(itemStack);
-        return ArrayKey.from(new NamespacedKey[] {key});
+        return ArrayKey.from(new NamespacedKey[] {key}, RecipeType.FURNACE);
     }
 }

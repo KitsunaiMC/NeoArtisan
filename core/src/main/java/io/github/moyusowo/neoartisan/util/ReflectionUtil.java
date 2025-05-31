@@ -24,7 +24,6 @@ public class ReflectionUtil {
             SECTION_BLOCK_UPDATE_POS.setAccessible(true);
             SECTION_BLOCK_UPDATE_STATE = ClientboundSectionBlocksUpdatePacket.class.getDeclaredField("states");
             SECTION_BLOCK_UPDATE_STATE.setAccessible(true);
-            System.out.println("success");
         } catch (NoSuchFieldException e) {
             throw new RuntimeException(e);
         }
