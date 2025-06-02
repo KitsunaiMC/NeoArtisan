@@ -14,7 +14,6 @@ import io.papermc.paper.command.brigadier.argument.ArgumentTypes;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
-import net.minecraft.ChatFormatting;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 

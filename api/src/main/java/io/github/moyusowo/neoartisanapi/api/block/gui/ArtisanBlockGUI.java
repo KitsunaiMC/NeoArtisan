@@ -2,7 +2,6 @@ package io.github.moyusowo.neoartisanapi.api.block.gui;
 
 import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
 import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlockData;
-import io.github.moyusowo.neoartisanapi.api.block.event.ArtisanBlockBreakEvent;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;

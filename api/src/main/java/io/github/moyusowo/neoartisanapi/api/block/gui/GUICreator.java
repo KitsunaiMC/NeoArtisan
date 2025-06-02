@@ -2,7 +2,6 @@ package io.github.moyusowo.neoartisanapi.api.block.gui;
 
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * GUI创建函数式接口，用于延迟初始化方块GUI

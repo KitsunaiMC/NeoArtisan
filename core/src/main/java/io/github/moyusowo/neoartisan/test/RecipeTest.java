@@ -1,8 +1,6 @@
 package io.github.moyusowo.neoartisan.test;
 
 import io.github.moyusowo.neoartisan.NeoArtisan;
-import io.github.moyusowo.neoartisan.util.init.InitMethod;
-import io.github.moyusowo.neoartisan.util.init.InitPriority;
 import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
 import io.github.moyusowo.neoartisanapi.api.item.ItemGenerator;
 import io.github.moyusowo.neoartisanapi.api.recipe.ArtisanFurnaceRecipe;
@@ -10,7 +8,6 @@ import io.github.moyusowo.neoartisanapi.api.recipe.ArtisanShapedRecipe;
 import io.github.moyusowo.neoartisanapi.api.recipe.ArtisanShapelessRecipe;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.checkerframework.checker.units.qual.N;
 
 final class RecipeTest {
 

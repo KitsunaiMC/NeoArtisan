@@ -1,5 +1,6 @@
 package io.github.moyusowo.neoartisan.util.init;
 
+@SuppressWarnings("unused")
 public enum InitPriority {
     REGISTRY_LOAD(1),
     REGISTRAR(2),

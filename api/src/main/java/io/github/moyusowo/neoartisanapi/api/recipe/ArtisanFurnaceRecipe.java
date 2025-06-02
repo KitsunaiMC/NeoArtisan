@@ -29,6 +29,7 @@ import org.jetbrains.annotations.NotNull;
  * @see ArtisanRecipe 基础配方接口
  * @since 1.0.2
  */
+@SuppressWarnings("unused")
 public interface ArtisanFurnaceRecipe extends ArtisanRecipe {
 
     /**

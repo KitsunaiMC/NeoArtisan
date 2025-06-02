@@ -17,6 +17,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import static io.github.moyusowo.neoartisan.util.Util.saveDefaultIfNotExists;
 
+@SuppressWarnings("unused")
 public final class BlockMappingsManager {
 
     private BlockMappingsManager() {}

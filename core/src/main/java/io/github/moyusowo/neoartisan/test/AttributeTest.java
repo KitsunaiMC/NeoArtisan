@@ -1,8 +1,6 @@
 package io.github.moyusowo.neoartisan.test;
 
 import io.github.moyusowo.neoartisan.NeoArtisan;
-import io.github.moyusowo.neoartisan.util.init.InitMethod;
-import io.github.moyusowo.neoartisan.util.init.InitPriority;
 import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
 import org.bukkit.NamespacedKey;
 import org.bukkit.persistence.PersistentDataType;

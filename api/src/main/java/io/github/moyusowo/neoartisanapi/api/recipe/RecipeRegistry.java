@@ -5,8 +5,6 @@ import org.bukkit.NamespacedKey;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
-
 /**
  * 自定义合成配方注册表API，提供标准化的配方创建接口。
  *
