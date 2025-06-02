@@ -1,12 +1,16 @@
 package io.github.moyusowo.neoartisan.item;
 
 import io.github.moyusowo.neoartisan.NeoArtisan;
+import io.github.moyusowo.neoartisan.util.init.InitMethod;
+import io.github.moyusowo.neoartisan.util.init.InitPriority;
 import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
 import io.github.moyusowo.neoartisanapi.api.item.*;
 import io.github.moyusowo.neoartisan.util.NamespacedKeyDataType;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.*;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
@@ -15,13 +19,27 @@ import org.bukkit.inventory.EquipmentSlotGroup;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.plugin.ServicePriority;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @SuppressWarnings({"unused", "UnstableApiUsage"})
 class ArtisanItemImpl implements ArtisanItem {
+
+    @InitMethod(priority = InitPriority.REGISTRAR)
+    public static void init() {
+        Bukkit.getServicesManager().register(
+                Builder.class,
+                new BuilderImpl(),
+                NeoArtisan.instance(),
+                ServicePriority.Normal
+        );
+    }
+
     private final NamespacedKey registryId;
     private final Material rawMaterial;
     private final boolean hasOriginalCraft;
@@ -287,6 +305,184 @@ class ArtisanItemImpl implements ArtisanItem {
         itemMeta.getPersistentDataContainer().set(NeoArtisan.getArtisanItemIdKey(), NamespacedKeyDataType.NAMESPACED_KEY, this.registryId);
         itemStack.setItemMeta(itemMeta);
         return itemStack;
+    }
+
+    @SuppressWarnings("UnstableApiUsage")
+    private static class BuilderImpl implements Builder {
+        private NamespacedKey registryId;
+        private Material rawMaterial;
+        private boolean hasOriginalCraft;
+        private CustomModelData customModelData;
+        private Component displayName;
+        private List<Component> lore;
+        private FoodProperty foodProperty;
+        private WeaponProperty weaponProperty;
+        private Integer maxDurability;
+        private ArmorProperty armorProperty;
+        private AttributePropertyImpl attributeProperty;
+        private NamespacedKey blockId;
+        private NamespacedKey itemModel;
+
+        private BuilderImpl() {
+            this.registryId = null;
+            this.rawMaterial = null;
+            this.hasOriginalCraft = false;
+            this.customModelData = null;
+            this.displayName = null;
+            this.lore = new ArrayList<>();
+            this.foodProperty = FoodProperty.EMPTY;
+            this.weaponProperty = WeaponProperty.EMPTY;
+            this.maxDurability = null;
+            this.armorProperty = ArmorProperty.EMPTY;
+            this.attributeProperty = new AttributePropertyImpl();
+            this.blockId = null;
+            this.itemModel = null;
+        }
+
+        @NotNull
+        @Override
+        public Builder registryId(@NotNull NamespacedKey registryId) {
+            this.registryId = Objects.requireNonNull(registryId);
+            return this;
+        }
+
+        @NotNull
+        @Override
+        public Builder rawMaterial(@NotNull Material rawMaterial) {
+            this.rawMaterial = Objects.requireNonNull(rawMaterial);
+            return this;
+        }
+
+        @NotNull
+        @Override
+        public Builder hasOriginalCraft(boolean hasOriginalCraft) {
+            this.hasOriginalCraft = hasOriginalCraft;
+            return this;
+        }
+
+        @NotNull
+        @Override
+        public Builder customModelData(@NotNull CustomModelData customModelData) {
+            this.customModelData = customModelData;
+            return this;
+        }
+
+        @NotNull
+        @Override
+        public Builder displayName(@NotNull String displayName) {
+            this.displayName = toNameComponent(Objects.requireNonNull(displayName));
+            return this;
+        }
+
+        @NotNull
+        @Override
+        public Builder displayName(@NotNull Component component) {
+            this.displayName = Objects.requireNonNull(component);
+            return this;
+        }
+
+        @NotNull
+        @Override
+        public Builder lore(@NotNull List<String> lore) {
+            this.lore = toLoreComponentList(Objects.requireNonNull(lore));
+            return this;
+        }
+
+        @NotNull
+        @Override
+        public Builder loreComponent(@NotNull List<Component> lore) {
+            this.lore = Objects.requireNonNull(lore);
+            return this;
+        }
+
+        @NotNull
+        @Override
+        public Builder foodProperty(@NotNull FoodProperty foodProperty) {
+            this.foodProperty = Objects.requireNonNull(foodProperty);
+            return this;
+        }
+
+        @NotNull
+        @Override
+        public Builder weaponProperty(@NotNull WeaponProperty weaponProperty) {
+            this.weaponProperty = Objects.requireNonNull(weaponProperty);
+            return this;
+        }
+
+        @NotNull
+        @Override
+        public Builder maxDurability(int maxDurability) {
+            this.maxDurability = maxDurability;
+            return this;
+        }
+
+        @NotNull
+        @Override
+        public Builder armorProperty(@NotNull ArmorProperty armorProperty) {
+            this.armorProperty = Objects.requireNonNull(armorProperty);
+            return this;
+        }
+
+        @NotNull
+        @Override
+        public Builder attributeProperty(@NotNull AttributeProperty attributeProperty) {
+            this.attributeProperty = Objects.requireNonNull((AttributePropertyImpl) attributeProperty);
+            return this;
+        }
+
+        @NotNull
+        @Override
+        public Builder blockId(@NotNull NamespacedKey cropId) {
+            this.blockId = cropId;
+            return this;
+        }
+
+        @NotNull
+        @Override
+        public Builder itemModel(@NotNull NamespacedKey itemModel) {
+            this.itemModel = itemModel;
+            return this;
+        }
+
+        @Override
+        @NotNull
+        public ArtisanItem build() {
+            if (registryId == null || rawMaterial == null) {
+                throw new IllegalArgumentException("You should at least provide registryId and rawMaterial!");
+            }
+            return new ArtisanItemImpl(
+                    registryId,
+                    rawMaterial,
+                    hasOriginalCraft,
+                    customModelData,
+                    displayName,
+                    lore,
+                    foodProperty,
+                    weaponProperty,
+                    maxDurability,
+                    armorProperty,
+                    attributeProperty,
+                    blockId,
+                    itemModel
+            );
+        }
+
+        private static Component toNameComponent(String s) {
+            s = "<white><italic:false>" + s;
+            return MiniMessage.miniMessage().deserialize(s);
+        }
+
+        private static List<Component> toLoreComponentList(List<String> list) {
+            List<Component> newList = new ArrayList<>();
+            for (String s : list) {
+                newList.add(
+                        MiniMessage.miniMessage().deserialize(
+                                "<gray><italic:false>" + s
+                        )
+                );
+            }
+            return newList;
+        }
     }
 
 }

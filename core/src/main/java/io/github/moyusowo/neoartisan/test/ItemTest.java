@@ -25,7 +25,7 @@ final class ItemTest {
     private static void register() {
         if (NeoArtisan.isDebugMode()) {
             NeoArtisanAPI.getItemRegistry().registerItem(
-                    NeoArtisanAPI.getItemRegistry().builder()
+                    ArtisanItem.builder()
                             .registryId(broken_stick)
                             .rawMaterial(Material.STICK)
                             .hasOriginalCraft(true)
@@ -37,9 +37,10 @@ final class ItemTest {
                                     )
                             )
                             .blockId(new NamespacedKey(NeoArtisan.instance(), "magic_crop"))
+                            .build()
             );
             NeoArtisanAPI.getItemRegistry().registerItem(
-                    NeoArtisanAPI.getItemRegistry().builder()
+                    ArtisanItem.builder()
                             .registryId(magic_bread)
                             .rawMaterial(Material.BREAD)
                             .displayName("<red>魔法面包~")
@@ -53,9 +54,10 @@ final class ItemTest {
                             .foodProperty(
                                     new FoodProperty(10, 10f, true)
                             )
+                            .build()
             );
             NeoArtisanAPI.getItemRegistry().registerItem(
-                    NeoArtisanAPI.getItemRegistry().builder()
+                    ArtisanItem.builder()
                             .registryId(magic_diamond)
                             .rawMaterial(Material.DIAMOND)
                             .displayName("<blue>魔法钻石~")
@@ -65,9 +67,10 @@ final class ItemTest {
                                             "可以合成更多的钻石噢"
                                     )
                             )
+                            .build()
             );
             NeoArtisanAPI.getItemRegistry().registerItem(
-                    NeoArtisanAPI.getItemRegistry().builder()
+                    ArtisanItem.builder()
                             .registryId(magic_helmet)
                             .rawMaterial(Material.IRON_HELMET)
                             .displayName("<aqua>魔法头盔~")
@@ -85,9 +88,10 @@ final class ItemTest {
                                     )
                             )
                             .maxDurability(2500)
+                            .build()
             );
             NeoArtisanAPI.getItemRegistry().registerItem(
-                    NeoArtisanAPI.getItemRegistry().builder()
+                    ArtisanItem.builder()
                             .registryId(magic_sword)
                             .rawMaterial(Material.IRON_SWORD)
                             .displayName("<yellow>魔法剑~")
@@ -105,22 +109,25 @@ final class ItemTest {
                                     )
                             )
                             .maxDurability(5000)
+                            .build()
             );
             NeoArtisanAPI.getItemRegistry().registerItem(
-                    NeoArtisanAPI.getItemRegistry().builder()
+                    ArtisanItem.builder()
                             .registryId(cooking_pot)
                             .rawMaterial(Material.PAPER)
                             .displayName("烹饪锅")
                             .blockId(cooking_pot)
                             .itemModel(cooking_pot)
+                            .build()
             );
             NeoArtisanAPI.getItemRegistry().registerItem(
-                    NeoArtisanAPI.getItemRegistry().builder()
+                    ArtisanItem.builder()
                             .registryId(cutting_board)
                             .rawMaterial(Material.PAPER)
                             .displayName("砧板")
                             .blockId(cutting_board)
                             .itemModel(cutting_board)
+                            .build()
             );
         }
     }

@@ -1,14 +1,9 @@
 package io.github.moyusowo.neoartisanapi.api.item;
 
-import io.papermc.paper.datacomponent.item.CustomModelData;
-import net.kyori.adventure.text.Component;
-import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.List;
 
 /**
  * 自定义物品注册表核心接口，提供完整的自定义物品生命周期管理。
@@ -26,163 +21,16 @@ import java.util.List;
  * @see org.bukkit.plugin.ServicesManager
  * @since 1.0.0
  */
-@SuppressWarnings({"unused", "UnstableApiUsage"})
+@SuppressWarnings({"unused"})
 public interface ItemRegistry {
 
     /**
-     * 构建自定义物品的构建器接口。
-     * <p>使用示例：
-     * <pre>{@code
-     * ItemRegistryAPI api; //先获取注册表实例
-     * api.builder()
-     *     .registryId(new NamespacedKey(plugin, "sword"))
-     *     .rawMaterial(Material.DIAMOND_SWORD)
-     *     .displayName("传奇之剑");
-     * }</pre>
-     */
-    interface Builder {
-
-        /**
-         * 设置物品的唯一标识键。
-         *
-         * @param registryId 物品的唯一标识键（不能为null）
-         * @return 当前构建器实例
-         * @throws IllegalArgumentException 如果registryId为null
-         */
-        @NotNull Builder registryId(@NotNull NamespacedKey registryId);
-
-        /**
-         * 设置物品的基础材质类型。
-         *
-         * @param rawMaterial 基础材质类型（不能为null）
-         * @return 当前构建器实例
-         * @throws IllegalArgumentException 如果rawMaterial为null
-         * @see Material
-         */
-        @NotNull Builder rawMaterial(@NotNull Material rawMaterial);
-
-        /**
-         * 设置是否保留原版合成配方。
-         *
-         * @param hasOriginalCraft true表示保留原版合成，false表示禁用（默认禁用）
-         * @return 当前构建器实例
-         */
-        @NotNull Builder hasOriginalCraft(boolean hasOriginalCraft);
-
-        /**
-         * 设置物品的自定义模型数据。
-         *
-         * @param customModelData 自定义模型数据ID（必须大于0）
-         * @return 当前构建器实例
-         * @throws IllegalArgumentException 如果customModelData ≤ 0
-         */
-        @NotNull Builder customModelData(CustomModelData customModelData);
-
-        /**
-         * 设置物品的显示名称。
-         *
-         * @param displayName 物品显示名称（不能为null或空字符串）
-         * @return 当前构建器实例
-         * @throws IllegalArgumentException 如果displayName为null或空
-         */
-        @NotNull Builder displayName(@NotNull String displayName);
-
-        /**
-         * 用adventure API的文本组件设置物品的显示名称。
-         *
-         * @param component 物品显示名称（不能为null或空字符串）
-         * @return 当前构建器实例
-         * @throws IllegalArgumentException 如果displayName为null或空
-         */
-        @NotNull Builder displayName(@NotNull Component component);
-
-        /**
-         * 设置物品的Lore描述。
-         *
-         * @param lore 物品描述文本列表
-         * @return 当前构建器实例
-         * @throws IllegalArgumentException 如果lore为null
-         */
-        @NotNull Builder lore(@NotNull List<String> lore);
-
-        /**
-         * 用adventure API的文本组件设置物品的Lore描述。
-         *
-         * @param lore 物品描述文本列表
-         * @return 当前构建器实例
-         * @throws IllegalArgumentException 如果lore为null
-         */
-        @NotNull Builder loreComponent(@NotNull List<Component> lore);
-
-        /**
-         * 设置物品的食物属性配置。
-         *
-         * @param foodProperty 食物属性配置（不能为null，使用 {@link FoodProperty#EMPTY} 表示无属性）
-         * @return 当前构建器实例
-         * @throws IllegalArgumentException 如果foodProperty为null
-         * @see FoodProperty
-         */
-        @NotNull Builder foodProperty(@NotNull FoodProperty foodProperty);
-
-        /**
-         * 设置物品的武器属性配置。
-         *
-         * @param weaponProperty 武器属性配置（不能为null，使用 {@link WeaponProperty#EMPTY} 表示无属性）
-         * @return 当前构建器实例
-         * @throws IllegalArgumentException 如果weaponProperty为null
-         * @see WeaponProperty
-         */
-        @NotNull Builder weaponProperty(@NotNull WeaponProperty weaponProperty);
-
-        /**
-         * 设置物品的最大耐久值。
-         *
-         * @param maxDurability 最大耐久值（必须大于0）
-         * @return 当前构建器实例
-         * @throws IllegalArgumentException 如果maxDurability ≤ 0
-         */
-        @NotNull Builder maxDurability(int maxDurability);
-
-        /**
-         * 设置物品的护甲属性配置。
-         *
-         * @param armorProperty 护甲属性配置（不能为null，使用 {@link ArmorProperty#EMPTY} 表示无属性）
-         * @return 当前构建器实例
-         * @throws IllegalArgumentException 如果armorProperty为null
-         * @see ArmorProperty
-         */
-        @NotNull Builder armorProperty(ArmorProperty armorProperty);
-
-        /**
-         * 设置物品的属性系统配置。
-         *
-         * @param attributeProperty 属性系统配置（不能为null，使用 {@link AttributeProperty#empty()} 表示无属性）
-         * @return 当前构建器实例
-         * @throws IllegalArgumentException 如果attributeProperty为null
-         * @see AttributeProperty
-         */
-        @NotNull Builder attributeProperty(AttributeProperty attributeProperty);
-
-        @NotNull Builder blockId(NamespacedKey blockKey);
-
-        @NotNull Builder itemModel(NamespacedKey itemModel);
-
-    }
-
-    /**
-     * 创建一个新的物品构建器实例。
+     * 注册自定义物品。
      *
-     * @return 新的物品构建器实例（不会为null）
-     */
-    @NotNull Builder builder();
-
-    /**
-     * 通过构建器直接注册物品。
-     *
-     * @param builder 物品构建器实例（不能为null）
+     * @param artisanItem 自定义物品实例（不能为null）
      * @throws IllegalArgumentException 如果builder为null或包含无效参数
      */
-    void registerItem(@NotNull Builder builder);
+    void registerItem(@NotNull ArtisanItem artisanItem);
 
     /**
      * 从物品堆解析注册ID。
