@@ -28,7 +28,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "UnstableApiUsage"})
 final class ArtisanBlockStorageImpl implements ArtisanBlockStorage, ArtisanBlockStorageInternal {
 
     private static ArtisanBlockStorageImpl instance;
@@ -83,7 +83,6 @@ final class ArtisanBlockStorageImpl implements ArtisanBlockStorage, ArtisanBlock
                         public void run() {
                             if (isAllLoaded()) {
                                 BlockDataSerializer.load(ArtisanBlockStorageImpl.instance.storage);
-                                NeoArtisan.logger().info("作物数据成功加载!");
                                 cancel();
                             }
                         }
@@ -128,8 +127,9 @@ final class ArtisanBlockStorageImpl implements ArtisanBlockStorage, ArtisanBlock
         lock.writeLock().lock();
         try {
             if (storage.get(level).get(chunkPos).containsKey(blockPos)) {
-                if (storage.get(level).get(chunkPos).get(blockPos).getGUI() != null) {
-                    storage.get(level).get(chunkPos).get(blockPos).getGUI().onTerminate();
+                ArtisanBlockGUI gui = storage.get(level).get(chunkPos).get(blockPos).getGUI();
+                if (gui != null) {
+                    gui.onTerminate();
                 }
                 storage.get(level).get(chunkPos).remove(blockPos);
             }

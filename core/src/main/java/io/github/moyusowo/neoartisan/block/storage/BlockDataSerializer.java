@@ -87,9 +87,9 @@ final class BlockDataSerializer {
                     }
                 }
             }
-            NeoArtisan.logger().info("作物数据自动保存成功！");
+            NeoArtisan.logger().info("自定义方块数据自动保存成功！");
         } catch (IOException e) {
-            NeoArtisan.logger().severe("作物数据保存失败: " + e);
+            NeoArtisan.logger().severe("自定义方块数据保存失败: " + e);
         }
     }
 
@@ -175,8 +175,9 @@ final class BlockDataSerializer {
                     }
                 }
             }
+            NeoArtisan.logger().info("自定义方块数据读取成功！");
         } catch (IOException e) {
-            NeoArtisan.logger().severe("作物数据读取失败: " + e);
+            NeoArtisan.logger().severe("自定义方块数据读取失败: " + e);
         }
     }
 }
