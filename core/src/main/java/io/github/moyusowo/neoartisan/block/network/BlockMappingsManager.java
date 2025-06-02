@@ -15,7 +15,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static io.github.moyusowo.neoartisan.block.util.BlockStateUtil.parseBlockStateId;
 import static io.github.moyusowo.neoartisan.util.Util.saveDefaultIfNotExists;
 
 public final class BlockMappingsManager {
