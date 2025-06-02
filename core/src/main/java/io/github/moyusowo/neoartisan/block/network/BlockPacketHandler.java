@@ -4,22 +4,25 @@ import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisan.block.storage.internal.ArtisanBlockStorageInternal;
 import io.github.moyusowo.neoartisan.util.ReflectionUtil;
 import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlockData;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelDuplexHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPromise;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.SectionPos;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.*;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.BitStorage;
+import net.minecraft.util.SimpleBitStorage;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.Objects;
 
 import static io.github.moyusowo.neoartisan.block.util.BlockStateUtil.stateById;
 
@@ -36,7 +39,8 @@ public class BlockPacketHandler extends ChannelDuplexHandler {
         if (msg instanceof ClientboundBlockUpdatePacket packet) {
             handleSingleBlockUpdate(packet);
         } else if (msg instanceof ClientboundLevelChunkWithLightPacket packet) {
-            handleChunkUpdate(ctx, promise, packet.getX(), packet.getZ());
+            handleChunkUpdate(packet);
+            handleChunkArtisanBlock(ctx, promise, packet.getX(), packet.getZ());
         } else if (msg instanceof ClientboundSectionBlocksUpdatePacket packet) {
             handleSectionBlocksUpdate(packet);
         } else if (msg instanceof ClientboundBundlePacket packet) {
@@ -56,13 +60,18 @@ public class BlockPacketHandler extends ChannelDuplexHandler {
                                 throw new RuntimeException(e);
                             }
                         } else if (subpacket instanceof ClientboundLevelChunkWithLightPacket p) {
+                            try {
+                                handleChunkUpdate(p);
+                            } catch (Exception e) {
+                                throw new RuntimeException(e);
+                            }
                             chunks.add(new ChunkPos(p.getX(), p.getZ()));
                         }
                     }
             );
             if (!chunks.isEmpty()) {
                 for (ChunkPos chunkPos : chunks) {
-                    handleChunkUpdate(ctx, promise, chunkPos.x, chunkPos.z);
+                    handleChunkArtisanBlock(ctx, promise, chunkPos.x, chunkPos.z);
                 }
             }
         }
@@ -101,7 +110,7 @@ public class BlockPacketHandler extends ChannelDuplexHandler {
         ReflectionUtil.SECTION_BLOCK_UPDATE_STATE.set(packet, states);
     }
 
-    private void handleChunkUpdate(ChannelHandlerContext ctx, ChannelPromise promise, final int chunkX, final int chunkZ) {
+    private void handleChunkArtisanBlock(ChannelHandlerContext ctx, ChannelPromise promise, final int chunkX, final int chunkZ) {
         promise.addListener(future -> {
             if (future.isSuccess()) {
                 Map<BlockPos, ArtisanBlockData> data = ArtisanBlockStorageInternal.getInternal().getChunkArtisanBlocks(player.level(), chunkX, chunkZ);
@@ -124,6 +133,74 @@ public class BlockPacketHandler extends ChannelDuplexHandler {
                 NeoArtisan.logger().severe("原始包发送失败: " + future.cause());
             }
         });
+    }
+
+    private void handleChunkUpdate(ClientboundLevelChunkWithLightPacket packet) throws Exception {
+        ClientboundLevelChunkPacketData chunkData = packet.getChunkData();
+        byte[] buffer = (byte[]) ReflectionUtil.CHUNK_DATA.get(chunkData);
+        FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.wrappedBuffer(buffer));
+        FriendlyByteBuf newBuf = new FriendlyByteBuf(Unpooled.buffer());
+        while (buf.readerIndex() < buffer.length) {
+            int nonEmptyBlock = buf.readShort();
+            newBuf.writeShort(nonEmptyBlock);
+            int bitsPerBlock = buf.readByte();
+            newBuf.writeByte(bitsPerBlock);
+            if (bitsPerBlock == 0) {
+                int stateId = buf.readVarInt();
+                Integer toStateId = BlockMappingsManager.getMappedStateId(stateId);
+                newBuf.writeVarInt(Objects.requireNonNullElse(toStateId, stateId));
+                long[] data = buf.readLongArray();
+                newBuf.writeLongArray(data);
+            } else if (bitsPerBlock <= 8) {
+                int sizeOfPalette = buf.readVarInt();
+                newBuf.writeVarInt(sizeOfPalette);
+                int[] palette = new int[sizeOfPalette];
+                for (int i = 0; i < sizeOfPalette; i++) {
+                    palette[i] = buf.readVarInt();
+                    Integer toStateId = BlockMappingsManager.getMappedStateId(palette[i]);
+                    if (toStateId != null) {
+                        newBuf.writeVarInt(toStateId);
+                    } else {
+                        newBuf.writeVarInt(palette[i]);
+                    }
+                }
+                long[] data = buf.readLongArray();
+                newBuf.writeLongArray(data);
+            } else {
+                long[] data = buf.readLongArray();
+                BitStorage storage = new SimpleBitStorage(bitsPerBlock, 4096, data);
+                for (int pos = 0; pos < 4096; pos++) {
+                    int stateId = storage.get(pos);
+                    Integer toStateId = BlockMappingsManager.getMappedStateId(stateId);
+                    if (toStateId != null) {
+                        storage.set(pos, toStateId);
+                    }
+                }
+                newBuf.writeLongArray(storage.getRaw());
+            }
+            int bitPerBiome = buf.readByte();
+            newBuf.writeByte(bitPerBiome);
+            if (bitPerBiome == 0) {
+                int sizeOfPalette = buf.readVarInt();
+                newBuf.writeVarInt(sizeOfPalette);
+                long[] data = buf.readLongArray();
+                newBuf.writeLongArray(data);
+            } else if (bitPerBiome <= 3) {
+                int sizeOfPalette = buf.readVarInt();
+                newBuf.writeVarInt(sizeOfPalette);
+                int[] palette = new int[sizeOfPalette];
+                for (int i = 0; i < sizeOfPalette; i++) {
+                    palette[i] = buf.readVarInt();
+                    newBuf.writeVarInt(palette[i]);
+                }
+                long[] data = buf.readLongArray();
+                newBuf.writeLongArray(data);
+            } else {
+                long[] data = buf.readLongArray();
+                newBuf.writeLongArray(data);
+            }
+        }
+        ReflectionUtil.CHUNK_DATA.set(chunkData, newBuf.array());
     }
 
     private BlockPos[] toBlockPos(short[] positions, SectionPos sectionPos) {
