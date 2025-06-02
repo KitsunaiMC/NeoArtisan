@@ -17,6 +17,8 @@ import java.util.Set;
 @SuppressWarnings("UnstableApiUsage")
 public final class RegisterManager {
 
+    public static final IllegalAccessError REGISTRY_CLOSED = new IllegalAccessError("Registry closed! Please register in the methods with annotation.");
+
     public static final String eTips = "只能在使用注解的方法内注册！";
 
     private RegisterManager() {}
@@ -78,16 +80,6 @@ public final class RegisterManager {
     private enum Status {
         OPEN,
         CLOSED;
-    }
-
-    public static final class RegisterException extends Exception {
-        private RegisterException() {
-            super("Registry is closed! Please register with annotation!");
-        }
-
-        public static RegisterException exception() {
-            return new RegisterException();
-        }
     }
 
 }

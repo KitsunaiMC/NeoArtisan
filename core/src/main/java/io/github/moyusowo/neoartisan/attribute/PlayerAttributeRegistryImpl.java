@@ -45,14 +45,10 @@ public class PlayerAttributeRegistryImpl implements PlayerAttributeRegistry {
 
     @Override
     public void registerAttribute(@NotNull NamespacedKey attributeKey, @NotNull PersistentDataType<?, ?> pdcType) {
-        try {
-            if (RegisterManager.isOpen()) {
-                playerAttributeRegistry.put(attributeKey, pdcType);
-            } else {
-                throw RegisterManager.RegisterException.exception();
-            }
-        } catch (RegisterManager.RegisterException e) {
-            NeoArtisan.logger().severe(RegisterManager.eTips);
+        if (RegisterManager.isOpen()) {
+            playerAttributeRegistry.put(attributeKey, pdcType);
+        } else {
+            throw RegisterManager.REGISTRY_CLOSED;
         }
     }
 

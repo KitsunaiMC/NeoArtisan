@@ -45,14 +45,10 @@ final class ItemRegistryImpl implements ItemRegistry {
 
     @Override
     public void registerItem(@NotNull ArtisanItem artisanItem) {
-        try {
-            if (RegisterManager.isOpen()) {
-                registry.put(artisanItem.getRegistryId(), (ArtisanItemImpl) artisanItem);
-            } else {
-                throw RegisterManager.RegisterException.exception();
-            }
-        } catch (RegisterManager.RegisterException e) {
-            NeoArtisan.logger().severe(RegisterManager.eTips);
+        if (RegisterManager.isOpen()) {
+            registry.put(artisanItem.getRegistryId(), (ArtisanItemImpl) artisanItem);
+        } else {
+            throw RegisterManager.REGISTRY_CLOSED;
         }
     }
 

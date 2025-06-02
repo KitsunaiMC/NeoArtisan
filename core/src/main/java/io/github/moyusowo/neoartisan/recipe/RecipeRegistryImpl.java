@@ -85,16 +85,12 @@ final class RecipeRegistryImpl implements Listener, RecipeRegistry, RecipeRegist
 
     @Override
     public void register(@NotNull ArtisanRecipe recipe) {
-        try {
-            if (RegisterManager.isOpen()) {
-                ArrayKey arrayKey = ArrayKey.from(recipe.getInputs(), recipe.getType());
-                toKey.put(recipe.getKey(), arrayKey);
-                recipeRegistry.put(arrayKey, recipe);
-            } else {
-                throw RegisterManager.RegisterException.exception();
-            }
-        } catch (RegisterManager.RegisterException e) {
-            NeoArtisan.logger().severe(RegisterManager.eTips);
+        if (RegisterManager.isOpen()) {
+            ArrayKey arrayKey = ArrayKey.from(recipe.getInputs(), recipe.getType());
+            toKey.put(recipe.getKey(), arrayKey);
+            recipeRegistry.put(arrayKey, recipe);
+        } else {
+            throw RegisterManager.REGISTRY_CLOSED;
         }
     }
 

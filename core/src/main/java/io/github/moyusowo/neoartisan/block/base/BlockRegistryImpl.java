@@ -41,14 +41,10 @@ final class BlockRegistryImpl implements BlockRegistry {
 
     @Override
     public void register(@NotNull ArtisanBlock artisanBlock) {
-        try {
-            if (RegisterManager.isOpen()) {
-                registry.put(artisanBlock.getBlockId(), artisanBlock);
-            } else {
-                throw RegisterManager.RegisterException.exception();
-            }
-        } catch (RegisterManager.RegisterException e) {
-            NeoArtisan.logger().severe(RegisterManager.eTips);
+        if (RegisterManager.isOpen()) {
+            registry.put(artisanBlock.getBlockId(), artisanBlock);
+        } else {
+            throw RegisterManager.REGISTRY_CLOSED;
         }
     }
 
