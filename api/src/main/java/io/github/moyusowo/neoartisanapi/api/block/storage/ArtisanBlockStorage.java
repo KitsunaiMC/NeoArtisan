@@ -1,7 +1,6 @@
 package io.github.moyusowo.neoartisanapi.api.block.storage;
 
 import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlockData;
-import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlockType;
 import io.github.moyusowo.neoartisanapi.api.block.crop.ArtisanCropData;
 import io.github.moyusowo.neoartisanapi.api.block.thin.ArtisanThinBlockData;
 import io.github.moyusowo.neoartisanapi.api.block.transparent.ArtisanTransparentBlockData;

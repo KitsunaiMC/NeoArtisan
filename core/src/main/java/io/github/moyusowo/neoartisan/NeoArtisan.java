@@ -3,6 +3,7 @@ package io.github.moyusowo.neoartisan;
 import io.github.moyusowo.neoartisan.util.init.Initializer;
 import io.github.moyusowo.neoartisan.util.terminate.Terminator;
 import io.github.moyusowo.neoartisanapi.api.persistence.EmptyPersistentDataContainer;
+import io.github.moyusowo.neoartisanapi.api.persistence.type.ItemStackDataType;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -14,9 +15,9 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.IOException;
 import java.util.logging.Logger;
 
+@SuppressWarnings("unused")
 public final class NeoArtisan extends JavaPlugin implements EmptyPersistentDataContainer {
 
     private static final String pkg = "io.github.moyusowo.neoartisan";
@@ -76,6 +77,7 @@ public final class NeoArtisan extends JavaPlugin implements EmptyPersistentDataC
 
     @Override
     public void onEnable() {
+        ItemStackDataType.ITEM_STACK.getComplexType();
         persistentDataAdapterContext = ItemStack.of(Material.STICK).getItemMeta().getPersistentDataContainer().getAdapterContext();
         Bukkit.getServicesManager().register(
                 EmptyPersistentDataContainer.class,

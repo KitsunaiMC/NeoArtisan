@@ -1,8 +1,6 @@
 package io.github.moyusowo.neoartisanapi.api.block.crop;
 
-import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlock;
 import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlockData;
-import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlockState;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;

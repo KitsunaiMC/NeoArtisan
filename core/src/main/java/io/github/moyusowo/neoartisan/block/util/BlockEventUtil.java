@@ -5,6 +5,7 @@ import io.github.moyusowo.neoartisan.block.storage.internal.ArtisanBlockStorageI
 import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
 import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlock;
 import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlockData;
+import io.github.moyusowo.neoartisanapi.api.block.base.sound.SoundProperty;
 import io.github.moyusowo.neoartisanapi.api.block.event.ArtisanBlockBreakEvent;
 import io.github.moyusowo.neoartisanapi.api.block.event.ArtisanBlockLoseSupportEvent;
 import io.github.moyusowo.neoartisanapi.api.block.event.ArtisanBlockPlaceEvent;
@@ -107,12 +108,18 @@ public final class BlockEventUtil {
             }
         }
         ArtisanBlockStorageInternal.getInternal().removeArtisanBlock(event.getBlock());
-        if (artisanBlockData.getArtisanBlock().getPlaceSoundProperty() != null) {
+        SoundProperty soundProperty = artisanBlockData.getArtisanBlock().getPlaceSoundProperty();
+        if (soundProperty != null) {
             event.getBlock().getWorld().playSound(
-                    event.getBlock().getLocation().toBlockLocation(),
-                    artisanBlockData.getArtisanBlock().getPlaceSoundProperty().key,
-                    artisanBlockData.getArtisanBlock().getPlaceSoundProperty().volume,
-                    artisanBlockData.getArtisanBlock().getPlaceSoundProperty().pitch
+                    net.kyori.adventure.sound.Sound.sound(
+                            soundProperty.key.key(),
+                            net.kyori.adventure.sound.Sound.Source.BLOCK,
+                            soundProperty.pitch,
+                            soundProperty.volume
+                    ),
+                    event.getBlock().getX(),
+                    event.getBlock().getY(),
+                    event.getBlock().getZ()
             );
         }
     }
@@ -239,12 +246,18 @@ public final class BlockEventUtil {
         BlockPos pos = new BlockPos(bukkitBlock.getX(), bukkitBlock.getY(), bukkitBlock.getZ());
         ArtisanBlockStorageInternal.getInternal().placeArtisanBlock(nmsWorld, pos, artisanBlockData);
         nmsWorld.setBlock(pos, stateById(artisanBlockData.getArtisanBlockState().actualState()), 3);
-        if (artisanBlockData.getArtisanBlock().getPlaceSoundProperty() != null) {
+        SoundProperty soundProperty = artisanBlockData.getArtisanBlock().getPlaceSoundProperty();
+        if (soundProperty != null) {
             bukkitBlock.getWorld().playSound(
-                    bukkitBlock.getLocation().toBlockLocation(),
-                    artisanBlockData.getArtisanBlock().getPlaceSoundProperty().key,
-                    artisanBlockData.getArtisanBlock().getPlaceSoundProperty().volume,
-                    artisanBlockData.getArtisanBlock().getPlaceSoundProperty().pitch
+                    net.kyori.adventure.sound.Sound.sound(
+                            soundProperty.key.key(),
+                            net.kyori.adventure.sound.Sound.Source.BLOCK,
+                            soundProperty.pitch,
+                            soundProperty.volume
+                    ),
+                    bukkitBlock.getX(),
+                    bukkitBlock.getY(),
+                    bukkitBlock.getZ()
             );
         }
     }

@@ -43,14 +43,10 @@ public class GlobalAttributeRegistryImpl implements GlobalAttributeRegistry {
 
     @Override
     public void registerAttribute(@NotNull NamespacedKey attributeKey, @NotNull PersistentDataType<?, ?> pdcType) {
-        try {
-            if (RegisterManager.isOpen()) {
-                globalAttributeRegistry.put(attributeKey, pdcType);
-            } else {
-                throw RegisterManager.RegisterException.exception();
-            }
-        } catch (RegisterManager.RegisterException e) {
-            NeoArtisan.logger().info(RegisterManager.eTips);
+        if (RegisterManager.isOpen()) {
+            globalAttributeRegistry.put(attributeKey, pdcType);
+        } else {
+            throw RegisterManager.REGISTRY_CLOSED;
         }
     }
 

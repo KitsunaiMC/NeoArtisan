@@ -1,7 +1,6 @@
 package io.github.moyusowo.neoartisanapi.api.item;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * 表示武器物品的战斗属性配置。

@@ -1,75 +1,109 @@
 package io.github.moyusowo.neoartisanapi.api.recipe;
 
+import io.github.moyusowo.neoartisanapi.api.item.ItemGenerator;
+import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
+import org.jetbrains.annotations.NotNull;
 
 /**
- * 无序合成配方构建器，用于定义材料自由摆放的自定义合成配方。
+ * 无序合成配方接口，继承自基础 {@link ArtisanRecipe}。
  *
- * <p>无序合成特点：</p>
+ * <p><b>配方特性说明：</b></p>
  * <ul>
- *   <li>材料无需按特定顺序排列</li>
- *   <li>支持批量添加同类材料</li>
- *   <li>最少需要1个、最多9个输入材料</li>
+ *   <li>不限制材料摆放顺序</li>
+ *   <li>自动处理材料堆叠数量</li>
+ *   <li>支持批量材料添加</li>
  * </ul>
  *
- * @see RecipeRegistry#createShapelessRecipe()
- * @see RecipeRegistry#createShapelessRecipe(NamespacedKey, int)
- * @since 1.0.0
+ * <p><b>典型示例：</b></p>
+ * <pre>{@code
+ * ArtisanShapelessRecipe.builder()
+ *     .key(new NamespacedKey("myplugin", "magic_powder"))
+ *     .add(Material.REDSTONE)
+ *     .add(Material.GLOWSTONE_DUST, 2)
+ *     .resultGenerator(() -> new ItemStack(Material.GLOWSTONE))
+ *     .build();
+ * }</pre>
+ *
+ * @see ArtisanRecipe 基础配方接口
+ * @since 1.0.2
  */
 @SuppressWarnings("unused")
-public interface ArtisanShapelessRecipe {
+public interface ArtisanShapelessRecipe extends ArtisanRecipe {
 
     /**
-     * 添加单个材料到合成配方。
+     * 获取无序配方建造器实例
      *
-     * <p>调用过 {@link #build()} 方法之后不能再调用。</p>
-     *
-     * @param registryId 自定义物品注册ID（不能为null）
-     * @see #add(NamespacedKey...)
+     * @return 非null的建造器实例
+     * @throws IllegalStateException 如果建造器服务未注册
      */
-    ArtisanShapelessRecipe add(NamespacedKey registryId);
+    static Builder builder() {
+        return Bukkit.getServicesManager().load(Builder.class);
+    }
 
     /**
-     * 批量添加多个相同材料到合成配方。
+     * 无序配方建造器接口
      *
-     * <p>示例添加3个钻石：</p>
-     * <pre>{@code
-     * add(
-     *     new NamespacedKey("myplugin", "diamond"),
-     *     new NamespacedKey("myplugin", "diamond"),
-     *     new NamespacedKey("myplugin", "diamond")
-     * )
-     * }</pre>
-     *
-     * <p>调用过 {@link #build()} 方法之后不能再调用。</p>
-     *
-     * @param registryIds 相同材料的注册ID数组（不能为null或空）
-     * @see #add(NamespacedKey)
+     * <p><b>构建流程：</b></p>
+     * <ol>
+     *   <li>必须设置 {@link #key(NamespacedKey)}</li>
+     *   <li>必须添加至少1个材料</li>
+     *   <li>必须设置 {@link #resultGenerator(ItemGenerator)}</li>
+     * </ol>
      */
-    ArtisanShapelessRecipe add(NamespacedKey... registryIds);
+    interface Builder {
 
-    /**
-     * 设置合成结果物品及数量。
-     *
-     * <p>调用过 {@link #build()} 方法之后不能再调用。</p>
-     *
-     * @param registryId 结果物品注册ID（不能为null）
-     * @param count 产出数量
-     */
-    ArtisanShapelessRecipe setResult(NamespacedKey registryId, int count);
+        /**
+         * 设置配方唯一标识符
+         *
+         * @param key 符合命名空间规范的键（非null）
+         * @return 当前建造器实例
+         */
+        @NotNull Builder key(NamespacedKey key);
 
-    /**
-     * 完成配方构建并注册到服务器。
-     *
-     * <p><b>前置条件检查：</b></p>
-     * <ul>
-     *   <li>必须设置结果物品</li>
-     *   <li>材料总数必须在1-9个之间</li>
-     *   <li>配方未构建过</li>
-     * </ul>
-     *
-     * <p>调用过本方法之后不能再调用。</p>
-     *
-     */
-    void build();
+        /**
+         * 添加单个材料（数量默认为1）
+         *
+         * @param itemId 材料ID（非null）
+         * @return 当前建造器实例
+         * @see #add(NamespacedKey, int) 指定数量的版本
+         */
+        @NotNull Builder add(@NotNull NamespacedKey itemId);
+
+        /**
+         * 批量添加多个材料（每个数量默认为1）
+         *
+         * @param itemIds 材料ID数组（非null，可空数组）
+         * @return 当前建造器实例
+         * @throws IllegalArgumentException 如果数组为null
+         */
+        @NotNull Builder add(@NotNull NamespacedKey... itemIds);
+
+        /**
+         * 添加指定数量的材料
+         *
+         * @param itemId 材料ID（非null）
+         * @param count 材料数量（≥1）
+         * @return 当前建造器实例
+         * @throws IllegalArgumentException 如果数量无效
+         */
+        @NotNull Builder add(@NotNull NamespacedKey itemId, int count);
+
+        /**
+         * 设置结果物品生成器
+         *
+         * @param resultGenerator 生成器实例（非null）
+         * @return 当前建造器实例
+         * @see ItemGenerator 生成器接口
+         */
+        @NotNull Builder resultGenerator(ItemGenerator resultGenerator);
+
+        /**
+         * 构建不可变的无序配方实例
+         *
+         * @return 配置完成的配方实例
+         * @throws IllegalStateException 如果缺少必要参数
+         */
+        @NotNull ArtisanShapelessRecipe build();
+    }
 }

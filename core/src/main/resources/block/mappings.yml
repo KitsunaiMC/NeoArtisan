@@ -12,7 +12,7 @@ minecraft:jungle_sapling[stage=1]: minecraft:jungle_sapling[stage=0]
 minecraft:dark_oak_sapling[stage=1]: minecraft:dark_oak_sapling[stage=0]
 minecraft:acacia_sapling[stage=1]: minecraft:acacia_sapling[stage=0]
 minecraft:cherry_sapling[stage=1]: minecraft:cherry_sapling[stage=0]
-minecraft:pale_oak_leaves[stage=1]: minecraft:pale_oak_leaves[stage=0]
+minecraft:pale_oak_sapling[stage=1]: minecraft:pale_oak_sapling[stage=0]
 ########################################################################################################################################################################################################################
 # Ideal block for lower half slabs
 # Sculk Sensor

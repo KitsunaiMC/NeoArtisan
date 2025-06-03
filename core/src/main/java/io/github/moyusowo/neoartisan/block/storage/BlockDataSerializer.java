@@ -50,35 +50,39 @@ final class BlockDataSerializer {
                         Map<BlockPos, ArtisanBlockData> blockMap = chunkEntry.getValue();
                         out.writeInt(blockMap.size());
                         for (Map.Entry<BlockPos, ArtisanBlockData> blockEntry : blockMap.entrySet()) {
-                            if (blockEntry.getValue() instanceof ArtisanCropData artisanCropData) {
-                                out.writeUTF(CROP_BLOCK);
-                                BlockPos pos = blockEntry.getKey();
-                                out.writeInt(pos.getX());
-                                out.writeInt(pos.getY());
-                                out.writeInt(pos.getZ());
-                                out.writeUTF(artisanCropData.blockId().getNamespace());
-                                out.writeUTF(artisanCropData.blockId().getKey());
-                                out.writeInt(artisanCropData.stage());
-                            } else if (blockEntry.getValue() instanceof ArtisanTransparentBlockData artisanTransparentBlockData) {
-                                out.writeUTF(TRANSPARENT_BLOCK);
-                                BlockPos pos = blockEntry.getKey();
-                                out.writeInt(pos.getX());
-                                out.writeInt(pos.getY());
-                                out.writeInt(pos.getZ());
-                                out.writeUTF(artisanTransparentBlockData.blockId().getNamespace());
-                                out.writeUTF(artisanTransparentBlockData.blockId().getKey());
-                                out.writeInt(artisanTransparentBlockData.stage());
-                            } else if (blockEntry.getValue() instanceof ArtisanThinBlockData artisanThinBlockData) {
-                                out.writeUTF(THIN_BLOCK);
-                                BlockPos pos = blockEntry.getKey();
-                                out.writeInt(pos.getX());
-                                out.writeInt(pos.getY());
-                                out.writeInt(pos.getZ());
-                                out.writeUTF(artisanThinBlockData.blockId().getNamespace());
-                                out.writeUTF(artisanThinBlockData.blockId().getKey());
-                                out.writeInt(artisanThinBlockData.stage());
-                            } else {
-                                throw new IllegalArgumentException("BlockType can not be Serializer!");
+                            switch (blockEntry.getValue()) {
+                                case ArtisanCropData artisanCropData -> {
+                                    out.writeUTF(CROP_BLOCK);
+                                    BlockPos pos = blockEntry.getKey();
+                                    out.writeInt(pos.getX());
+                                    out.writeInt(pos.getY());
+                                    out.writeInt(pos.getZ());
+                                    out.writeUTF(artisanCropData.blockId().getNamespace());
+                                    out.writeUTF(artisanCropData.blockId().getKey());
+                                    out.writeInt(artisanCropData.stage());
+                                }
+                                case ArtisanTransparentBlockData artisanTransparentBlockData -> {
+                                    out.writeUTF(TRANSPARENT_BLOCK);
+                                    BlockPos pos = blockEntry.getKey();
+                                    out.writeInt(pos.getX());
+                                    out.writeInt(pos.getY());
+                                    out.writeInt(pos.getZ());
+                                    out.writeUTF(artisanTransparentBlockData.blockId().getNamespace());
+                                    out.writeUTF(artisanTransparentBlockData.blockId().getKey());
+                                    out.writeInt(artisanTransparentBlockData.stage());
+                                }
+                                case ArtisanThinBlockData artisanThinBlockData -> {
+                                    out.writeUTF(THIN_BLOCK);
+                                    BlockPos pos = blockEntry.getKey();
+                                    out.writeInt(pos.getX());
+                                    out.writeInt(pos.getY());
+                                    out.writeInt(pos.getZ());
+                                    out.writeUTF(artisanThinBlockData.blockId().getNamespace());
+                                    out.writeUTF(artisanThinBlockData.blockId().getKey());
+                                    out.writeInt(artisanThinBlockData.stage());
+                                }
+                                case null, default ->
+                                        throw new IllegalArgumentException("BlockType can not be Serializer!");
                             }
                             byte[] pdcByte = blockEntry.getValue().getPersistentDataContainer().serializeToBytes();
                             out.writeInt(pdcByte.length);
@@ -87,9 +91,9 @@ final class BlockDataSerializer {
                     }
                 }
             }
-            NeoArtisan.logger().info("作物数据自动保存成功！");
+            NeoArtisan.logger().info("自定义方块数据自动保存成功！");
         } catch (IOException e) {
-            NeoArtisan.logger().severe("作物数据保存失败: " + e);
+            NeoArtisan.logger().severe("自定义方块数据保存失败: " + e);
         }
     }
 
@@ -118,65 +122,70 @@ final class BlockDataSerializer {
                             int blockCount = in.readInt();
                             for (int j = 0; j < blockCount; j++) {
                                 String type = in.readUTF();
-                                if (type.equals(CROP_BLOCK)) {
-                                    BlockPos blockPos = new BlockPos(
-                                            in.readInt(),
-                                            in.readInt(),
-                                            in.readInt()
-                                    );
-                                    ArtisanCropData artisanCropData = ArtisanCropData.builder()
-                                            .blockId(new NamespacedKey(in.readUTF(), in.readUTF()))
-                                            .stage(in.readInt())
-                                            .location(new Location(world, blockPos.getX(), blockPos.getY(), blockPos.getZ()))
-                                            .build();
-                                    int length = in.readInt();
-                                    byte[] pdcByte = in.readNBytes(length);
-                                    PersistentDataContainer persistentDataContainer = NeoArtisanAPI.emptyPersistentDataContainer().emptyPersistentDataContainer();
-                                    persistentDataContainer.readFromBytes(pdcByte, true);
-                                    ArtisanBlockDataInternal.asInternal(artisanCropData).setPersistentDataContainer(persistentDataContainer);
-                                    blockMap.put(blockPos, artisanCropData);
-                                } else if (type.equals(TRANSPARENT_BLOCK)) {
-                                    BlockPos blockPos = new BlockPos(
-                                            in.readInt(),
-                                            in.readInt(),
-                                            in.readInt()
-                                    );
-                                    ArtisanTransparentBlockData artisanTransparentBlockData = ArtisanTransparentBlockData.builder()
-                                            .blockId(new NamespacedKey(in.readUTF(), in.readUTF()))
-                                            .stage(in.readInt())
-                                            .location(new Location(world, blockPos.getX(), blockPos.getY(), blockPos.getZ()))
-                                            .build();
-                                    int length = in.readInt();
-                                    byte[] pdcByte = in.readNBytes(length);
-                                    PersistentDataContainer persistentDataContainer = NeoArtisanAPI.emptyPersistentDataContainer().emptyPersistentDataContainer();
-                                    persistentDataContainer.readFromBytes(pdcByte, true);
-                                    ArtisanBlockDataInternal.asInternal(artisanTransparentBlockData).setPersistentDataContainer(persistentDataContainer);
-                                    blockMap.put(blockPos, artisanTransparentBlockData);
-                                } else if (type.equals(THIN_BLOCK)) {
-                                    BlockPos blockPos = new BlockPos(
-                                            in.readInt(),
-                                            in.readInt(),
-                                            in.readInt()
-                                    );
-                                    ArtisanThinBlockData artisanThinBlockData = ArtisanThinBlockData.builder()
-                                            .blockId(new NamespacedKey(in.readUTF(), in.readUTF()))
-                                            .stage(in.readInt())
-                                            .location(new Location(world, blockPos.getX(), blockPos.getY(), blockPos.getZ()))
-                                            .build();
-                                    int length = in.readInt();
-                                    byte[] pdcByte = in.readNBytes(length);
-                                    PersistentDataContainer persistentDataContainer = NeoArtisanAPI.emptyPersistentDataContainer().emptyPersistentDataContainer();
-                                    persistentDataContainer.readFromBytes(pdcByte, true);
-                                    ArtisanBlockDataInternal.asInternal(artisanThinBlockData).setPersistentDataContainer(persistentDataContainer);
-                                    blockMap.put(blockPos, artisanThinBlockData);
+                                switch (type) {
+                                    case CROP_BLOCK -> {
+                                        BlockPos blockPos = new BlockPos(
+                                                in.readInt(),
+                                                in.readInt(),
+                                                in.readInt()
+                                        );
+                                        ArtisanCropData artisanCropData = ArtisanCropData.builder()
+                                                .blockId(new NamespacedKey(in.readUTF(), in.readUTF()))
+                                                .stage(in.readInt())
+                                                .location(new Location(world, blockPos.getX(), blockPos.getY(), blockPos.getZ()))
+                                                .build();
+                                        int length = in.readInt();
+                                        byte[] pdcByte = in.readNBytes(length);
+                                        PersistentDataContainer persistentDataContainer = NeoArtisanAPI.emptyPersistentDataContainer().emptyPersistentDataContainer();
+                                        persistentDataContainer.readFromBytes(pdcByte, true);
+                                        ArtisanBlockDataInternal.asInternal(artisanCropData).setPersistentDataContainer(persistentDataContainer);
+                                        blockMap.put(blockPos, artisanCropData);
+                                    }
+                                    case TRANSPARENT_BLOCK -> {
+                                        BlockPos blockPos = new BlockPos(
+                                                in.readInt(),
+                                                in.readInt(),
+                                                in.readInt()
+                                        );
+                                        ArtisanTransparentBlockData artisanTransparentBlockData = ArtisanTransparentBlockData.builder()
+                                                .blockId(new NamespacedKey(in.readUTF(), in.readUTF()))
+                                                .stage(in.readInt())
+                                                .location(new Location(world, blockPos.getX(), blockPos.getY(), blockPos.getZ()))
+                                                .build();
+                                        int length = in.readInt();
+                                        byte[] pdcByte = in.readNBytes(length);
+                                        PersistentDataContainer persistentDataContainer = NeoArtisanAPI.emptyPersistentDataContainer().emptyPersistentDataContainer();
+                                        persistentDataContainer.readFromBytes(pdcByte, true);
+                                        ArtisanBlockDataInternal.asInternal(artisanTransparentBlockData).setPersistentDataContainer(persistentDataContainer);
+                                        blockMap.put(blockPos, artisanTransparentBlockData);
+                                    }
+                                    case THIN_BLOCK -> {
+                                        BlockPos blockPos = new BlockPos(
+                                                in.readInt(),
+                                                in.readInt(),
+                                                in.readInt()
+                                        );
+                                        ArtisanThinBlockData artisanThinBlockData = ArtisanThinBlockData.builder()
+                                                .blockId(new NamespacedKey(in.readUTF(), in.readUTF()))
+                                                .stage(in.readInt())
+                                                .location(new Location(world, blockPos.getX(), blockPos.getY(), blockPos.getZ()))
+                                                .build();
+                                        int length = in.readInt();
+                                        byte[] pdcByte = in.readNBytes(length);
+                                        PersistentDataContainer persistentDataContainer = NeoArtisanAPI.emptyPersistentDataContainer().emptyPersistentDataContainer();
+                                        persistentDataContainer.readFromBytes(pdcByte, true);
+                                        ArtisanBlockDataInternal.asInternal(artisanThinBlockData).setPersistentDataContainer(persistentDataContainer);
+                                        blockMap.put(blockPos, artisanThinBlockData);
+                                    }
                                 }
                             }
                         }
                     }
                 }
             }
+            NeoArtisan.logger().info("自定义方块数据读取成功！");
         } catch (IOException e) {
-            NeoArtisan.logger().severe("作物数据读取失败: " + e);
+            NeoArtisan.logger().severe("自定义方块数据读取失败: " + e);
         }
     }
 }

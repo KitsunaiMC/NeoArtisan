@@ -4,9 +4,6 @@ import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisan.block.storage.internal.ArtisanBlockStorageInternal;
 import io.github.moyusowo.neoartisan.util.ReflectionUtil;
 import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlockData;
-import io.github.moyusowo.neoartisanapi.api.block.crop.ArtisanCropData;
-import io.github.moyusowo.neoartisanapi.api.block.thin.ArtisanThinBlockData;
-import io.github.moyusowo.neoartisanapi.api.block.transparent.ArtisanTransparentBlockData;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelDuplexHandler;
 import io.netty.channel.ChannelHandlerContext;
@@ -14,15 +11,16 @@ import io.netty.channel.ChannelPromise;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.SectionPos;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.protocol.game.ClientboundBlockUpdatePacket;
-import net.minecraft.network.protocol.game.ClientboundLevelChunkPacketData;
-import net.minecraft.network.protocol.game.ClientboundLevelChunkWithLightPacket;
-import net.minecraft.network.protocol.game.ClientboundSectionBlocksUpdatePacket;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.*;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.BitStorage;
 import net.minecraft.util.SimpleBitStorage;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.state.BlockState;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -42,83 +40,66 @@ public class BlockPacketHandler extends ChannelDuplexHandler {
             handleSingleBlockUpdate(packet);
         } else if (msg instanceof ClientboundLevelChunkWithLightPacket packet) {
             handleChunkUpdate(packet);
-            promise.addListener(future -> {
-                if (future.isSuccess()) {
-                    Map<BlockPos, ArtisanBlockData> data = ArtisanBlockStorageInternal.getInternal().getChunkArtisanBlocks(player.level(), packet.getX(), packet.getZ());
-                    int i = 0;
-                    for (Map.Entry<BlockPos, ArtisanBlockData> entry : data.entrySet()) {
-                        if (entry.getValue() instanceof ArtisanCropData artisanCropData) {
-                            ClientboundBlockUpdatePacket newPacket = new ClientboundBlockUpdatePacket(entry.getKey(), stateById(artisanCropData.getArtisanBlockState().appearanceState()));
-                            ctx.write(newPacket).addListener(f -> {
-                                if (!f.isSuccess()) {
-                                    NeoArtisan.logger().severe("补充包 " + i + " 发送失败: " + f.cause());
-                                }
-                            });
-                        } else if (entry.getValue() instanceof ArtisanTransparentBlockData artisanTransparentBlockData) {
-                            ClientboundBlockUpdatePacket newPacket = new ClientboundBlockUpdatePacket(entry.getKey(), stateById(artisanTransparentBlockData.getArtisanBlockState().appearanceState()));
-                            ctx.write(newPacket).addListener(f -> {
-                                if (!f.isSuccess()) {
-                                    NeoArtisan.logger().severe("补充包 " + i + " 发送失败: " + f.cause());
-                                }
-                            });
-                        } else if (entry.getValue() instanceof ArtisanThinBlockData artisanThinBlockData) {
-                            ClientboundBlockUpdatePacket newPacket = new ClientboundBlockUpdatePacket(entry.getKey(), stateById(artisanThinBlockData.getArtisanBlockState().appearanceState()));
-                            ctx.write(newPacket).addListener(f -> {
-                                if (!f.isSuccess()) {
-                                    NeoArtisan.logger().severe("补充包 " + i + " 发送失败: " + f.cause());
-                                }
-                            });
-                        }
-                    }
-                    ctx.flush();
-                } else {
-                    NeoArtisan.logger().severe("原始包发送失败: " + future.cause());
-                }
-            });
+            handleChunkArtisanBlock(ctx, promise, packet.getX(), packet.getZ());
         } else if (msg instanceof ClientboundSectionBlocksUpdatePacket packet) {
             handleSectionBlocksUpdate(packet);
+        } else if (msg instanceof ClientboundBundlePacket packet) {
+            final List<ChunkPos> chunks = new ArrayList<>();
+            packet.subPackets().forEach(
+                    subpacket -> {
+                        if (subpacket instanceof ClientboundBlockUpdatePacket p) {
+                            try {
+                                handleSingleBlockUpdate(p);
+                            } catch (Exception e) {
+                                throw new RuntimeException(e);
+                            }
+                        } else if (subpacket instanceof ClientboundSectionBlocksUpdatePacket p) {
+                            try {
+                                handleSectionBlocksUpdate(p);
+                            } catch (Exception e) {
+                                throw new RuntimeException(e);
+                            }
+                        } else if (subpacket instanceof ClientboundLevelChunkWithLightPacket p) {
+                            try {
+                                handleChunkUpdate(p);
+                            } catch (Exception e) {
+                                throw new RuntimeException(e);
+                            }
+                            chunks.add(new ChunkPos(p.getX(), p.getZ()));
+                        }
+                    }
+            );
+            if (!chunks.isEmpty()) {
+                for (ChunkPos chunkPos : chunks) {
+                    handleChunkArtisanBlock(ctx, promise, chunkPos.x, chunkPos.z);
+                }
+            }
         }
         super.write(ctx, msg, promise);
     }
 
     private void handleSingleBlockUpdate(ClientboundBlockUpdatePacket packet) throws Exception {
-        BlockPos blockPos = (BlockPos) ReflectionUtil.getField(packet, "pos");
-        BlockState state = (BlockState) ReflectionUtil.getField(packet, "blockState");
-        if (ArtisanBlockStorageInternal.getInternal().isArtisanBlock(player.level(), blockPos)
-                && ArtisanBlockStorageInternal.getInternal().getArtisanBlock(player.level(), blockPos) instanceof ArtisanCropData artisanCropData) {
-            BlockState toState = stateById(artisanCropData.getArtisanBlockState().appearanceState());
-            ReflectionUtil.setField(packet, "blockState", toState);
-        } else if (ArtisanBlockStorageInternal.getInternal().isArtisanBlock(player.level(), blockPos)
-                && ArtisanBlockStorageInternal.getInternal().getArtisanBlock(player.level(), blockPos) instanceof ArtisanTransparentBlockData artisanTransparentBlockData) {
-            BlockState toState = stateById(artisanTransparentBlockData.getArtisanBlockState().appearanceState());
-            ReflectionUtil.setField(packet, "blockState", toState);
-        } else if (ArtisanBlockStorageInternal.getInternal().isArtisanBlock(player.level(), blockPos)
-                && ArtisanBlockStorageInternal.getInternal().getArtisanBlock(player.level(), blockPos) instanceof ArtisanThinBlockData artisanThinBlockData) {
-            BlockState toState = stateById(artisanThinBlockData.getArtisanBlockState().appearanceState());
-            ReflectionUtil.setField(packet, "blockState", toState);
+        BlockPos blockPos = (BlockPos) ReflectionUtil.BLOCK_UPDATE_POS.get(packet);
+        BlockState state = (BlockState) ReflectionUtil.BLOCK_UPDATE_STATE.get(packet);
+        if (ArtisanBlockStorageInternal.getInternal().isArtisanBlock(player.level(), blockPos)) {
+            BlockState toState = stateById(ArtisanBlockStorageInternal.getInternal().getArtisanBlock(player.level(), blockPos).getArtisanBlockState().appearanceState());
+            ReflectionUtil.BLOCK_UPDATE_STATE.set(packet, toState);
         } else {
             BlockState toState = BlockMappingsManager.getMappedState(state);
             if (toState != null) {
-                ReflectionUtil.setField(packet, "blockState", toState);
+                ReflectionUtil.BLOCK_UPDATE_STATE.set(packet, toState);
             }
         }
     }
 
     private void handleSectionBlocksUpdate(ClientboundSectionBlocksUpdatePacket packet) throws Exception {
-        SectionPos sectionPos = (SectionPos) ReflectionUtil.getField(packet, "sectionPos");
-        short[] positions = (short[]) ReflectionUtil.getField(packet, "positions");
+        SectionPos sectionPos = (SectionPos) ReflectionUtil.SECTION_UPDATE_POS.get(packet);
+        short[] positions = (short[]) ReflectionUtil.SECTION_BLOCK_UPDATE_POS.get(packet);
         BlockPos[] pos = toBlockPos(positions, sectionPos);
-        BlockState[] states = (BlockState[]) ReflectionUtil.getField(packet, "states");
+        BlockState[] states = (BlockState[]) ReflectionUtil.SECTION_BLOCK_UPDATE_STATE.get(packet);
         for (int i = 0; i < states.length; i++) {
-            if (ArtisanBlockStorageInternal.getInternal().isArtisanBlock(player.level(), pos[i])
-                    && ArtisanBlockStorageInternal.getInternal().getArtisanBlock(player.level(), pos[i]) instanceof ArtisanCropData artisanCropData) {
-                states[i] = stateById(artisanCropData.getArtisanBlockState().appearanceState());
-            } else if (ArtisanBlockStorageInternal.getInternal().isArtisanBlock(player.level(), pos[i])
-                    && ArtisanBlockStorageInternal.getInternal().getArtisanBlock(player.level(), pos[i]) instanceof ArtisanTransparentBlockData artisanTransparentBlockData) {
-                states[i] = stateById(artisanTransparentBlockData.getArtisanBlockState().appearanceState());
-            } else if (ArtisanBlockStorageInternal.getInternal().isArtisanBlock(player.level(), pos[i])
-                    && ArtisanBlockStorageInternal.getInternal().getArtisanBlock(player.level(), pos[i]) instanceof ArtisanThinBlockData artisanThinBlockData) {
-                states[i] = stateById(artisanThinBlockData.getArtisanBlockState().appearanceState());
+            if (ArtisanBlockStorageInternal.getInternal().isArtisanBlock(player.level(), pos[i])) {
+                states[i] = stateById(ArtisanBlockStorageInternal.getInternal().getArtisanBlock(player.level(), pos[i]).getArtisanBlockState().appearanceState());
             } else {
                 BlockState toState = BlockMappingsManager.getMappedState(states[i]);
                 if (toState != null) {
@@ -126,12 +107,37 @@ public class BlockPacketHandler extends ChannelDuplexHandler {
                 }
             }
         }
-        ReflectionUtil.setField(packet, "states", states);
+        ReflectionUtil.SECTION_BLOCK_UPDATE_STATE.set(packet, states);
+    }
+
+    private void handleChunkArtisanBlock(ChannelHandlerContext ctx, ChannelPromise promise, final int chunkX, final int chunkZ) {
+        promise.addListener(future -> {
+            if (future.isSuccess()) {
+                Map<BlockPos, ArtisanBlockData> data = ArtisanBlockStorageInternal.getInternal().getChunkArtisanBlocks(player.level(), chunkX, chunkZ);
+                List<Packet<? super ClientGamePacketListener>> bundle = new ArrayList<>();
+                for (Map.Entry<BlockPos, ArtisanBlockData> entry : data.entrySet()) {
+                    ClientboundBlockUpdatePacket newPacket = new ClientboundBlockUpdatePacket(
+                            entry.getKey(),
+                            stateById(entry.getValue().getArtisanBlockState().appearanceState())
+                    );
+                    bundle.add(newPacket);
+                }
+                ClientboundBundlePacket bundlePacket = new ClientboundBundlePacket(bundle);
+                ctx.write(bundlePacket).addListener(f -> {
+                    if (!f.isSuccess()) {
+                        NeoArtisan.logger().severe("补充包发送失败: " + f.cause());
+                    }
+                });
+                ctx.flush();
+            } else {
+                NeoArtisan.logger().severe("原始包发送失败: " + future.cause());
+            }
+        });
     }
 
     private void handleChunkUpdate(ClientboundLevelChunkWithLightPacket packet) throws Exception {
         ClientboundLevelChunkPacketData chunkData = packet.getChunkData();
-        byte[] buffer = (byte[]) ReflectionUtil.getField(chunkData, "buffer");
+        byte[] buffer = (byte[]) ReflectionUtil.CHUNK_DATA.get(chunkData);
         FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.wrappedBuffer(buffer));
         FriendlyByteBuf newBuf = new FriendlyByteBuf(Unpooled.buffer());
         while (buf.readerIndex() < buffer.length) {
@@ -194,7 +200,7 @@ public class BlockPacketHandler extends ChannelDuplexHandler {
                 newBuf.writeLongArray(data);
             }
         }
-        ReflectionUtil.setField(chunkData, "buffer", newBuf.array());
+        ReflectionUtil.CHUNK_DATA.set(chunkData, newBuf.array());
     }
 
     private BlockPos[] toBlockPos(short[] positions, SectionPos sectionPos) {

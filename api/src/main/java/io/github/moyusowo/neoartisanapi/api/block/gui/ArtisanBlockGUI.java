@@ -7,15 +7,16 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
+import org.bukkit.event.*;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.BlockInventoryHolder;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -32,6 +33,7 @@ import org.jetbrains.annotations.NotNull;
  * <ol>
  *   <li>必须实现 {@link #setItemInInventory()} 设置初始物品</li>
  *   <li>可通过重写和增加事件方法扩展交互逻辑</li>
+ *   <li>在构造函数中不能直接调用getArtisanBlockData方法，因为此刻数据可能还没有加载到内存中，必须使用BukkitRunnable调度</li>
  * </ol>
  *
  * @see BlockInventoryHolder Bukkit库存持有者接口
@@ -55,7 +57,15 @@ public abstract class ArtisanBlockGUI implements BlockInventoryHolder, Listener 
         this.location = location;
         inventory = plugin.getServer().createInventory(this, size, title);
         Bukkit.getPluginManager().registerEvents(this, plugin);
-        setItemInInventory();
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (NeoArtisanAPI.getArtisanBlockStorage().isArtisanBlock(location.getBlock())) {
+                    setItemInInventory();
+                    cancel();
+                }
+            }
+        }.runTaskTimer(plugin, 0L, 1L);
     }
 
     /**
@@ -69,7 +79,15 @@ public abstract class ArtisanBlockGUI implements BlockInventoryHolder, Listener 
         this.location = location;
         inventory = plugin.getServer().createInventory(this, inventoryType, title);
         Bukkit.getPluginManager().registerEvents(this, plugin);
-        setItemInInventory();
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (NeoArtisanAPI.getArtisanBlockStorage().isArtisanBlock(location.getBlock())) {
+                    setItemInInventory();
+                    cancel();
+                }
+            }
+        }.runTaskTimer(plugin, 0L, 1L);
     }
 
     /**
@@ -124,10 +142,24 @@ public abstract class ArtisanBlockGUI implements BlockInventoryHolder, Listener 
     }
 
     /**
+     * 该GUI绑定的BlockData销毁时的逻辑，由插件实现调用。
+     *
+     * <p>监听器必须注销！否则会残留GUI对方块的绑定！</p>
+     *
+     * @implNote 若该方法耗时太长，可能堵塞方块数据储存
+     * @since 1.2.0
+     */
+    public void onTerminate() {
+        HandlerList.unregisterAll(this);
+    }
+
+    /**
      * 抽象方法：初始化库存物品
      * <p>
      * 子类必须实现此方法，在构造时设置库存的初始物品布局。
      * </p>
+     *
+     * <p>该方法中可以安全的调用getArtisanBlockData方法，因为该方法会在数据加载完之后执行。</p>
      */
     protected abstract void setItemInInventory();
 
@@ -135,8 +167,18 @@ public abstract class ArtisanBlockGUI implements BlockInventoryHolder, Listener 
      * 库存点击事件处理（默认取消所有操作）
      */
     @EventHandler
-    protected void onClick(InventoryClickEvent event) {
+    public void onClick(InventoryClickEvent event) {
+        if (event.getClickedInventory() == null) return;
         if (!(event.getClickedInventory().getHolder(false) instanceof ArtisanBlockGUI)) return;
+        event.setCancelled(true);
+    }
+
+    /**
+     * 库存点击事件处理（默认取消所有操作）
+     */
+    @EventHandler
+    public void onDrag(InventoryDragEvent event) {
+        if (!(event.getInventory().getHolder(false) instanceof ArtisanBlockGUI)) return;
         event.setCancelled(true);
     }
 
@@ -144,7 +186,11 @@ public abstract class ArtisanBlockGUI implements BlockInventoryHolder, Listener 
      * 方块交互事件处理（默认打开GUI）
      */
     @EventHandler(priority = EventPriority.LOWEST)
-    protected void onInteract(PlayerInteractEvent event) {
+    public void onInteract(PlayerInteractEvent event) {
+        if (event.useInteractedBlock() == Event.Result.DENY) return;
+        if (event.useItemInHand() == Event.Result.DENY) return;
+        if (event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
+        if (event.getClickedBlock() == null) return;
         if (!event.getClickedBlock().getLocation().equals(this.location)) return;
         event.setCancelled(true);
         event.getPlayer().openInventory(this.inventory);

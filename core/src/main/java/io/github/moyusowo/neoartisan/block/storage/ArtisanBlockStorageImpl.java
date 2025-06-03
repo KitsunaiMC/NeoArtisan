@@ -4,6 +4,7 @@ import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisan.block.storage.internal.ArtisanBlockStorageInternal;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlockData;
+import io.github.moyusowo.neoartisanapi.api.block.gui.ArtisanBlockGUI;
 import io.github.moyusowo.neoartisanapi.api.block.storage.ArtisanBlockStorage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.ChunkPos;
@@ -12,6 +13,12 @@ import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.CraftWorld;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.HandlerList;
+import org.bukkit.event.Listener;
+import org.bukkit.event.server.PluginEnableEvent;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
@@ -21,7 +28,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "UnstableApiUsage"})
 final class ArtisanBlockStorageImpl implements ArtisanBlockStorage, ArtisanBlockStorageInternal {
 
     private static ArtisanBlockStorageImpl instance;
@@ -51,7 +58,38 @@ final class ArtisanBlockStorageImpl implements ArtisanBlockStorage, ArtisanBlock
         );
         this.storage = new HashMap<>();
         this.lock = new ReentrantReadWriteLock();
-        BlockDataSerializer.load(this.storage);
+        Bukkit.getPluginManager().registerEvents(new Listener() {
+            @EventHandler(priority = EventPriority.MONITOR)
+            private void onPluginEnabled(PluginEnableEvent event) {
+                final Listener listener = this;
+                if (event.getPlugin().getName().equals("NeoArtisan")) {
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            HandlerList.unregisterAll(listener);
+                        }
+                    }.runTaskLater(NeoArtisan.instance(), 10L);
+                    new BukkitRunnable() {
+                        private boolean isAllLoaded() {
+                            for (Plugin otherPlugin : Bukkit.getPluginManager().getPlugins()) {
+                                if (otherPlugin.getPluginMeta().getPluginDependencies().contains("NeoArtisan") ||
+                                        otherPlugin.getPluginMeta().getPluginSoftDependencies().contains("NeoArtisan")) {
+                                    if (!otherPlugin.isEnabled()) return false;
+                                }
+                            }
+                            return true;
+                        }
+                        @Override
+                        public void run() {
+                            if (isAllLoaded()) {
+                                BlockDataSerializer.load(ArtisanBlockStorageImpl.instance.storage);
+                                cancel();
+                            }
+                        }
+                    }.runTaskTimer(NeoArtisan.instance(), 1L, 5L);
+                }
+            }
+        }, NeoArtisan.instance());
         new BukkitRunnable() {
             @Override
             public void run() {
@@ -88,7 +126,13 @@ final class ArtisanBlockStorageImpl implements ArtisanBlockStorage, ArtisanBlock
         ChunkPos chunkPos = new ChunkPos(blockPos);
         lock.writeLock().lock();
         try {
-            storage.get(level).get(chunkPos).remove(blockPos);
+            if (storage.get(level).get(chunkPos).containsKey(blockPos)) {
+                ArtisanBlockGUI gui = storage.get(level).get(chunkPos).get(blockPos).getGUI();
+                if (gui != null) {
+                    gui.onTerminate();
+                }
+                storage.get(level).get(chunkPos).remove(blockPos);
+            }
             if (storage.get(level).get(chunkPos).isEmpty()) {
                 storage.get(level).remove(chunkPos);
             }

@@ -21,6 +21,7 @@ import org.jetbrains.annotations.NotNull;
  * @see ArtisanBlock 自定义方块类型
  * @since 1.0.0
  */
+@SuppressWarnings({"unused", "UnstableApiUsage"})
 public class ArtisanBlockPlaceEvent extends BlockPlaceEvent {
 
     private static final HandlerList handlers = new HandlerList();

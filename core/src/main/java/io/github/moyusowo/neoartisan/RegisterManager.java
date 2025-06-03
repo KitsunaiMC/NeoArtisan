@@ -17,6 +17,8 @@ import java.util.Set;
 @SuppressWarnings("UnstableApiUsage")
 public final class RegisterManager {
 
+    public static final IllegalAccessError REGISTRY_CLOSED = new IllegalAccessError("Registry closed! Please register in the methods with annotation.");
+
     public static final String eTips = "只能在使用注解的方法内注册！";
 
     private RegisterManager() {}
@@ -64,9 +66,9 @@ public final class RegisterManager {
                 try {
                     method.invoke(null);
                 } catch (InvocationTargetException | IllegalAccessException e) {
-                    NeoArtisan.logger().info("注册方法 " + method.getDeclaringClass().getPackageName() + "." + method.getDeclaringClass().getName() + " 执行失败：" + e.getLocalizedMessage());
+                    NeoArtisan.logger().info("注册方法 "  + method.getDeclaringClass().getName() + "." + method.getName() + " 执行失败：" + e.getLocalizedMessage());
                 }
-                NeoArtisan.logger().info("成功执行注册方法：" + method.getDeclaringClass().getPackageName() + "." + method.getDeclaringClass().getName());
+                NeoArtisan.logger().info("成功执行注册方法："  + method.getDeclaringClass().getName() + "." + method.getName());
             }
         }
     }
@@ -78,16 +80,6 @@ public final class RegisterManager {
     private enum Status {
         OPEN,
         CLOSED;
-    }
-
-    public static final class RegisterException extends Exception {
-        private RegisterException() {
-            super("Registry is closed! Please register with annotation!");
-        }
-
-        public static RegisterException exception() {
-            return new RegisterException();
-        }
     }
 
 }

@@ -88,7 +88,7 @@ public void registerContent() {
                     .build()
     );
     NeoArtisanAPI.getItemRegistry().registerItem(
-            NeoArtisanAPI.getItemRegistry().builder()
+            ArtisanItem.builder()
                     .registryId(magic_helmet)
                     .rawMaterial(Material.IRON_HELMET)
                     .displayName("<aqua>魔法头盔~")
@@ -106,9 +106,10 @@ public void registerContent() {
                             )
                     )
                     .maxDurability(2500)
+                    .build()
     );
     NeoArtisanAPI.getItemRegistry().registerItem(
-            NeoArtisanAPI.getItemRegistry().builder()
+            ArtisanItem.builder()
                     .registryId(magic_sword)
                     .rawMaterial(Material.IRON_SWORD)
                     .displayName("<yellow>魔法剑~")
@@ -126,14 +127,16 @@ public void registerContent() {
                             )
                     )
                     .maxDurability(5000)
+                    .build()
     );
     NeoArtisanAPI.getItemRegistry().registerItem(
-            NeoArtisanAPI.getItemRegistry().builder()
+            ArtisanItem.builder()
                     .registryId(cooking_pot)
                     .rawMaterial(Material.PAPER)
                     .displayName("烹饪锅")
                     .blockId(cooking_pot)
                     .itemModel(cooking_pot)
+                    .build()
     );
 }
 ```

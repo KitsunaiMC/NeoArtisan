@@ -1,14 +1,9 @@
 package io.github.moyusowo.neoartisan.util;
 
 import io.github.moyusowo.neoartisan.NeoArtisan;
-import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
-import org.bukkit.NamespacedKey;
-import org.bukkit.attribute.AttributeModifier;
-import org.bukkit.inventory.EquipmentSlot;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
-import java.util.Collection;
 
 @SuppressWarnings("unused")
 public final class Util {

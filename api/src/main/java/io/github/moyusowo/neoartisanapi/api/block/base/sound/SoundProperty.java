@@ -1,5 +1,6 @@
 package io.github.moyusowo.neoartisanapi.api.block.base.sound;
 
+import org.bukkit.NamespacedKey;
 import org.bukkit.Registry;
 import org.bukkit.Sound;
 import org.jetbrains.annotations.NotNull;
@@ -28,11 +29,11 @@ public final class SoundProperty {
     /**
      * 音效资源键
      * <p>
-     * - 对于原版音效，格式为Minecraft命名空间键（如"entity.player.levelup"）<br>
+     * - 对于原版音效，格式为Minecraft命名空间键（如"minecraft:entity.player.levelup"）<br>
      * - 对于自定义音效，需与资源包中的sounds.json定义一致
      * </p>
      */
-    public final String key;
+    public final NamespacedKey key;
 
     /**
      * 音效播放音量
@@ -59,7 +60,7 @@ public final class SoundProperty {
      * @param volume 音量（建议0.0-1.0）
      * @param pitch 音调（建议0.5-2.0）
      */
-    private SoundProperty(String key, float volume, float pitch) {
+    private SoundProperty(NamespacedKey key, float volume, float pitch) {
         this.key = key;
         this.volume = volume;
         this.pitch = pitch;
@@ -76,7 +77,7 @@ public final class SoundProperty {
      */
     public static @NotNull SoundProperty of(@NotNull Sound sound, float volume, float pitch) {
         var namespacedKey = Registry.SOUNDS.getKey(sound);
-        if (namespacedKey != null) return new SoundProperty(namespacedKey.getKey(), volume, pitch);
+        if (namespacedKey != null) return new SoundProperty(namespacedKey, volume, pitch);
         else throw new IllegalArgumentException("Could not find that sound in bukkit Registry!");
     }
 
@@ -88,7 +89,7 @@ public final class SoundProperty {
      * @param pitch 音调
      * @return 音效属性实例（非null）
      */
-    public static @NotNull SoundProperty of(@NotNull String key, float volume, float pitch) {
+    public static @NotNull SoundProperty of(@NotNull NamespacedKey key, float volume, float pitch) {
         return new SoundProperty(key, volume, pitch);
     }
 
@@ -108,7 +109,7 @@ public final class SoundProperty {
      * @param key 音效资源键
      * @return 音效属性实例（非null）
      */
-    public static @NotNull SoundProperty of(@NotNull String key) {
+    public static @NotNull SoundProperty of(@NotNull NamespacedKey key) {
         return of(key, 1.0f, 1.0f);
     }
 }

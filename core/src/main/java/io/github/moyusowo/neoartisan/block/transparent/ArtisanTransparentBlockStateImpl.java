@@ -53,7 +53,7 @@ class ArtisanTransparentBlockStateImpl extends ArtisanBlockStateBase implements 
                 case MANGROVE_LEAVES -> blockState = Blocks.MANGROVE_LEAVES.defaultBlockState();
                 case PALE_OAK_LEAVES -> blockState = Blocks.PALE_OAK_LEAVES.defaultBlockState();
                 case FLOWERING_AZALEA_LEAVES -> blockState = Blocks.FLOWERING_AZALEA_LEAVES.defaultBlockState();
-                case null, default -> blockState = Blocks.OAK_LEAVES.defaultBlockState();
+                default -> blockState = Blocks.OAK_LEAVES.defaultBlockState();
             }
             return Block.getId(
                     blockState.setValue(BlockStateProperties.DISTANCE, this.transparentAppearance.distance)
