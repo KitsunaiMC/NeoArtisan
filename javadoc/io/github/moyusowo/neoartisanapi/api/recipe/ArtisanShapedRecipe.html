@@ -38,7 +38,7 @@ loadScripts(document, 'script');</script>
 <li>
 <p>概要:</p>
 <ul>
-<li>嵌套</li>
+<li><a href="#nested-class-summary">嵌套</a></li>
 <li>字段</li>
 <li>构造器</li>
 <li><a href="#method-summary">方法</a></li>
@@ -58,7 +58,7 @@ loadScripts(document, 'script');</script>
 <div id="navbar-sub-list">
 <ul class="sub-nav-list">
 <li>概要:&nbsp;</li>
-<li>嵌套&nbsp;|&nbsp;</li>
+<li><a href="#nested-class-summary">嵌套</a>&nbsp;|&nbsp;</li>
 <li>字段&nbsp;|&nbsp;</li>
 <li>构造器&nbsp;|&nbsp;</li>
 <li><a href="#method-summary">方法</a></li>
@@ -86,60 +86,76 @@ loadScripts(document, 'script');</script>
 <h1 title="接口 ArtisanShapedRecipe" class="title">接口 ArtisanShapedRecipe</h1>
 </div>
 <section class="class-description" id="class-description">
+<dl class="notes">
+<dt>所有超级接口:</dt>
+<dd><code><a href="ArtisanRecipe.html" title="io.github.moyusowo.neoartisanapi.api.recipe中的接口">ArtisanRecipe</a></code></dd>
+</dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public interface </span><span class="element-name type-name-label">ArtisanShapedRecipe</span></div>
-<div class="block">有序合成配方构建器，用于定义精确布局的自定义合成配方。
+<div class="type-signature"><span class="modifiers">public interface </span><span class="element-name type-name-label">ArtisanShapedRecipe</span><span class="extends-implements">
+extends <a href="ArtisanRecipe.html" title="io.github.moyusowo.neoartisanapi.api.recipe中的接口">ArtisanRecipe</a></span></div>
+<div class="block">有序合成配方接口，继承自基础 <a href="ArtisanRecipe.html" title="io.github.moyusowo.neoartisanapi.api.recipe中的接口"><code>ArtisanRecipe</code></a>。
 
- <p>通过此接口可以：</p>
- <ul>
-   <li>将字符符号绑定到特定材料</li>
-   <li>设置合成结果物品和数量</li>
-   <li>最终注册配方到服务器</li>
- </ul></div>
+ <p><b>配方模式说明：</b></p>
+ <pre>
+ 示例配方布局：
+ .set(" A ", " B ", "   ")
+ .add('A', Material.IRON_INGOT)
+ .add('B', Material.STICK)
+ 对应工作台布局：
+ [ 空 ][铁锭][ 空 ]
+ [ 空 ][木棍][ 空 ]
+ [ 空 ][ 空 ][ 空 ]
+ </pre></div>
 <dl class="notes">
 <dt>从以下版本开始:</dt>
-<dd>1.0.0</dd>
+<dd>1.0.2</dd>
 <dt>另请参阅:</dt>
 <dd>
-<ul class="tag-list-long">
-<li><a href="RecipeRegistry.html#createShapedRecipe(java.lang.String,java.lang.String,java.lang.String)"><code>RecipeRegistry.createShapedRecipe(String, String, String)</code></a></li>
+<ul class="tag-list">
+<li><a href="ArtisanRecipe.html" title="io.github.moyusowo.neoartisanapi.api.recipe中的接口"><code>基础配方接口</code></a></li>
 </ul>
 </dd>
 </dl>
 </section>
 <section class="summary">
 <ul class="summary-list">
+<!-- ======== NESTED CLASS SUMMARY ======== -->
+<li>
+<section class="nested-class-summary" id="nested-class-summary">
+<h2>嵌套类概要</h2>
+<div class="caption"><span>嵌套类</span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">修饰符和类型</div>
+<div class="table-header col-second">接口</div>
+<div class="table-header col-last">说明</div>
+<div class="col-first even-row-color"><code>static interface&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="ArtisanShapedRecipe.Builder.html" class="type-name-link" title="io.github.moyusowo.neoartisanapi.api.recipe中的接口">ArtisanShapedRecipe.Builder</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">有序配方建造器接口，采用流式API设计。</div>
+</div>
+</div>
+</section>
+</li>
 <!-- ========== METHOD SUMMARY =========== -->
 <li>
 <section class="method-summary" id="method-summary">
 <h2>方法概要</h2>
 <div id="method-summary-table">
-<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">所有方法</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">实例方法</button><button id="method-summary-table-tab3" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab3', 3)" class="table-tab">抽象方法</button></div>
-<div id="method-summary-table.tabpanel" role="tabpanel" aria-labelledby="method-summary-table-tab0">
+<div class="caption"><span>静态方法</span></div>
 <div class="summary-table three-column-summary">
 <div class="table-header col-first">修饰符和类型</div>
 <div class="table-header col-second">方法</div>
 <div class="table-header col-last">说明</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="ArtisanShapedRecipe.html" title="io.github.moyusowo.neoartisanapi.api.recipe中的接口">ArtisanShapedRecipe</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#add(char,org.bukkit.NamespacedKey)" class="member-name-link">add</a><wbr>(char&nbsp;c,
- @NotNull <a href="https://jd.papermc.io/paper/1.21.5/org/bukkit/NamespacedKey.html" title="org.bukkit中的类或接口" class="external-link">NamespacedKey</a>&nbsp;registryId)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
-<div class="block">将配方符号绑定到自定义物品。</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#build()" class="member-name-link">build</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
-<div class="block">完成配方构建并注册到服务器。</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="ArtisanShapedRecipe.html" title="io.github.moyusowo.neoartisanapi.api.recipe中的接口">ArtisanShapedRecipe</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#setResult(org.bukkit.NamespacedKey,int)" class="member-name-link">setResult</a><wbr>(@NotNull <a href="https://jd.papermc.io/paper/1.21.5/org/bukkit/NamespacedKey.html" title="org.bukkit中的类或接口" class="external-link">NamespacedKey</a>&nbsp;result,
- int&nbsp;count)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
-<div class="block">设置合成结果。</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1"><code>static <a href="ArtisanShapedRecipe.Builder.html" title="io.github.moyusowo.neoartisanapi.api.recipe中的接口">ArtisanShapedRecipe.Builder</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1"><code><a href="#builder()" class="member-name-link">builder</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1">
+<div class="block">获取有序配方建造器实例</div>
 </div>
 </div>
 </div>
-</div>
+<div class="inherited-list">
+<h3 id="methods-inherited-from-class-io.github.moyusowo.neoartisanapi.api.recipe.ArtisanRecipe">从接口继承的方法&nbsp;io.github.moyusowo.neoartisanapi.api.recipe.<a href="ArtisanRecipe.html" title="io.github.moyusowo.neoartisanapi.api.recipe中的接口">ArtisanRecipe</a></h3>
+<code><a href="ArtisanRecipe.html#getInputs()">getInputs</a>, <a href="ArtisanRecipe.html#getKey()">getKey</a>, <a href="ArtisanRecipe.html#getResultGenerator()">getResultGenerator</a>, <a href="ArtisanRecipe.html#getType()">getType</a></code></div>
 </section>
 </li>
 </ul>
@@ -152,66 +168,17 @@ loadScripts(document, 'script');</script>
 <h2>方法详细资料</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="add(char,org.bukkit.NamespacedKey)">
-<h3>add</h3>
-<div class="member-signature"><span class="return-type"><a href="ArtisanShapedRecipe.html" title="io.github.moyusowo.neoartisanapi.api.recipe中的接口">ArtisanShapedRecipe</a></span>&nbsp;<span class="element-name">add</span><wbr><span class="parameters">(char&nbsp;c,
- @NotNull
- @NotNull <a href="https://jd.papermc.io/paper/1.21.5/org/bukkit/NamespacedKey.html" title="org.bukkit中的类或接口" class="external-link">NamespacedKey</a>&nbsp;registryId)</span></div>
-<div class="block">将配方符号绑定到自定义物品。
+<section class="detail" id="builder()">
+<h3>builder</h3>
+<div class="member-signature"><span class="modifiers">static</span>&nbsp;<span class="return-type"><a href="ArtisanShapedRecipe.Builder.html" title="io.github.moyusowo.neoartisanapi.api.recipe中的接口">ArtisanShapedRecipe.Builder</a></span>&nbsp;<span class="element-name">builder</span>()</div>
+<div class="block">获取有序配方建造器实例
 
- <p>示例将'A'绑定到钻石剑：</p>
- <pre><code>
- add('A', new NamespacedKey("myplugin", "diamond_sword"))
- </code></pre>
-
- <p>调用过 <a href="#build()"><code>build()</code></a> 方法之后不能再调用。</p></div>
+ <p><b>服务定位：</b>通过 <a href="https://jd.papermc.io/paper/1.21.5/org/bukkit/plugin/ServicesManager.html" title="org.bukkit.plugin中的类或接口" class="external-link"><code>ServicesManager</code></a> 加载实现</p></div>
 <dl class="notes">
-<dt>参数:</dt>
-<dd><code>c</code> - 配方模式中的字符符号（大小写敏感）</dd>
-<dd><code>registryId</code> - 自定义物品注册ID（不能为null）</dd>
+<dt>返回:</dt>
+<dd>非null的建造器实例</dd>
 <dt>抛出:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="java.lang中的类或接口" class="external-link">IllegalArgumentException</a></code> - 如果重复绑定同一字符</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="setResult(org.bukkit.NamespacedKey,int)">
-<h3>setResult</h3>
-<div class="member-signature"><span class="return-type"><a href="ArtisanShapedRecipe.html" title="io.github.moyusowo.neoartisanapi.api.recipe中的接口">ArtisanShapedRecipe</a></span>&nbsp;<span class="element-name">setResult</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="https://jd.papermc.io/paper/1.21.5/org/bukkit/NamespacedKey.html" title="org.bukkit中的类或接口" class="external-link">NamespacedKey</a>&nbsp;result,
- int&nbsp;count)</span></div>
-<div class="block">设置合成结果。
-
- <p>调用过 <a href="#build()"><code>build()</code></a> 方法之后不能再调用。</p></div>
-<dl class="notes">
-<dt>参数:</dt>
-<dd><code>result</code> - 结果物品注册ID（不能为null）</dd>
-<dd><code>count</code> - 产出数量</dd>
-<dt>另请参阅:</dt>
-<dd>
-<ul class="tag-list">
-<li><a href="#build()"><code>build()</code></a></li>
-</ul>
-</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="build()">
-<h3>build</h3>
-<div class="member-signature"><span class="return-type">void</span>&nbsp;<span class="element-name">build</span>()</div>
-<div class="block">完成配方构建并注册到服务器。
-
- <p><b>必须调用此方法配方才会生效！</b></p>
-
- <p>调用过本方法之后不能再调用。</p></div>
-<dl class="notes">
-<dt>另请参阅:</dt>
-<dd>
-<ul class="tag-list">
-<li><a href="RecipeRegistry.html" title="io.github.moyusowo.neoartisanapi.api.recipe中的接口"><code>RecipeRegistry</code></a></li>
-</ul>
-</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalStateException.html" title="java.lang中的类或接口" class="external-link">IllegalStateException</a></code> - 如果建造器服务未注册</dd>
 </dl>
 </section>
 </li>

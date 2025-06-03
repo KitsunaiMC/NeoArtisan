@@ -38,7 +38,7 @@ loadScripts(document, 'script');</script>
 <li>
 <p>概要:</p>
 <ul>
-<li>嵌套</li>
+<li><a href="#nested-class-summary">嵌套</a></li>
 <li><a href="#field-summary">字段</a></li>
 <li>构造器</li>
 <li><a href="#method-summary">方法</a></li>
@@ -58,7 +58,7 @@ loadScripts(document, 'script');</script>
 <div id="navbar-sub-list">
 <ul class="sub-nav-list">
 <li>概要:&nbsp;</li>
-<li>嵌套&nbsp;|&nbsp;</li>
+<li><a href="#nested-class-summary">嵌套</a>&nbsp;|&nbsp;</li>
 <li><a href="#field-summary">字段</a>&nbsp;|&nbsp;</li>
 <li>构造器&nbsp;|&nbsp;</li>
 <li><a href="#method-summary">方法</a></li>
@@ -108,6 +108,23 @@ loadScripts(document, 'script');</script>
 </section>
 <section class="summary">
 <ul class="summary-list">
+<!-- ======== NESTED CLASS SUMMARY ======== -->
+<li>
+<section class="nested-class-summary" id="nested-class-summary">
+<h2>嵌套类概要</h2>
+<div class="caption"><span>嵌套类</span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">修饰符和类型</div>
+<div class="table-header col-second">接口</div>
+<div class="table-header col-last">说明</div>
+<div class="col-first even-row-color"><code>static interface&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="ArtisanItem.Builder.html" class="type-name-link" title="io.github.moyusowo.neoartisanapi.api.item中的接口">ArtisanItem.Builder</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">构建自定义物品的构建器接口。</div>
+</div>
+</div>
+</section>
+</li>
 <!-- =========== FIELD SUMMARY =========== -->
 <li>
 <section class="field-summary" id="field-summary">
@@ -130,73 +147,78 @@ loadScripts(document, 'script');</script>
 <section class="method-summary" id="method-summary">
 <h2>方法概要</h2>
 <div id="method-summary-table">
-<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">所有方法</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">实例方法</button><button id="method-summary-table-tab3" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab3', 3)" class="table-tab">抽象方法</button></div>
+<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">所有方法</button><button id="method-summary-table-tab1" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab1', 3)" class="table-tab">静态方法</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">实例方法</button><button id="method-summary-table-tab3" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab3', 3)" class="table-tab">抽象方法</button></div>
 <div id="method-summary-table.tabpanel" role="tabpanel" aria-labelledby="method-summary-table-tab0">
 <div class="summary-table three-column-summary">
 <div class="table-header col-first">修饰符和类型</div>
 <div class="table-header col-second">方法</div>
 <div class="table-header col-last">说明</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#equals(org.bukkit.NamespacedKey)" class="member-name-link">equals</a><wbr>(@NotNull <a href="https://jd.papermc.io/paper/1.21.5/org/bukkit/NamespacedKey.html" title="org.bukkit中的类或接口" class="external-link">NamespacedKey</a>&nbsp;registryId)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
-<div class="block">通过注册ID判断是否为此自定义物品。</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1"><code>static <a href="ArtisanItem.Builder.html" title="io.github.moyusowo.neoartisanapi.api.item中的接口">ArtisanItem.Builder</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1"><code><a href="#builder()" class="member-name-link">builder</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1">
+<div class="block">创建一个新的自定义物品构建器实例。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#equals(org.bukkit.inventory.ItemStack)" class="member-name-link">equals</a><wbr>(@NotNull <a href="https://jd.papermc.io/paper/1.21.5/org/bukkit/inventory/ItemStack.html" title="org.bukkit.inventory中的类或接口" class="external-link">ItemStack</a>&nbsp;itemStack)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#equals(org.bukkit.NamespacedKey)" class="member-name-link">equals</a><wbr>(@NotNull <a href="https://jd.papermc.io/paper/1.21.5/org/bukkit/NamespacedKey.html" title="org.bukkit中的类或接口" class="external-link">NamespacedKey</a>&nbsp;registryId)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
-<div class="block">通过物品堆判断是否为此自定义物品。</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="ArmorProperty.html" title="io.github.moyusowo.neoartisanapi.api.item中的类">ArmorProperty</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#getArmorProperty()" class="member-name-link">getArmorProperty</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
-<div class="block">获取此物品的武器属性配置。</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="AttributeProperty.html" title="io.github.moyusowo.neoartisanapi.api.item中的接口">AttributeProperty</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#getAttributeProperty()" class="member-name-link">getAttributeProperty</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
-<div class="block">获取此物品的属性系统配置。</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@Nullable <a href="https://jd.papermc.io/paper/1.21.5/org/bukkit/NamespacedKey.html" title="org.bukkit中的类或接口" class="external-link">NamespacedKey</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#getBlockId()" class="member-name-link">getBlockId</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
-<div class="block">获取此物品右键放置出的方块。</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@Nullable <a href="https://jd.papermc.io/paper/1.21.5/io/papermc/paper/datacomponent/item/CustomModelData.html" title="io.papermc.paper.datacomponent.item中的类或接口" class="external-link">CustomModelData</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#getCustomModelData()" class="member-name-link">getCustomModelData</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
-<div class="block">获取此物品的自定义模型数据值。</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="FoodProperty.html" title="io.github.moyusowo.neoartisanapi.api.item中的类">FoodProperty</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#getFoodProperty()" class="member-name-link">getFoodProperty</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
-<div class="block">获取此物品的食物属性配置。</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@Nullable <a href="https://jd.papermc.io/paper/1.21.5/org/bukkit/NamespacedKey.html" title="org.bukkit中的类或接口" class="external-link">NamespacedKey</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#getItemModel()" class="member-name-link">getItemModel</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Integer.html" title="java.lang中的类或接口" class="external-link">Integer</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#getMaxDurability()" class="member-name-link">getMaxDurability</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
-<div class="block">获取此物品的最大耐久值。</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="https://jd.papermc.io/paper/1.21.5/org/bukkit/Material.html" title="org.bukkit中的类或接口" class="external-link">Material</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#getRawMaterial()" class="member-name-link">getRawMaterial</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
-<div class="block">获取此自定义物品的基础材质。</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="https://jd.papermc.io/paper/1.21.5/org/bukkit/NamespacedKey.html" title="org.bukkit中的类或接口" class="external-link">NamespacedKey</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#getRegistryId()" class="member-name-link">getRegistryId</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
-<div class="block">获取此自定义物品的唯一注册ID。</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="WeaponProperty.html" title="io.github.moyusowo.neoartisanapi.api.item中的类">WeaponProperty</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#getWeaponProperty()" class="member-name-link">getWeaponProperty</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
-<div class="block">获取此物品的武器属性配置。</div>
+<div class="block">通过注册ID判断是否为此自定义物品。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#hasOriginalCraft()" class="member-name-link">hasOriginalCraft</a>()</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#equals(org.bukkit.inventory.ItemStack)" class="member-name-link">equals</a><wbr>(@NotNull <a href="https://jd.papermc.io/paper/1.21.5/org/bukkit/inventory/ItemStack.html" title="org.bukkit.inventory中的类或接口" class="external-link">ItemStack</a>&nbsp;itemStack)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="block">通过物品堆判断是否为此自定义物品。</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="ArmorProperty.html" title="io.github.moyusowo.neoartisanapi.api.item中的类">ArmorProperty</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#getArmorProperty()" class="member-name-link">getArmorProperty</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="block">获取此物品的武器属性配置。</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="AttributeProperty.html" title="io.github.moyusowo.neoartisanapi.api.item中的接口">AttributeProperty</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#getAttributeProperty()" class="member-name-link">getAttributeProperty</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="block">获取此物品的属性系统配置。</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@Nullable <a href="https://jd.papermc.io/paper/1.21.5/org/bukkit/NamespacedKey.html" title="org.bukkit中的类或接口" class="external-link">NamespacedKey</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#getBlockId()" class="member-name-link">getBlockId</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="block">获取此物品右键放置出的方块。</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@Nullable <a href="https://jd.papermc.io/paper/1.21.5/io/papermc/paper/datacomponent/item/CustomModelData.html" title="io.papermc.paper.datacomponent.item中的类或接口" class="external-link">CustomModelData</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#getCustomModelData()" class="member-name-link">getCustomModelData</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="block">获取此物品的自定义模型数据值。</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="FoodProperty.html" title="io.github.moyusowo.neoartisanapi.api.item中的类">FoodProperty</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#getFoodProperty()" class="member-name-link">getFoodProperty</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="block">获取此物品的食物属性配置。</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@Nullable <a href="https://jd.papermc.io/paper/1.21.5/org/bukkit/NamespacedKey.html" title="org.bukkit中的类或接口" class="external-link">NamespacedKey</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#getItemModel()" class="member-name-link">getItemModel</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Integer.html" title="java.lang中的类或接口" class="external-link">Integer</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#getMaxDurability()" class="member-name-link">getMaxDurability</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="block">获取此物品的最大耐久值。</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="https://jd.papermc.io/paper/1.21.5/org/bukkit/Material.html" title="org.bukkit中的类或接口" class="external-link">Material</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#getRawMaterial()" class="member-name-link">getRawMaterial</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="block">获取此自定义物品的基础材质。</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="https://jd.papermc.io/paper/1.21.5/org/bukkit/NamespacedKey.html" title="org.bukkit中的类或接口" class="external-link">NamespacedKey</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#getRegistryId()" class="member-name-link">getRegistryId</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="block">获取此自定义物品的唯一注册ID。</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="WeaponProperty.html" title="io.github.moyusowo.neoartisanapi.api.item中的类">WeaponProperty</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#getWeaponProperty()" class="member-name-link">getWeaponProperty</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="block">获取此物品的武器属性配置。</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#hasOriginalCraft()" class="member-name-link">hasOriginalCraft</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">检查此物品是否保留原版合成配方。</div>
 </div>
 </div>
@@ -228,6 +250,17 @@ loadScripts(document, 'script');</script>
 <section class="method-details" id="method-detail">
 <h2>方法详细资料</h2>
 <ul class="member-list">
+<li>
+<section class="detail" id="builder()">
+<h3>builder</h3>
+<div class="member-signature"><span class="modifiers">static</span>&nbsp;<span class="return-type"><a href="ArtisanItem.Builder.html" title="io.github.moyusowo.neoartisanapi.api.item中的接口">ArtisanItem.Builder</a></span>&nbsp;<span class="element-name">builder</span>()</div>
+<div class="block">创建一个新的自定义物品构建器实例。</div>
+<dl class="notes">
+<dt>返回:</dt>
+<dd>新的自定义物品构建器实例（不会为null）</dd>
+</dl>
+</section>
+</li>
 <li>
 <section class="detail" id="equals(org.bukkit.inventory.ItemStack)">
 <h3>equals</h3>

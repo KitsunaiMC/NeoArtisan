@@ -90,21 +90,24 @@ loadScripts(document, 'script');</script>
 <div class="type-signature"><span class="modifiers">public interface </span><span class="element-name type-name-label">RecipeRegistry</span></div>
 <div class="block">自定义合成配方注册表API，提供标准化的配方创建接口。
 
- <p>支持两种配方类型：</p>
+ <p>支持三种配方类型：</p>
  <ul>
    <li><b>有序合成(Shaped)</b> - 精确匹配物品排列位置</li>
    <li><b>无序合成(Shapeless)</b> - 仅需材料无需考虑排列</li>
+   <li><b>熔炉烧炼(Furnace)</b> - 在熔炉中烧炼的配方</li>
  </ul>
 
- <p>通过 <a href="https://jd.papermc.io/paper/1.21.5/org/bukkit/Bukkit.html#getServicesManager()" title="org.bukkit中的类或接口" class="external-link"><code>Bukkit.getServicesManager()</code></a> 获取实例。</p></div>
+ <p>通过 <a href="../NeoArtisanAPI.html#getRecipeRegistry()"><code>NeoArtisanAPI.getRecipeRegistry()</code></a> ()} 获取实例。</p></div>
 <dl class="notes">
 <dt>从以下版本开始:</dt>
-<dd>1.0.0</dd>
+<dd>1.0.2</dd>
 <dt>另请参阅:</dt>
 <dd>
 <ul class="tag-list">
+<li><a href="ArtisanRecipe.html" title="io.github.moyusowo.neoartisanapi.api.recipe中的接口"><code>ArtisanRecipe</code></a></li>
 <li><a href="ArtisanShapedRecipe.html" title="io.github.moyusowo.neoartisanapi.api.recipe中的接口"><code>ArtisanShapedRecipe</code></a></li>
 <li><a href="ArtisanShapelessRecipe.html" title="io.github.moyusowo.neoartisanapi.api.recipe中的接口"><code>ArtisanShapelessRecipe</code></a></li>
+<li><a href="ArtisanFurnaceRecipe.html" title="io.github.moyusowo.neoartisanapi.api.recipe中的接口"><code>ArtisanFurnaceRecipe</code></a></li>
 </ul>
 </dd>
 </dl>
@@ -122,23 +125,20 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">修饰符和类型</div>
 <div class="table-header col-second">方法</div>
 <div class="table-header col-last">说明</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="ArtisanShapedRecipe.html" title="io.github.moyusowo.neoartisanapi.api.recipe中的接口">ArtisanShapedRecipe</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#createShapedRecipe(java.lang.String,java.lang.String,java.lang.String)" class="member-name-link">createShapedRecipe</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="java.lang中的类或接口" class="external-link">String</a>&nbsp;line1,
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="java.lang中的类或接口" class="external-link">String</a>&nbsp;line2,
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="java.lang中的类或接口" class="external-link">String</a>&nbsp;line3)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="ArtisanRecipe.html" title="io.github.moyusowo.neoartisanapi.api.recipe中的接口">ArtisanRecipe</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#getRecipe(org.bukkit.NamespacedKey)" class="member-name-link">getRecipe</a><wbr>(@NotNull <a href="https://jd.papermc.io/paper/1.21.5/org/bukkit/NamespacedKey.html" title="org.bukkit中的类或接口" class="external-link">NamespacedKey</a>&nbsp;key)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
-<div class="block">创建有序合成配方模板。</div>
+<div class="block">获取已注册的配方实例</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="ArtisanShapelessRecipe.html" title="io.github.moyusowo.neoartisanapi.api.recipe中的接口">ArtisanShapelessRecipe</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#createShapelessRecipe()" class="member-name-link">createShapelessRecipe</a>()</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#hasRecipe(org.bukkit.NamespacedKey)" class="member-name-link">hasRecipe</a><wbr>(@Nullable <a href="https://jd.papermc.io/paper/1.21.5/org/bukkit/NamespacedKey.html" title="org.bukkit中的类或接口" class="external-link">NamespacedKey</a>&nbsp;key)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
-<div class="block">创建基础无序合成配方模板。</div>
+<div class="block">检查指定ID的配方是否已注册</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="ArtisanShapelessRecipe.html" title="io.github.moyusowo.neoartisanapi.api.recipe中的接口">ArtisanShapelessRecipe</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#createShapelessRecipe(org.bukkit.NamespacedKey,int)" class="member-name-link">createShapelessRecipe</a><wbr>(<a href="https://jd.papermc.io/paper/1.21.5/org/bukkit/NamespacedKey.html" title="org.bukkit中的类或接口" class="external-link">NamespacedKey</a>&nbsp;result,
- int&nbsp;count)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#register(io.github.moyusowo.neoartisanapi.api.recipe.ArtisanRecipe)" class="member-name-link">register</a><wbr>(@NotNull <a href="ArtisanRecipe.html" title="io.github.moyusowo.neoartisanapi.api.recipe中的接口">ArtisanRecipe</a>&nbsp;recipe)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
-<div class="block">创建预设结果的无序合成配方模板。</div>
+<div class="block">注册自定义合成配方到中央注册表</div>
 </div>
 </div>
 </div>
@@ -155,85 +155,60 @@ loadScripts(document, 'script');</script>
 <h2>方法详细资料</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="createShapedRecipe(java.lang.String,java.lang.String,java.lang.String)">
-<h3>createShapedRecipe</h3>
-<div class="member-signature"><span class="annotations">@NotNull
-</span><span class="return-type">@NotNull <a href="ArtisanShapedRecipe.html" title="io.github.moyusowo.neoartisanapi.api.recipe中的接口">ArtisanShapedRecipe</a></span>&nbsp;<span class="element-name">createShapedRecipe</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="java.lang中的类或接口" class="external-link">String</a>&nbsp;line1,
- @NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="java.lang中的类或接口" class="external-link">String</a>&nbsp;line2,
- @NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="java.lang中的类或接口" class="external-link">String</a>&nbsp;line3)</span></div>
-<div class="block">创建有序合成配方模板。
+<section class="detail" id="register(io.github.moyusowo.neoartisanapi.api.recipe.ArtisanRecipe)">
+<h3>register</h3>
+<div class="member-signature"><span class="return-type">void</span>&nbsp;<span class="element-name">register</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="ArtisanRecipe.html" title="io.github.moyusowo.neoartisanapi.api.recipe中的接口">ArtisanRecipe</a>&nbsp;recipe)</span></div>
+<div class="block">注册自定义合成配方到中央注册表
 
- <p>配方格式使用字母代表材料，每行对应工作台的3个格子：</p>
- <pre><code>
- 示例：
- " A "   → 中间放置A材料
- " B "   → 中间下方放B材料
- "   "   → 其他位置为空（空行也可以传入空字符串""）
- </code></pre></div>
+ <p><b>注册约束：</b></p>
+ <ul>
+   <li>配方ID必须全局唯一</li>
+   <li>重复注册相同ID将抛出异常</li>
+   <li>必须在插件启用阶段完成注册</li>
+ </ul></div>
 <dl class="notes">
 <dt>参数:</dt>
-<dd><code>line1</code> - 第一行配方模式（3字符，不能为null）</dd>
-<dd><code>line2</code> - 第二行配方模式（3字符，不能为null）</dd>
-<dd><code>line3</code> - 第三行配方模式（3字符，不能为null）</dd>
-<dt>返回:</dt>
-<dd>配方构建器实例（不会为null）</dd>
+<dd><code>recipe</code> - 要注册的配方实例（非null）</dd>
 <dt>抛出:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="java.lang中的类或接口" class="external-link">IllegalArgumentException</a></code> - 如果格式不符合3字符长度或含非法字符</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="java.lang中的类或接口" class="external-link">IllegalArgumentException</a></code> - 使用了相同的配方ID</dd>
 <dt>另请参阅:</dt>
 <dd>
 <ul class="tag-list">
-<li><a href="ArtisanShapedRecipe.html" title="io.github.moyusowo.neoartisanapi.api.recipe中的接口"><code>ArtisanShapedRecipe</code></a></li>
+<li><a href="../NeoArtisanAPI.Register.html" title="io.github.moyusowo.neoartisanapi.api 中的批注接口"><code>合法的注册入口注解</code></a></li>
 </ul>
 </dd>
 </dl>
 </section>
 </li>
 <li>
-<section class="detail" id="createShapelessRecipe()">
-<h3>createShapelessRecipe</h3>
-<div class="member-signature"><span class="annotations">@NotNull
-</span><span class="return-type">@NotNull <a href="ArtisanShapelessRecipe.html" title="io.github.moyusowo.neoartisanapi.api.recipe中的接口">ArtisanShapelessRecipe</a></span>&nbsp;<span class="element-name">createShapelessRecipe</span>()</div>
-<div class="block">创建基础无序合成配方模板。
-
- <p>通过返回的 <a href="ArtisanShapelessRecipe.html" title="io.github.moyusowo.neoartisanapi.api.recipe中的接口"><code>ArtisanShapelessRecipe</code></a> 继续添加材料</p></div>
+<section class="detail" id="hasRecipe(org.bukkit.NamespacedKey)">
+<h3>hasRecipe</h3>
+<div class="member-signature"><span class="return-type">boolean</span>&nbsp;<span class="element-name">hasRecipe</span><wbr><span class="parameters">(@Nullable
+ @Nullable <a href="https://jd.papermc.io/paper/1.21.5/org/bukkit/NamespacedKey.html" title="org.bukkit中的类或接口" class="external-link">NamespacedKey</a>&nbsp;key)</span></div>
+<div class="block">检查指定ID的配方是否已注册</div>
 <dl class="notes">
+<dt>参数:</dt>
+<dd><code>key</code> - 要检查的配方ID</dd>
 <dt>返回:</dt>
-<dd>配方构建器实例（不会为null）</dd>
-<dt>另请参阅:</dt>
-<dd>
-<ul class="tag-list">
-<li><a href="ArtisanShapelessRecipe.html" title="io.github.moyusowo.neoartisanapi.api.recipe中的接口"><code>ArtisanShapelessRecipe</code></a></li>
-</ul>
-</dd>
+<dd>如果存在对应配方返回true</dd>
 </dl>
 </section>
 </li>
 <li>
-<section class="detail" id="createShapelessRecipe(org.bukkit.NamespacedKey,int)">
-<h3>createShapelessRecipe</h3>
+<section class="detail" id="getRecipe(org.bukkit.NamespacedKey)">
+<h3>getRecipe</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="return-type">@NotNull <a href="ArtisanShapelessRecipe.html" title="io.github.moyusowo.neoartisanapi.api.recipe中的接口">ArtisanShapelessRecipe</a></span>&nbsp;<span class="element-name">createShapelessRecipe</span><wbr><span class="parameters">(<a href="https://jd.papermc.io/paper/1.21.5/org/bukkit/NamespacedKey.html" title="org.bukkit中的类或接口" class="external-link">NamespacedKey</a>&nbsp;result,
- int&nbsp;count)</span></div>
-<div class="block">创建预设结果的无序合成配方模板。
-
- <p>通过返回的 <a href="ArtisanShapelessRecipe.html" title="io.github.moyusowo.neoartisanapi.api.recipe中的接口"><code>ArtisanShapelessRecipe</code></a> 继续添加材料</p></div>
+</span><span class="return-type">@NotNull <a href="ArtisanRecipe.html" title="io.github.moyusowo.neoartisanapi.api.recipe中的接口">ArtisanRecipe</a></span>&nbsp;<span class="element-name">getRecipe</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="https://jd.papermc.io/paper/1.21.5/org/bukkit/NamespacedKey.html" title="org.bukkit中的类或接口" class="external-link">NamespacedKey</a>&nbsp;key)</span></div>
+<div class="block">获取已注册的配方实例</div>
 <dl class="notes">
 <dt>参数:</dt>
-<dd><code>result</code> - 合成结果物品ID（不能为null）</dd>
-<dd><code>count</code> - 产出数量（不能超过堆叠上限）</dd>
+<dd><code>key</code> - 配方ID（非null）</dd>
 <dt>返回:</dt>
-<dd>配方构建器实例（不会为null）</dd>
+<dd>对应的配方实例</dd>
 <dt>抛出:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="java.lang中的类或接口" class="external-link">IllegalArgumentException</a></code> - 如果数量超出范围或物品未注册</dd>
-<dt>另请参阅:</dt>
-<dd>
-<ul class="tag-list">
-<li><a href="ArtisanShapelessRecipe.html" title="io.github.moyusowo.neoartisanapi.api.recipe中的接口"><code>ArtisanShapelessRecipe</code></a></li>
-</ul>
-</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="java.lang中的类或接口" class="external-link">IllegalArgumentException</a></code> - 如果key未在任何命名空间注册</dd>
 </dl>
 </section>
 </li>
