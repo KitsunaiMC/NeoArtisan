@@ -37,6 +37,8 @@ NeoArtisan is a custom content framework for Minecraft 1.21.4+, licensed under G
 - Builder pattern
 - Comprehensive documentation
 - Lifecycle event system
+- **Efficiency-First Philosophy**: We believe in the value of development efficiency, meeting most needs with concise APIs
+
 
 ## Quick Start
 
@@ -49,7 +51,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly 'com.github.MoYuSOwO:NeoArtisan:1.0:api'
+    compileOnly 'com.github.MoYuSOwO:NeoArtisan:<api_version>:api'
 }
 ```
 
@@ -99,11 +101,9 @@ public void registerContent() {
                             )
                     )
                     .armorProperty(
-                            new ArmorProperty(
-                                    5,
-                                    1,
-                                    null
-                            )
+                            5,
+                            1,
+                            null
                     )
                     .maxDurability(2500)
                     .build()
@@ -120,22 +120,23 @@ public void registerContent() {
                             )
                     )
                     .weaponProperty(
-                            new WeaponProperty(
-                                    1.0f,
-                                    1.5f,
-                                    11.0f
-                            )
+                            1.0f,
+                            1.5f,
+                            11.0f
                     )
                     .maxDurability(5000)
                     .build()
     );
     NeoArtisanAPI.getItemRegistry().registerItem(
-            ArtisanItem.builder()
+            ArtisanItem.complexBuilder()
                     .registryId(cooking_pot)
-                    .rawMaterial(Material.PAPER)
-                    .displayName("烹饪锅")
+                    .itemStack(() -> {
+                        ItemStack itemStack = ItemStack.of(Material.PAPER);
+                        itemStack.setData(DataComponentTypes.ITEM_NAME, Component.text("<green>烹饪锅"));
+                        itemStack.setData(DataComponentTypes.ITEM_MODEL, cooking_pot);
+                        return itemStack;
+                    })
                     .blockId(cooking_pot)
-                    .itemModel(cooking_pot)
                     .build()
     );
 }
