@@ -3,11 +3,17 @@ package io.github.moyusowo.neoartisan.test;
 import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
 import io.github.moyusowo.neoartisanapi.api.item.*;
+import io.papermc.paper.datacomponent.DataComponentTypes;
+import io.papermc.paper.datacomponent.item.FoodProperties;
+import io.papermc.paper.datacomponent.item.ItemLore;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
+@SuppressWarnings("UnstableApiUsage")
 final class ItemTest {
 
     static final String namespace = "neoartisan";
@@ -23,48 +29,42 @@ final class ItemTest {
     private static void register() {
         if (NeoArtisan.isDebugMode()) {
             NeoArtisanAPI.getItemRegistry().registerItem(
-                    ArtisanItem.builder()
+                    ArtisanItem.complexBuilder()
                             .registryId(broken_stick)
-                            .rawMaterial(Material.STICK)
-                            .hasOriginalCraft(true)
-                            .displayName("有点损坏的木棍")
-                            .lore(
-                                    List.of(
-                                            "是一根好像快坏掉了的木棍",
-                                            "但是似乎还能用"
-                                    )
-                            )
+                            .itemStack(() -> {
+                                ItemStack itemStack = ItemStack.of(Material.STICK);
+                                itemStack.setData(DataComponentTypes.ITEM_NAME, Component.text("有点损坏的木棍"));
+                                ItemLore itemLore = ItemLore.lore(
+                                        List.of(
+                                                Component.text("是一根好像快坏掉了的木棍"),
+                                                Component.text("但是似乎还能用")
+                                        )
+                                );
+                                itemStack.setData(DataComponentTypes.LORE, itemLore);
+                                return itemStack;
+                            })
+                            .hasOriginalCraft()
                             .blockId(new NamespacedKey(NeoArtisan.instance(), "magic_crop"))
                             .build()
             );
             NeoArtisanAPI.getItemRegistry().registerItem(
-                    ArtisanItem.builder()
+                    ArtisanItem.complexBuilder()
                             .registryId(magic_bread)
-                            .rawMaterial(Material.BREAD)
-                            .displayName("<red>魔法面包~")
-                            .lore(
-                                    List.of(
-                                            "魔法面包好",
-                                            "魔法面包妙",
-                                            "魔法面包生存少不了"
-                                    )
-                            )
-                            .foodProperty(
-                                    new FoodProperty(10, 10f, true)
-                            )
-                            .build()
-            );
-            NeoArtisanAPI.getItemRegistry().registerItem(
-                    ArtisanItem.builder()
-                            .registryId(magic_diamond)
-                            .rawMaterial(Material.DIAMOND)
-                            .displayName("<blue>魔法钻石~")
-                            .lore(
-                                    List.of(
-                                            "被神赐福过的魔法钻石",
-                                            "可以合成更多的钻石噢"
-                                    )
-                            )
+                            .itemStack(() -> {
+                                ItemStack itemStack = ItemStack.of(Material.BREAD);
+                                itemStack.setData(DataComponentTypes.ITEM_NAME, Component.text("<red>魔法面包~"));
+                                ItemLore itemLore = ItemLore.lore(
+                                        List.of(
+                                                Component.text("魔法面包好"),
+                                                Component.text("魔法面包妙"),
+                                                Component.text("魔法面包生存少不了")
+                                        )
+                                );
+                                itemStack.setData(DataComponentTypes.LORE, itemLore);
+                                FoodProperties foodProperties = FoodProperties.food().saturation(10).nutrition(10).canAlwaysEat(true).build();
+                                itemStack.setData(DataComponentTypes.FOOD, foodProperties);
+                                return itemStack;
+                            })
                             .build()
             );
             NeoArtisanAPI.getItemRegistry().registerItem(
