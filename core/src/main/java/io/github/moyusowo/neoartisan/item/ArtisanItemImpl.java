@@ -7,9 +7,9 @@ import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
 import io.github.moyusowo.neoartisanapi.api.item.*;
 import io.github.moyusowo.neoartisan.util.NamespacedKeyDataType;
 import io.github.moyusowo.neoartisanapi.api.item.factory.ItemBuilderFactory;
-import io.github.moyusowo.neoartisanapi.api.item.property.ArmorProperty;
-import io.github.moyusowo.neoartisanapi.api.item.property.FoodProperty;
-import io.github.moyusowo.neoartisanapi.api.item.property.WeaponProperty;
+import io.github.moyusowo.neoartisan.item.property.ArmorProperty;
+import io.github.moyusowo.neoartisan.item.property.FoodProperty;
+import io.github.moyusowo.neoartisan.item.property.WeaponProperty;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.*;
 import net.kyori.adventure.text.Component;
@@ -314,15 +314,15 @@ class ArtisanItemImpl implements ArtisanItem {
 
         @NotNull
         @Override
-        public Builder foodProperty(@NotNull FoodProperty foodProperty) {
-            this.foodProperty = Objects.requireNonNull(foodProperty);
+        public Builder foodProperty(int nutrition, float saturation, boolean canAlwaysEat) {
+            this.foodProperty = new FoodProperty(nutrition, saturation, canAlwaysEat);
             return this;
         }
 
         @NotNull
         @Override
-        public Builder weaponProperty(@NotNull WeaponProperty weaponProperty) {
-            this.weaponProperty = Objects.requireNonNull(weaponProperty);
+        public Builder weaponProperty(float speed, float knockback, float damage) {
+            this.weaponProperty = new WeaponProperty(speed, knockback, damage);
             return this;
         }
 
@@ -335,8 +335,8 @@ class ArtisanItemImpl implements ArtisanItem {
 
         @NotNull
         @Override
-        public Builder armorProperty(@NotNull ArmorProperty armorProperty) {
-            this.armorProperty = Objects.requireNonNull(armorProperty);
+        public Builder armorProperty(int armor, int armorToughness, @Nullable EquipmentSlot slot) {
+            this.armorProperty = new ArmorProperty(armor, armorToughness, slot);
             return this;
         }
 

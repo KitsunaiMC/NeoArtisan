@@ -1,14 +1,12 @@
 package io.github.moyusowo.neoartisanapi.api.item;
 
 import io.github.moyusowo.neoartisanapi.api.item.factory.ItemBuilderFactory;
-import io.github.moyusowo.neoartisanapi.api.item.property.ArmorProperty;
-import io.github.moyusowo.neoartisanapi.api.item.property.FoodProperty;
-import io.github.moyusowo.neoartisanapi.api.item.property.WeaponProperty;
 import io.papermc.paper.datacomponent.item.CustomModelData;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -255,24 +253,24 @@ public interface ArtisanItem {
         @NotNull Builder loreComponent(@NotNull List<Component> lore);
 
         /**
-         * 设置物品的食物属性配置。
+         * 设置物品的食物属性。
          *
-         * @param foodProperty 食物属性配置（不能为null，使用 {@link FoodProperty#EMPTY} 表示无属性）
+         * @param nutrition 营养值
+         * @param saturation 饱和度
+         * @param canAlwaysEat 是否在饱食时仍可食用
          * @return 当前构建器实例
-         * @throws IllegalArgumentException 如果foodProperty为null
-         * @see FoodProperty
          */
-        @NotNull Builder foodProperty(@NotNull FoodProperty foodProperty);
+        @NotNull Builder foodProperty(int nutrition, float saturation, boolean canAlwaysEat);
 
         /**
-         * 设置物品的武器属性配置。
+         * 设置物品的武器属性。
          *
-         * @param weaponProperty 武器属性配置（不能为null，使用 {@link WeaponProperty#EMPTY} 表示无属性）
+         * @param speed 攻击速度
+         * @param knockback 击退强度
+         * @param damage 基础伤害值
          * @return 当前构建器实例
-         * @throws IllegalArgumentException 如果weaponProperty为null
-         * @see WeaponProperty
          */
-        @NotNull Builder weaponProperty(@NotNull WeaponProperty weaponProperty);
+        @NotNull Builder weaponProperty(float speed, float knockback, float damage);
 
         /**
          * 设置物品的最大耐久值。
@@ -286,12 +284,12 @@ public interface ArtisanItem {
         /**
          * 设置物品的护甲属性配置。
          *
-         * @param armorProperty 护甲属性配置（不能为null，使用 {@link ArmorProperty#EMPTY} 表示无属性）
+         * @param armor 护甲值
+         * @param armorToughness 护甲韧性
+         * @param slot 装备槽位（null则继承模板物品的穿戴位置，如果没有则不能为null）
          * @return 当前构建器实例
-         * @throws IllegalArgumentException 如果armorProperty为null
-         * @see ArmorProperty
          */
-        @NotNull Builder armorProperty(@NotNull ArmorProperty armorProperty);
+        @NotNull Builder armorProperty(int armor, int armorToughness, @Nullable EquipmentSlot slot);
 
         /**
          * 设置物品的属性系统配置。

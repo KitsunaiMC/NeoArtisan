@@ -3,8 +3,8 @@ package io.github.moyusowo.neoartisan.test;
 import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
 import io.github.moyusowo.neoartisanapi.api.item.*;
-import io.github.moyusowo.neoartisanapi.api.item.property.ArmorProperty;
-import io.github.moyusowo.neoartisanapi.api.item.property.WeaponProperty;
+import io.github.moyusowo.neoartisan.item.property.ArmorProperty;
+import io.github.moyusowo.neoartisan.item.property.WeaponProperty;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.FoodProperties;
 import io.papermc.paper.datacomponent.item.ItemLore;
@@ -82,11 +82,9 @@ final class ItemTest {
                                     )
                             )
                             .armorProperty(
-                                    new ArmorProperty(
-                                            5,
-                                            1,
-                                            null
-                                    )
+                                    5,
+                                    1,
+                                    null
                             )
                             .maxDurability(2500)
                             .build()
@@ -103,11 +101,9 @@ final class ItemTest {
                                     )
                             )
                             .weaponProperty(
-                                    new WeaponProperty(
-                                            1.0f,
-                                            1.5f,
-                                            11.0f
-                                    )
+                                    1.0f,
+                                    1.5f,
+                                    11.0f
                             )
                             .maxDurability(5000)
                             .build()

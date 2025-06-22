@@ -62,12 +62,12 @@ dependencies {
 @NeoArtisanAPI.Register
 public void registerContent() {
     NeoArtisanAPI.getBlockRegistry().register(
-            ArtisanTransparentBlock.builder()
+            ArtisanTransparentBlock.factory().builder()
                     .blockId(ItemTest.cooking_pot)
                     .canBurn(false)
                     .states(
                             List.of(
-                                    ArtisanTransparentBlockState.builder()
+                                    ArtisanTransparentBlockState.factory().builder()
                                             .appearanceState(
                                                     new TransparentAppearance(
                                                             TransparentAppearance.LeavesAppearance.OAK_LEAVES,
@@ -90,7 +90,7 @@ public void registerContent() {
                     .build()
     );
     NeoArtisanAPI.getItemRegistry().registerItem(
-            ArtisanItem.builder()
+            ArtisanItem.factory().builder()
                     .registryId(magic_helmet)
                     .rawMaterial(Material.IRON_HELMET)
                     .displayName("<aqua>魔法头盔~")
@@ -109,7 +109,7 @@ public void registerContent() {
                     .build()
     );
     NeoArtisanAPI.getItemRegistry().registerItem(
-            ArtisanItem.builder()
+            ArtisanItem.factory().builder()
                     .registryId(magic_sword)
                     .rawMaterial(Material.IRON_SWORD)
                     .displayName("<yellow>魔法剑~")
@@ -128,7 +128,7 @@ public void registerContent() {
                     .build()
     );
     NeoArtisanAPI.getItemRegistry().registerItem(
-            ArtisanItem.complexBuilder()
+            ArtisanItem.factory().complexBuilder()
                     .registryId(cooking_pot)
                     .itemStack(() -> {
                         ItemStack itemStack = ItemStack.of(Material.PAPER);
