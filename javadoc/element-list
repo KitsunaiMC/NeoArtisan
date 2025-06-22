@@ -4,11 +4,13 @@ io.github.moyusowo.neoartisanapi.api.block.base
 io.github.moyusowo.neoartisanapi.api.block.base.sound
 io.github.moyusowo.neoartisanapi.api.block.crop
 io.github.moyusowo.neoartisanapi.api.block.event
+io.github.moyusowo.neoartisanapi.api.block.full
 io.github.moyusowo.neoartisanapi.api.block.gui
 io.github.moyusowo.neoartisanapi.api.block.storage
 io.github.moyusowo.neoartisanapi.api.block.thin
 io.github.moyusowo.neoartisanapi.api.block.transparent
 io.github.moyusowo.neoartisanapi.api.item
+io.github.moyusowo.neoartisanapi.api.item.factory
 io.github.moyusowo.neoartisanapi.api.persistence
 io.github.moyusowo.neoartisanapi.api.persistence.type
 io.github.moyusowo.neoartisanapi.api.recipe
