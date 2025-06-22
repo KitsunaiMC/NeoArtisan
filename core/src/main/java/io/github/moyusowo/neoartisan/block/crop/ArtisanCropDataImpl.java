@@ -12,14 +12,20 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.ServicePriority;
+import org.jetbrains.annotations.NotNull;
 
 class ArtisanCropDataImpl extends ArtisanBlockDataBaseInternal implements ArtisanCropData {
 
     @InitMethod(priority = InitPriority.BLOCKDATA)
     private static void init() {
         Bukkit.getServicesManager().register(
-                Builder.class,
-                new BuilderImpl(),
+                BuilderFactory.class,
+                new BuilderFactory() {
+                    @Override
+                    public @NotNull Builder builder() {
+                        return new BuilderImpl();
+                    }
+                },
                 NeoArtisan.instance(),
                 ServicePriority.Normal
         );
@@ -30,12 +36,12 @@ class ArtisanCropDataImpl extends ArtisanBlockDataBaseInternal implements Artisa
     }
 
     @Override
-    public ArtisanCrop getArtisanBlock() {
+    public @NotNull ArtisanCrop getArtisanBlock() {
         return (ArtisanCrop) super.getArtisanBlock();
     }
 
     @Override
-    public ArtisanCropState getArtisanBlockState() {
+    public @NotNull ArtisanCropState getArtisanBlockState() {
         return (ArtisanCropState) super.getArtisanBlockState();
     }
 

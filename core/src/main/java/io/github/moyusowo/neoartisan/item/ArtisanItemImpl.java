@@ -6,6 +6,10 @@ import io.github.moyusowo.neoartisan.util.init.InitPriority;
 import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
 import io.github.moyusowo.neoartisanapi.api.item.*;
 import io.github.moyusowo.neoartisan.util.NamespacedKeyDataType;
+import io.github.moyusowo.neoartisanapi.api.item.factory.ItemBuilderFactory;
+import io.github.moyusowo.neoartisanapi.api.item.property.ArmorProperty;
+import io.github.moyusowo.neoartisanapi.api.item.property.FoodProperty;
+import io.github.moyusowo.neoartisanapi.api.item.property.WeaponProperty;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.*;
 import net.kyori.adventure.text.Component;
@@ -34,14 +38,18 @@ class ArtisanItemImpl implements ArtisanItem {
     @InitMethod(priority = InitPriority.REGISTRAR)
     public static void init() {
         Bukkit.getServicesManager().register(
-                ComplexBuilder.class,
-                new ComplexBuilderImpl(),
-                NeoArtisan.instance(),
-                ServicePriority.Normal
-        );
-        Bukkit.getServicesManager().register(
-                Builder.class,
-                new BuilderImpl(),
+                ItemBuilderFactory.class,
+                new ItemBuilderFactory() {
+                    @Override
+                    public @NotNull ArtisanItem.ComplexBuilder complexBuilder() {
+                        return new ComplexBuilderImpl();
+                    }
+
+                    @Override
+                    public @NotNull ArtisanItem.Builder builder() {
+                        return new BuilderImpl();
+                    }
+                },
                 NeoArtisan.instance(),
                 ServicePriority.Normal
         );
@@ -152,7 +160,7 @@ class ArtisanItemImpl implements ArtisanItem {
         itemStack.setItemMeta(itemMeta);
     }
 
-    private static class ComplexBuilderImpl implements ComplexBuilder {
+    private static final class ComplexBuilderImpl implements ComplexBuilder {
         private NamespacedKey registryId;
         private boolean hasOriginalCraft;
         private AttributeProperty attributeProperty;
@@ -217,7 +225,7 @@ class ArtisanItemImpl implements ArtisanItem {
     }
 
     @SuppressWarnings("UnstableApiUsage")
-    private static class BuilderImpl implements Builder {
+    private static final class BuilderImpl implements Builder {
         private NamespacedKey registryId;
         private Material rawMaterial;
         private boolean hasOriginalCraft;
@@ -401,7 +409,7 @@ class ArtisanItemImpl implements ArtisanItem {
                         .build();
                 itemStack.setData(DataComponentTypes.FOOD, foodProperties);
             }
-            if (this.weaponProperty != null) {
+            if (this.weaponProperty != WeaponProperty.EMPTY) {
                 builder.addModifier(
                         Attribute.ATTACK_DAMAGE,
                         new AttributeModifier(
@@ -440,7 +448,8 @@ class ArtisanItemImpl implements ArtisanItem {
                     }
                 });
             }
-            if (this.armorProperty != null) {
+            if (this.armorProperty != ArmorProperty.EMPTY) {
+                NeoArtisan.logger().info(armorProperty.toString());
                 if (this.armorProperty.slot() != null) {
                     itemStack.setData(DataComponentTypes.EQUIPPABLE, Equippable.equippable(this.armorProperty.slot()));
                     builder.addModifier(
@@ -462,7 +471,9 @@ class ArtisanItemImpl implements ArtisanItem {
                             )
                     );
                 } else {
+                    NeoArtisan.logger().info(rawMaterial.name());
                     var slots = this.rawMaterial.getEquipmentSlot();
+                    NeoArtisan.logger().info(slots.name());
                     if (slots == EquipmentSlot.HAND) throw new IllegalArgumentException("You can not set null slot in a unequipped item!");
                     builder.addModifier(
                             Attribute.ARMOR,

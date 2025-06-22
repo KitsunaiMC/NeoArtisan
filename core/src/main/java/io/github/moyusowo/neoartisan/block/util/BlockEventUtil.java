@@ -151,24 +151,24 @@ public final class BlockEventUtil {
     public static <D extends ArtisanBlockData> void onBelowBlockPistonBreakOrMove(BlockPistonExtendEvent event, Class<D> artisanBlockDataClass) {
         if (event.isCancelled()) return;
         for (Block block : event.getBlocks()) {
-            if (isNotTypedArtisanBlock(block.getRelative(BlockFace.UP), artisanBlockDataClass)) return;
-            ArtisanBlockData artisanBlockData = NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlockData(event.getBlock().getRelative(BlockFace.UP));
+            if (isNotTypedArtisanBlock(block.getRelative(BlockFace.UP), artisanBlockDataClass)) continue;
+            ArtisanBlockData artisanBlockData = NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlockData(block.getRelative(BlockFace.UP));
             block.getRelative(BlockFace.UP).setType(Material.AIR);
             ArtisanBlockLoseSupportEvent artisanBlockLoseSupportEvent = new ArtisanBlockLoseSupportEvent(
-                    event.getBlock(),
+                    block,
                     artisanBlockData.getArtisanBlock()
             );
             artisanBlockLoseSupportEvent.callEvent();
             if (artisanBlockLoseSupportEvent.getExpToDrop() > 0) {
-                ExperienceOrb orb = (ExperienceOrb) event.getBlock().getWorld().spawnEntity(
-                        event.getBlock().getLocation(),
+                ExperienceOrb orb = (ExperienceOrb) block.getWorld().spawnEntity(
+                        block.getLocation(),
                         EntityType.EXPERIENCE_ORB
                 );
                 orb.setExperience(artisanBlockLoseSupportEvent.getExpToDrop());
             }
             if (artisanBlockLoseSupportEvent.isDropItems()) {
                 for (ItemStack drop : artisanBlockData.getArtisanBlockState().drops()) {
-                    event.getBlock().getWorld().dropItemNaturally(event.getBlock().getRelative(BlockFace.UP).getLocation(), drop);
+                    block.getWorld().dropItemNaturally(block.getRelative(BlockFace.UP).getLocation(), drop);
                 }
             }
             ArtisanBlockStorageInternal.getInternal().removeArtisanBlock(block.getRelative(BlockFace.UP));

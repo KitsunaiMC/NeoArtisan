@@ -47,17 +47,17 @@ public abstract class ArtisanBlockDataBase implements ArtisanBlockData {
     }
 
     @Override
-    public ArtisanBlock getArtisanBlock() {
+    public @NotNull ArtisanBlock getArtisanBlock() {
         return NeoArtisanAPI.getBlockRegistry().getArtisanBlock(blockId);
     }
 
     @Override
-    public ArtisanBlockState getArtisanBlockState() {
+    public @NotNull ArtisanBlockState getArtisanBlockState() {
         return NeoArtisanAPI.getBlockRegistry().getArtisanBlock(blockId).getState(stage);
     }
 
     @Override
-    public PersistentDataContainer getPersistentDataContainer() {
+    public @NotNull PersistentDataContainer getPersistentDataContainer() {
         return this.persistentDataContainer;
     }
 
@@ -67,7 +67,7 @@ public abstract class ArtisanBlockDataBase implements ArtisanBlockData {
     }
 
     @Override
-    public NamespacedKey blockId() {
+    public @NotNull NamespacedKey blockId() {
         return this.blockId;
     }
 
@@ -77,7 +77,7 @@ public abstract class ArtisanBlockDataBase implements ArtisanBlockData {
     }
 
     @Override
-    public Location getLocation() {
+    public @NotNull Location getLocation() {
         return this.location;
     }
 

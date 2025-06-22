@@ -35,8 +35,13 @@ class ArtisanThinBlockImpl extends ArtisanBlockBase implements ArtisanThinBlock 
     @InitMethod(priority = InitPriority.REGISTRAR)
     private static void init() {
         Bukkit.getServicesManager().register(
-                Builder.class,
-                new BuilderImpl(),
+                BuilderFactory.class,
+                new BuilderFactory() {
+                    @Override
+                    public @NotNull Builder builder() {
+                        return new BuilderImpl();
+                    }
+                },
                 NeoArtisan.instance(),
                 ServicePriority.Normal
         );
@@ -123,7 +128,7 @@ class ArtisanThinBlockImpl extends ArtisanBlockBase implements ArtisanThinBlock 
                     event,
                     event.getClickedBlock().getRelative(event.getBlockFace()),
                     event.getClickedBlock(),
-                    ArtisanThinBlockData.builder()
+                    ArtisanThinBlockData.factory().builder()
                             .blockId(artisanItem.getBlockId())
                             .stage(0)
                             .location(event.getClickedBlock().getRelative(event.getBlockFace()).getLocation())

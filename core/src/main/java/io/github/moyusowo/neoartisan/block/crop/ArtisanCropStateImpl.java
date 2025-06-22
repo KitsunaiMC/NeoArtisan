@@ -18,8 +18,13 @@ class ArtisanCropStateImpl extends ArtisanBlockStateBase implements ArtisanCropS
     @InitMethod(priority = InitPriority.REGISTRAR)
     private static void init() {
         Bukkit.getServicesManager().register(
-                ArtisanCropState.Builder.class,
-                new BuilderImpl(),
+                BuilderFactory.class,
+                new BuilderFactory() {
+                    @Override
+                    public @NotNull Builder builder() {
+                        return new BuilderImpl();
+                    }
+                },
                 NeoArtisan.instance(),
                 ServicePriority.Normal
         );
@@ -61,19 +66,19 @@ class ArtisanCropStateImpl extends ArtisanBlockStateBase implements ArtisanCropS
         }
 
         @Override
-        public Builder appearance(@NotNull CropAppearance cropAppearanceBlock) {
+        public @NotNull Builder appearance(@NotNull CropAppearance cropAppearanceBlock) {
             this.cropAppearanceBlock = cropAppearanceBlock;
             return this;
         }
 
         @Override
-        public Builder generators(ItemGenerator[] generators) {
+        public @NotNull Builder generators(ItemGenerator[] generators) {
             this.generators = generators;
             return this;
         }
 
         @Override
-        public ArtisanCropState build() {
+        public @NotNull ArtisanCropState build() {
             if (generators == null || cropAppearanceBlock == null) throw new IllegalArgumentException("You must fill all the param!");
             return new ArtisanCropStateImpl(generateAppearanceState(), actualState, generators);
         }

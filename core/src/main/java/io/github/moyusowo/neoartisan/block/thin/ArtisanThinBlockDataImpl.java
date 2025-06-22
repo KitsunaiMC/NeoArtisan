@@ -11,14 +11,20 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.ServicePriority;
+import org.jetbrains.annotations.NotNull;
 
 class ArtisanThinBlockDataImpl extends ArtisanBlockDataBaseInternal implements ArtisanThinBlockData {
 
     @InitMethod(priority = InitPriority.BLOCKDATA)
     private static void init() {
         Bukkit.getServicesManager().register(
-                Builder.class,
-                new BuilderImpl(),
+                BuilderFactory.class,
+                new BuilderFactory() {
+                    @Override
+                    public @NotNull Builder builder() {
+                        return new BuilderImpl();
+                    }
+                },
                 NeoArtisan.instance(),
                 ServicePriority.Normal
         );
@@ -29,12 +35,12 @@ class ArtisanThinBlockDataImpl extends ArtisanBlockDataBaseInternal implements A
     }
 
     @Override
-    public ArtisanThinBlock getArtisanBlock() {
+    public @NotNull ArtisanThinBlock getArtisanBlock() {
         return (ArtisanThinBlock) super.getArtisanBlock();
     }
 
     @Override
-    public ArtisanThinBlockState getArtisanBlockState() {
+    public @NotNull ArtisanThinBlockState getArtisanBlockState() {
         return (ArtisanThinBlockState) super.getArtisanBlockState();
     }
 

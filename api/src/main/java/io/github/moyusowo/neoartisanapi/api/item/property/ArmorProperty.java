@@ -1,4 +1,4 @@
-package io.github.moyusowo.neoartisanapi.api.item;
+package io.github.moyusowo.neoartisanapi.api.item.property;
 
 import org.bukkit.inventory.EquipmentSlot;
 import org.jetbrains.annotations.NotNull;

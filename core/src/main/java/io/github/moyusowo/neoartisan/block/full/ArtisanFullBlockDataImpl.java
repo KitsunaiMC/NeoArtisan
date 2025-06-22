@@ -1,20 +1,19 @@
-package io.github.moyusowo.neoartisan.block.transparent;
+package io.github.moyusowo.neoartisan.block.full;
 
 import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisan.block.base.ArtisanBlockDataBaseInternal;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
-import io.github.moyusowo.neoartisanapi.api.block.transparent.ArtisanTransparentBlock;
-import io.github.moyusowo.neoartisanapi.api.block.transparent.ArtisanTransparentBlockData;
-import io.github.moyusowo.neoartisanapi.api.block.transparent.ArtisanTransparentBlockState;
+import io.github.moyusowo.neoartisanapi.api.block.full.ArtisanFullBlock;
+import io.github.moyusowo.neoartisanapi.api.block.full.ArtisanFullBlockData;
+import io.github.moyusowo.neoartisanapi.api.block.full.ArtisanFullBlockState;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.ServicePriority;
 import org.jetbrains.annotations.NotNull;
 
-class ArtisanTransparentBlockDataImpl extends ArtisanBlockDataBaseInternal implements ArtisanTransparentBlockData {
-
+class ArtisanFullBlockDataImpl extends ArtisanBlockDataBaseInternal implements ArtisanFullBlockData {
     @InitMethod(priority = InitPriority.BLOCKDATA)
     private static void init() {
         Bukkit.getServicesManager().register(
@@ -30,21 +29,21 @@ class ArtisanTransparentBlockDataImpl extends ArtisanBlockDataBaseInternal imple
         );
     }
 
-    protected ArtisanTransparentBlockDataImpl(NamespacedKey blockId, int stage, Location location) {
+    protected ArtisanFullBlockDataImpl(NamespacedKey blockId, int stage, Location location) {
         super(blockId, stage, location);
     }
 
     @Override
-    public @NotNull ArtisanTransparentBlock getArtisanBlock() {
-        return (ArtisanTransparentBlock) super.getArtisanBlock();
+    public @NotNull ArtisanFullBlock getArtisanBlock() {
+        return (ArtisanFullBlock) super.getArtisanBlock();
     }
 
     @Override
-    public @NotNull ArtisanTransparentBlockState getArtisanBlockState() {
-        return (ArtisanTransparentBlockState) super.getArtisanBlockState();
+    public @NotNull ArtisanFullBlockState getArtisanBlockState() {
+        return (ArtisanFullBlockState) super.getArtisanBlockState();
     }
 
-    public static class BuilderImpl implements Builder {
+    private static class BuilderImpl implements Builder {
 
         private NamespacedKey blockId;
         private int stage;
@@ -75,9 +74,9 @@ class ArtisanTransparentBlockDataImpl extends ArtisanBlockDataBaseInternal imple
         }
 
         @Override
-        public ArtisanTransparentBlockData build() {
+        public ArtisanFullBlockData build() {
             if (blockId == null || stage < 0 || location == null) throw new IllegalArgumentException("You must fill all the param!");
-            return new ArtisanTransparentBlockDataImpl(blockId, stage, location);
+            return new ArtisanFullBlockDataImpl(blockId, stage, location);
         }
     }
 }

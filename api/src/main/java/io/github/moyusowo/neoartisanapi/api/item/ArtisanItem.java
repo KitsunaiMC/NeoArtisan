@@ -1,5 +1,9 @@
 package io.github.moyusowo.neoartisanapi.api.item;
 
+import io.github.moyusowo.neoartisanapi.api.item.factory.ItemBuilderFactory;
+import io.github.moyusowo.neoartisanapi.api.item.property.ArmorProperty;
+import io.github.moyusowo.neoartisanapi.api.item.property.FoodProperty;
+import io.github.moyusowo.neoartisanapi.api.item.property.WeaponProperty;
 import io.papermc.paper.datacomponent.item.CustomModelData;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
@@ -23,16 +27,9 @@ import java.util.function.Supplier;
 @SuppressWarnings({"unused"})
 public interface ArtisanItem {
 
-    /**
-     * 创建一个新的复杂自定义物品构建器实例。
-     *
-     * @return 新的简单自定义物品构建器实例（不会为null）
-     */
-    static ComplexBuilder complexBuilder() {
-        return Bukkit.getServicesManager().load(ComplexBuilder.class);
+    static ItemBuilderFactory factory() {
+        return Bukkit.getServicesManager().load(ItemBuilderFactory.class);
     }
-
-    static Builder builder() { return Bukkit.getServicesManager().load(Builder.class); }
 
     /**
      * 空命名空间键，物品为空时的物品注册ID

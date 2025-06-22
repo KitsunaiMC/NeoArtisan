@@ -59,7 +59,7 @@ final class RecipeRegistryImpl implements Listener, RecipeRegistry, RecipeRegist
                 if (furnaceRecipe.getInputChoice() instanceof RecipeChoice.MaterialChoice materialChoice) {
                     for (Material material : materialChoice.getChoices()) {
                         instance.register(
-                                ArtisanFurnaceRecipe.builder()
+                                ArtisanFurnaceRecipe.factory().builder()
                                         .key(material.getKey())
                                         .inputItemId(material.getKey())
                                         .resultGenerator(

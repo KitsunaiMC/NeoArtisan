@@ -3,6 +3,8 @@ package io.github.moyusowo.neoartisan.test;
 import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
 import io.github.moyusowo.neoartisanapi.api.item.*;
+import io.github.moyusowo.neoartisanapi.api.item.property.ArmorProperty;
+import io.github.moyusowo.neoartisanapi.api.item.property.WeaponProperty;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.FoodProperties;
 import io.papermc.paper.datacomponent.item.ItemLore;
@@ -23,13 +25,14 @@ final class ItemTest {
             magic_helmet = new NamespacedKey(namespace, "magic_helmet"),
             magic_sword = new NamespacedKey(namespace, "magic_sword"),
             cooking_pot = new NamespacedKey(namespace, "cooking_pot"),
-            cutting_board = new NamespacedKey(namespace, "cutting_board");
+            cutting_board = new NamespacedKey(namespace, "cutting_board"),
+            magic_block = new NamespacedKey(namespace, "magic_block");
 
     @NeoArtisanAPI.Register
     private static void register() {
         if (NeoArtisan.isDebugMode()) {
             NeoArtisanAPI.getItemRegistry().registerItem(
-                    ArtisanItem.complexBuilder()
+                    ArtisanItem.factory().complexBuilder()
                             .registryId(broken_stick)
                             .itemStack(() -> {
                                 ItemStack itemStack = ItemStack.of(Material.STICK);
@@ -48,7 +51,7 @@ final class ItemTest {
                             .build()
             );
             NeoArtisanAPI.getItemRegistry().registerItem(
-                    ArtisanItem.complexBuilder()
+                    ArtisanItem.factory().complexBuilder()
                             .registryId(magic_bread)
                             .itemStack(() -> {
                                 ItemStack itemStack = ItemStack.of(Material.BREAD);
@@ -68,7 +71,7 @@ final class ItemTest {
                             .build()
             );
             NeoArtisanAPI.getItemRegistry().registerItem(
-                    ArtisanItem.builder()
+                    ArtisanItem.factory().builder()
                             .registryId(magic_helmet)
                             .rawMaterial(Material.IRON_HELMET)
                             .displayName("<aqua>魔法头盔~")
@@ -89,7 +92,7 @@ final class ItemTest {
                             .build()
             );
             NeoArtisanAPI.getItemRegistry().registerItem(
-                    ArtisanItem.builder()
+                    ArtisanItem.factory().builder()
                             .registryId(magic_sword)
                             .rawMaterial(Material.IRON_SWORD)
                             .displayName("<yellow>魔法剑~")
@@ -110,7 +113,7 @@ final class ItemTest {
                             .build()
             );
             NeoArtisanAPI.getItemRegistry().registerItem(
-                    ArtisanItem.builder()
+                    ArtisanItem.factory().builder()
                             .registryId(cooking_pot)
                             .rawMaterial(Material.PAPER)
                             .displayName("烹饪锅")
@@ -119,12 +122,20 @@ final class ItemTest {
                             .build()
             );
             NeoArtisanAPI.getItemRegistry().registerItem(
-                    ArtisanItem.builder()
+                    ArtisanItem.factory().builder()
                             .registryId(cutting_board)
                             .rawMaterial(Material.PAPER)
                             .displayName("砧板")
                             .blockId(cutting_board)
                             .itemModel(cutting_board)
+                            .build()
+            );
+            NeoArtisanAPI.getItemRegistry().registerItem(
+                    ArtisanItem.factory().builder()
+                            .registryId(magic_block)
+                            .rawMaterial(Material.GRASS_BLOCK)
+                            .displayName("<gold>魔法小方块")
+                            .blockId(magic_block)
                             .build()
             );
         }

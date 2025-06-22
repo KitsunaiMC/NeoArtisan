@@ -1,20 +1,24 @@
-package io.github.moyusowo.neoartisanapi.api.block.thin;
+package io.github.moyusowo.neoartisanapi.api.block.full;
 
-import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlockState;
-import io.github.moyusowo.neoartisanapi.api.item.ItemGenerator;
+import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlock;
+import io.github.moyusowo.neoartisanapi.api.block.base.sound.SoundProperty;
+import io.github.moyusowo.neoartisanapi.api.block.gui.GUICreator;
 import org.bukkit.Bukkit;
+import org.bukkit.NamespacedKey;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+
 /**
- * 薄型自定义方块的特定状态定义。
+ * 表示完整自定义方块的基础接口。
  * <p>
- * 包含外观和掉落物等状态相关属性。
+ * 所有实例应通过 {@link ArtisanFullBlock.Builder} 构建。
  * </p>
  *
- * @see ArtisanBlockState 基础方块状态接口
- * @since 1.0.0
+ * @see ArtisanBlock 基础方块接口
+ * @since 2.0.0
  */
-public interface ArtisanThinBlockState extends ArtisanBlockState {
+public interface ArtisanFullBlock extends ArtisanBlock {
     /**
      * 获取工厂服务实例
      * <p>
@@ -48,11 +52,24 @@ public interface ArtisanThinBlockState extends ArtisanBlockState {
         Builder builder();
     }
 
+    @NotNull
+    ArtisanFullBlockState getState(int n);
+
+    /**
+     * 完整方块建造器接口
+     */
     interface Builder extends BaseBuilder {
-        @NotNull Builder appearanceState(@NotNull ThinBlockAppearance thinBlockAppearance);
 
-        @NotNull Builder generators(@NotNull ItemGenerator[] generators);
+        @NotNull Builder blockId(@NotNull NamespacedKey blockId);
 
-        @NotNull ArtisanThinBlockState build();
+        @NotNull Builder states(@NotNull List<ArtisanFullBlockState> states);
+
+        @NotNull Builder placeSound(@NotNull SoundProperty placeSoundProperty);
+
+        @NotNull Builder breakSound(@NotNull SoundProperty breakSoundProperty);
+
+        @NotNull Builder guiCreator(@NotNull GUICreator creator);
+
+        ArtisanFullBlock build();
     }
 }

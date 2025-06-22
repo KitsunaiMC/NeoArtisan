@@ -40,8 +40,13 @@ class ArtisanCropImpl extends ArtisanBlockBase implements ArtisanCrop {
     @InitMethod(priority = InitPriority.REGISTRAR)
     private static void init() {
         Bukkit.getServicesManager().register(
-                Builder.class,
-                new BuilderImpl(),
+                BuilderFactory.class,
+                new BuilderFactory() {
+                    @Override
+                    public @NotNull Builder builder() {
+                        return new BuilderImpl();
+                    }
+                },
                 NeoArtisan.instance(),
                 ServicePriority.Normal
         );

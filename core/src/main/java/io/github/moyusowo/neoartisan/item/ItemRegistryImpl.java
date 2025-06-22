@@ -52,13 +52,8 @@ final class ItemRegistryImpl implements ItemRegistry {
         }
     }
 
-    public Set<String> getAllIds() {
-        Set<NamespacedKey> keySet = registry.keySet();
-        Set<String> keySetString = new HashSet<>();
-        for (NamespacedKey key : keySet) {
-            keySetString.add(key.asString());
-        }
-        return keySetString;
+    public Set<NamespacedKey> getAllIds() {
+        return Collections.unmodifiableSet(registry.keySet());
     }
 
     @Override
