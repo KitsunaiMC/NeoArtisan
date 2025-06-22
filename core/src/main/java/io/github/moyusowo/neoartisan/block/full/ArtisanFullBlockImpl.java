@@ -1,41 +1,46 @@
-package io.github.moyusowo.neoartisan.block.transparent;
+package io.github.moyusowo.neoartisan.block.full;
 
 import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisan.block.util.BlockEventUtil;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
 import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
-import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlockType;
-import io.github.moyusowo.neoartisanapi.api.block.base.sound.SoundProperty;
 import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlockBase;
 import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlockState;
+import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlockType;
+import io.github.moyusowo.neoartisanapi.api.block.base.sound.SoundProperty;
+import io.github.moyusowo.neoartisanapi.api.block.full.ArtisanFullBlock;
+import io.github.moyusowo.neoartisanapi.api.block.full.ArtisanFullBlockData;
+import io.github.moyusowo.neoartisanapi.api.block.full.ArtisanFullBlockState;
 import io.github.moyusowo.neoartisanapi.api.block.gui.GUICreator;
-import io.github.moyusowo.neoartisanapi.api.block.transparent.ArtisanTransparentBlock;
-import io.github.moyusowo.neoartisanapi.api.block.transparent.ArtisanTransparentBlockData;
-import io.github.moyusowo.neoartisanapi.api.block.transparent.ArtisanTransparentBlockState;
 import io.github.moyusowo.neoartisanapi.api.item.ArtisanItem;
-import io.papermc.paper.event.block.BlockBreakBlockEvent;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.block.Block;
+import org.bukkit.craftbukkit.block.data.CraftBlockData;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockBurnEvent;
 import org.bukkit.event.block.BlockExplodeEvent;
-import org.bukkit.event.block.BlockIgniteEvent;
+import org.bukkit.event.block.BlockPistonExtendEvent;
+import org.bukkit.event.block.BlockPistonRetractEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.plugin.ServicePriority;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
+import static io.github.moyusowo.neoartisan.block.util.BlockEventUtil.isNotTypedArtisanBlock;
 import static io.github.moyusowo.neoartisan.block.util.BoundingBoxUtil.overlap;
 
-class ArtisanTransparentBlockImpl extends ArtisanBlockBase implements ArtisanTransparentBlock {
-
+class ArtisanFullBlockImpl extends ArtisanBlockBase implements ArtisanFullBlock {
     @InitMethod(priority = InitPriority.REGISTRAR)
     private static void init() {
         Bukkit.getServicesManager().register(
@@ -51,29 +56,20 @@ class ArtisanTransparentBlockImpl extends ArtisanBlockBase implements ArtisanTra
         );
     }
 
-    private final boolean canBurn;
-
-    protected ArtisanTransparentBlockImpl(NamespacedKey blockId, List<? extends ArtisanBlockState> stages, GUICreator creator, boolean canBurn, SoundProperty placeSound, SoundProperty breakSound, ArtisanBlockType artisanBlockType) {
+    protected ArtisanFullBlockImpl(@NotNull NamespacedKey blockId, @NotNull List<? extends ArtisanBlockState> stages, ArtisanBlockType artisanBlockType, @Nullable GUICreator creator, SoundProperty placeSound, SoundProperty breakSound) {
         super(blockId, stages, artisanBlockType, creator, placeSound, breakSound);
-        this.canBurn = canBurn;
-    }
-
-    @Override
-    public boolean canBurn() {
-        return this.canBurn;
     }
 
     @Override
     @NotNull
-    public ArtisanTransparentBlockState getState(int n) {
-        return (ArtisanTransparentBlockState) super.getState(n);
+    public ArtisanFullBlockState getState(int n) {
+        return (ArtisanFullBlockState) super.getState(n);
     }
 
-    public static class BuilderImpl implements Builder {
+    private static class BuilderImpl implements Builder {
 
         protected NamespacedKey blockId;
-        protected List<ArtisanTransparentBlockState> stages;
-        protected boolean canBurn;
+        protected List<ArtisanFullBlockState> stages;
         protected GUICreator creator;
         protected SoundProperty placeSound;
         protected SoundProperty breakSound;
@@ -84,7 +80,6 @@ class ArtisanTransparentBlockImpl extends ArtisanBlockBase implements ArtisanTra
             blockId = null;
             stages = null;
             creator = null;
-            canBurn = false;
         }
 
         @Override
@@ -94,14 +89,8 @@ class ArtisanTransparentBlockImpl extends ArtisanBlockBase implements ArtisanTra
         }
 
         @Override
-        public @NotNull Builder states(@NotNull List<ArtisanTransparentBlockState> states) {
+        public @NotNull Builder states(@NotNull List<ArtisanFullBlockState> states) {
             this.stages = states;
-            return this;
-        }
-
-        @Override
-        public @NotNull Builder canBurn(boolean canBurn) {
-            this.canBurn = canBurn;
             return this;
         }
 
@@ -124,31 +113,31 @@ class ArtisanTransparentBlockImpl extends ArtisanBlockBase implements ArtisanTra
         }
 
         @Override
-        public ArtisanTransparentBlock build() {
+        public ArtisanFullBlock build() {
             if (blockId == null || stages == null) throw new IllegalArgumentException("You must fill all the param!");
-            return new ArtisanTransparentBlockImpl(blockId, stages, creator, canBurn, placeSound, breakSound, ArtisanBlockType.TRANSPARENT_BLOCK);
+            return new ArtisanFullBlockImpl(blockId, stages, ArtisanBlockType.FULL_BLOCK, creator, placeSound, breakSound);
         }
     }
 
-    public static final class ArtisanTransparentBlockBehavior implements Listener {
+    public static final class ArtisanFullBlockBehavior implements Listener {
 
-        private ArtisanTransparentBlockBehavior() {}
+        private ArtisanFullBlockBehavior() {}
 
         @InitMethod(priority = InitPriority.LISTENER)
         static void init() {
-            NeoArtisan.registerListener(new ArtisanTransparentBlockBehavior());
+            NeoArtisan.registerListener(new ArtisanFullBlockBehavior());
         }
 
         @EventHandler(priority = EventPriority.HIGHEST)
         private static void onPlace(PlayerInteractEvent event) throws Exception {
-            if (BlockEventUtil.canNotPlaceBasicCheck(event, ArtisanTransparentBlock.class)) return;
+            if (BlockEventUtil.canNotPlaceBasicCheck(event, ArtisanFullBlock.class)) return;
             ArtisanItem artisanItem = NeoArtisanAPI.getItemRegistry().getArtisanItem(event.getItem());
             if (overlap(event.getClickedBlock().getRelative(event.getBlockFace()))) return;
             BlockEventUtil.onPlaceBasicLogic(
                     event,
                     event.getClickedBlock().getRelative(event.getBlockFace()),
                     event.getClickedBlock(),
-                    ArtisanTransparentBlockData.factory().builder()
+                    ArtisanFullBlockData.factory().builder()
                             .blockId(artisanItem.getBlockId())
                             .stage(0)
                             .location(event.getClickedBlock().getRelative(event.getBlockFace()).getLocation())
@@ -158,47 +147,72 @@ class ArtisanTransparentBlockImpl extends ArtisanBlockBase implements ArtisanTra
 
         @EventHandler(priority = EventPriority.HIGHEST)
         private static void onBreak(BlockBreakEvent event) {
-            if (BlockEventUtil.isNotTypedArtisanBlock(event.getBlock(), ArtisanTransparentBlockData.class)) return;
+            if (isNotTypedArtisanBlock(event.getBlock(), ArtisanFullBlockData.class)) return;
             BlockEventUtil.onBreakBasicLogic(event);
-        }
-
-        @EventHandler(priority = EventPriority.LOWEST)
-        private static void onPistonBreak(BlockBreakBlockEvent event) {
-            if (BlockEventUtil.isNotTypedArtisanBlock(event.getBlock(), ArtisanTransparentBlockData.class)) return;
-            BlockEventUtil.onWaterOrPistonBreakBasicLogic(event);
         }
 
         @EventHandler(priority = EventPriority.HIGHEST)
         private static void onBlockExplode(BlockExplodeEvent event) {
-            BlockEventUtil.onBlockExplode(event, ArtisanTransparentBlockData.class);
+            BlockEventUtil.onBlockExplode(event, ArtisanFullBlockData.class);
         }
 
         @EventHandler(priority = EventPriority.HIGHEST)
         private static void onEntityExplode(EntityExplodeEvent event) {
-            BlockEventUtil.onEntityExplode(event, ArtisanTransparentBlockData.class);
+            BlockEventUtil.onEntityExplode(event, ArtisanFullBlockData.class);
         }
 
         @EventHandler(priority = EventPriority.HIGHEST)
         private static void onEntityChangeBlock(EntityChangeBlockEvent event) {
-            BlockEventUtil.onEntityChangeBlock(event, ArtisanTransparentBlockData.class);
+            BlockEventUtil.onEntityChangeBlock(event, ArtisanFullBlockData.class);
         }
 
         @EventHandler(priority = EventPriority.HIGHEST)
-        private static void onBurn(BlockBurnEvent event) {
+        private static void onPistonPushBlock(BlockPistonExtendEvent event) {
             if (event.isCancelled()) return;
-            if (!NeoArtisanAPI.getArtisanBlockStorage().isArtisanBlock(event.getBlock())) return;
-            if (!(NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlockData(event.getBlock()) instanceof ArtisanTransparentBlockData artisanTransparentBlockData)) return;
-            if (artisanTransparentBlockData.getArtisanBlock().canBurn()) return;
-            event.setCancelled(true);
+            for (Block block : event.getBlocks()) {
+                if (isNotTypedArtisanBlock(block, ArtisanFullBlockData.class)) continue;
+                event.setCancelled(true);
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        for (Player player : block.getLocation().getNearbyPlayers(64)) {
+                            player.sendBlockChange(
+                                    block.getLocation(),
+                                    CraftBlockData.createData(
+                                            net.minecraft.world.level.block.Block.stateById(
+                                                    NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlockData(block).getArtisanBlockState().appearanceState()
+                                            )
+                                    )
+                            );
+                        }
+                    }
+                }.runTaskLater(NeoArtisan.instance(), 2L);
+            }
         }
 
         @EventHandler(priority = EventPriority.HIGHEST)
-        public static void onIgnite(BlockIgniteEvent event) {
+        private static void onPistonPullBlock(BlockPistonRetractEvent event) {
             if (event.isCancelled()) return;
-            if (!NeoArtisanAPI.getArtisanBlockStorage().isArtisanBlock(event.getBlock())) return;
-            if (!(NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlockData(event.getBlock()) instanceof ArtisanTransparentBlockData artisanTransparentBlockData)) return;
-            if (artisanTransparentBlockData.getArtisanBlock().canBurn()) return;
-            event.setCancelled(true);
+            if (event.getBlock().getType() != Material.MOVING_PISTON) return;
+            for (Block block : event.getBlocks()) {
+                if (isNotTypedArtisanBlock(block, ArtisanFullBlockData.class)) continue;
+                event.setCancelled(true);
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        for (Player player : block.getLocation().getNearbyPlayers(16)) {
+                            player.sendBlockChange(
+                                    block.getLocation(),
+                                    CraftBlockData.createData(
+                                            net.minecraft.world.level.block.Block.stateById(
+                                                    NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlockData(block).getArtisanBlockState().appearanceState()
+                                            )
+                                    )
+                            );
+                        }
+                    }
+                }.runTaskLater(NeoArtisan.instance(), 2L);
+            }
         }
     }
 }

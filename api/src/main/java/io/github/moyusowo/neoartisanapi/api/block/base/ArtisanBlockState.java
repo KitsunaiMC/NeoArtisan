@@ -57,4 +57,7 @@ public interface ArtisanBlockState {
      */
     @NotNull ItemStack[] drops();
 
+    @ApiStatus.Internal
+    interface BaseBuilder {}
+
 }

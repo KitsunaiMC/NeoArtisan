@@ -3,11 +3,19 @@ package io.github.moyusowo.neoartisan.test;
 import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
 import io.github.moyusowo.neoartisanapi.api.item.*;
+import io.github.moyusowo.neoartisan.item.property.ArmorProperty;
+import io.github.moyusowo.neoartisan.item.property.WeaponProperty;
+import io.papermc.paper.datacomponent.DataComponentTypes;
+import io.papermc.paper.datacomponent.item.FoodProperties;
+import io.papermc.paper.datacomponent.item.ItemLore;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
+@SuppressWarnings("UnstableApiUsage")
 final class ItemTest {
 
     static final String namespace = "neoartisan";
@@ -17,58 +25,53 @@ final class ItemTest {
             magic_helmet = new NamespacedKey(namespace, "magic_helmet"),
             magic_sword = new NamespacedKey(namespace, "magic_sword"),
             cooking_pot = new NamespacedKey(namespace, "cooking_pot"),
-            cutting_board = new NamespacedKey(namespace, "cutting_board");
+            cutting_board = new NamespacedKey(namespace, "cutting_board"),
+            magic_block = new NamespacedKey(namespace, "magic_block");
 
     @NeoArtisanAPI.Register
     private static void register() {
         if (NeoArtisan.isDebugMode()) {
             NeoArtisanAPI.getItemRegistry().registerItem(
-                    ArtisanItem.builder()
+                    ArtisanItem.factory().complexBuilder()
                             .registryId(broken_stick)
-                            .rawMaterial(Material.STICK)
-                            .hasOriginalCraft(true)
-                            .displayName("有点损坏的木棍")
-                            .lore(
-                                    List.of(
-                                            "是一根好像快坏掉了的木棍",
-                                            "但是似乎还能用"
-                                    )
-                            )
+                            .itemStack(() -> {
+                                ItemStack itemStack = ItemStack.of(Material.STICK);
+                                itemStack.setData(DataComponentTypes.ITEM_NAME, Component.text("有点损坏的木棍"));
+                                ItemLore itemLore = ItemLore.lore(
+                                        List.of(
+                                                Component.text("是一根好像快坏掉了的木棍"),
+                                                Component.text("但是似乎还能用")
+                                        )
+                                );
+                                itemStack.setData(DataComponentTypes.LORE, itemLore);
+                                return itemStack;
+                            })
+                            .hasOriginalCraft()
                             .blockId(new NamespacedKey(NeoArtisan.instance(), "magic_crop"))
                             .build()
             );
             NeoArtisanAPI.getItemRegistry().registerItem(
-                    ArtisanItem.builder()
+                    ArtisanItem.factory().complexBuilder()
                             .registryId(magic_bread)
-                            .rawMaterial(Material.BREAD)
-                            .displayName("<red>魔法面包~")
-                            .lore(
-                                    List.of(
-                                            "魔法面包好",
-                                            "魔法面包妙",
-                                            "魔法面包生存少不了"
-                                    )
-                            )
-                            .foodProperty(
-                                    new FoodProperty(10, 10f, true)
-                            )
+                            .itemStack(() -> {
+                                ItemStack itemStack = ItemStack.of(Material.BREAD);
+                                itemStack.setData(DataComponentTypes.ITEM_NAME, Component.text("<red>魔法面包~"));
+                                ItemLore itemLore = ItemLore.lore(
+                                        List.of(
+                                                Component.text("魔法面包好"),
+                                                Component.text("魔法面包妙"),
+                                                Component.text("魔法面包生存少不了")
+                                        )
+                                );
+                                itemStack.setData(DataComponentTypes.LORE, itemLore);
+                                FoodProperties foodProperties = FoodProperties.food().saturation(10).nutrition(10).canAlwaysEat(true).build();
+                                itemStack.setData(DataComponentTypes.FOOD, foodProperties);
+                                return itemStack;
+                            })
                             .build()
             );
             NeoArtisanAPI.getItemRegistry().registerItem(
-                    ArtisanItem.builder()
-                            .registryId(magic_diamond)
-                            .rawMaterial(Material.DIAMOND)
-                            .displayName("<blue>魔法钻石~")
-                            .lore(
-                                    List.of(
-                                            "被神赐福过的魔法钻石",
-                                            "可以合成更多的钻石噢"
-                                    )
-                            )
-                            .build()
-            );
-            NeoArtisanAPI.getItemRegistry().registerItem(
-                    ArtisanItem.builder()
+                    ArtisanItem.factory().builder()
                             .registryId(magic_helmet)
                             .rawMaterial(Material.IRON_HELMET)
                             .displayName("<aqua>魔法头盔~")
@@ -79,17 +82,15 @@ final class ItemTest {
                                     )
                             )
                             .armorProperty(
-                                    new ArmorProperty(
-                                            5,
-                                            1,
-                                            null
-                                    )
+                                    5,
+                                    1,
+                                    null
                             )
                             .maxDurability(2500)
                             .build()
             );
             NeoArtisanAPI.getItemRegistry().registerItem(
-                    ArtisanItem.builder()
+                    ArtisanItem.factory().builder()
                             .registryId(magic_sword)
                             .rawMaterial(Material.IRON_SWORD)
                             .displayName("<yellow>魔法剑~")
@@ -100,17 +101,15 @@ final class ItemTest {
                                     )
                             )
                             .weaponProperty(
-                                    new WeaponProperty(
-                                            1.0f,
-                                            1.5f,
-                                            11.0f
-                                    )
+                                    1.0f,
+                                    1.5f,
+                                    11.0f
                             )
                             .maxDurability(5000)
                             .build()
             );
             NeoArtisanAPI.getItemRegistry().registerItem(
-                    ArtisanItem.builder()
+                    ArtisanItem.factory().builder()
                             .registryId(cooking_pot)
                             .rawMaterial(Material.PAPER)
                             .displayName("烹饪锅")
@@ -119,12 +118,20 @@ final class ItemTest {
                             .build()
             );
             NeoArtisanAPI.getItemRegistry().registerItem(
-                    ArtisanItem.builder()
+                    ArtisanItem.factory().builder()
                             .registryId(cutting_board)
                             .rawMaterial(Material.PAPER)
                             .displayName("砧板")
                             .blockId(cutting_board)
                             .itemModel(cutting_board)
+                            .build()
+            );
+            NeoArtisanAPI.getItemRegistry().registerItem(
+                    ArtisanItem.factory().builder()
+                            .registryId(magic_block)
+                            .rawMaterial(Material.GRASS_BLOCK)
+                            .displayName("<gold>魔法小方块")
+                            .blockId(magic_block)
                             .build()
             );
         }

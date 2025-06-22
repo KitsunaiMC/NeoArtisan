@@ -3,6 +3,9 @@ package io.github.moyusowo.neoartisanapi.api.block.base;
 import io.github.moyusowo.neoartisanapi.api.block.crop.ArtisanCrop;
 import io.github.moyusowo.neoartisanapi.api.block.crop.ArtisanCropData;
 import io.github.moyusowo.neoartisanapi.api.block.crop.ArtisanCropState;
+import io.github.moyusowo.neoartisanapi.api.block.full.ArtisanFullBlock;
+import io.github.moyusowo.neoartisanapi.api.block.full.ArtisanFullBlockData;
+import io.github.moyusowo.neoartisanapi.api.block.full.ArtisanFullBlockState;
 import io.github.moyusowo.neoartisanapi.api.block.thin.ArtisanThinBlock;
 import io.github.moyusowo.neoartisanapi.api.block.thin.ArtisanThinBlockData;
 import io.github.moyusowo.neoartisanapi.api.block.thin.ArtisanThinBlockState;
@@ -42,9 +45,14 @@ public enum ArtisanBlockType {
      *
      * <p>不会消失，不会被烧毁，其他行为遵循原版树叶逻辑。</p>
      */
-    TRANSPARENT_BLOCK(ArtisanTransparentBlock.class, ArtisanTransparentBlockState.class, ArtisanTransparentBlockData.class);
+    TRANSPARENT_BLOCK(ArtisanTransparentBlock.class, ArtisanTransparentBlockState.class, ArtisanTransparentBlockData.class),
 
-//    FULL_BLOCK;
+    /**
+     * 完整方块，服务器内的真实方块是石头。
+     *
+     * <p>不会消失，不会被烧毁，不能被活塞推动，其他行为遵循原版石头逻辑，客户端挖掘继承音符盒逻辑</p>
+     */
+    FULL_BLOCK(ArtisanFullBlock.class, ArtisanFullBlockState.class, ArtisanFullBlockData.class);
 
     public final Class<? extends ArtisanBlock> artisanBlockClass;
     public final Class<? extends ArtisanBlockState> artisanBlockStateClass;

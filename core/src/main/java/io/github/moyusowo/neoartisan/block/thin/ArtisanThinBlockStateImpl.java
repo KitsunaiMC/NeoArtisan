@@ -13,14 +13,20 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.ServicePriority;
+import org.jetbrains.annotations.NotNull;
 
 class ArtisanThinBlockStateImpl extends ArtisanBlockStateBase implements ArtisanThinBlockState {
 
     @InitMethod(priority = InitPriority.REGISTRAR)
     private static void init() {
         Bukkit.getServicesManager().register(
-                Builder.class,
-                new BuilderImpl(),
+                BuilderFactory.class,
+                new BuilderFactory() {
+                    @Override
+                    public @NotNull Builder builder() {
+                        return new BuilderImpl();
+                    }
+                },
                 NeoArtisan.instance(),
                 ServicePriority.Normal
         );
@@ -55,19 +61,19 @@ class ArtisanThinBlockStateImpl extends ArtisanBlockStateBase implements Artisan
 
 
         @Override
-        public Builder appearanceState(ThinBlockAppearance thinBlockAppearance) {
+        public @NotNull Builder appearanceState(@NotNull ThinBlockAppearance thinBlockAppearance) {
             this.thinBlockAppearance = thinBlockAppearance;
             return this;
         }
 
         @Override
-        public Builder generators(ItemGenerator[] generators) {
+        public @NotNull Builder generators(ItemGenerator[] generators) {
             this.generators = generators;
             return this;
         }
 
         @Override
-        public ArtisanThinBlockState build() {
+        public @NotNull ArtisanThinBlockState build() {
             if (generators == null || thinBlockAppearance == null) throw new IllegalArgumentException("You must fill all the param!");
             return new ArtisanThinBlockStateImpl(generateAppearanceState(), actualState, generators);
         }

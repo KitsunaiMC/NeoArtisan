@@ -5,6 +5,7 @@ import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -38,7 +39,7 @@ public interface ArtisanBlockData {
      *
      * @return 不可变的位置对象，包含世界、坐标信息
      */
-    Location getLocation();
+    @NotNull Location getLocation();
 
     /**
      * 获取方块的ID
@@ -46,7 +47,7 @@ public interface ArtisanBlockData {
      * @return 与 {@link ArtisanBlock#getBlockId()} 一致的命名空间键
      * @see ArtisanBlock#getBlockId()
      */
-    NamespacedKey blockId();
+    @NotNull NamespacedKey blockId();
 
     /**
      * 获取当前方块状态索引
@@ -61,7 +62,7 @@ public interface ArtisanBlockData {
      *
      * @return 不可变的方块类型实例
      */
-    ArtisanBlock getArtisanBlock();
+    @NotNull ArtisanBlock getArtisanBlock();
 
     /**
      * 获取当前方块状态实例
@@ -69,7 +70,7 @@ public interface ArtisanBlockData {
      * @return 通过 {@link ArtisanBlock#getState(int)} 获取的不可变状态
      * @see ArtisanBlock#getState(int)
      */
-    ArtisanBlockState getArtisanBlockState();
+    @NotNull ArtisanBlockState getArtisanBlockState();
 
     /**
      * 获取方块的持久化数据容器
@@ -79,10 +80,8 @@ public interface ArtisanBlockData {
      *
      * @return 可读写的bukkitAPI数据容器，生命周期与方块实例相同
      */
-    PersistentDataContainer getPersistentDataContainer();
+    @NotNull PersistentDataContainer getPersistentDataContainer();
 
     @ApiStatus.Internal
-    interface BaseBuilder {
-
-    }
+    interface BaseBuilder {}
 }

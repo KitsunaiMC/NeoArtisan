@@ -4,6 +4,7 @@ import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlockData;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * 表示世界中实际存在的自定义作物方块数据，扩展基础 {@link ArtisanBlockData} 功能。
@@ -16,6 +17,38 @@ import org.bukkit.NamespacedKey;
  */
 @SuppressWarnings("unused")
 public interface ArtisanCropData extends ArtisanBlockData {
+    /**
+     * 获取工厂服务实例
+     * <p>
+     * 此工厂用于创建全新的 {@link Builder} 实例，确保每次构建过程独立且线程安全。
+     * </p>
+     *
+     * @return 作物建造器工厂实例（非null）
+     * @throws IllegalStateException 如果工厂服务未注册
+     * @see Builder 构建器接口
+     * @since 2.0.0
+     */
+    static BuilderFactory factory() {
+        return Bukkit.getServicesManager().load(BuilderFactory.class);
+    }
+
+    /**
+     * 建造器工厂接口
+     * <p>
+     * 负责创建全新的 {@link Builder} 实例，确保每次构建过程独立。
+     * 实现必须保证每次调用 {@link #builder()} 都返回<strong>未使用过</strong>的构建器。
+     * </p>
+     *
+     * <p><b>实现要求：</b></p>
+     * <ol>
+     *   <li>禁止返回单例或共享实例</li>
+     *   <li>构建器初始状态必须完全重置</li>
+     * </ol>
+     */
+    interface BuilderFactory {
+        @NotNull
+        Builder builder();
+    }
 
     /**
      * 获取关联的自定义方块定义
@@ -23,6 +56,7 @@ public interface ArtisanCropData extends ArtisanBlockData {
      * @return 不可变的方块类型实例
      */
     @Override
+    @NotNull
     ArtisanCrop getArtisanBlock();
 
     /**
@@ -32,17 +66,8 @@ public interface ArtisanCropData extends ArtisanBlockData {
      * @see ArtisanCrop#getState(int)
      */
     @Override
+    @NotNull
     ArtisanCropState getArtisanBlockState();
-
-    /**
-     * 获取作物数据建造器实例
-     *
-     * @return 通过服务管理器加载的建造器
-     * @throws IllegalStateException 如果建造器服务未注册
-     */
-    static Builder builder() {
-        return Bukkit.getServicesManager().load(Builder.class);
-    }
 
     /**
      * 检查是否存在下一生长阶段

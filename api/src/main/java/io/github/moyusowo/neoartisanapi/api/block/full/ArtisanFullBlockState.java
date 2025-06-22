@@ -1,20 +1,21 @@
-package io.github.moyusowo.neoartisanapi.api.block.thin;
+package io.github.moyusowo.neoartisanapi.api.block.full;
 
 import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlockState;
 import io.github.moyusowo.neoartisanapi.api.item.ItemGenerator;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * 薄型自定义方块的特定状态定义。
+ * 完整自定义方块的特定状态定义。
  * <p>
  * 包含外观和掉落物等状态相关属性。
  * </p>
  *
  * @see ArtisanBlockState 基础方块状态接口
- * @since 1.0.0
+ * @since 2.0.0
  */
-public interface ArtisanThinBlockState extends ArtisanBlockState {
+public interface ArtisanFullBlockState extends ArtisanBlockState {
     /**
      * 获取工厂服务实例
      * <p>
@@ -49,10 +50,10 @@ public interface ArtisanThinBlockState extends ArtisanBlockState {
     }
 
     interface Builder extends BaseBuilder {
-        @NotNull Builder appearanceState(@NotNull ThinBlockAppearance thinBlockAppearance);
+        @NotNull Builder appearanceState(@NotNull FullBlockAppearance fullBlockAppearance);
 
         @NotNull Builder generators(@NotNull ItemGenerator[] generators);
 
-        @NotNull ArtisanThinBlockState build();
+        @NotNull ArtisanFullBlockState build();
     }
 }

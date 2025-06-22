@@ -95,7 +95,7 @@ final class ArtisanBlockStorageImpl implements ArtisanBlockStorage, ArtisanBlock
             public void run() {
                 BlockDataSerializer.save();
             }
-        }.runTaskLaterAsynchronously(NeoArtisan.instance(), 20L * 120);
+        }.runTaskTimerAsynchronously(NeoArtisan.instance(), 20L * 30, 20L * 15);
     }
 
     private final Map<Level, Map<ChunkPos, Map<BlockPos, ArtisanBlockData>>> storage;

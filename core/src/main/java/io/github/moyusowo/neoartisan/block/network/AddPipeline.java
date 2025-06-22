@@ -3,6 +3,7 @@ package io.github.moyusowo.neoartisan.block.network;
 import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
+import io.netty.channel.Channel;
 import net.minecraft.server.level.ServerPlayer;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
@@ -11,6 +12,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 public class AddPipeline implements Listener {
+
+    private static final String INJECTED = "block_packet_neoartisan_handler";
 
     private AddPipeline() {}
 
@@ -21,11 +24,16 @@ public class AddPipeline implements Listener {
 
     @EventHandler
     private void onPlayerJoin(PlayerJoinEvent event) {
-        Player player = event.getPlayer();
-        CraftPlayer craftPlayer = (CraftPlayer) player;
-        ServerPlayer serverPlayer = craftPlayer.getHandle();
-        serverPlayer.connection.connection.channel.pipeline().addBefore(
-                "packet_handler", "block_packet_custom_handler", new BlockPacketHandler(serverPlayer)
-        );
+        final Player player = event.getPlayer();
+        final CraftPlayer craftPlayer = (CraftPlayer) player;
+        final ServerPlayer serverPlayer = craftPlayer.getHandle();
+        final Channel channel = serverPlayer.connection.connection.channel;
+        channel.eventLoop().execute(() -> {
+            if (channel.pipeline().get(INJECTED) == null) {
+                channel.pipeline().addBefore(
+                        "packet_handler", INJECTED, new BlockPacketHandler(serverPlayer)
+                );
+            }
+        });
     }
 }

@@ -5,6 +5,9 @@ import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
 import io.github.moyusowo.neoartisanapi.api.block.crop.ArtisanCrop;
 import io.github.moyusowo.neoartisanapi.api.block.crop.ArtisanCropState;
 import io.github.moyusowo.neoartisanapi.api.block.crop.TripwireAppearance;
+import io.github.moyusowo.neoartisanapi.api.block.full.ArtisanFullBlock;
+import io.github.moyusowo.neoartisanapi.api.block.full.ArtisanFullBlockState;
+import io.github.moyusowo.neoartisanapi.api.block.full.FullBlockAppearance;
 import io.github.moyusowo.neoartisanapi.api.block.thin.ArtisanThinBlock;
 import io.github.moyusowo.neoartisanapi.api.block.thin.ArtisanThinBlockState;
 import io.github.moyusowo.neoartisanapi.api.block.thin.ThinBlockAppearance;
@@ -19,20 +22,19 @@ import java.util.List;
 
 import static io.github.moyusowo.neoartisan.test.ItemTest.namespace;
 
-final class CropTest {
+final class BlockTest {
 
-    static final NamespacedKey magic_crop = new NamespacedKey(namespace, "magic_crop"),
-            cooking_pot = new NamespacedKey(namespace, "cooking_pot");
+    static final NamespacedKey magic_crop = new NamespacedKey(namespace, "magic_crop");
 
     @NeoArtisanAPI.Register
     private static void register() {
         if (NeoArtisan.isDebugMode()) {
             NeoArtisanAPI.getBlockRegistry().register(
-                    ArtisanCrop.builder()
+                    ArtisanCrop.factory().builder()
                             .blockId(magic_crop)
                             .stages(
                                     List.of(
-                                            ArtisanCropState.builder()
+                                            ArtisanCropState.factory().builder()
                                                     .appearance(
                                                             new TripwireAppearance(
                                                                     false,
@@ -58,7 +60,7 @@ final class CropTest {
                                                             }
                                                     )
                                                     .build(),
-                                            ArtisanCropState.builder()
+                                            ArtisanCropState.factory().builder()
                                                     .appearance(
                                                             new TripwireAppearance(
                                                                     true,
@@ -74,7 +76,7 @@ final class CropTest {
                                                             new ItemGenerator[0]
                                                     )
                                                     .build(),
-                                            ArtisanCropState.builder()
+                                            ArtisanCropState.factory().builder()
                                                     .appearance(
                                                             new TripwireAppearance(
                                                                     false,
@@ -107,12 +109,12 @@ final class CropTest {
                             .build()
             );
             NeoArtisanAPI.getBlockRegistry().register(
-                    ArtisanTransparentBlock.builder()
+                    ArtisanTransparentBlock.factory().builder()
                             .blockId(ItemTest.cooking_pot)
                             .canBurn(false)
                             .states(
                                     List.of(
-                                            ArtisanTransparentBlockState.builder()
+                                            ArtisanTransparentBlockState.factory().builder()
                                                     .appearanceState(
                                                             new TransparentAppearance(
                                                                     TransparentAppearance.LeavesAppearance.OAK_LEAVES,
@@ -135,11 +137,11 @@ final class CropTest {
                             .build()
             );
             NeoArtisanAPI.getBlockRegistry().register(
-                    ArtisanThinBlock.builder()
+                    ArtisanThinBlock.factory().builder()
                             .blockId(ItemTest.cutting_board)
                             .states(
                                     List.of(
-                                            ArtisanThinBlockState.builder()
+                                            ArtisanThinBlockState.factory().builder()
                                                     .appearanceState(
                                                             new ThinBlockAppearance(
                                                                     ThinBlockAppearance.PressurePlateAppearance.LIGHT_WEIGHTED_PRESSURE_PLATE,
@@ -152,6 +154,23 @@ final class CropTest {
                                                                             ItemTest.cutting_board,
                                                                             1
                                                                     )
+                                                            }
+                                                    )
+                                                    .build()
+                                    )
+                            )
+                            .build()
+            );
+            NeoArtisanAPI.getBlockRegistry().register(
+                    ArtisanFullBlock.factory().builder()
+                            .blockId(ItemTest.magic_block)
+                            .states(
+                                    List.of(
+                                            ArtisanFullBlockState.factory().builder()
+                                                    .appearanceState(new FullBlockAppearance(FullBlockAppearance.NoteBlockAppearance.SKELETON, 1, true))
+                                                    .generators(
+                                                            new ItemGenerator[] {
+                                                                    ItemGenerator.simpleGenerator(ItemTest.magic_block, 1)
                                                             }
                                                     )
                                                     .build()

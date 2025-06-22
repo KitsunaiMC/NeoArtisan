@@ -37,6 +37,7 @@ NeoArtisan 是一个面向 Minecraft 1.21.4+ 的自定义内容框架，基于 G
 - **建造者模式**：简化内容对象创建
 - **清晰文档**：完整的Javadoc和示例
 - **事件系统**：覆盖方块生命周期关键事件
+- **效率优先哲学**：我们坚信开发效率的价值，用简洁API满足绝大多数需求
 
 ## 快速开始
 
@@ -49,7 +50,7 @@ repositories {
 }
 
 dependencies {
-    CompileOnly 'com.github.MoYuSOwO:NeoArtisan:1.0:api'
+    CompileOnly 'com.github.MoYuSOwO:NeoArtisan:<api_version>:api'
 }
 ```
 
@@ -60,12 +61,12 @@ dependencies {
 @NeoArtisanAPI.Register 
 public void registerContent() {
     NeoArtisanAPI.getBlockRegistry().register(
-            ArtisanTransparentBlock.builder()
+            ArtisanTransparentBlock.factory().builder()
                     .blockId(ItemTest.cooking_pot)
                     .canBurn(false)
                     .states(
                             List.of(
-                                    ArtisanTransparentBlockState.builder()
+                                    ArtisanTransparentBlockState.factory().builder()
                                             .appearanceState(
                                                     new TransparentAppearance(
                                                             TransparentAppearance.LeavesAppearance.OAK_LEAVES,
@@ -88,7 +89,7 @@ public void registerContent() {
                     .build()
     );
     NeoArtisanAPI.getItemRegistry().registerItem(
-            ArtisanItem.builder()
+            ArtisanItem.factory().builder()
                     .registryId(magic_helmet)
                     .rawMaterial(Material.IRON_HELMET)
                     .displayName("<aqua>魔法头盔~")
@@ -99,17 +100,15 @@ public void registerContent() {
                             )
                     )
                     .armorProperty(
-                            new ArmorProperty(
-                                    5,
-                                    1,
-                                    null
-                            )
+                              5,
+                              1,
+                              null
                     )
                     .maxDurability(2500)
                     .build()
     );
     NeoArtisanAPI.getItemRegistry().registerItem(
-            ArtisanItem.builder()
+            ArtisanItem.factory().builder()
                     .registryId(magic_sword)
                     .rawMaterial(Material.IRON_SWORD)
                     .displayName("<yellow>魔法剑~")
@@ -120,22 +119,23 @@ public void registerContent() {
                             )
                     )
                     .weaponProperty(
-                            new WeaponProperty(
-                                    1.0f,
-                                    1.5f,
-                                    11.0f
-                            )
+                              1.0f,
+                              1.5f,
+                              11.0f
                     )
                     .maxDurability(5000)
                     .build()
     );
     NeoArtisanAPI.getItemRegistry().registerItem(
-            ArtisanItem.builder()
+            ArtisanItem.factory().complexBuilder()
                     .registryId(cooking_pot)
-                    .rawMaterial(Material.PAPER)
-                    .displayName("烹饪锅")
+                    .itemStack(() -> {
+                        ItemStack itemStack = ItemStack.of(Material.PAPER);
+                        itemStack.setData(DataComponentTypes.ITEM_NAME, Component.text("<green>烹饪锅"));
+                        itemStack.setData(DataComponentTypes.ITEM_MODEL, cooking_pot);
+                        return itemStack;
+                    })
                     .blockId(cooking_pot)
-                    .itemModel(cooking_pot)
                     .build()
     );
 }

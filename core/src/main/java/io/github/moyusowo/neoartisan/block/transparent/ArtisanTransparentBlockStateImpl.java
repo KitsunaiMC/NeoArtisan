@@ -13,14 +13,20 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.ServicePriority;
+import org.jetbrains.annotations.NotNull;
 
 class ArtisanTransparentBlockStateImpl extends ArtisanBlockStateBase implements ArtisanTransparentBlockState {
 
     @InitMethod(priority = InitPriority.REGISTRAR)
     private static void init() {
         Bukkit.getServicesManager().register(
-                Builder.class,
-                new BuilderImpl(),
+                BuilderFactory.class,
+                new BuilderFactory() {
+                    @Override
+                    public @NotNull Builder builder() {
+                        return new BuilderImpl();
+                    }
+                },
                 NeoArtisan.instance(),
                 ServicePriority.Normal
         );
@@ -69,19 +75,19 @@ class ArtisanTransparentBlockStateImpl extends ArtisanBlockStateBase implements 
 
 
         @Override
-        public Builder appearanceState(TransparentAppearance transparentAppearance) {
+        public @NotNull Builder appearanceState(@NotNull TransparentAppearance transparentAppearance) {
             this.transparentAppearance = transparentAppearance;
             return this;
         }
 
         @Override
-        public Builder generators(ItemGenerator[] generators) {
+        public @NotNull Builder generators(ItemGenerator[] generators) {
             this.generators = generators;
             return this;
         }
 
         @Override
-        public ArtisanTransparentBlockState build() {
+        public @NotNull ArtisanTransparentBlockState build() {
             if (generators == null || transparentAppearance == null) throw new IllegalArgumentException("You must fill all the param!");
             return new ArtisanTransparentBlockStateImpl(generateAppearanceState(), actualState, generators);
         }

@@ -1,20 +1,21 @@
-package io.github.moyusowo.neoartisanapi.api.block.thin;
+package io.github.moyusowo.neoartisanapi.api.block.full;
 
-import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlockState;
-import io.github.moyusowo.neoartisanapi.api.item.ItemGenerator;
+import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlockData;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.NamespacedKey;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * 薄型自定义方块的特定状态定义。
+ * 完整自定义方块在世界中的具体数据实例。
  * <p>
- * 包含外观和掉落物等状态相关属性。
+ * 包含位置、状态等运行时信息，通过 {@link ArtisanFullBlockData.Builder} 构建不可变实例。
  * </p>
  *
- * @see ArtisanBlockState 基础方块状态接口
- * @since 1.0.0
+ * @see ArtisanBlockData 基础方块数据接口
+ * @since 2.0.0
  */
-public interface ArtisanThinBlockState extends ArtisanBlockState {
+public interface ArtisanFullBlockData extends ArtisanBlockData {
     /**
      * 获取工厂服务实例
      * <p>
@@ -48,11 +49,22 @@ public interface ArtisanThinBlockState extends ArtisanBlockState {
         Builder builder();
     }
 
+    @Override
+    @NotNull
+    ArtisanFullBlock getArtisanBlock();
+
+    @Override
+    @NotNull
+    ArtisanFullBlockState getArtisanBlockState();
+
     interface Builder extends BaseBuilder {
-        @NotNull Builder appearanceState(@NotNull ThinBlockAppearance thinBlockAppearance);
 
-        @NotNull Builder generators(@NotNull ItemGenerator[] generators);
+        Builder location(Location location);
 
-        @NotNull ArtisanThinBlockState build();
+        Builder blockId(NamespacedKey blockId);
+
+        Builder stage(int stage);
+
+        ArtisanFullBlockData build();
     }
 }

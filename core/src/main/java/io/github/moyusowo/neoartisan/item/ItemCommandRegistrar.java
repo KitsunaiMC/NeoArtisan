@@ -23,8 +23,8 @@ final class ItemCommandRegistrar {
             (ctx, builder) -> {
                 String currentInput = builder.getRemaining().toLowerCase();
                 ItemRegistryImpl.getInstance().getAllIds().stream()
-                        .filter(id -> id.toLowerCase().startsWith(currentInput))
-                        .forEach(builder::suggest);
+                        .filter(id -> id.asString().startsWith(currentInput) || id.getKey().startsWith(currentInput))
+                        .forEach(id -> builder.suggest(id.asString()));
                 return builder.buildFuture();
             };
 
