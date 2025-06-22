@@ -71,7 +71,7 @@ public interface ArtisanCrop extends ArtisanBlock {
      *
      * @apiNote 所有setter方法返回建造器自身以实现链式调用
      */
-    interface Builder {
+    interface Builder extends BaseBuilder {
 
         @NotNull Builder blockId(@NotNull NamespacedKey blockId);
 

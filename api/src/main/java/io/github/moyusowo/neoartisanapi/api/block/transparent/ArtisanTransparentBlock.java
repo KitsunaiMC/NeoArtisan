@@ -41,7 +41,7 @@ public interface ArtisanTransparentBlock extends ArtisanBlock {
     /**
      * 透明方块建造器接口
      */
-    interface Builder {
+    interface Builder extends BaseBuilder {
 
         @NotNull Builder blockId(@NotNull NamespacedKey blockId);
 

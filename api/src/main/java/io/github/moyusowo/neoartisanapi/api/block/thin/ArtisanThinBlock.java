@@ -40,7 +40,7 @@ public interface ArtisanThinBlock extends ArtisanBlock {
     /**
      * 薄型方块建造器接口
      */
-    interface Builder {
+    interface Builder extends BaseBuilder {
 
         @NotNull Builder blockId(@NotNull NamespacedKey blockId);
 

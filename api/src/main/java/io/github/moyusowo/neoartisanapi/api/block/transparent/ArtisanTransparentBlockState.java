@@ -19,7 +19,7 @@ public interface ArtisanTransparentBlockState extends ArtisanBlockState {
         return Bukkit.getServicesManager().load(Builder.class);
     }
 
-    interface Builder {
+    interface Builder extends BaseBuilder {
 
         Builder appearanceState(TransparentAppearance transparentAppearance);
 

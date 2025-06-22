@@ -82,7 +82,5 @@ public interface ArtisanBlockData {
     PersistentDataContainer getPersistentDataContainer();
 
     @ApiStatus.Internal
-    interface BaseBuilder {
-
-    }
+    interface BaseBuilder {}
 }

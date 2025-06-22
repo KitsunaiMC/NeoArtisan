@@ -95,5 +95,8 @@ public interface ArtisanBlock {
      */
     @NotNull ArtisanBlockType getArtisanBlockType();
 
+    @ApiStatus.Internal
+    interface BaseBuilder {}
+
 }
 

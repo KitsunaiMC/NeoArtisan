@@ -30,7 +30,7 @@ public interface ArtisanCropState extends ArtisanBlockState {
     /**
      * 作物状态建造器接口
      */
-    interface Builder {
+    interface Builder extends BaseBuilder {
 
         /**
          * 设置作物外观配置
