@@ -76,8 +76,7 @@ public final class BlockEventUtil {
 
     public static <D extends ArtisanBlockData> boolean isNotTypedArtisanBlock(Block block, Class<D> artisanBlockDataClass) {
         if (!NeoArtisanAPI.getArtisanBlockStorage().isArtisanBlock(block)) return true;
-        if (!artisanBlockDataClass.isInstance(NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlockData(block))) return true;
-        return false;
+        return !artisanBlockDataClass.isInstance(NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlockData(block));
     }
 
     public static void onBreakBasicLogic(BlockBreakEvent event) {
@@ -103,7 +102,7 @@ public final class BlockEventUtil {
         if (event.getPlayer().getGameMode() != GameMode.CREATIVE) {
             if (artisanBlockBreakEvent.isDropItems()) {
                 for (ItemStack drop : artisanBlockData.getArtisanBlockState().drops()) {
-                    event.getBlock().getWorld().dropItemNaturally(event.getBlock().getLocation(), drop);
+                    event.getBlock().getWorld().dropItemNaturally(event.getBlock().getLocation().add(0, 1, 0), drop);
                 }
             }
         }
@@ -142,7 +141,7 @@ public final class BlockEventUtil {
         }
         if (artisanBlockLoseSupportEvent.isDropItems()) {
             for (ItemStack drop : artisanBlockData.getArtisanBlockState().drops()) {
-                event.getBlock().getWorld().dropItemNaturally(event.getBlock().getRelative(BlockFace.UP).getLocation(), drop);
+                event.getBlock().getWorld().dropItemNaturally(event.getBlock().getRelative(BlockFace.UP).getLocation().add(0.5, 0.5, 0.5), drop);
             }
         }
         ArtisanBlockStorageInternal.getInternal().removeArtisanBlock(event.getBlock().getRelative(BlockFace.UP));
@@ -168,7 +167,7 @@ public final class BlockEventUtil {
             }
             if (artisanBlockLoseSupportEvent.isDropItems()) {
                 for (ItemStack drop : artisanBlockData.getArtisanBlockState().drops()) {
-                    block.getWorld().dropItemNaturally(block.getRelative(BlockFace.UP).getLocation(), drop);
+                    block.getWorld().dropItemNaturally(block.getRelative(BlockFace.UP).getLocation().add(0.5, 0.5, 0.5), drop);
                 }
             }
             ArtisanBlockStorageInternal.getInternal().removeArtisanBlock(block.getRelative(BlockFace.UP));
@@ -199,7 +198,7 @@ public final class BlockEventUtil {
             ArtisanBlockData artisanBlockData = NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlockData(artisanBlock);
             if (ThreadLocalRandom.current().nextDouble() < event.getYield()) {
                 for (ItemStack drop : artisanBlockData.getArtisanBlockState().drops()) {
-                    artisanBlock.getWorld().dropItemNaturally(artisanBlock.getLocation(), drop);
+                    artisanBlock.getWorld().dropItemNaturally(artisanBlock.getLocation().add(0.5, 0.5, 0.5), drop);
                 }
             }
             artisanBlock.setType(Material.AIR);
@@ -221,7 +220,7 @@ public final class BlockEventUtil {
             ArtisanBlockData artisanBlockData = NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlockData(artisanBlock);
             if (ThreadLocalRandom.current().nextDouble() < event.getYield()) {
                 for (ItemStack drop : artisanBlockData.getArtisanBlockState().drops()) {
-                    artisanBlock.getWorld().dropItemNaturally(artisanBlock.getLocation(), drop);
+                    artisanBlock.getWorld().dropItemNaturally(artisanBlock.getLocation().add(0.5, 0.5, 0.5), drop);
                 }
             }
             artisanBlock.setType(Material.AIR);

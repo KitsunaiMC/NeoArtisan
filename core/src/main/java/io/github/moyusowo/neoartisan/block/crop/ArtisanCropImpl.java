@@ -216,7 +216,7 @@ class ArtisanCropImpl extends ArtisanBlockBase implements ArtisanCrop {
             event.getBlock().getRelative(BlockFace.UP).setType(Material.AIR);
             event.getBlock().setType(Material.DIRT);
             for (ItemStack drop: artisanCropData.getArtisanBlockState().drops()) {
-                event.getBlock().getWorld().dropItemNaturally(event.getBlock().getRelative(BlockFace.UP).getLocation(), drop);
+                event.getBlock().getWorld().dropItemNaturally(event.getBlock().getRelative(BlockFace.UP).getLocation().add(0.5, 0.5, 0.5), drop);
             }
             ArtisanBlockStorageInternal.getInternal().removeArtisanBlock(event.getBlock().getRelative(BlockFace.UP));
         }
