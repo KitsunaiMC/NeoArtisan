@@ -193,9 +193,43 @@ public abstract class ArtisanBlockGUI implements BlockInventoryHolder, Listener 
      * @throws IllegalStateException 如果初始化已完成
      * @see GUILifecycleTask 生命周期任务接口
      */
+    @ApiStatus.Internal
     protected void addLifecycleTask(@NotNull GUILifecycleTask lifecycleTask) {
         if (isInit) throw new IllegalStateException("Cannot add tasks after initialization");
         lifecycleTasks.add(lifecycleTask);
+    }
+
+    /**
+     * 添加GUI生命周期任务
+     * <p>
+     * 用于注册需要在GUI初始化后运行的周期性任务（如库存刷新）。
+     * 必须在 {@link #init()} 方法执行前调用，可在构造函数或 {@link #init()} 方法中注册。
+     * </p>
+     *
+     * @param bukkitRunnable 要添加的任务（非null）
+     * @param delay 任务开始时的延迟（Tick为单位）
+     * @param period 任务执行的周期（Tick为单位）
+     * @throws IllegalStateException 如果初始化已完成
+     */
+    protected void addLifecycleTask(@NotNull BukkitRunnable bukkitRunnable, long delay, long period) {
+        addLifecycleTask(new GUILifecycleTask(plugin, bukkitRunnable, delay, period));
+    }
+
+    /**
+     * 添加GUI生命周期任务
+     * <p>
+     * 用于注册需要在GUI初始化后运行的周期性任务（如库存刷新）。
+     * 必须在 {@link #init()} 方法执行前调用，可在构造函数或 {@link #init()} 方法中注册。
+     * </p>
+     *
+     * @param bukkitRunnable 要添加的任务（非null）
+     * @param delay 任务开始时的延迟（Tick为单位）
+     * @param period 任务执行的周期（Tick为单位）
+     * @param isAsynchronous 是否异步执行
+     * @throws IllegalStateException 如果初始化已完成
+     */
+    protected void addLifecycleTask(@NotNull BukkitRunnable bukkitRunnable, long delay, long period, boolean isAsynchronous) {
+        addLifecycleTask(new GUILifecycleTask(plugin, bukkitRunnable, delay, period, isAsynchronous));
     }
 
     /**
