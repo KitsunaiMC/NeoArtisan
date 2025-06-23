@@ -251,11 +251,10 @@ public abstract class ArtisanBlockGUI implements BlockInventoryHolder, Listener 
     private void onInit() {
         try {
             init();
-        } catch (Exception ignored) {
-
+        } finally {
+            lifecycleTasks.forEach(GUILifecycleTask::run);
+            isInit = true;
         }
-        lifecycleTasks.forEach(GUILifecycleTask::run);
-        isInit = true;
     }
 
     /**
@@ -295,16 +294,15 @@ public abstract class ArtisanBlockGUI implements BlockInventoryHolder, Listener 
     public final void onTerminate() {
         try {
             terminate();
-        } catch (Exception ignored) {
-
+        } finally {
+            Bukkit.getOnlinePlayers().stream()
+                    .filter(p -> p.getOpenInventory().getTopInventory().getHolder() == this)
+                    .forEach(player -> {
+                        player.closeInventory(InventoryCloseEvent.Reason.PLUGIN);
+                    });
+            HandlerList.unregisterAll(this);
+            lifecycleTasks.forEach(GUILifecycleTask::cancel);
         }
-        Bukkit.getOnlinePlayers().stream()
-                .filter(p -> p.getOpenInventory().getTopInventory().getHolder() == this)
-                .forEach(player -> {
-                    player.closeInventory(InventoryCloseEvent.Reason.PLUGIN);
-                });
-        HandlerList.unregisterAll(this);
-        lifecycleTasks.forEach(GUILifecycleTask::cancel);
     }
 
     /**
