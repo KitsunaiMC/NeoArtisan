@@ -103,7 +103,9 @@ final class BlockDataSerializer {
                     }
                 }
             }
-            NeoArtisan.logger().info("自定义方块数据自动保存成功！");
+            if (NeoArtisan.isDebugMode()) {
+                NeoArtisan.logger().info("自定义方块数据自动保存成功！");
+            }
         } catch (IOException e) {
             NeoArtisan.logger().severe("自定义方块数据保存失败: " + e);
         }
