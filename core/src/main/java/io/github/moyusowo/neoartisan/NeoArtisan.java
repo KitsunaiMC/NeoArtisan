@@ -1,5 +1,6 @@
 package io.github.moyusowo.neoartisan;
 
+import io.github.moyusowo.neoartisan.util.Util;
 import io.github.moyusowo.neoartisan.util.init.Initializer;
 import io.github.moyusowo.neoartisan.util.terminate.Terminator;
 import io.github.moyusowo.neoartisanapi.api.persistence.EmptyPersistentDataContainer;
@@ -8,6 +9,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Server;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataAdapterContext;
@@ -15,13 +17,14 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
 import java.util.logging.Logger;
 
 @SuppressWarnings("unused")
 public final class NeoArtisan extends JavaPlugin implements EmptyPersistentDataContainer {
 
     private static final String pkg = "io.github.moyusowo.neoartisan";
-    private static final boolean isDebugMode = true;
+    private final boolean isDebugMode;
 
     private static NeoArtisan instance;
     private static NamespacedKey artisanItemIdKey;
@@ -35,6 +38,10 @@ public final class NeoArtisan extends JavaPlugin implements EmptyPersistentDataC
         artisanItemAttackDamageKey = new NamespacedKey("minecraft", "base_attack_damage");
         artisanItemAttackKnockbackKey = new NamespacedKey("minecraft", "base_attack_knockback");
         artisanItemAttackSpeedKey = new NamespacedKey("minecraft", "base_attack_speed");
+        Util.saveDefaultIfNotExists("config.yml");
+        File configFile = new File(getDataFolder(), "config.yml");
+        YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+        isDebugMode = config.getBoolean("debug");
     }
 
     public static NamespacedKey getArtisanItemIdKey() {
@@ -70,7 +77,7 @@ public final class NeoArtisan extends JavaPlugin implements EmptyPersistentDataC
     }
 
     public static boolean isDebugMode() {
-        return isDebugMode;
+        return instance().isDebugMode;
     }
 
     public PersistentDataContainer emptyPersistentDataContainer() { return persistentDataAdapterContext.newPersistentDataContainer(); }
