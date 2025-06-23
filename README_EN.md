@@ -6,6 +6,52 @@
 
 [中文文档](README.md)
 
+<div class="warning" style="
+    background: #fff8e6;
+    border-left: 4px solid #ffc107;
+    padding: 1rem;
+    margin: 1.5rem 0;
+    border-radius: 0 4px 4px 0;
+">
+  <div style="
+      display: flex;
+      align-items: center;
+      margin-bottom: 0.5rem;
+      color: #d84315;
+      font-weight: bold;
+  ">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style="margin-right: 8px">
+      <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM13 17H11V15H13V17ZM13 13H11V7H13V13Z" fill="currentColor"/>
+    </svg>
+    <span>DEVELOPMENT STAGE WARNING</span>
+  </div>
+
+  <p style="margin: 0.5rem 0">
+    <strong>Current version: 0.x.y (Development Preview)</strong>
+  </p>
+
+  <ul style="
+      margin: 0.5rem 0;
+      padding-left: 1.5rem;
+  ">
+    <li>🚨 <strong>No Compatibility Guarantee</strong>: Does not follow Semantic Versioning spec</li>
+    <li>⚡ <strong>Change Risks</strong>: Any update may contain breaking API changes</li>
+    <li>💥 <strong>Versioning Rules</strong>:
+      <ul style="padding-left: 1.5rem; margin: 0.25rem 0">
+        <li>Patch updates (0.x.<strong>y</strong>): <em>May</em> contain breaking changes</li>
+        <li>Minor updates (0.<strong>x</strong>.y): <em>Will</em> contain breaking changes</li>
+      </ul>
+    </li>
+  </ul>
+
+  <p style="
+      margin: 0.75rem 0 0.25rem;
+      font-style: italic;
+  ">
+    <strong>Stability Plan</strong>: Semantic Versioning compliance begins at v1.0.0 (ETA TBD)
+  </p>
+</div>
+
 ## Project Overview
 
 NeoArtisan is a custom content framework for Minecraft 1.21.4+, licensed under GPL3, focused on providing flexible content creation capabilities for plugin developers while maintaining good compatibility with PaperAPI.

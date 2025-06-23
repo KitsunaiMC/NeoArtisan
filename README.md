@@ -6,6 +6,52 @@
 
 [English Version Documentation](README_EN.md)
 
+<div class="warning" style="
+    background: #fff8e6;
+    border-left: 4px solid #ffc107;
+    padding: 1rem;
+    margin: 1.5rem 0;
+    border-radius: 0 4px 4px 0;
+">
+  <div style="
+      display: flex;
+      align-items: center;
+      margin-bottom: 0.5rem;
+      color: #d84315;
+      font-weight: bold;
+  ">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style="margin-right: 8px">
+      <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM13 17H11V15H13V17ZM13 13H11V7H13V13Z" fill="currentColor"/>
+    </svg>
+    <span>开发阶段警告</span>
+  </div>
+
+  <p style="margin: 0.5rem 0">
+    <strong>当前版本：0.x.y（开发预览版）</strong>
+  </p>
+
+  <ul style="
+      margin: 0.5rem 0;
+      padding-left: 1.5rem;
+  ">
+    <li>🚨 <strong>无兼容性承诺</strong>：不遵循语义化版本控制规范</li>
+    <li>⚡ <strong>变更风险</strong>：任何更新都可能包含API破坏性变更</li>
+    <li>💥 <strong>版本升级规则</strong>：
+      <ul style="padding-left: 1.5rem; margin: 0.25rem 0">
+        <li>修订号更新（0.x.<strong>y</strong>）：<em>可能</em>包含破坏性变更</li>
+        <li>次版本更新（0.<strong>x</strong>.y）：<em>必定</em>包含破坏性变更</li>
+      </ul>
+    </li>
+  </ul>
+
+  <p style="
+      margin: 0.75rem 0 0.25rem;
+      font-style: italic;
+  ">
+    <strong>稳定版计划</strong>：1.0.0版本发布时开始遵循语义化版本控制（时间待定）
+  </p>
+</div>
+
 ## 项目概述
 
 NeoArtisan 是一个面向 Minecraft 1.21.4+ 的自定义内容框架，基于 GPL3 协议开源，专注于为插件开发者提供灵活的内容创建能力，同时保持与 PaperAPI 的良好兼容性。
@@ -50,7 +96,7 @@ repositories {
 }
 
 dependencies {
-    CompileOnly 'com.github.MoYuSOwO:NeoArtisan:<api_version>:api'
+    CompileOnly 'com.github.MoYuSOwO:NeoArtisan:-SNAPSHOT:api'
 }
 ```
 
