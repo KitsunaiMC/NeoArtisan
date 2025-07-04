@@ -2,6 +2,7 @@ package io.github.moyusowo.neoartisanapi.api.block.gui;
 
 import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
 import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlockData;
+import io.github.moyusowo.neoartisanapi.api.block.task.LifecycleTask;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
@@ -41,7 +42,7 @@ import java.util.List;
  *   <li>必须实现 {@link #init()} 方法进行初始化</li>
  *   <li>可通过重写 {@link #terminate()} 实现清理逻辑</li>
  *   <li>在构造函数中<b>禁止直接调用</b> {@link #getArtisanBlockData()}，必须通过重写 {@link #init()} 方法以使用内置的延迟初始化机制</li>
- *   <li>如需与GUI生命周期相关的周期性任务，使用 {@link #addLifecycleTask(GUILifecycleTask)} 注册</li>
+ *   <li>如需与GUI生命周期相关的周期性任务，使用 {@link #addLifecycleTask(LifecycleTask)} 注册</li>
  * </ol>
  *
  * <p><b>生命周期流程图：</b></p>
@@ -53,7 +54,7 @@ import java.util.List;
  *
  * @see BlockInventoryHolder Bukkit库存持有者接口
  * @see Listener 事件监听标记
- * @see GUILifecycleTask
+ * @see LifecycleTask
  * @since 2.0.0
  */
 public abstract class ArtisanBlockGUI implements BlockInventoryHolder, Listener {
@@ -61,7 +62,7 @@ public abstract class ArtisanBlockGUI implements BlockInventoryHolder, Listener 
     protected final Inventory inventory;
     protected final Location location;
     protected final Plugin plugin;
-    private final List<GUILifecycleTask> lifecycleTasks;
+    private final List<LifecycleTask> lifecycleTasks;
     private boolean isInit = false;
 
     /**
@@ -191,10 +192,10 @@ public abstract class ArtisanBlockGUI implements BlockInventoryHolder, Listener 
      *
      * @param lifecycleTask 要添加的任务（非null）
      * @throws IllegalStateException 如果初始化已完成
-     * @see GUILifecycleTask 生命周期任务接口
+     * @see LifecycleTask 生命周期任务接口
      */
     @ApiStatus.Internal
-    protected void addLifecycleTask(@NotNull GUILifecycleTask lifecycleTask) {
+    protected void addLifecycleTask(@NotNull LifecycleTask lifecycleTask) {
         if (isInit) throw new IllegalStateException("Cannot add tasks after initialization");
         lifecycleTasks.add(lifecycleTask);
     }
@@ -212,7 +213,7 @@ public abstract class ArtisanBlockGUI implements BlockInventoryHolder, Listener 
      * @throws IllegalStateException 如果初始化已完成
      */
     protected void addLifecycleTask(@NotNull BukkitRunnable bukkitRunnable, long delay, long period) {
-        addLifecycleTask(new GUILifecycleTask(plugin, bukkitRunnable, delay, period));
+        addLifecycleTask(new LifecycleTask(plugin, bukkitRunnable, delay, period));
     }
 
     /**
@@ -229,7 +230,7 @@ public abstract class ArtisanBlockGUI implements BlockInventoryHolder, Listener 
      * @throws IllegalStateException 如果初始化已完成
      */
     protected void addLifecycleTask(@NotNull BukkitRunnable bukkitRunnable, long delay, long period, boolean isAsynchronous) {
-        addLifecycleTask(new GUILifecycleTask(plugin, bukkitRunnable, delay, period, isAsynchronous));
+        addLifecycleTask(new LifecycleTask(plugin, bukkitRunnable, delay, period, isAsynchronous));
     }
 
     /**
@@ -252,7 +253,7 @@ public abstract class ArtisanBlockGUI implements BlockInventoryHolder, Listener 
         try {
             init();
         } finally {
-            lifecycleTasks.forEach(GUILifecycleTask::run);
+            lifecycleTasks.forEach(LifecycleTask::run);
             isInit = true;
         }
     }
@@ -301,7 +302,7 @@ public abstract class ArtisanBlockGUI implements BlockInventoryHolder, Listener 
                         player.closeInventory(InventoryCloseEvent.Reason.PLUGIN);
                     });
             HandlerList.unregisterAll(this);
-            lifecycleTasks.forEach(GUILifecycleTask::cancel);
+            lifecycleTasks.forEach(LifecycleTask::cancel);
         }
     }
 
