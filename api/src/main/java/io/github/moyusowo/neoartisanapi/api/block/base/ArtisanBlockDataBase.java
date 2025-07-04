@@ -62,7 +62,7 @@ public abstract class ArtisanBlockDataBase implements ArtisanBlockData {
     }
 
     @ApiStatus.Internal
-    public void setPersistentDataContainer(PersistentDataContainer persistentDataContainer) {
+    protected void setPersistentDataContainer(PersistentDataContainer persistentDataContainer) {
         persistentDataContainer.copyTo(this.persistentDataContainer, true);
     }
 
