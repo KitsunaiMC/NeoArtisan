@@ -1,7 +1,6 @@
 package io.github.moyusowo.neoartisan.block.head;
 
 import io.github.moyusowo.neoartisan.NeoArtisan;
-import io.github.moyusowo.neoartisan.block.util.BlockStateUtil;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
 import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlockStateBase;

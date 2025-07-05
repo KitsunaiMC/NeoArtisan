@@ -5,8 +5,6 @@ import io.github.moyusowo.neoartisanapi.api.item.ItemGenerator;
 import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Base64;
-
 /**
  * 自定义头颅方块的特定状态定义。
  * <p>

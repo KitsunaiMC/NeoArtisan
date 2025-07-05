@@ -1,7 +1,5 @@
 package io.github.moyusowo.neoartisan.block.util;
 
-import com.destroystokyo.paper.profile.PlayerProfile;
-import com.destroystokyo.paper.profile.ProfileProperty;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import io.github.moyusowo.neoartisan.NeoArtisan;
@@ -24,7 +22,6 @@ import net.minecraft.world.level.block.entity.SkullBlockEntity;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.block.Skull;
 import org.bukkit.craftbukkit.CraftWorld;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.EntityType;
@@ -249,7 +246,7 @@ public final class BlockEventUtil {
         }
     }
 
-    public static void place(Block bukkitBlock, ArtisanBlockData artisanBlockData) throws Exception {
+    public static void place(Block bukkitBlock, ArtisanBlockData artisanBlockData) {
         CraftWorld craftWorld = (CraftWorld) bukkitBlock.getWorld();
         Level nmsWorld = craftWorld.getHandle();
         BlockPos pos = new BlockPos(bukkitBlock.getX(), bukkitBlock.getY(), bukkitBlock.getZ());
@@ -269,7 +266,7 @@ public final class BlockEventUtil {
                     for (Player player : bukkitBlock.getLocation().getNearbyPlayers(32)) {
                         final ServerPlayer serverPlayer = ((CraftPlayer) player).getHandle();
                         serverPlayer.connection.connection.channel.eventLoop().execute(
-                                () -> serverPlayer.connection.connection.send(skullBlockEntity.getUpdatePacket())
+                                () -> serverPlayer.connection.connection.send(Objects.requireNonNull(skullBlockEntity.getUpdatePacket()))
                         );
                     }
                 }
@@ -311,7 +308,7 @@ public final class BlockEventUtil {
                     for (Player player : bukkitBlock.getLocation().getNearbyPlayers(32)) {
                         final ServerPlayer serverPlayer = ((CraftPlayer) player).getHandle();
                         serverPlayer.connection.connection.channel.eventLoop().execute(
-                                () -> serverPlayer.connection.connection.send(skullBlockEntity.getUpdatePacket())
+                                () -> serverPlayer.connection.connection.send(Objects.requireNonNull(skullBlockEntity.getUpdatePacket()))
                         );
                     }
                 }
