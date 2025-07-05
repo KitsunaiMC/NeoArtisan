@@ -26,7 +26,8 @@ final class ItemTest {
             cutting_board = new NamespacedKey(namespace, "cutting_board"),
             magic_block = new NamespacedKey(namespace, "magic_block"),
             soup_block = new NamespacedKey(namespace, "soup_block"),
-            paper_soup_block = new NamespacedKey(namespace, "paper_soup_block");
+            paper_soup_block = new NamespacedKey(namespace, "paper_soup_block"),
+            useless_emerald = new NamespacedKey(namespace, "useless_emerald");
 
     static final String soup_block_skull = "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvM2UwYzE3MTFhNzU2MmEyNGE3MDgzOWUyY2YyNDZiYTE2ZGE0MzFmZGNiNzRkNTA2Zjc3OWRlYjA1YzNhNDEzNSJ9fX0=";
 
@@ -154,6 +155,14 @@ final class ItemTest {
                             .skullProperty(soup_block_skull, true)
                             .blockId(soup_block)
                             .foodProperty(1, 1, true)
+                            .build()
+            );
+            NeoArtisanAPI.getItemRegistry().registerItem(
+                    ArtisanItem.factory().builder()
+                            .registryId(useless_emerald)
+                            .rawMaterial(Material.EMERALD)
+                            .displayName("<green>无用的绿宝石")
+                            .foodProperty(10, 10, true)
                             .build()
             );
         }

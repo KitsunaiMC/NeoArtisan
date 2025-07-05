@@ -129,7 +129,7 @@ final class ArtisanFullBlockImpl extends ArtisanBlockBase implements ArtisanFull
         }
 
         @EventHandler(priority = EventPriority.HIGHEST)
-        private static void onPlace(PlayerInteractEvent event) {
+        public void onPlace(PlayerInteractEvent event) {
             if (BlockEventUtil.canNotPlaceBasicCheck(event, ArtisanFullBlock.class)) return;
             ArtisanItem artisanItem = NeoArtisanAPI.getItemRegistry().getArtisanItem(event.getItem());
             if (overlap(event.getClickedBlock().getRelative(event.getBlockFace()))) return;
@@ -146,13 +146,13 @@ final class ArtisanFullBlockImpl extends ArtisanBlockBase implements ArtisanFull
         }
 
         @EventHandler(priority = EventPriority.HIGHEST)
-        private static void onBreak(BlockBreakEvent event) {
+        public void onBreak(BlockBreakEvent event) {
             if (isNotTypedArtisanBlock(event.getBlock(), ArtisanFullBlockData.class)) return;
             BlockEventUtil.onBreakBasicLogic(event);
         }
 
         @EventHandler(priority = EventPriority.HIGHEST)
-        private static void onBlockExplode(BlockExplodeEvent event) {
+        public void onBlockExplode(BlockExplodeEvent event) {
             BlockEventUtil.onBlockExplode(event, ArtisanFullBlockData.class);
         }
 
@@ -162,12 +162,12 @@ final class ArtisanFullBlockImpl extends ArtisanBlockBase implements ArtisanFull
         }
 
         @EventHandler(priority = EventPriority.HIGHEST)
-        private static void onEntityChangeBlock(EntityChangeBlockEvent event) {
+        public void onEntityChangeBlock(EntityChangeBlockEvent event) {
             BlockEventUtil.onEntityChangeBlock(event, ArtisanFullBlockData.class);
         }
 
         @EventHandler(priority = EventPriority.HIGHEST)
-        private static void onPistonPushBlock(BlockPistonExtendEvent event) {
+        public void onPistonPushBlock(BlockPistonExtendEvent event) {
             if (event.isCancelled()) return;
             for (Block block : event.getBlocks()) {
                 if (isNotTypedArtisanBlock(block, ArtisanFullBlockData.class)) continue;
@@ -191,7 +191,7 @@ final class ArtisanFullBlockImpl extends ArtisanBlockBase implements ArtisanFull
         }
 
         @EventHandler(priority = EventPriority.HIGHEST)
-        private static void onPistonPullBlock(BlockPistonRetractEvent event) {
+        public void onPistonPullBlock(BlockPistonRetractEvent event) {
             if (event.isCancelled()) return;
             if (event.getBlock().getType() != Material.MOVING_PISTON) return;
             for (Block block : event.getBlocks()) {

@@ -18,7 +18,7 @@ final class SmithingBehavior implements Listener {
     }
 
     @EventHandler
-    private void onSmithing(PrepareSmithingEvent event) {
+    public void onSmithing(PrepareSmithingEvent event) {
         if (event.getInventory().getInputEquipment() == null) return;
         if (NeoArtisanAPI.getItemRegistry().isArtisanItem(event.getInventory().getInputEquipment())) event.setResult(null);
     }

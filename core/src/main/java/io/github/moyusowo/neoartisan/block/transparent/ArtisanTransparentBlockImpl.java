@@ -140,7 +140,7 @@ final class ArtisanTransparentBlockImpl extends ArtisanBlockBase implements Arti
         }
 
         @EventHandler(priority = EventPriority.HIGHEST)
-        private static void onPlace(PlayerInteractEvent event) {
+        public void onPlace(PlayerInteractEvent event) {
             if (BlockEventUtil.canNotPlaceBasicCheck(event, ArtisanTransparentBlock.class)) return;
             ArtisanItem artisanItem = NeoArtisanAPI.getItemRegistry().getArtisanItem(event.getItem());
             if (overlap(event.getClickedBlock().getRelative(event.getBlockFace()))) return;
@@ -157,34 +157,34 @@ final class ArtisanTransparentBlockImpl extends ArtisanBlockBase implements Arti
         }
 
         @EventHandler(priority = EventPriority.HIGHEST)
-        private static void onBreak(BlockBreakEvent event) {
+        public void onBreak(BlockBreakEvent event) {
             if (BlockEventUtil.isNotTypedArtisanBlock(event.getBlock(), ArtisanTransparentBlockData.class)) return;
             BlockEventUtil.onBreakBasicLogic(event);
         }
 
         @EventHandler(priority = EventPriority.LOWEST)
-        private static void onPistonBreak(BlockBreakBlockEvent event) {
+        public void onPistonBreak(BlockBreakBlockEvent event) {
             if (BlockEventUtil.isNotTypedArtisanBlock(event.getBlock(), ArtisanTransparentBlockData.class)) return;
             BlockEventUtil.onWaterOrPistonBreakBasicLogic(event);
         }
 
         @EventHandler(priority = EventPriority.HIGHEST)
-        private static void onBlockExplode(BlockExplodeEvent event) {
+        public void onBlockExplode(BlockExplodeEvent event) {
             BlockEventUtil.onBlockExplode(event, ArtisanTransparentBlockData.class);
         }
 
         @EventHandler(priority = EventPriority.HIGHEST)
-        private static void onEntityExplode(EntityExplodeEvent event) {
+        public void onEntityExplode(EntityExplodeEvent event) {
             BlockEventUtil.onEntityExplode(event, ArtisanTransparentBlockData.class);
         }
 
         @EventHandler(priority = EventPriority.HIGHEST)
-        private static void onEntityChangeBlock(EntityChangeBlockEvent event) {
+        public void onEntityChangeBlock(EntityChangeBlockEvent event) {
             BlockEventUtil.onEntityChangeBlock(event, ArtisanTransparentBlockData.class);
         }
 
         @EventHandler(priority = EventPriority.HIGHEST)
-        private static void onBurn(BlockBurnEvent event) {
+        public void onBurn(BlockBurnEvent event) {
             if (event.isCancelled()) return;
             if (!NeoArtisanAPI.getArtisanBlockStorage().isArtisanBlock(event.getBlock())) return;
             if (!(NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlockData(event.getBlock()) instanceof ArtisanTransparentBlockData artisanTransparentBlockData)) return;
@@ -193,7 +193,7 @@ final class ArtisanTransparentBlockImpl extends ArtisanBlockBase implements Arti
         }
 
         @EventHandler(priority = EventPriority.HIGHEST)
-        public static void onIgnite(BlockIgniteEvent event) {
+        public void onIgnite(BlockIgniteEvent event) {
             if (event.isCancelled()) return;
             if (!NeoArtisanAPI.getArtisanBlockStorage().isArtisanBlock(event.getBlock())) return;
             if (!(NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlockData(event.getBlock()) instanceof ArtisanTransparentBlockData artisanTransparentBlockData)) return;

@@ -60,7 +60,7 @@ final class ArtisanBlockStorageImpl implements ArtisanBlockStorage, ArtisanBlock
         this.lock = new ReentrantReadWriteLock();
         Bukkit.getPluginManager().registerEvents(new Listener() {
             @EventHandler(priority = EventPriority.MONITOR)
-            private void onPluginEnabled(PluginEnableEvent event) {
+            public void onPluginEnabled(PluginEnableEvent event) {
                 final Listener listener = this;
                 if (event.getPlugin().getName().equals("NeoArtisan")) {
                     new BukkitRunnable() {

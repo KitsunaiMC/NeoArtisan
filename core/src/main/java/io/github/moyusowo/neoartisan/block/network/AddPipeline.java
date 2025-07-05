@@ -23,7 +23,7 @@ public class AddPipeline implements Listener {
     }
 
     @EventHandler
-    private void onPlayerJoin(PlayerJoinEvent event) {
+    public void onPlayerJoin(PlayerJoinEvent event) {
         final Player player = event.getPlayer();
         final CraftPlayer craftPlayer = (CraftPlayer) player;
         final ServerPlayer serverPlayer = craftPlayer.getHandle();

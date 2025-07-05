@@ -32,7 +32,7 @@ final class CraftingTableBehavior implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    private void onPrepareItemCraft(PrepareItemCraftEvent event) {
+    public void onPrepareItemCraft(PrepareItemCraftEvent event) {
         CraftingInventory inventory = event.getInventory();
         ItemStack[] matrix = inventory.getMatrix();
         if (matrix.length == 4) return;
@@ -61,7 +61,7 @@ final class CraftingTableBehavior implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    private void onItemCraft(InventoryClickEvent event) {
+    public void onItemCraft(InventoryClickEvent event) {
         if (event.isCancelled()) return;
         if (!(event.getClickedInventory() instanceof CraftingInventory inventory)) return;
         if (!(event.getWhoClicked() instanceof Player player)) return;

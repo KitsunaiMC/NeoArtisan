@@ -20,7 +20,7 @@ public class Debug implements Listener {
     }
 
     @EventHandler
-    private static void onPlayerAttack(EntityDamageByEntityEvent event) {
+    public void onPlayerAttack(EntityDamageByEntityEvent event) {
 
     }
 

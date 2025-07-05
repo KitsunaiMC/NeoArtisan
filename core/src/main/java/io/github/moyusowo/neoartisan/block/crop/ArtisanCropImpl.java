@@ -154,7 +154,7 @@ final class ArtisanCropImpl extends ArtisanBlockBase implements ArtisanCrop {
         }
 
         @EventHandler(priority = EventPriority.HIGHEST)
-        private static void onPlace(PlayerInteractEvent event) throws Exception {
+        public void onPlace(PlayerInteractEvent event) throws Exception {
             if (BlockEventUtil.canNotPlaceBasicCheck(event, ArtisanCrop.class)) return;
             if (event.getClickedBlock().getType() != Material.FARMLAND) return;
             if (event.getBlockFace() != BlockFace.UP) return;
@@ -169,45 +169,45 @@ final class ArtisanCropImpl extends ArtisanBlockBase implements ArtisanCrop {
         }
 
         @EventHandler(priority = EventPriority.HIGHEST)
-        private static void onBreak(BlockBreakEvent event) {
+        public void onBreak(BlockBreakEvent event) {
             if (BlockEventUtil.isNotTypedArtisanBlock(event.getBlock(), ArtisanCropData.class)) return;
             BlockEventUtil.onBreakBasicLogic(event);
         }
 
         @EventHandler(priority = EventPriority.HIGHEST)
-        private static void onBlockBreakUnderCrop(BlockBreakEvent event) {
+        public void onBlockBreakUnderCrop(BlockBreakEvent event) {
             if (BlockEventUtil.isNotTypedArtisanBlock(event.getBlock().getRelative(BlockFace.UP), ArtisanCropData.class)) return;
             BlockEventUtil.onBelowBlockBreakBasicLogic(event);
         }
 
         @EventHandler(priority = EventPriority.HIGHEST)
-        private static void onPistonBreakOrMoveUnderCrop(BlockPistonExtendEvent event) {
+        public void onPistonBreakOrMoveUnderCrop(BlockPistonExtendEvent event) {
             BlockEventUtil.onBelowBlockPistonBreakOrMove(event, ArtisanCropData.class);
         }
 
         @EventHandler(priority = EventPriority.HIGHEST)
-        private static void onBlockExplode(BlockExplodeEvent event) {
+        public void onBlockExplode(BlockExplodeEvent event) {
             BlockEventUtil.onBlockExplode(event, ArtisanCropData.class);
         }
 
         @EventHandler(priority = EventPriority.HIGHEST)
-        private static void onEntityExplode(EntityExplodeEvent event) {
+        public void onEntityExplode(EntityExplodeEvent event) {
             BlockEventUtil.onEntityExplode(event, ArtisanCropData.class);
         }
 
         @EventHandler(priority = EventPriority.HIGHEST)
-        private static void onEntityChangeBlock(EntityChangeBlockEvent event) {
+        public void onEntityChangeBlock(EntityChangeBlockEvent event) {
             BlockEventUtil.onEntityChangeBlock(event, ArtisanCropData.class);
         }
 
         @EventHandler(priority = EventPriority.LOWEST)
-        private static void onWaterOrPistonBreak(BlockBreakBlockEvent event) {
+        public void onWaterOrPistonBreak(BlockBreakBlockEvent event) {
             if (BlockEventUtil.isNotTypedArtisanBlock(event.getBlock(), ArtisanCropData.class)) return;
             BlockEventUtil.onWaterOrPistonBreakBasicLogic(event);
         }
 
         @EventHandler(priority = EventPriority.HIGHEST)
-        private static void onEntityChangeFarmland(EntityChangeBlockEvent event) {
+        public void onEntityChangeFarmland(EntityChangeBlockEvent event) {
             if (event.isCancelled()) return;
             if (!NeoArtisanAPI.getArtisanBlockStorage().isArtisanBlock(event.getBlock().getRelative(BlockFace.UP))) return;
             if (!(NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlockData(event.getBlock().getRelative(BlockFace.UP)) instanceof ArtisanCropData artisanCropData)) return;
@@ -222,7 +222,7 @@ final class ArtisanCropImpl extends ArtisanBlockBase implements ArtisanCrop {
         }
 
         @EventHandler(priority = EventPriority.HIGHEST)
-        private static void onGrow(BlockGrowEvent event) {
+        public void onGrow(BlockGrowEvent event) {
             if (event.isCancelled()) return;
             if (!NeoArtisanAPI.getArtisanBlockStorage().isArtisanBlock(event.getBlock())) return;
             if (!(NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlockData(event.getBlock()) instanceof ArtisanCropData artisanCropData)) return;
@@ -240,7 +240,7 @@ final class ArtisanCropImpl extends ArtisanBlockBase implements ArtisanCrop {
         }
 
         @EventHandler(priority = EventPriority.HIGHEST)
-        private static void onFertilize(BlockFertilizeEvent event) {
+        public void onFertilize(BlockFertilizeEvent event) {
             if (event.isCancelled()) return;
             for (BlockState blockState : event.getBlocks()) {
                 if (NeoArtisanAPI.getArtisanBlockStorage().isArtisanBlock(blockState.getBlock())) {

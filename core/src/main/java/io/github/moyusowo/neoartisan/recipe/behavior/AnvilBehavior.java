@@ -19,7 +19,7 @@ final class AnvilBehavior implements Listener {
     }
 
     @EventHandler
-    private void onAnvil(PrepareAnvilEvent event) {
+    public void onAnvil(PrepareAnvilEvent event) {
         if (event.getResult() == null) return;
         ItemStack firstItem = event.getInventory().getFirstItem();
         ItemStack secondItem = event.getInventory().getSecondItem();
