@@ -8,12 +8,13 @@ import io.github.moyusowo.neoartisanapi.api.block.crop.*;
 import io.github.moyusowo.neoartisanapi.api.item.ItemGenerator;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.ServicePriority;
 import org.jetbrains.annotations.NotNull;
 
-class ArtisanCropStateImpl extends ArtisanBlockStateBase implements ArtisanCropState {
+final class ArtisanCropStateImpl extends ArtisanBlockStateBase implements ArtisanCropState {
 
     @InitMethod(priority = InitPriority.REGISTRAR)
     private static void init() {
@@ -30,7 +31,7 @@ class ArtisanCropStateImpl extends ArtisanBlockStateBase implements ArtisanCropS
         );
     }
 
-    protected ArtisanCropStateImpl(int appearanceState, int actualState, ItemGenerator[] generators) {
+    ArtisanCropStateImpl(int appearanceState, int actualState, ItemGenerator[] generators) {
         super(appearanceState, actualState, generators);
     }
 
@@ -51,12 +52,24 @@ class ArtisanCropStateImpl extends ArtisanBlockStateBase implements ArtisanCropS
                                 .setValue(BlockStateProperties.WEST, tripwireAppearance.get(TripwireAppearance.BlockStateProperty.WEST))
                                 .setValue(BlockStateProperties.POWERED, tripwireAppearance.get(TripwireAppearance.BlockStateProperty.POWERED))
                 );
-            } else {
-                SugarCaneAppearance sugarCaneAppearance = (SugarCaneAppearance) this.cropAppearanceBlock;
+            } else if (this.cropAppearanceBlock instanceof SugarCaneAppearance sugarCaneAppearance) {
                 return Block.getId(
                         Blocks.SUGAR_CANE.defaultBlockState()
                                 .setValue(BlockStateProperties.AGE_15, sugarCaneAppearance.get())
                 );
+            } else {
+                OriginalCropAppearance originalCropAppearance = (OriginalCropAppearance) this.cropAppearanceBlock;
+                final BlockState blockState;
+                switch (originalCropAppearance.cropType) {
+                    case WHEAT -> blockState = Blocks.WHEAT.defaultBlockState().setValue(BlockStateProperties.AGE_7, originalCropAppearance.age);
+                    case CARROT -> blockState = Blocks.CARROTS.defaultBlockState().setValue(BlockStateProperties.AGE_7, originalCropAppearance.age);
+                    case POTATO -> blockState = Blocks.POTATOES.defaultBlockState().setValue(BlockStateProperties.AGE_7, originalCropAppearance.age);
+                    case BEETROOT -> blockState = Blocks.BEETROOTS.defaultBlockState().setValue(BlockStateProperties.AGE_3, originalCropAppearance.age);
+                    case TORCH_FLOWER -> blockState = Blocks.TORCHFLOWER.defaultBlockState().setValue(BlockStateProperties.AGE_2, originalCropAppearance.age);
+                    case PITCHER_PLANT -> blockState = Blocks.PITCHER_CROP.defaultBlockState().setValue(BlockStateProperties.AGE_4, originalCropAppearance.age);
+                    default -> blockState = Blocks.AIR.defaultBlockState();
+                }
+                return Block.getId(blockState);
             }
         }
 
