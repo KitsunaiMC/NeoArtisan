@@ -12,7 +12,7 @@ package io.github.moyusowo.neoartisanapi.api.block.crop;
  *
  * @implNote 实际客户端显示需通过资源包覆盖原版甘蔗纹理
  */
-public class SugarCaneAppearance implements CropAppearance {
+public final class SugarCaneAppearance implements CropAppearance {
 
     private final int age;
 

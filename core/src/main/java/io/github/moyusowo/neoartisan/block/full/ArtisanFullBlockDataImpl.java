@@ -13,7 +13,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.ServicePriority;
 import org.jetbrains.annotations.NotNull;
 
-class ArtisanFullBlockDataImpl extends ArtisanBlockBaseDataInternal implements ArtisanFullBlockData {
+final class ArtisanFullBlockDataImpl extends ArtisanBlockBaseDataInternal implements ArtisanFullBlockData {
     @InitMethod(priority = InitPriority.BLOCKDATA)
     private static void init() {
         Bukkit.getServicesManager().register(
@@ -29,7 +29,7 @@ class ArtisanFullBlockDataImpl extends ArtisanBlockBaseDataInternal implements A
         );
     }
 
-    protected ArtisanFullBlockDataImpl(NamespacedKey blockId, int stage, Location location) {
+    ArtisanFullBlockDataImpl(NamespacedKey blockId, int stage, Location location) {
         super(blockId, stage, location);
     }
 

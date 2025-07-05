@@ -34,7 +34,7 @@ import java.util.List;
 
 import static io.github.moyusowo.neoartisan.block.util.BoundingBoxUtil.overlap;
 
-class ArtisanTransparentBlockImpl extends ArtisanBlockBase implements ArtisanTransparentBlock {
+final class ArtisanTransparentBlockImpl extends ArtisanBlockBase implements ArtisanTransparentBlock {
 
     @InitMethod(priority = InitPriority.REGISTRAR)
     private static void init() {
@@ -53,7 +53,7 @@ class ArtisanTransparentBlockImpl extends ArtisanBlockBase implements ArtisanTra
 
     private final boolean canBurn;
 
-    protected ArtisanTransparentBlockImpl(NamespacedKey blockId, List<? extends ArtisanBlockState> stages, GUICreator creator, boolean canBurn, SoundProperty placeSound, SoundProperty breakSound, ArtisanBlockType artisanBlockType) {
+    ArtisanTransparentBlockImpl(NamespacedKey blockId, List<? extends ArtisanBlockState> stages, GUICreator creator, boolean canBurn, SoundProperty placeSound, SoundProperty breakSound, ArtisanBlockType artisanBlockType) {
         super(blockId, stages, artisanBlockType, creator, placeSound, breakSound);
         this.canBurn = canBurn;
     }

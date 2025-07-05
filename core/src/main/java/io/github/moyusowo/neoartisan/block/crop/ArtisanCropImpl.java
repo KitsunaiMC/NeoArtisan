@@ -35,7 +35,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
-class ArtisanCropImpl extends ArtisanBlockBase implements ArtisanCrop {
+final class ArtisanCropImpl extends ArtisanBlockBase implements ArtisanCrop {
 
     @InitMethod(priority = InitPriority.REGISTRAR)
     private static void init() {
@@ -54,7 +54,7 @@ class ArtisanCropImpl extends ArtisanBlockBase implements ArtisanCrop {
 
     private final int boneMealMinGrowth, boneMealMaxGrowth;
 
-    public ArtisanCropImpl(NamespacedKey cropId, List<ArtisanCropState> stages, int boneMealMinGrowth, int boneMealMaxGrowth, SoundProperty placeSound, SoundProperty breakSound, ArtisanBlockType artisanBlockType) {
+    ArtisanCropImpl(NamespacedKey cropId, List<ArtisanCropState> stages, int boneMealMinGrowth, int boneMealMaxGrowth, SoundProperty placeSound, SoundProperty breakSound, ArtisanBlockType artisanBlockType) {
         super(cropId, stages, artisanBlockType, null, placeSound, breakSound);
         this.boneMealMinGrowth = boneMealMinGrowth;
         this.boneMealMaxGrowth = boneMealMaxGrowth;

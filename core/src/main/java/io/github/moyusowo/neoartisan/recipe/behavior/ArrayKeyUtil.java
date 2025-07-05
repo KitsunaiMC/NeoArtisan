@@ -9,7 +9,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
 
-public final class ArrayKeyUtil {
+final class ArrayKeyUtil {
 
     public static ArrayKey toShapedKey(ItemStack[] matrix) {
         NamespacedKey[] matrixKeys = new NamespacedKey[9];

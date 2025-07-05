@@ -13,7 +13,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.ServicePriority;
 import org.jetbrains.annotations.NotNull;
 
-class ArtisanThinBlockDataImpl extends ArtisanBlockBaseDataInternal implements ArtisanThinBlockData {
+final class ArtisanThinBlockDataImpl extends ArtisanBlockBaseDataInternal implements ArtisanThinBlockData {
 
     @InitMethod(priority = InitPriority.BLOCKDATA)
     private static void init() {
@@ -30,7 +30,7 @@ class ArtisanThinBlockDataImpl extends ArtisanBlockBaseDataInternal implements A
         );
     }
 
-    protected ArtisanThinBlockDataImpl(NamespacedKey blockId, int stage, Location location) {
+    ArtisanThinBlockDataImpl(NamespacedKey blockId, int stage, Location location) {
         super(blockId, stage, location);
     }
 

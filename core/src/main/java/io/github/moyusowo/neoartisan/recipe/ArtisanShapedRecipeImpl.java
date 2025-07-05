@@ -16,7 +16,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-class ArtisanShapedRecipeImpl implements ArtisanShapedRecipe {
+final class ArtisanShapedRecipeImpl implements ArtisanShapedRecipe {
     private final NamespacedKey key;
     private final NamespacedKey[] matrix;
     private final ItemGenerator resultGenerator;

@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
-class ArtisanHeadBlockStateImpl extends ArtisanBlockStateBase implements ArtisanHeadBlockState {
+final class ArtisanHeadBlockStateImpl extends ArtisanBlockStateBase implements ArtisanHeadBlockState {
     @InitMethod(priority = InitPriority.REGISTRAR)
     private static void init() {
         Bukkit.getServicesManager().register(
@@ -33,7 +33,7 @@ class ArtisanHeadBlockStateImpl extends ArtisanBlockStateBase implements Artisan
 
     private final String urlBase64;
 
-    protected ArtisanHeadBlockStateImpl(ItemGenerator[] generators, String urlBase64) {
+    ArtisanHeadBlockStateImpl(ItemGenerator[] generators, String urlBase64) {
         super(Block.getId(Blocks.PLAYER_HEAD.defaultBlockState()), Block.getId(Blocks.PLAYER_HEAD.defaultBlockState()), generators);
         this.urlBase64 = urlBase64;
     }

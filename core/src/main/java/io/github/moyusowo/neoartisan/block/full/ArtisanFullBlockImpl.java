@@ -40,7 +40,7 @@ import java.util.List;
 import static io.github.moyusowo.neoartisan.block.util.BlockEventUtil.isNotTypedArtisanBlock;
 import static io.github.moyusowo.neoartisan.block.util.BoundingBoxUtil.overlap;
 
-class ArtisanFullBlockImpl extends ArtisanBlockBase implements ArtisanFullBlock {
+final class ArtisanFullBlockImpl extends ArtisanBlockBase implements ArtisanFullBlock {
     @InitMethod(priority = InitPriority.REGISTRAR)
     private static void init() {
         Bukkit.getServicesManager().register(
@@ -56,7 +56,7 @@ class ArtisanFullBlockImpl extends ArtisanBlockBase implements ArtisanFullBlock 
         );
     }
 
-    protected ArtisanFullBlockImpl(@NotNull NamespacedKey blockId, @NotNull List<? extends ArtisanBlockState> stages, ArtisanBlockType artisanBlockType, @Nullable GUICreator creator, SoundProperty placeSound, SoundProperty breakSound) {
+    ArtisanFullBlockImpl(@NotNull NamespacedKey blockId, @NotNull List<? extends ArtisanBlockState> stages, ArtisanBlockType artisanBlockType, @Nullable GUICreator creator, SoundProperty placeSound, SoundProperty breakSound) {
         super(blockId, stages, artisanBlockType, creator, placeSound, breakSound);
     }
 

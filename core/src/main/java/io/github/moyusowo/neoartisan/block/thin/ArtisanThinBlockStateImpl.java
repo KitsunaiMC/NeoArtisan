@@ -15,7 +15,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.ServicePriority;
 import org.jetbrains.annotations.NotNull;
 
-class ArtisanThinBlockStateImpl extends ArtisanBlockStateBase implements ArtisanThinBlockState {
+final class ArtisanThinBlockStateImpl extends ArtisanBlockStateBase implements ArtisanThinBlockState {
 
     @InitMethod(priority = InitPriority.REGISTRAR)
     private static void init() {
@@ -32,7 +32,7 @@ class ArtisanThinBlockStateImpl extends ArtisanBlockStateBase implements Artisan
         );
     }
 
-    protected ArtisanThinBlockStateImpl(int appearanceState, int actualState, ItemGenerator[] generators) {
+    ArtisanThinBlockStateImpl(int appearanceState, int actualState, ItemGenerator[] generators) {
         super(appearanceState, actualState, generators);
     }
 

@@ -13,7 +13,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.ServicePriority;
 import org.jetbrains.annotations.NotNull;
 
-class ArtisanTransparentBlockDataImpl extends ArtisanBlockBaseDataInternal implements ArtisanTransparentBlockData {
+final class ArtisanTransparentBlockDataImpl extends ArtisanBlockBaseDataInternal implements ArtisanTransparentBlockData {
 
     @InitMethod(priority = InitPriority.BLOCKDATA)
     private static void init() {
@@ -30,7 +30,7 @@ class ArtisanTransparentBlockDataImpl extends ArtisanBlockBaseDataInternal imple
         );
     }
 
-    protected ArtisanTransparentBlockDataImpl(NamespacedKey blockId, int stage, Location location) {
+    ArtisanTransparentBlockDataImpl(NamespacedKey blockId, int stage, Location location) {
         super(blockId, stage, location);
     }
 

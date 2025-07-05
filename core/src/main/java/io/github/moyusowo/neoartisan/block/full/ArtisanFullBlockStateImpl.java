@@ -16,7 +16,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.ServicePriority;
 import org.jetbrains.annotations.NotNull;
 
-class ArtisanFullBlockStateImpl extends ArtisanBlockStateBase implements ArtisanFullBlockState {
+final class ArtisanFullBlockStateImpl extends ArtisanBlockStateBase implements ArtisanFullBlockState {
     @InitMethod(priority = InitPriority.REGISTRAR)
     private static void init() {
         Bukkit.getServicesManager().register(
@@ -32,7 +32,7 @@ class ArtisanFullBlockStateImpl extends ArtisanBlockStateBase implements Artisan
         );
     }
 
-    protected ArtisanFullBlockStateImpl(int appearanceState, int actualState, ItemGenerator[] generators) {
+    ArtisanFullBlockStateImpl(int appearanceState, int actualState, ItemGenerator[] generators) {
         super(appearanceState, actualState, generators);
     }
 

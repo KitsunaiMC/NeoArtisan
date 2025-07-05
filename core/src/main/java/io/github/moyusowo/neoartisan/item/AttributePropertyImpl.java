@@ -13,11 +13,11 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.Map;
 
-class AttributePropertyImpl implements AttributeProperty {
+final class AttributePropertyImpl implements AttributeProperty {
 
     private final Map<NamespacedKey, Object> globalAttributeValues, itemstackAttributeValues;
 
-    public AttributePropertyImpl() {
+    AttributePropertyImpl() {
         this.globalAttributeValues = new HashMap<>();
         this.itemstackAttributeValues = new HashMap<>();
     }

@@ -15,7 +15,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.ServicePriority;
 import org.jetbrains.annotations.NotNull;
 
-class ArtisanTransparentBlockStateImpl extends ArtisanBlockStateBase implements ArtisanTransparentBlockState {
+final class ArtisanTransparentBlockStateImpl extends ArtisanBlockStateBase implements ArtisanTransparentBlockState {
 
     @InitMethod(priority = InitPriority.REGISTRAR)
     private static void init() {
@@ -32,7 +32,7 @@ class ArtisanTransparentBlockStateImpl extends ArtisanBlockStateBase implements 
         );
     }
 
-    protected ArtisanTransparentBlockStateImpl(int appearanceState, int actualState, ItemGenerator[] generators) {
+    ArtisanTransparentBlockStateImpl(int appearanceState, int actualState, ItemGenerator[] generators) {
         super(appearanceState, actualState, generators);
     }
 

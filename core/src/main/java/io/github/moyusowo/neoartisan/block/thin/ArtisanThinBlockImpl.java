@@ -30,7 +30,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-class ArtisanThinBlockImpl extends ArtisanBlockBase implements ArtisanThinBlock {
+final class ArtisanThinBlockImpl extends ArtisanBlockBase implements ArtisanThinBlock {
 
     @InitMethod(priority = InitPriority.REGISTRAR)
     private static void init() {
@@ -47,7 +47,7 @@ class ArtisanThinBlockImpl extends ArtisanBlockBase implements ArtisanThinBlock 
         );
     }
 
-    protected ArtisanThinBlockImpl(NamespacedKey blockId, List<? extends ArtisanBlockState> stages, GUICreator creator, SoundProperty placeSound, SoundProperty breakSound, ArtisanBlockType artisanBlockType) {
+    ArtisanThinBlockImpl(NamespacedKey blockId, List<? extends ArtisanBlockState> stages, GUICreator creator, SoundProperty placeSound, SoundProperty breakSound, ArtisanBlockType artisanBlockType) {
         super(blockId, stages, artisanBlockType, creator, placeSound, breakSound);
     }
 

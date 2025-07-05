@@ -11,7 +11,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.ServicePriority;
 import org.jetbrains.annotations.NotNull;
 
-class ArtisanFurnaceRecipeImpl implements ArtisanFurnaceRecipe {
+final class ArtisanFurnaceRecipeImpl implements ArtisanFurnaceRecipe {
     private final NamespacedKey key;
     private final NamespacedKey input;
     private final int cookTime;
@@ -33,7 +33,7 @@ class ArtisanFurnaceRecipeImpl implements ArtisanFurnaceRecipe {
         );
     }
 
-    public ArtisanFurnaceRecipeImpl(NamespacedKey key, NamespacedKey input, ItemGenerator resultGenerator, int cookTime, float exp) {
+    private ArtisanFurnaceRecipeImpl(NamespacedKey key, NamespacedKey input, ItemGenerator resultGenerator, int cookTime, float exp) {
         this.key = key;
         this.input = input;
         this.resultGenerator = resultGenerator;

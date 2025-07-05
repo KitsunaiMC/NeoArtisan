@@ -14,7 +14,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.ServicePriority;
 import org.jetbrains.annotations.NotNull;
 
-class ArtisanCropDataImpl extends ArtisanBlockBaseDataInternal implements ArtisanCropData {
+final class ArtisanCropDataImpl extends ArtisanBlockBaseDataInternal implements ArtisanCropData {
 
     @InitMethod(priority = InitPriority.BLOCKDATA)
     private static void init() {
@@ -31,7 +31,7 @@ class ArtisanCropDataImpl extends ArtisanBlockBaseDataInternal implements Artisa
         );
     }
 
-    public ArtisanCropDataImpl(NamespacedKey cropId, int stage, Location location) {
+    ArtisanCropDataImpl(NamespacedKey cropId, int stage, Location location) {
         super(cropId, stage, location);
     }
 

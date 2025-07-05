@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-class ArtisanShapelessRecipeImpl implements ArtisanShapelessRecipe {
+final class ArtisanShapelessRecipeImpl implements ArtisanShapelessRecipe {
     private final NamespacedKey key;
     private final NamespacedKey[] recipe;
     private final ItemGenerator resultGenerator;
@@ -36,7 +36,7 @@ class ArtisanShapelessRecipeImpl implements ArtisanShapelessRecipe {
         );
     }
 
-    public ArtisanShapelessRecipeImpl(NamespacedKey key, List<NamespacedKey> recipe, ItemGenerator resultGenerator) {
+    private ArtisanShapelessRecipeImpl(NamespacedKey key, List<NamespacedKey> recipe, ItemGenerator resultGenerator) {
         this.key = key;
         this.recipe = new NamespacedKey[9];
         for (int i = 0; i < 9; i++) {

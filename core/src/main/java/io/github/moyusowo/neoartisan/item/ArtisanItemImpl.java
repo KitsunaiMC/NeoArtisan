@@ -33,7 +33,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.function.Supplier;
 
-class ArtisanItemImpl implements ArtisanItem {
+final class ArtisanItemImpl implements ArtisanItem {
 
     @InitMethod(priority = InitPriority.REGISTRAR)
     public static void init() {
@@ -62,7 +62,7 @@ class ArtisanItemImpl implements ArtisanItem {
     private final ItemStack itemStack;
     private final Supplier<ItemStack> itemStackSupplier;
 
-    protected ArtisanItemImpl(
+    ArtisanItemImpl(
             NamespacedKey registryId,
             ItemStack itemStack,
             boolean hasOriginalCraft,

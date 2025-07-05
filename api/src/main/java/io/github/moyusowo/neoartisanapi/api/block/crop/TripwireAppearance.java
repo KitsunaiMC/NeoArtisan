@@ -11,7 +11,7 @@ package io.github.moyusowo.neoartisanapi.api.block.crop;
  *
  * @implNote 需确保资源包中对应状态有特殊纹理
  */
-public class TripwireAppearance implements CropAppearance {
+public final class TripwireAppearance implements CropAppearance {
 
     private final boolean[] b;
 
