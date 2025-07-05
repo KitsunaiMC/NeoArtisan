@@ -17,7 +17,6 @@ import java.util.Arrays;
  *   <li>状态实例应当是不可变的</li>
  * </ol>
  *
- * @since 1.0.0
  */
 public abstract class ArtisanBlockStateBase implements ArtisanBlockState {
 

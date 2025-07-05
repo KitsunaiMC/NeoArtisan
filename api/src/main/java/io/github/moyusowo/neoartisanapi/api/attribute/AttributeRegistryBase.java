@@ -2,12 +2,9 @@ package io.github.moyusowo.neoartisanapi.api.attribute;
 
 import org.bukkit.NamespacedKey;
 import org.bukkit.persistence.PersistentDataType;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
-@ApiStatus.AvailableSince(value = "1.0.0")
 interface AttributeRegistryBase {
-
     /**
      * 注册一个属性。
      *

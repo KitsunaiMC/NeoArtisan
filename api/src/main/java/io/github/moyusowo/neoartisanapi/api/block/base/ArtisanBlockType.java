@@ -21,9 +21,7 @@ import io.github.moyusowo.neoartisanapi.api.block.transparent.ArtisanTransparent
  * </p>
  *
  * @see ArtisanBlock
- * @since 1.0.1
  */
-@SuppressWarnings("unused")
 public enum ArtisanBlockType {
 
     /**

@@ -1,12 +1,8 @@
 package io.github.moyusowo.neoartisanapi.api.block.storage;
 
 import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlockData;
-import io.github.moyusowo.neoartisanapi.api.block.crop.ArtisanCropData;
-import io.github.moyusowo.neoartisanapi.api.block.thin.ArtisanThinBlockData;
-import io.github.moyusowo.neoartisanapi.api.block.transparent.ArtisanTransparentBlockData;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -18,7 +14,6 @@ import org.jetbrains.annotations.NotNull;
  *
  * @see ArtisanBlockData 基础方块数据接口
  * @see io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI#getArtisanBlockStorage() 获取服务实例
- * @since 1.0.0
  */
 public interface ArtisanBlockStorage {
 

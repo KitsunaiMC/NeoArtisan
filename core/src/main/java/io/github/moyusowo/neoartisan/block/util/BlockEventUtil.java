@@ -55,13 +55,14 @@ public final class BlockEventUtil {
         if (artisanItem.getBlockId() == null) return true;
         if (!NeoArtisanAPI.getBlockRegistry().isArtisanBlock(artisanItem.getBlockId())) return true;
         if (!artisanBlockClass.isInstance(NeoArtisanAPI.getBlockRegistry().getArtisanBlock(artisanItem.getBlockId()))) return true;
-        if ((!event.getPlayer().isSneaking()) && InteractionUtil.isInteractable(event.getClickedBlock())) return true;
-        return false;
+        return (!event.getPlayer().isSneaking()) && InteractionUtil.isInteractable(event.getClickedBlock());
     }
 
-    public static void onPlaceBasicLogic(PlayerInteractEvent event, Block blockWillPlace, Block blockPlaceAgainst, ArtisanBlockData newArtisanBlockData) throws Exception {
+    public static void onPlaceBasicLogic(PlayerInteractEvent event, Block blockWillPlace, Block blockPlaceAgainst, ArtisanBlockData newArtisanBlockData) {
         event.setCancelled(true);
         ArtisanItem artisanItem = NeoArtisanAPI.getItemRegistry().getArtisanItem(event.getItem());
+        assert event.getItem() != null;
+        assert artisanItem.getBlockId() != null;
         ArtisanBlockPlaceEvent artisanBlockPlaceEvent = new ArtisanBlockPlaceEvent(
                 blockWillPlace,
                 blockWillPlace.getState(),

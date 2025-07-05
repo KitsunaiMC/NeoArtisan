@@ -12,7 +12,6 @@ import org.jetbrains.annotations.NotNull;
  *
  * @see ArtisanBlock 自定义方块接口
  * @see io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI.Register 注册方法标记注解
- * @since 1.0.0
  */
 public interface BlockRegistry {
 

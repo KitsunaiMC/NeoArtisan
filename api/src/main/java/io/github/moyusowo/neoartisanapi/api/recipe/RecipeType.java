@@ -13,7 +13,6 @@ package io.github.moyusowo.neoartisanapi.api.recipe;
  * @see ArtisanShapedRecipe
  * @see ArtisanShapelessRecipe
  * @see ArtisanFurnaceRecipe
- * @since 1.0.2
  */
 public enum RecipeType {
     SHAPED,

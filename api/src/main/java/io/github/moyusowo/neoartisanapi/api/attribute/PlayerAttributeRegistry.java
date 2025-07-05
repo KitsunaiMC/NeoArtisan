@@ -7,10 +7,7 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * 自定义玩家属性注册表API，用于管理自定义玩家属性。
- *
- * @since 1.0.0
  */
-@SuppressWarnings("unused")
 public interface PlayerAttributeRegistry extends AttributeRegistryBase {
 
     @Nullable <T> T getPlayerAttribute(@NotNull Player player, @NotNull NamespacedKey attributeKey);

@@ -13,9 +13,7 @@ import org.jetbrains.annotations.NotNull;
  * </p>
  *
  * @see ArtisanBlockData 基础方块数据接口
- * @since 1.0.0
  */
-@SuppressWarnings("unused")
 public interface ArtisanCropData extends ArtisanBlockData {
     /**
      * 获取工厂服务实例

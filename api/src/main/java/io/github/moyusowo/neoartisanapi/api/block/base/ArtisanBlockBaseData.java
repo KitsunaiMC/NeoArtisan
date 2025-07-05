@@ -21,10 +21,9 @@ import org.jetbrains.annotations.Nullable;
  * </ol>
  *
  * @see ArtisanBlockData 基础数据接口
- * @see #ArtisanBlockDataBase(NamespacedKey, int, Location) 必须使用的构造方法
- * @since 1.0.0
+ * @see #ArtisanBlockBaseData(NamespacedKey, int, Location) 必须使用的构造方法
  */
-public abstract class ArtisanBlockDataBase implements ArtisanBlockData {
+public abstract class ArtisanBlockBaseData implements ArtisanBlockData {
 
     private final Location location;
     private final NamespacedKey blockId;
@@ -32,7 +31,7 @@ public abstract class ArtisanBlockDataBase implements ArtisanBlockData {
     private final PersistentDataContainer persistentDataContainer;
     private final ArtisanBlockGUI artisanBlockGUI;
 
-    protected ArtisanBlockDataBase(@NotNull NamespacedKey blockId, int stage, @NotNull Location location) {
+    protected ArtisanBlockBaseData(@NotNull NamespacedKey blockId, int stage, @NotNull Location location) {
         this.blockId = blockId;
         this.stage = stage;
         this.location = location;

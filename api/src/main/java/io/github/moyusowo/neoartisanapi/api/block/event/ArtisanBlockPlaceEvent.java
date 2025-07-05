@@ -19,9 +19,7 @@ import org.jetbrains.annotations.NotNull;
  * </p>
  *
  * @see ArtisanBlock 自定义方块类型
- * @since 1.0.0
  */
-@SuppressWarnings({"unused", "UnstableApiUsage"})
 public class ArtisanBlockPlaceEvent extends BlockPlaceEvent {
 
     private static final HandlerList handlers = new HandlerList();
@@ -41,6 +39,7 @@ public class ArtisanBlockPlaceEvent extends BlockPlaceEvent {
      * @param hand 使用的手持装备槽（非null）
      * @param artisanBlock 关联的自定义方块定义（非null）
      */
+    @SuppressWarnings("UnstableApiUsage")
     public ArtisanBlockPlaceEvent(@NotNull Block placedBlock, @NotNull BlockState replacedBlockState, @NotNull Block placedAgainst, @NotNull ItemStack itemInHand, @NotNull Player thePlayer, boolean canBuild, @NotNull EquipmentSlot hand, @NotNull ArtisanBlock artisanBlock, @NotNull ArtisanBlockData placedArtisanBlockData) {
         super(placedBlock, replacedBlockState, placedAgainst, itemInHand, thePlayer, canBuild, hand);
         this.artisanBlock = artisanBlock;

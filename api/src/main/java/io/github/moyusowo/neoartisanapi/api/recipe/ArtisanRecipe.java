@@ -16,7 +16,6 @@ import org.jetbrains.annotations.NotNull;
  * @see ArtisanShapedRecipe 有序合成配方
  * @see ArtisanShapelessRecipe 无序合成配方
  * @see ArtisanFurnaceRecipe 熔炉配方
- * @since 1.0.2
  */
 public interface ArtisanRecipe {
 

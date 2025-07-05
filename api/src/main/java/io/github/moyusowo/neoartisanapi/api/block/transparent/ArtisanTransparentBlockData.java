@@ -13,7 +13,6 @@ import org.jetbrains.annotations.NotNull;
  * </p>
  *
  * @see ArtisanBlockData 基础方块数据接口
- * @since 1.0.0
  */
 public interface ArtisanTransparentBlockData extends ArtisanBlockData {
     /**
@@ -25,7 +24,6 @@ public interface ArtisanTransparentBlockData extends ArtisanBlockData {
      * @return 作物建造器工厂实例（非null）
      * @throws IllegalStateException 如果工厂服务未注册
      * @see Builder 构建器接口
-     * @since 2.0.0
      */
     static BuilderFactory factory() {
         return Bukkit.getServicesManager().load(BuilderFactory.class);

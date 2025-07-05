@@ -15,7 +15,6 @@ import org.jetbrains.annotations.Nullable;
  * </p>
  *
  * @see ArtisanBlockData 在世界中的方块数据
- * @since 1.0.0
  */
 public interface ArtisanBlock {
 

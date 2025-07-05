@@ -16,7 +16,6 @@ import org.jetbrains.annotations.NotNull;
  * </ul>
  *
  * @see #empty()
- * @since 1.0.0
  */
 @SuppressWarnings("unused")
 public interface AttributeProperty {

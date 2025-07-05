@@ -29,9 +29,7 @@ import java.lang.annotation.Target;
  * }</pre>
  *
  * @see org.bukkit.plugin.ServicesManager
- * @since 1.0.0
  */
-@SuppressWarnings("unused")
 public final class NeoArtisanAPI {
 
     /**

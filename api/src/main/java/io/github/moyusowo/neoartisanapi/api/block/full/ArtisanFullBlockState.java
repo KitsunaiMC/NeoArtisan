@@ -3,7 +3,6 @@ package io.github.moyusowo.neoartisanapi.api.block.full;
 import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlockState;
 import io.github.moyusowo.neoartisanapi.api.item.ItemGenerator;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -13,7 +12,6 @@ import org.jetbrains.annotations.NotNull;
  * </p>
  *
  * @see ArtisanBlockState 基础方块状态接口
- * @since 2.0.0
  */
 public interface ArtisanFullBlockState extends ArtisanBlockState {
     /**
@@ -25,7 +23,6 @@ public interface ArtisanFullBlockState extends ArtisanBlockState {
      * @return 作物建造器工厂实例（非null）
      * @throws IllegalStateException 如果工厂服务未注册
      * @see Builder 构建器接口
-     * @since 2.0.0
      */
     static BuilderFactory factory() {
         return Bukkit.getServicesManager().load(BuilderFactory.class);

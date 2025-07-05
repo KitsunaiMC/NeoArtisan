@@ -7,8 +7,6 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * 物品堆属性注册表API，用于管理自定义物品堆属性。
- *
- * @since 1.0.0
  */
 public interface ItemStackAttributeRegistry extends AttributeRegistryBase {
     /**

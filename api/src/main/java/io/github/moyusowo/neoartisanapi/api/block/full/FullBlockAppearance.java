@@ -12,7 +12,6 @@ import org.jetbrains.annotations.NotNull;
  * </ul>
  *
  * @implNote 实际客户端显示需通过资源包覆盖
- * @since 2.0.0
  */
 public final class FullBlockAppearance {
 

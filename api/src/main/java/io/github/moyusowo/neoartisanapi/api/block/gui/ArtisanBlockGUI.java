@@ -55,7 +55,6 @@ import java.util.List;
  * @see BlockInventoryHolder Bukkit库存持有者接口
  * @see Listener 事件监听标记
  * @see LifecycleTask
- * @since 2.0.0
  */
 public abstract class ArtisanBlockGUI implements BlockInventoryHolder, Listener {
 
@@ -298,9 +297,7 @@ public abstract class ArtisanBlockGUI implements BlockInventoryHolder, Listener 
         } finally {
             Bukkit.getOnlinePlayers().stream()
                     .filter(p -> p.getOpenInventory().getTopInventory().getHolder() == this)
-                    .forEach(player -> {
-                        player.closeInventory(InventoryCloseEvent.Reason.PLUGIN);
-                    });
+                    .forEach(player -> player.closeInventory(InventoryCloseEvent.Reason.PLUGIN));
             HandlerList.unregisterAll(this);
             lifecycleTasks.forEach(LifecycleTask::cancel);
         }

@@ -22,7 +22,6 @@ import org.jetbrains.annotations.NotNull;
  * }</pre>
  *
  * @see Sound Bukkit音效枚举
- * @since 1.0.1
  */
 public final class SoundProperty {
 

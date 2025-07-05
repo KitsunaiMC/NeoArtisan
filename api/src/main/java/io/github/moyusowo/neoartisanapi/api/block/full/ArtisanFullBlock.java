@@ -16,7 +16,6 @@ import java.util.List;
  * </p>
  *
  * @see ArtisanBlock 基础方块接口
- * @since 2.0.0
  */
 public interface ArtisanFullBlock extends ArtisanBlock {
     /**

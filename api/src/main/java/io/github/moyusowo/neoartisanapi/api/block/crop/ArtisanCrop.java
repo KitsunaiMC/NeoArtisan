@@ -16,9 +16,7 @@ import java.util.List;
  * </p>
  *
  * @see ArtisanBlock 基础方块接口
- * @since 1.0.0
  */
-@SuppressWarnings("unused")
 public interface ArtisanCrop extends ArtisanBlock {
 
     /**

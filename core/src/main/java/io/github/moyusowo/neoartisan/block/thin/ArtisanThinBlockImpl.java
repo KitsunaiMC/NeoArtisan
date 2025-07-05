@@ -120,7 +120,7 @@ class ArtisanThinBlockImpl extends ArtisanBlockBase implements ArtisanThinBlock 
         }
 
         @EventHandler(priority = EventPriority.HIGHEST)
-        private static void onPlace(PlayerInteractEvent event) throws Exception {
+        private static void onPlace(PlayerInteractEvent event) {
             if (BlockEventUtil.canNotPlaceBasicCheck(event, ArtisanThinBlock.class)) return;
             if (event.getBlockFace() != BlockFace.UP) return;
             ArtisanItem artisanItem = NeoArtisanAPI.getItemRegistry().getArtisanItem(event.getItem());

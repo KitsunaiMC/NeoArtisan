@@ -15,7 +15,6 @@ import org.jetbrains.annotations.NotNull;
  * </ol>
  *
  * @see io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlock.BaseBuilder
- * @since 1.0.0
  */
 @FunctionalInterface
 public interface GUICreator {

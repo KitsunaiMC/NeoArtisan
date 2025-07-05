@@ -18,7 +18,6 @@ import org.jetbrains.annotations.NotNull;
  * </p>
  *
  * @see ArtisanBlockStateBase 必须继承的基础实现
- * @since 1.0.0
  */
 public interface ArtisanBlockState {
 

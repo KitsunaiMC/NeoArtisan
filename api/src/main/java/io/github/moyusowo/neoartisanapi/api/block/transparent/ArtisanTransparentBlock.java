@@ -16,7 +16,6 @@ import java.util.List;
  * </p>
  *
  * @see ArtisanBlock 基础方块接口
- * @since 1.0.0
  */
 @SuppressWarnings("unused")
 public interface ArtisanTransparentBlock extends ArtisanBlock {
@@ -29,7 +28,6 @@ public interface ArtisanTransparentBlock extends ArtisanBlock {
      * @return 作物建造器工厂实例（非null）
      * @throws IllegalStateException 如果工厂服务未注册
      * @see Builder 构建器接口
-     * @since 2.0.0
      */
     static BuilderFactory factory() {
         return Bukkit.getServicesManager().load(BuilderFactory.class);

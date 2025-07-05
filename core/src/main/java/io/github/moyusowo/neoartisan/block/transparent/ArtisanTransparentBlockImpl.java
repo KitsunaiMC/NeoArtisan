@@ -140,7 +140,7 @@ class ArtisanTransparentBlockImpl extends ArtisanBlockBase implements ArtisanTra
         }
 
         @EventHandler(priority = EventPriority.HIGHEST)
-        private static void onPlace(PlayerInteractEvent event) throws Exception {
+        private static void onPlace(PlayerInteractEvent event) {
             if (BlockEventUtil.canNotPlaceBasicCheck(event, ArtisanTransparentBlock.class)) return;
             ArtisanItem artisanItem = NeoArtisanAPI.getItemRegistry().getArtisanItem(event.getItem());
             if (overlap(event.getClickedBlock().getRelative(event.getBlockFace()))) return;

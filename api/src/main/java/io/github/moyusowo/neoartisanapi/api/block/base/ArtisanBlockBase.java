@@ -23,7 +23,6 @@ import java.util.List;
  *
  * @see ArtisanBlock 基础接口定义
  * @see #ArtisanBlockBase(NamespacedKey, List, ArtisanBlockType, GUICreator, SoundProperty, SoundProperty) 唯一允许的构造方式
- * @since 1.0.0
  */
 public abstract class ArtisanBlockBase implements ArtisanBlock {
 

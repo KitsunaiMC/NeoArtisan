@@ -16,7 +16,6 @@ import java.util.concurrent.ThreadLocalRandom;
  *   <li>{@link RangedItemGenerator} - 生成随机数量范围内的物品</li>
  * </ul>
  *
- * @since 1.0.0
  */
 @SuppressWarnings("unused")
 public interface ItemGenerator {

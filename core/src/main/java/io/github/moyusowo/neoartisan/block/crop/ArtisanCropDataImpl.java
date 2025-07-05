@@ -1,7 +1,7 @@
 package io.github.moyusowo.neoartisan.block.crop;
 
 import io.github.moyusowo.neoartisan.NeoArtisan;
-import io.github.moyusowo.neoartisan.block.base.ArtisanBlockDataBaseInternal;
+import io.github.moyusowo.neoartisan.block.base.ArtisanBlockBaseDataInternal;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
 import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
@@ -14,7 +14,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.ServicePriority;
 import org.jetbrains.annotations.NotNull;
 
-class ArtisanCropDataImpl extends ArtisanBlockDataBaseInternal implements ArtisanCropData {
+class ArtisanCropDataImpl extends ArtisanBlockBaseDataInternal implements ArtisanCropData {
 
     @InitMethod(priority = InitPriority.BLOCKDATA)
     private static void init() {

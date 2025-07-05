@@ -22,9 +22,7 @@ import org.jetbrains.annotations.Nullable;
  *
  * @see ArtisanBlock 对应的自定义方块类型定义
  * @see ArtisanBlockState 方块状态系统
- * @since 1.0.0
  */
-@SuppressWarnings("unused")
 public interface ArtisanBlockData {
 
     /**
@@ -44,7 +42,7 @@ public interface ArtisanBlockData {
     /**
      * 获取方块的ID
      *
-     * @return 与 {@link ArtisanBlock#getBlockId()} 一致的命名空间键
+     * @return 与 {@link ArtisanBlock#getBlockId()} 一致地命名空间键
      * @see ArtisanBlock#getBlockId()
      */
     @NotNull NamespacedKey blockId();

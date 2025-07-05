@@ -19,7 +19,6 @@ import org.jetbrains.annotations.Nullable;
  * @apiNote 部分方法涉及持久化操作，请在主线程调用
  * @see ArtisanItem
  * @see org.bukkit.plugin.ServicesManager
- * @since 1.0.0
  */
 @SuppressWarnings({"unused"})
 public interface ItemRegistry {

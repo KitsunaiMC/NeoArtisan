@@ -129,7 +129,7 @@ class ArtisanFullBlockImpl extends ArtisanBlockBase implements ArtisanFullBlock 
         }
 
         @EventHandler(priority = EventPriority.HIGHEST)
-        private static void onPlace(PlayerInteractEvent event) throws Exception {
+        private static void onPlace(PlayerInteractEvent event) {
             if (BlockEventUtil.canNotPlaceBasicCheck(event, ArtisanFullBlock.class)) return;
             ArtisanItem artisanItem = NeoArtisanAPI.getItemRegistry().getArtisanItem(event.getItem());
             if (overlap(event.getClickedBlock().getRelative(event.getBlockFace()))) return;
