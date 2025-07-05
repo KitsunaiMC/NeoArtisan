@@ -25,7 +25,10 @@ final class ItemTest {
             cooking_pot = new NamespacedKey(namespace, "cooking_pot"),
             cutting_board = new NamespacedKey(namespace, "cutting_board"),
             magic_block = new NamespacedKey(namespace, "magic_block"),
-            soup_block = new NamespacedKey(namespace, "soup_block");
+            soup_block = new NamespacedKey(namespace, "soup_block"),
+            paper_soup_block = new NamespacedKey(namespace, "paper_soup_block");
+
+    static final String soup_block_skull = "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvM2UwYzE3MTFhNzU2MmEyNGE3MDgzOWUyY2YyNDZiYTE2ZGE0MzFmZGNiNzRkNTA2Zjc3OWRlYjA1YzNhNDEzNSJ9fX0=";
 
     @NeoArtisanAPI.Register
     private static void register() {
@@ -136,8 +139,19 @@ final class ItemTest {
             NeoArtisanAPI.getItemRegistry().registerItem(
                     ArtisanItem.factory().builder()
                             .registryId(soup_block)
-                            .rawMaterial(Material.FURNACE)
+                            .rawMaterial(Material.PLAYER_HEAD)
                             .displayName("<aqua>汤锅")
+                            .skullProperty(soup_block_skull, true)
+                            .blockId(soup_block)
+                            .foodProperty(1, 1, true)
+                            .build()
+            );
+            NeoArtisanAPI.getItemRegistry().registerItem(
+                    ArtisanItem.factory().builder()
+                            .registryId(paper_soup_block)
+                            .rawMaterial(Material.PAPER)
+                            .displayName("<aqua>汤锅")
+                            .skullProperty(soup_block_skull, true)
                             .blockId(soup_block)
                             .foodProperty(1, 1, true)
                             .build()

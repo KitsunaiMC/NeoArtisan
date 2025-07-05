@@ -319,6 +319,17 @@ public interface ArtisanItem {
         @NotNull Builder itemModel(@NotNull NamespacedKey itemModel);
 
         /**
+         * 若该物品的Material为PLAYER_HEAD，则可用该方法设置头颅的贴图。
+         *
+         * <p>若该物品的Material不为PLAYER_HEAD，则该方法不起作用</p>
+         *
+         * @param textureUrl 头颅贴图的URL链接或对应的Base64编码（不能为null）
+         * @param isBase64 提供的字符串是否为Base64编码
+         * @return 当前构建器实例
+         */
+        @NotNull Builder skullProperty(@NotNull String textureUrl, boolean isBase64);
+
+        /**
          * 按照所给的参数构建自定义物品。
          *
          * @return 构建的自定义物品实例

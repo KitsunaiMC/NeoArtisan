@@ -1,5 +1,6 @@
 package io.github.moyusowo.neoartisan.item;
 
+import com.destroystokyo.paper.profile.ProfileProperty;
 import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
@@ -28,9 +29,8 @@ import org.bukkit.plugin.ServicePriority;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
 import java.util.function.Supplier;
 
 class ArtisanItemImpl implements ArtisanItem {
@@ -239,6 +239,7 @@ class ArtisanItemImpl implements ArtisanItem {
         private FoodProperty foodProperty;
         private WeaponProperty weaponProperty;
         private ArmorProperty armorProperty;
+        private String skullTextureUrlBase64;
 
         private BuilderImpl() {
             this.registryId = null;
@@ -254,6 +255,7 @@ class ArtisanItemImpl implements ArtisanItem {
             this.foodProperty = FoodProperty.EMPTY;
             this.armorProperty = ArmorProperty.EMPTY;
             this.weaponProperty = WeaponProperty.EMPTY;
+            this.skullTextureUrlBase64 = null;
         }
 
         @NotNull
@@ -362,6 +364,16 @@ class ArtisanItemImpl implements ArtisanItem {
         }
 
         @Override
+        public @NotNull Builder skullProperty(@NotNull String textureUrl, boolean isBase64) {
+            if (isBase64) {
+                this.skullTextureUrlBase64 = textureUrl;
+            } else {
+                this.skullTextureUrlBase64 = Base64.getUrlEncoder().encodeToString(textureUrl.getBytes(StandardCharsets.UTF_8));
+            }
+            return this;
+        }
+
+        @Override
         @NotNull
         public ArtisanItem build() {
             if (registryId == null || rawMaterial == null) {
@@ -391,6 +403,9 @@ class ArtisanItemImpl implements ArtisanItem {
                     builder.addModifier(entry.attribute(), entry.modifier(), entry.getGroup());
                 }
             });
+            if (this.skullTextureUrlBase64 != null) {
+                itemStack.setData(DataComponentTypes.PROFILE, ResolvableProfile.resolvableProfile().name(null).uuid(null).addProperty(new ProfileProperty("textures", this.skullTextureUrlBase64)));
+            }
             if (this.displayName != null) {
                 itemStack.setData(DataComponentTypes.ITEM_NAME, this.displayName);
             }

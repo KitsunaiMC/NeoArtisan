@@ -186,7 +186,7 @@ final class BlockTest {
                             .states(
                                     List.of(
                                             ArtisanHeadBlockState.factory().builder()
-                                                    .textureUrl("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvM2UwYzE3MTFhNzU2MmEyNGE3MDgzOWUyY2YyNDZiYTE2ZGE0MzFmZGNiNzRkNTA2Zjc3OWRlYjA1YzNhNDEzNSJ9fX0=", true)
+                                                    .textureUrl(ItemTest.soup_block_skull, true)
                                                     .generators(
                                                             new ItemGenerator[] {
                                                                     ItemGenerator.simpleGenerator(ItemTest.soup_block, 1)
