@@ -1,5 +1,9 @@
 package io.github.moyusowo.neoartisan.block.util;
 
+import com.destroystokyo.paper.profile.PlayerProfile;
+import com.destroystokyo.paper.profile.ProfileProperty;
+import com.mojang.authlib.GameProfile;
+import com.mojang.authlib.properties.Property;
 import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisan.block.storage.internal.ArtisanBlockStorageInternal;
 import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
@@ -9,16 +13,23 @@ import io.github.moyusowo.neoartisanapi.api.block.base.sound.SoundProperty;
 import io.github.moyusowo.neoartisanapi.api.block.event.ArtisanBlockBreakEvent;
 import io.github.moyusowo.neoartisanapi.api.block.event.ArtisanBlockLoseSupportEvent;
 import io.github.moyusowo.neoartisanapi.api.block.event.ArtisanBlockPlaceEvent;
+import io.github.moyusowo.neoartisanapi.api.block.head.ArtisanHeadBlockData;
 import io.github.moyusowo.neoartisanapi.api.item.ArtisanItem;
 import io.papermc.paper.event.block.BlockBreakBlockEvent;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.component.ResolvableProfile;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.SkullBlockEntity;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.Skull;
 import org.bukkit.craftbukkit.CraftWorld;
+import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.ExperienceOrb;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -29,10 +40,9 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static io.github.moyusowo.neoartisan.block.util.BlockStateUtil.stateById;
@@ -245,6 +255,26 @@ public final class BlockEventUtil {
         BlockPos pos = new BlockPos(bukkitBlock.getX(), bukkitBlock.getY(), bukkitBlock.getZ());
         ArtisanBlockStorageInternal.getInternal().placeArtisanBlock(nmsWorld, pos, artisanBlockData);
         nmsWorld.setBlock(pos, stateById(artisanBlockData.getArtisanBlockState().actualState()), 3);
+        if (artisanBlockData instanceof ArtisanHeadBlockData headBlockData) {
+            nmsWorld.removeBlockEntity(pos);
+            final SkullBlockEntity skullBlockEntity = new SkullBlockEntity(pos, nmsWorld.getBlockState(pos));
+            GameProfile profile = new GameProfile(UUID.randomUUID(), "NeoArtisanHeads");
+            profile.getProperties().put("textures", new Property("textures", headBlockData.getArtisanBlockState().getUrlBase64()));
+            skullBlockEntity.setOwner(new ResolvableProfile(profile));
+            skullBlockEntity.setChanged();
+            nmsWorld.setBlockEntity(skullBlockEntity);
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    for (Player player : bukkitBlock.getLocation().getNearbyPlayers(32)) {
+                        final ServerPlayer serverPlayer = ((CraftPlayer) player).getHandle();
+                        serverPlayer.connection.connection.channel.eventLoop().execute(
+                                () -> serverPlayer.connection.connection.send(skullBlockEntity.getUpdatePacket())
+                        );
+                    }
+                }
+            }.runTaskLater(NeoArtisan.instance(), 3L);
+        }
         SoundProperty soundProperty = artisanBlockData.getArtisanBlock().getPlaceSoundProperty();
         if (soundProperty != null) {
             bukkitBlock.getWorld().playSound(
@@ -267,6 +297,26 @@ public final class BlockEventUtil {
         BlockPos pos = new BlockPos(bukkitBlock.getX(), bukkitBlock.getY(), bukkitBlock.getZ());
         ArtisanBlockStorageInternal.getInternal().replaceArtisanBlock(nmsWorld, pos, artisanBlockData);
         nmsWorld.setBlock(pos, stateById(artisanBlockData.getArtisanBlockState().actualState()), 3);
+        if (artisanBlockData instanceof ArtisanHeadBlockData headBlockData) {
+            nmsWorld.removeBlockEntity(pos);
+            final SkullBlockEntity skullBlockEntity = new SkullBlockEntity(pos, nmsWorld.getBlockState(pos));
+            GameProfile profile = new GameProfile(UUID.randomUUID(), "NeoArtisanHeads");
+            profile.getProperties().put("textures", new Property("textures", headBlockData.getArtisanBlockState().getUrlBase64()));
+            skullBlockEntity.setOwner(new ResolvableProfile(profile));
+            skullBlockEntity.setChanged();
+            nmsWorld.setBlockEntity(skullBlockEntity);
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    for (Player player : bukkitBlock.getLocation().getNearbyPlayers(32)) {
+                        final ServerPlayer serverPlayer = ((CraftPlayer) player).getHandle();
+                        serverPlayer.connection.connection.channel.eventLoop().execute(
+                                () -> serverPlayer.connection.connection.send(skullBlockEntity.getUpdatePacket())
+                        );
+                    }
+                }
+            }.runTaskLater(NeoArtisan.instance(), 3L);
+        }
     }
 
     public static void playBoneMealEffects(Location loc) {

@@ -8,6 +8,8 @@ import io.github.moyusowo.neoartisanapi.api.block.crop.TripwireAppearance;
 import io.github.moyusowo.neoartisanapi.api.block.full.ArtisanFullBlock;
 import io.github.moyusowo.neoartisanapi.api.block.full.ArtisanFullBlockState;
 import io.github.moyusowo.neoartisanapi.api.block.full.FullBlockAppearance;
+import io.github.moyusowo.neoartisanapi.api.block.head.ArtisanHeadBlock;
+import io.github.moyusowo.neoartisanapi.api.block.head.ArtisanHeadBlockState;
 import io.github.moyusowo.neoartisanapi.api.block.thin.ArtisanThinBlock;
 import io.github.moyusowo.neoartisanapi.api.block.thin.ArtisanThinBlockState;
 import io.github.moyusowo.neoartisanapi.api.block.thin.ThinBlockAppearance;
@@ -171,6 +173,23 @@ final class BlockTest {
                                                     .generators(
                                                             new ItemGenerator[] {
                                                                     ItemGenerator.simpleGenerator(ItemTest.magic_block, 1)
+                                                            }
+                                                    )
+                                                    .build()
+                                    )
+                            )
+                            .build()
+            );
+            NeoArtisanAPI.getBlockRegistry().register(
+                    ArtisanHeadBlock.factory().builder()
+                            .blockId(ItemTest.soup_block)
+                            .states(
+                                    List.of(
+                                            ArtisanHeadBlockState.factory().builder()
+                                                    .textureUrl("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvM2UwYzE3MTFhNzU2MmEyNGE3MDgzOWUyY2YyNDZiYTE2ZGE0MzFmZGNiNzRkNTA2Zjc3OWRlYjA1YzNhNDEzNSJ9fX0=", true)
+                                                    .generators(
+                                                            new ItemGenerator[] {
+                                                                    ItemGenerator.simpleGenerator(ItemTest.soup_block, 1)
                                                             }
                                                     )
                                                     .build()

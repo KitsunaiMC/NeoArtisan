@@ -3,8 +3,6 @@ package io.github.moyusowo.neoartisan.test;
 import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
 import io.github.moyusowo.neoartisanapi.api.item.*;
-import io.github.moyusowo.neoartisan.item.property.ArmorProperty;
-import io.github.moyusowo.neoartisan.item.property.WeaponProperty;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.FoodProperties;
 import io.papermc.paper.datacomponent.item.ItemLore;
@@ -26,7 +24,8 @@ final class ItemTest {
             magic_sword = new NamespacedKey(namespace, "magic_sword"),
             cooking_pot = new NamespacedKey(namespace, "cooking_pot"),
             cutting_board = new NamespacedKey(namespace, "cutting_board"),
-            magic_block = new NamespacedKey(namespace, "magic_block");
+            magic_block = new NamespacedKey(namespace, "magic_block"),
+            soup_block = new NamespacedKey(namespace, "soup_block");
 
     @NeoArtisanAPI.Register
     private static void register() {
@@ -132,6 +131,15 @@ final class ItemTest {
                             .rawMaterial(Material.GRASS_BLOCK)
                             .displayName("<gold>魔法小方块")
                             .blockId(magic_block)
+                            .build()
+            );
+            NeoArtisanAPI.getItemRegistry().registerItem(
+                    ArtisanItem.factory().builder()
+                            .registryId(soup_block)
+                            .rawMaterial(Material.FURNACE)
+                            .displayName("<aqua>汤锅")
+                            .blockId(soup_block)
+                            .foodProperty(1, 1, true)
                             .build()
             );
         }
