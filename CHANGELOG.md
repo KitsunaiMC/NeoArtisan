@@ -50,8 +50,25 @@
   </p>
 </div>
 
+## [0.6.0] - 2025-07-06
+### 新增 / Added
+- 增加头颅方块ArtisanHeadBlock / Added ArtisanHeadBlock for custom skull blocks
+- 增加物品Builder的头颅参数 / Added skull parameters to Item Builder
+- 对作物方块外观增加了直接使用原版作物外观的选择，适配不想强制适用资源包的开发者 / Added vanilla crop appearance option for artisan crops, supporting developers who don't want to enforce resource packs
+- 阻止自定义物品参与村民交易事件 / Prevent custom items from participating in villager trade events
+
+### 变更 / Changed
+- 将方块生命周期事件类独立出GUI包 / Moved block lifecycle event classes out of GUI package
+- 将不希望再继承的一些类增加final标记 / Marked certain classes as final to prevent inheritance
+- 重构文档 / Refactored documentation
+
+### 修复 / Fixed
+- 修复了一些警告信息 / Fixed various warning messages
+- 修改了部分包结构与类可见性，确保安全 / Adjusted package structure and class visibility for enhanced security
+- 事件监听方法改为规范的public void前缀 / Standardized event listener methods with public void prefix
+
 ## [0.5.0] - 2025-06-23
-### Added / 新增
+### 新增 / Added
 - ArtisanItem增加复杂构造器，支持传入ItemStack的Supplier从而动态生成ItemStack / Added complex constructor to ArtisanItem supporting ItemStack Supplier for dynamic generation
 - 增加初始化时反射调用异常的原因显示 / Added cause display for reflection invocation exceptions during initialization
 - 增加Block内Builder的基接口，用于标记 / Added base Builder interface in Block for type marking
@@ -60,12 +77,12 @@
 - 增加了Factory接口，修复了服务管理器单例复用的问题 / Added Factory interface, fixed service manager singleton reuse issue
 - 增加默认配置文件，里面有debug选项 / Added default configuration file with debug option
 
-### Changed / 变更
+### 变更 / Changed
 - ArtisanItem的Builder中几个Property直接传入数值参数，Property类移到core模块用于内部使用 / Simplified ArtisanItem Builder with direct value parameters, moved Property class to core module
 - 移动了一些类，优化目录结构 / Moved classes for better package structure
 - 优化掉落效果 / Improved drop effects
 
-### Fixed / 修复
+### 修复 / Fixed
 - 修复了注入管道时可能的线程不安全问题 / Fixed potential thread-safety issue in pipeline injection
 - 修复了活塞打破下方方块事件时的错误 / Fixed piston breaking block below event error
 - 修复了碰撞箱判定，考虑所有实体 / Fixed collision box detection to include all entities
@@ -76,7 +93,7 @@
 ---
 
 ## [0.4.0] - 2025-06-03
-### Added / 新增
+### 新增 / Added
 - 自定义方块事件系统初探，增加自定义方块的放置破坏和失去支撑掉落的事件 / Initial custom block event system with place, break and support-loss events
 - 增加方块GUI抽象类和GUICreator接口，增加方块到GUI的绑定 / Added block GUI abstract class and GUICreator interface for block-GUI binding
 - 加入了ThinBlock，类似压力板形状的方块，默认映射金制和银质压力板 / Added ThinBlock (pressure plate-like) with gold/silver plate mappings
@@ -86,7 +103,7 @@
 - 新增ArtisanBlockType枚举 / Added ArtisanBlockType enum
 - 增加熔炉配方系统 / Added furnace recipe system
 
-### Changed / 变更
+### 变更 / Changed
 - 重构了自定义方块体系，增加一些基类，抽离Crop实现，利于拓展 / Refactored block system with base classes and decoupled crop implementation
 - 自定义方块改为有限适用，分为不同种类的方块，不再尝试全部匹配 / Limited block applicability to specific types instead of universal matching
 - 规范初始化顺序，调整目录结构和包结构 / Standardized initialization order and package structure
@@ -98,29 +115,29 @@
 ---
 
 ## [0.3.0] - 2025-05-20
-### Added / 新增
+### 新增 / Added
 - 属性系统增加玩家绑定属性的支持和API / Added player-bound attributes to attribute system
 - 内部代码初始化增加注解驱动 / Added annotation-driven initialization
 - 增加debugMode / Added debug mode
 - 增加对自定义装备对原版装备槽位的继承 / Added vanilla equipment slot inheritance for custom gear
 - 对自定义方块附加了PDC / Added PDC support for custom blocks
 
-### Changed / 变更
+### 变更 / Changed
 - 分离全局属性和物品堆属性的注册 / Separated global and itemstack attribute registration
 - 删除读取yml的相关功能，专注核心模块和API设计 / Removed YAML reading to focus on core API
 - 规范重命名和移动部分模块 / Standardized naming and module organization
 - 创建物品使用新版的数据组件API，修复了一些ItemMeta导致的问题 / Used new data component API for item creation, fixed ItemMeta issues
 
-### Fixed / 修复
+### 修复 / Fixed
 - 更健壮的错误处理 / More robust error handling
 
 ---
 
 ## [0.2.0] - 2025-05-12
-### Added / 新增
+### 新增 / Added
 - 加入作物系统及持久化 / Added crop system with persistence
 
-### Changed / 变更
+### 变更 / Changed
 - 调整包结构，符合封装原则 / Adjusted package structure for encapsulation
 - 重写配方匹配，改用Bukkit提供的NamespacedKey作为索引键 / Rewrote recipe matching using Bukkit's NamespacedKey
 - 调整部分API命名和结构 / Adjusted API naming and structure
@@ -128,6 +145,6 @@
 ---
 
 ## [0.1.0] - 2025-05-09
-### Added / 新增
+### 新增 / Added
 - 合成系统、物品系统和属性系统初步完成 / Initial implementation of crafting, item and attribute systems
 - 提供独立的基本API框架 / Provided standalone basic API framework
