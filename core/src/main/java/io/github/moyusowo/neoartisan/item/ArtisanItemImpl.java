@@ -78,7 +78,7 @@ final class ArtisanItemImpl implements ArtisanItem {
         this.itemStackSupplier = null;
     }
 
-    protected ArtisanItemImpl(
+    ArtisanItemImpl(
             NamespacedKey registryId,
             Supplier<ItemStack> itemStackSupplier,
             boolean hasOriginalCraft,

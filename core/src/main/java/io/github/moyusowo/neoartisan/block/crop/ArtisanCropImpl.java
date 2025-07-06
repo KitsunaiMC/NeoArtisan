@@ -154,7 +154,7 @@ final class ArtisanCropImpl extends ArtisanBlockBase implements ArtisanCrop {
         }
 
         @EventHandler(priority = EventPriority.HIGHEST)
-        public void onPlace(PlayerInteractEvent event) throws Exception {
+        public void onPlace(PlayerInteractEvent event) {
             if (BlockEventUtil.canNotPlaceBasicCheck(event, ArtisanCrop.class)) return;
             if (event.getClickedBlock().getType() != Material.FARMLAND) return;
             if (event.getBlockFace() != BlockFace.UP) return;
