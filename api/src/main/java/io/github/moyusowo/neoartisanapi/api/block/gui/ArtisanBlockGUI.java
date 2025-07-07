@@ -10,13 +10,11 @@ import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.event.*;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.inventory.InventoryDragEvent;
-import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.event.inventory.*;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.BlockInventoryHolder;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryView;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.ApiStatus;
@@ -24,6 +22,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 自定义方块GUI的抽象基类，实现与方块位置绑定的交互界面。
@@ -361,17 +360,22 @@ public abstract class ArtisanBlockGUI implements BlockInventoryHolder, Listener 
     }
 
     /**
-     * 方块交互事件处理（默认打开GUI）
+     * 方块打开GUI处理
      */
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onInteract(PlayerInteractEvent event) {
+    public final void onInteract(PlayerInteractEvent event) {
         if (event.useInteractedBlock() == Event.Result.DENY) return;
         if (event.useItemInHand() == Event.Result.DENY) return;
         if (event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
         if (event.getClickedBlock() == null) return;
         if (!event.getClickedBlock().getLocation().equals(this.location)) return;
+        if (!NeoArtisanAPI.getBlockProtection().canInteract(event.getPlayer(), event.getClickedBlock().getLocation())) return;
         event.setCancelled(true);
-        event.getPlayer().openInventory(this.inventory);
+        InventoryView inventoryView = Objects.requireNonNull(event.getPlayer().openInventory(this.inventory));
+        InventoryOpenEvent inventoryOpenEvent = new InventoryOpenEvent(inventoryView);
+        inventoryOpenEvent.callEvent();
+        if (inventoryOpenEvent.titleOverride() != null) throw new IllegalArgumentException("Can not change title of ArtisanBlockGUI!");
+        if (inventoryOpenEvent.isCancelled()) inventoryView.close();
     }
 
 }

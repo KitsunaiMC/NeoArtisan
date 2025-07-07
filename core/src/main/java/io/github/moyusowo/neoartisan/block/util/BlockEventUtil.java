@@ -50,11 +50,13 @@ public final class BlockEventUtil {
         if (event.useInteractedBlock() == Event.Result.DENY) return true;
         if (event.useItemInHand() == Event.Result.DENY) return true;
         if (event.getAction() != Action.RIGHT_CLICK_BLOCK) return true;
+        assert event.getClickedBlock() != null;
         if (!NeoArtisanAPI.getItemRegistry().isArtisanItem(event.getItem())) return true;
         ArtisanItem artisanItem = NeoArtisanAPI.getItemRegistry().getArtisanItem(event.getItem());
         if (artisanItem.getBlockId() == null) return true;
         if (!NeoArtisanAPI.getBlockRegistry().isArtisanBlock(artisanItem.getBlockId())) return true;
         if (!artisanBlockClass.isInstance(NeoArtisanAPI.getBlockRegistry().getArtisanBlock(artisanItem.getBlockId()))) return true;
+        if (!NeoArtisanAPI.getBlockProtection().canPlace(event.getPlayer(), event.getClickedBlock().getRelative(event.getBlockFace()).getLocation())) return true;
         return (!event.getPlayer().isSneaking()) && InteractionUtil.isInteractable(event.getClickedBlock());
     }
 
@@ -89,6 +91,7 @@ public final class BlockEventUtil {
 
     public static void onBreakBasicLogic(BlockBreakEvent event) {
         if (event.isCancelled()) return;
+        if (!NeoArtisanAPI.getBlockProtection().canBreak(event.getPlayer(), event.getBlock().getLocation())) return;
         ArtisanBlockData artisanBlockData = NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlockData(event.getBlock());
         event.setCancelled(true);
         ArtisanBlockBreakEvent artisanBlockBreakEvent = new ArtisanBlockBreakEvent(
@@ -134,6 +137,7 @@ public final class BlockEventUtil {
     public static void onBelowBlockBreakBasicLogic(BlockBreakEvent event) {
         ArtisanBlockData artisanBlockData = NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlockData(event.getBlock().getRelative(BlockFace.UP));
         if (event.isCancelled()) return;
+        if (!NeoArtisanAPI.getBlockProtection().canBreak(event.getPlayer(), event.getBlock().getLocation())) return;
         event.getBlock().getRelative(BlockFace.UP).setType(Material.AIR);
         ArtisanBlockLoseSupportEvent artisanBlockLoseSupportEvent = new ArtisanBlockLoseSupportEvent(
                 event.getBlock().getRelative(BlockFace.UP),
@@ -192,7 +196,6 @@ public final class BlockEventUtil {
     }
 
     public static <D extends ArtisanBlockData> void onBlockExplode(BlockExplodeEvent event, Class<D> artisanBlockDataClass) {
-        NeoArtisan.logger().info("onBlockExplode");
         if (event.isCancelled()) return;
         final List<Block> artisanBlocks = new ArrayList<>();
         final Iterator<Block> iterator = event.blockList().iterator();

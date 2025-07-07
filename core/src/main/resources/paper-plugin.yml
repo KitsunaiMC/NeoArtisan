@@ -3,4 +3,215 @@ version: ${version}
 main: io.github.moyusowo.neoartisan.NeoArtisan
 api-version: '1.21.4'
 authors: [ MoYuOwO ]
-description: aaa
+description: A custom items, blocks, attributes plugin
+dependencies:
+  bootstrap:
+    BentoBox:
+      load: BEFORE
+      required: false
+      join-classpath: true
+    CrashClaim:
+      load: BEFORE
+      required: false
+      join-classpath: true
+    Dominion:
+      load: BEFORE
+      required: false
+      join-classpath: true
+    FabledSkyBlock:
+      load: BEFORE
+      required: false
+      join-classpath: true
+    FactionsUUID:
+      load: BEFORE
+      required: false
+      join-classpath: true
+    GriefDefender:
+      load: BEFORE
+      required: false
+      join-classpath: true
+    GriefPrevention:
+      load: BEFORE
+      required: false
+      join-classpath: true
+    hClaims:
+      load: BEFORE
+      required: false
+      join-classpath: true
+    HuskClaims:
+      load: BEFORE
+      required: false
+      join-classpath: true
+    HuskTowns:
+      load: BEFORE
+      required: false
+      join-classpath: true
+    IridiumSkyBlock:
+      load: BEFORE
+      required: false
+      join-classpath: true
+    KingdomsX:
+      load: BEFORE
+      required: false
+      join-classpath: true
+    Landlord:
+      load: BEFORE
+      required: false
+      join-classpath: true
+    Lands:
+      load: BEFORE
+      required: false
+      join-classpath: true
+    PlotSquared:
+      load: BEFORE
+      required: false
+      join-classpath: true
+    PreciousStones:
+      load: BEFORE
+      required: false
+      join-classpath: true
+    ProtectionStones:
+      load: BEFORE
+      required: false
+      join-classpath: true
+    RedProtect:
+      load: BEFORE
+      required: false
+      join-classpath: true
+    Residence:
+      load: BEFORE
+      required: false
+      join-classpath: true
+    SaberFactions:
+      load: BEFORE
+      required: false
+      join-classpath: true
+    SuperiorSkyBlock:
+      load: BEFORE
+      required: false
+      join-classpath: true
+    Towny:
+      load: BEFORE
+      required: false
+      join-classpath: true
+    UltimateClaims:
+      load: BEFORE
+      required: false
+      join-classpath: true
+    UltimateClans:
+      load: BEFORE
+      required: false
+      join-classpath: true
+    WorldGuard:
+      load: BEFORE
+      required: false
+      join-classpath: true
+    XClaim:
+      load: BEFORE
+      required: false
+      join-classpath: true
+  server:
+    BentoBox:
+      load: BEFORE
+      required: false
+      join-classpath: true
+    CrashClaim:
+      load: BEFORE
+      required: false
+      join-classpath: true
+    Dominion:
+      load: BEFORE
+      required: false
+      join-classpath: true
+    FabledSkyBlock:
+      load: BEFORE
+      required: false
+      join-classpath: true
+    FactionsUUID:
+      load: BEFORE
+      required: false
+      join-classpath: true
+    GriefDefender:
+      load: BEFORE
+      required: false
+      join-classpath: true
+    GriefPrevention:
+      load: BEFORE
+      required: false
+      join-classpath: true
+    hClaims:
+      load: BEFORE
+      required: false
+      join-classpath: true
+    HuskClaims:
+      load: BEFORE
+      required: false
+      join-classpath: true
+    HuskTowns:
+      load: BEFORE
+      required: false
+      join-classpath: true
+    IridiumSkyBlock:
+      load: BEFORE
+      required: false
+      join-classpath: true
+    KingdomsX:
+      load: BEFORE
+      required: false
+      join-classpath: true
+    Landlord:
+      load: BEFORE
+      required: false
+      join-classpath: true
+    Lands:
+      load: BEFORE
+      required: false
+      join-classpath: true
+    PlotSquared:
+      load: BEFORE
+      required: false
+      join-classpath: true
+    PreciousStones:
+      load: BEFORE
+      required: false
+      join-classpath: true
+    ProtectionStones:
+      load: BEFORE
+      required: false
+      join-classpath: true
+    RedProtect:
+      load: BEFORE
+      required: false
+      join-classpath: true
+    Residence:
+      load: BEFORE
+      required: false
+      join-classpath: true
+    SaberFactions:
+      load: BEFORE
+      required: false
+      join-classpath: true
+    SuperiorSkyBlock:
+      load: BEFORE
+      required: false
+      join-classpath: true
+    Towny:
+      load: BEFORE
+      required: false
+      join-classpath: true
+    UltimateClaims:
+      load: BEFORE
+      required: false
+      join-classpath: true
+    UltimateClans:
+      load: BEFORE
+      required: false
+      join-classpath: true
+    WorldGuard:
+      load: BEFORE
+      required: false
+      join-classpath: true
+    XClaim:
+      load: BEFORE
+      required: false
+      join-classpath: true

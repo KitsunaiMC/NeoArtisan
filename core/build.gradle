@@ -14,12 +14,17 @@ repositories {
         name = "sonatype"
         url = "https://oss.sonatype.org/content/groups/public/"
     }
+    maven {
+        name = "xiaomomi's plugins"
+        url = "https://repo.momirealms.net/releases/"
+    }
 }
 
 dependencies {
     implementation(project(":api"))
     paperweight.paperDevBundle("1.21.4-R0.1-SNAPSHOT")
     implementation 'org.reflections:reflections:0.10.2'
+    implementation("net.momirealms:antigrieflib:0.18")
 }
 
 paperweight {

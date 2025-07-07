@@ -5,6 +5,7 @@ import io.github.moyusowo.neoartisan.util.init.Initializer;
 import io.github.moyusowo.neoartisan.util.terminate.Terminator;
 import io.github.moyusowo.neoartisanapi.api.persistence.EmptyPersistentDataContainer;
 import io.github.moyusowo.neoartisanapi.api.persistence.type.ItemStackDataType;
+import net.momirealms.antigrieflib.AntiGriefLib;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -30,6 +31,7 @@ public final class NeoArtisan extends JavaPlugin implements EmptyPersistentDataC
     private static NamespacedKey artisanItemIdKey;
     private static NamespacedKey artisanItemAttackDamageKey, artisanItemAttackKnockbackKey, artisanItemAttackSpeedKey;
     private static PersistentDataAdapterContext persistentDataAdapterContext;
+    private static AntiGriefLib antiGriefLib;
 
     public NeoArtisan() {
         super();
@@ -43,6 +45,8 @@ public final class NeoArtisan extends JavaPlugin implements EmptyPersistentDataC
         YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
         isDebugMode = config.getBoolean("debug");
     }
+
+    public static AntiGriefLib getAntiGriefLib() { return antiGriefLib; }
 
     public static NamespacedKey getArtisanItemIdKey() {
         return artisanItemIdKey;
@@ -84,6 +88,7 @@ public final class NeoArtisan extends JavaPlugin implements EmptyPersistentDataC
 
     @Override
     public void onEnable() {
+        antiGriefLib = AntiGriefLib.builder(this).silentLogs(true).ignoreOP(true).build();
         ItemStackDataType.ITEM_STACK.getComplexType();
         persistentDataAdapterContext = ItemStack.of(Material.STICK).getItemMeta().getPersistentDataContainer().getAdapterContext();
         Bukkit.getServicesManager().register(
