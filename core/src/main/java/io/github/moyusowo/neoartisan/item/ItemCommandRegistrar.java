@@ -29,37 +29,17 @@ final class ItemCommandRegistrar {
             };
 
     private static final LiteralArgumentBuilder<CommandSourceStack> command =
-            Commands.literal("item").requires(ctx -> ctx.getSender().isOp()).then(
-                    Commands.literal("get").then(
-                            Commands.argument("registryId", ArgumentTypes.namespacedKey())
-                                    .suggests(REGISTRY_ID_SUGGESTIONS)
-                                    .executes(
-                                            ctx -> {
-                                                if (ctx.getSource().getSender() instanceof Player player) {
-                                                    NamespacedKey registryId = ctx.getArgument("registryId", NamespacedKey.class);
-                                                    if (NeoArtisanAPI.getItemRegistry().isArtisanItem(registryId)) {
-                                                        player.give(((ArtisanItemImpl) ItemRegistryImpl.getInstance().getArtisanItem(registryId)).getItemStack());
-                                                    } else {
-                                                        player.sendMessage(Component.text("该物品ID不存在！").color(TextColor.color(255, 0, 0)));
-                                                    }
-                                                    return 1;
-                                                }
-                                                ctx.getSource().getSender().sendMessage(
-                                                        Component.text("你必须是一名玩家！").color(TextColor.color(255, 0, 0))
-                                                );
-                                                return 0;
-                                            }
-                                    )
-                    ).then(
-                            Commands.argument("registryId", ArgumentTypes.namespacedKey()).then(
-                                    Commands.argument("count", IntegerArgumentType.integer(1))
+            Commands.literal("neoartisan").then(
+                    Commands.literal("item").requires(ctx -> ctx.getSender().isOp()).then(
+                            Commands.literal("get").then(
+                                    Commands.argument("registryId", ArgumentTypes.namespacedKey())
+                                            .suggests(REGISTRY_ID_SUGGESTIONS)
                                             .executes(
                                                     ctx -> {
                                                         if (ctx.getSource().getSender() instanceof Player player) {
                                                             NamespacedKey registryId = ctx.getArgument("registryId", NamespacedKey.class);
-                                                            int count = IntegerArgumentType.getInteger(ctx, "count");
                                                             if (NeoArtisanAPI.getItemRegistry().isArtisanItem(registryId)) {
-                                                                player.give(((ArtisanItemImpl) ItemRegistryImpl.getInstance().getArtisanItem(registryId)).getItemStack(count));
+                                                                player.give(((ArtisanItemImpl) ItemRegistryImpl.getInstance().getArtisanItem(registryId)).getItemStack());
                                                             } else {
                                                                 player.sendMessage(Component.text("该物品ID不存在！").color(TextColor.color(255, 0, 0)));
                                                             }
@@ -71,6 +51,28 @@ final class ItemCommandRegistrar {
                                                         return 0;
                                                     }
                                             )
+                            ).then(
+                                    Commands.argument("registryId", ArgumentTypes.namespacedKey()).then(
+                                            Commands.argument("count", IntegerArgumentType.integer(1))
+                                                    .executes(
+                                                            ctx -> {
+                                                                if (ctx.getSource().getSender() instanceof Player player) {
+                                                                    NamespacedKey registryId = ctx.getArgument("registryId", NamespacedKey.class);
+                                                                    int count = IntegerArgumentType.getInteger(ctx, "count");
+                                                                    if (NeoArtisanAPI.getItemRegistry().isArtisanItem(registryId)) {
+                                                                        player.give(((ArtisanItemImpl) ItemRegistryImpl.getInstance().getArtisanItem(registryId)).getItemStack(count));
+                                                                    } else {
+                                                                        player.sendMessage(Component.text("该物品ID不存在！").color(TextColor.color(255, 0, 0)));
+                                                                    }
+                                                                    return 1;
+                                                                }
+                                                                ctx.getSource().getSender().sendMessage(
+                                                                        Component.text("你必须是一名玩家！").color(TextColor.color(255, 0, 0))
+                                                                );
+                                                                return 0;
+                                                            }
+                                                    )
+                                    )
                             )
                     )
             );
