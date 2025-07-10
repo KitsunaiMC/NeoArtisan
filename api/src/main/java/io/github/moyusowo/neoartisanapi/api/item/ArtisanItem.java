@@ -93,6 +93,8 @@ public interface ArtisanItem {
      */
     @Nullable NamespacedKey getBlockId();
 
+    boolean isInternal();
+
     /**
      * 构建复杂自定义物品的构建器接口，可以完全自定义物品堆的各项数据。
      * <p>使用示例：
@@ -104,7 +106,6 @@ public interface ArtisanItem {
      *     .itemStack(itemStack)
      *     .build();
      * }</pre>
-     * @since 2.0.0
      */
     interface ComplexBuilder {
 
@@ -154,6 +155,8 @@ public interface ArtisanItem {
          * @see io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlock
          */
         @NotNull ComplexBuilder blockId(@NotNull NamespacedKey blockId);
+
+        @NotNull ComplexBuilder internalUse();
 
         /**
          * 按照所给的参数构建自定义物品。
@@ -326,6 +329,8 @@ public interface ArtisanItem {
          * @return 当前构建器实例
          */
         @NotNull Builder skullProperty(@NotNull String textureUrl, boolean isBase64);
+
+        @NotNull Builder internalUse();
 
         /**
          * 按照所给的参数构建自定义物品。

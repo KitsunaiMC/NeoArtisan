@@ -61,13 +61,15 @@ final class ArtisanItemImpl implements ArtisanItem {
     private final NamespacedKey blockId;
     private final ItemStack itemStack;
     private final Supplier<ItemStack> itemStackSupplier;
+    private final boolean isInternal;
 
     ArtisanItemImpl(
             NamespacedKey registryId,
             ItemStack itemStack,
             boolean hasOriginalCraft,
             @NotNull AttributeProperty attributeProperty,
-            @Nullable NamespacedKey blockId
+            @Nullable NamespacedKey blockId,
+            boolean isInternal
     ) {
         this.registryId = registryId;
         this.itemStack = itemStack.clone();
@@ -76,6 +78,7 @@ final class ArtisanItemImpl implements ArtisanItem {
         this.blockId = blockId;
         addIdAndAttribute(this.itemStack);
         this.itemStackSupplier = null;
+        this.isInternal = isInternal;
     }
 
     ArtisanItemImpl(
@@ -83,7 +86,8 @@ final class ArtisanItemImpl implements ArtisanItem {
             Supplier<ItemStack> itemStackSupplier,
             boolean hasOriginalCraft,
             @NotNull AttributeProperty attributeProperty,
-            @Nullable NamespacedKey blockId
+            @Nullable NamespacedKey blockId,
+            boolean isInternal
     ) {
         this.registryId = registryId;
         this.itemStack = null;
@@ -91,6 +95,7 @@ final class ArtisanItemImpl implements ArtisanItem {
         this.attributeProperty = attributeProperty;
         this.blockId = blockId;
         this.itemStackSupplier = itemStackSupplier;
+        this.isInternal = isInternal;
     }
 
     public @NotNull ItemStack getItemStack(int count) {
@@ -147,6 +152,11 @@ final class ArtisanItemImpl implements ArtisanItem {
         return this.blockId;
     }
 
+    @Override
+    public boolean isInternal() {
+        return this.isInternal;
+    }
+
     private void addIdAndAttribute(ItemStack itemStack) {
         ItemMeta itemMeta = itemStack.getItemMeta();
         if (!this.attributeProperty.isEmpty()) {
@@ -166,6 +176,7 @@ final class ArtisanItemImpl implements ArtisanItem {
         private AttributeProperty attributeProperty;
         private NamespacedKey blockId;
         private Supplier<ItemStack> itemStackSupplier;
+        private boolean isInternal;
 
         private ComplexBuilderImpl() {
             this.registryId = null;
@@ -173,6 +184,7 @@ final class ArtisanItemImpl implements ArtisanItem {
             this.attributeProperty = new AttributePropertyImpl();
             this.blockId = null;
             this.itemStackSupplier = null;
+            this.isInternal = false;
         }
 
         @NotNull
@@ -209,6 +221,12 @@ final class ArtisanItemImpl implements ArtisanItem {
         }
 
         @Override
+        public @NotNull ComplexBuilder internalUse() {
+            this.isInternal = true;
+            return this;
+        }
+
+        @Override
         @NotNull
         public ArtisanItem build() {
             if (registryId == null || itemStackSupplier == null) {
@@ -219,7 +237,8 @@ final class ArtisanItemImpl implements ArtisanItem {
                     itemStackSupplier,
                     hasOriginalCraft,
                     attributeProperty,
-                    blockId
+                    blockId,
+                    isInternal
             );
         }
     }
@@ -240,6 +259,7 @@ final class ArtisanItemImpl implements ArtisanItem {
         private WeaponProperty weaponProperty;
         private ArmorProperty armorProperty;
         private String skullTextureUrlBase64;
+        private boolean isInternal;
 
         private BuilderImpl() {
             this.registryId = null;
@@ -256,6 +276,7 @@ final class ArtisanItemImpl implements ArtisanItem {
             this.armorProperty = ArmorProperty.EMPTY;
             this.weaponProperty = WeaponProperty.EMPTY;
             this.skullTextureUrlBase64 = null;
+            this.isInternal = false;
         }
 
         @NotNull
@@ -374,6 +395,12 @@ final class ArtisanItemImpl implements ArtisanItem {
         }
 
         @Override
+        public @NotNull Builder internalUse() {
+            this.isInternal = true;
+            return this;
+        }
+
+        @Override
         @NotNull
         public ArtisanItem build() {
             if (registryId == null || rawMaterial == null) {
@@ -384,7 +411,8 @@ final class ArtisanItemImpl implements ArtisanItem {
                     createNewItemStack(),
                     hasOriginalCraft,
                     attributeProperty,
-                    blockId
+                    blockId,
+                    isInternal
             );
         }
 

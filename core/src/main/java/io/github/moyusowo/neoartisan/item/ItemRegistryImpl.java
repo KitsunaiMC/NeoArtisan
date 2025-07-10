@@ -16,6 +16,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 final class ItemRegistryImpl implements ItemRegistry {
 
@@ -26,10 +27,14 @@ final class ItemRegistryImpl implements ItemRegistry {
     }
 
     private final ConcurrentHashMap<NamespacedKey, ArtisanItemImpl> registry;
+    private final Set<NamespacedKey> cachedItemList;
+    private final AtomicBoolean cached;
 
     private ItemRegistryImpl() {
         instance = this;
         registry = new ConcurrentHashMap<>();
+        cachedItemList = new HashSet<>();
+        cached = new AtomicBoolean(false);
         Bukkit.getServicesManager().register(
                 ItemRegistry.class,
                 ItemRegistryImpl.getInstance(),
@@ -52,8 +57,18 @@ final class ItemRegistryImpl implements ItemRegistry {
         }
     }
 
-    public Set<NamespacedKey> getAllIds() {
-        return Collections.unmodifiableSet(registry.keySet());
+    public @NotNull Set<NamespacedKey> getAllIds() {
+        if (!cached.get()) {
+            registry.forEach(
+                    (key, item) -> {
+                        if (!item.isInternal()) {
+                            cachedItemList.add(key);
+                        }
+                    }
+            );
+            cached.set(true);
+        }
+        return Collections.unmodifiableSet(cachedItemList);
     }
 
     @Override
