@@ -22,7 +22,6 @@ import java.util.function.Supplier;
  *
  */
 public interface ArtisanItem {
-
     static ItemBuilderFactory factory() {
         return Bukkit.getServicesManager().load(ItemBuilderFactory.class);
     }
