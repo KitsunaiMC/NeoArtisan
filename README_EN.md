@@ -76,7 +76,7 @@ NeoArtisan is a custom content framework for Minecraft 1.21.4+, licensed under G
 - NBT integration
 
 ### 🔮 Custom Recipe System
-- Extensible design (currently only crafting table)
+- Extensible design (currently only crafting table and furnace)
 - Independent architecture
 
 ### 🛠️ Developer Experience
@@ -203,7 +203,7 @@ public void registerContent() {
 ## Future Plans
 
 - Develop more block types
-- Add support for non-crafting table recipes (furnace, anvil, etc.)
+- Add support for more recipe types
 - Implement API extensions for technical content (logistics, electricity systems)
 - More features under consideration
 
