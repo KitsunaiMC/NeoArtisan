@@ -50,6 +50,25 @@
   </p>
 </div>
 
+## [0.8.0 and 0.7.0] - 2025-07-15
+### 新增 / Added
+- 引入保护插件钩子库，在方块交互前检查权限 / Added protection plugin hook library to check permissions before block interactions
+- 物品构造器增加 `internalUse` 方法，标记内部物品不在命令补全显示 / Added `internalUse` method to Item builder for internal items excluded from command completions
+- 实现更合理的命令建议系统 / Implemented more intuitive command suggestion system
+- 增加 PacketEvents 网络层支持 / Added PacketEvents network layer support
+- 引入全局 UUID 存储系统替代 NMS Level 对象 / Introduced global UUID storage system to replace NMS Level objects
+### 变更 / Changed
+- 使用 PacketEvents 重写区块方块重映射网络包处理 / Rewrote block remapping packet handling using PacketEvents
+- 完全移除 NMS 和 OBC 依赖 / Completely removed NMS and OBC dependencies
+- 优化方块数据存储结构 / Optimized block data storage structure
+- 重构网络包处理线程模型 / Refactored packet handling threading model
+- 更新跨版本兼容层实现 / Updated cross-version compatibility layer implementation
+### 修复 / Fixed
+- 修复保护插件交互时的边缘情况 / Fixed edge cases in protection plugin interactions
+- 修正命令建议中的排序问题 / Fixed sorting issues in command suggestions
+- 解决全局 UUID 存储的线程竞争问题 / Resolved thread contention in global UUID storage
+- 修复 PacketEvents 集成中的包处理异常 / Fixed packet processing exceptions in PacketEvents integration
+
 ## [0.6.0] - 2025-07-06
 ### 新增 / Added
 - 增加头颅方块ArtisanHeadBlock / Added ArtisanHeadBlock for custom skull blocks

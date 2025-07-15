@@ -18,8 +18,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
-import org.bukkit.craftbukkit.block.data.CraftBlockData;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -31,7 +29,6 @@ import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.plugin.ServicePriority;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -172,21 +169,6 @@ final class ArtisanFullBlockImpl extends ArtisanBlockBase implements ArtisanFull
             for (Block block : event.getBlocks()) {
                 if (isNotTypedArtisanBlock(block, ArtisanFullBlockData.class)) continue;
                 event.setCancelled(true);
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        for (Player player : block.getLocation().getNearbyPlayers(64)) {
-                            player.sendBlockChange(
-                                    block.getLocation(),
-                                    CraftBlockData.createData(
-                                            net.minecraft.world.level.block.Block.stateById(
-                                                    NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlockData(block).getArtisanBlockState().appearanceState()
-                                            )
-                                    )
-                            );
-                        }
-                    }
-                }.runTaskLater(NeoArtisan.instance(), 2L);
             }
         }
 
@@ -197,21 +179,6 @@ final class ArtisanFullBlockImpl extends ArtisanBlockBase implements ArtisanFull
             for (Block block : event.getBlocks()) {
                 if (isNotTypedArtisanBlock(block, ArtisanFullBlockData.class)) continue;
                 event.setCancelled(true);
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        for (Player player : block.getLocation().getNearbyPlayers(16)) {
-                            player.sendBlockChange(
-                                    block.getLocation(),
-                                    CraftBlockData.createData(
-                                            net.minecraft.world.level.block.Block.stateById(
-                                                    NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlockData(block).getArtisanBlockState().appearanceState()
-                                            )
-                                    )
-                            );
-                        }
-                    }
-                }.runTaskLater(NeoArtisan.instance(), 2L);
             }
         }
     }

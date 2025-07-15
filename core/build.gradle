@@ -1,7 +1,6 @@
 plugins {
     id 'java'
     id("com.gradleup.shadow") version "9.0.0-beta9"
-    id 'io.papermc.paperweight.userdev' version '2.0.0-beta.16'
 }
 
 repositories {
@@ -18,17 +17,15 @@ repositories {
         name = "xiaomomi's plugins"
         url = "https://repo.momirealms.net/releases/"
     }
+    maven { url = uri("https://repo.codemc.io/repository/maven-releases/") }
 }
 
 dependencies {
     implementation(project(":api"))
-    paperweight.paperDevBundle("1.21.4-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT")
     implementation 'org.reflections:reflections:0.10.2'
     implementation("net.momirealms:antigrieflib:0.18")
-}
-
-paperweight {
-    reobfJar.enabled = true
+    compileOnly("com.github.retrooper:packetevents-spigot:2.9.1")
 }
 
 build {

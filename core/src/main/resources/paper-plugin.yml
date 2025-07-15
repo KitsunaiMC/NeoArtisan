@@ -6,6 +6,10 @@ authors: [ MoYuOwO ]
 description: A custom items, blocks, attributes plugin
 dependencies:
   bootstrap:
+    packetevents:
+      load: BEFORE
+      required: true
+      join-classpath: true
     BentoBox:
       load: BEFORE
       required: false
@@ -111,6 +115,10 @@ dependencies:
       required: false
       join-classpath: true
   server:
+    packetevents:
+      load: BEFORE
+      required: true
+      join-classpath: true
     BentoBox:
       load: BEFORE
       required: false

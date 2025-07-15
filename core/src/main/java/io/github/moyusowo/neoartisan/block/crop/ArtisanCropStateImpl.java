@@ -1,15 +1,17 @@
 package io.github.moyusowo.neoartisan.block.crop;
 
+import com.github.retrooper.packetevents.protocol.nbt.NBT;
+import com.github.retrooper.packetevents.protocol.world.states.WrappedBlockState;
+import com.github.retrooper.packetevents.protocol.world.states.enums.East;
+import com.github.retrooper.packetevents.protocol.world.states.enums.North;
+import com.github.retrooper.packetevents.protocol.world.states.enums.South;
+import com.github.retrooper.packetevents.protocol.world.states.enums.West;
 import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlockStateBase;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
 import io.github.moyusowo.neoartisanapi.api.block.crop.*;
 import io.github.moyusowo.neoartisanapi.api.item.ItemGenerator;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.ServicePriority;
 import org.jetbrains.annotations.NotNull;
@@ -38,38 +40,70 @@ final class ArtisanCropStateImpl extends ArtisanBlockStateBase implements Artisa
     public static class BuilderImpl implements ArtisanCropState.Builder {
         protected CropAppearance cropAppearanceBlock;
         protected ItemGenerator[] generators;
-        protected static final int actualState = Block.getId(Blocks.WHEAT.defaultBlockState().setValue(BlockStateProperties.AGE_7, 1));
+        protected static final int actualState = WrappedBlockState.getByString("minecraft:wheat[age=1]").getGlobalId();
 
         private int generateAppearanceState() {
             if (this.cropAppearanceBlock instanceof TripwireAppearance tripwireAppearance) {
-                return Block.getId(
-                        Blocks.TRIPWIRE.defaultBlockState()
-                                .setValue(BlockStateProperties.ATTACHED, tripwireAppearance.get(TripwireAppearance.BlockStateProperty.ATTACHED))
-                                .setValue(BlockStateProperties.DISARMED, tripwireAppearance.get(TripwireAppearance.BlockStateProperty.DISARMED))
-                                .setValue(BlockStateProperties.EAST, tripwireAppearance.get(TripwireAppearance.BlockStateProperty.EAST))
-                                .setValue(BlockStateProperties.NORTH, tripwireAppearance.get(TripwireAppearance.BlockStateProperty.NORTH))
-                                .setValue(BlockStateProperties.SOUTH, tripwireAppearance.get(TripwireAppearance.BlockStateProperty.SOUTH))
-                                .setValue(BlockStateProperties.WEST, tripwireAppearance.get(TripwireAppearance.BlockStateProperty.WEST))
-                                .setValue(BlockStateProperties.POWERED, tripwireAppearance.get(TripwireAppearance.BlockStateProperty.POWERED))
-                );
+                WrappedBlockState wrappedBlockState = WrappedBlockState.getByString("minecraft:tripwire[attached=true,disarmed=true,east=true,north=true,south=true,west=true,powered=true]");
+                wrappedBlockState.setAttached(tripwireAppearance.get(TripwireAppearance.BlockStateProperty.ATTACHED));
+                wrappedBlockState.setDisarmed(tripwireAppearance.get(TripwireAppearance.BlockStateProperty.DISARMED));
+                if (tripwireAppearance.get(TripwireAppearance.BlockStateProperty.EAST)) {
+                    wrappedBlockState.setEast(East.TRUE);
+                } else {
+                    wrappedBlockState.setEast(East.FALSE);
+                }
+                if (tripwireAppearance.get(TripwireAppearance.BlockStateProperty.NORTH)) {
+                    wrappedBlockState.setNorth(North.TRUE);
+                } else {
+                    wrappedBlockState.setNorth(North.FALSE);
+                }
+                if (tripwireAppearance.get(TripwireAppearance.BlockStateProperty.WEST)) {
+                    wrappedBlockState.setWest(West.TRUE);
+                } else {
+                    wrappedBlockState.setWest(West.FALSE);
+                }
+                if (tripwireAppearance.get(TripwireAppearance.BlockStateProperty.SOUTH)) {
+                    wrappedBlockState.setSouth(South.TRUE);
+                } else {
+                    wrappedBlockState.setSouth(South.FALSE);
+                }
+                wrappedBlockState.setPowered(tripwireAppearance.get(TripwireAppearance.BlockStateProperty.POWERED));
+                return wrappedBlockState.getGlobalId();
             } else if (this.cropAppearanceBlock instanceof SugarCaneAppearance sugarCaneAppearance) {
-                return Block.getId(
-                        Blocks.SUGAR_CANE.defaultBlockState()
-                                .setValue(BlockStateProperties.AGE_15, sugarCaneAppearance.get())
-                );
+                WrappedBlockState wrappedBlockState = WrappedBlockState.getByString("minecraft:sugar_cane[age=0]");
+                wrappedBlockState.setAge(sugarCaneAppearance.get());
+                return wrappedBlockState.getGlobalId();
             } else {
                 OriginalCropAppearance originalCropAppearance = (OriginalCropAppearance) this.cropAppearanceBlock;
-                final BlockState blockState;
+                final WrappedBlockState wrappedBlockState;
                 switch (originalCropAppearance.cropType) {
-                    case WHEAT -> blockState = Blocks.WHEAT.defaultBlockState().setValue(BlockStateProperties.AGE_7, originalCropAppearance.age);
-                    case CARROT -> blockState = Blocks.CARROTS.defaultBlockState().setValue(BlockStateProperties.AGE_7, originalCropAppearance.age);
-                    case POTATO -> blockState = Blocks.POTATOES.defaultBlockState().setValue(BlockStateProperties.AGE_7, originalCropAppearance.age);
-                    case BEETROOT -> blockState = Blocks.BEETROOTS.defaultBlockState().setValue(BlockStateProperties.AGE_3, originalCropAppearance.age);
-                    case TORCH_FLOWER -> blockState = Blocks.TORCHFLOWER.defaultBlockState().setValue(BlockStateProperties.AGE_2, originalCropAppearance.age);
-                    case PITCHER_PLANT -> blockState = Blocks.PITCHER_CROP.defaultBlockState().setValue(BlockStateProperties.AGE_4, originalCropAppearance.age);
-                    default -> blockState = Blocks.AIR.defaultBlockState();
+                    case WHEAT -> {
+                        wrappedBlockState = WrappedBlockState.getByString("minecraft:wheat[age=1]");
+                        wrappedBlockState.setAge(originalCropAppearance.age);
+                    }
+                    case CARROT -> {
+                        wrappedBlockState = WrappedBlockState.getByString("minecraft:carrots[age=1]");
+                        wrappedBlockState.setAge(originalCropAppearance.age);
+                    }
+                    case POTATO -> {
+                        wrappedBlockState = WrappedBlockState.getByString("minecraft:potatoes[age=1]");
+                        wrappedBlockState.setAge(originalCropAppearance.age);
+                    }
+                    case BEETROOT -> {
+                        wrappedBlockState = WrappedBlockState.getByString("minecraft:beetroot[age=1]");
+                        wrappedBlockState.setAge(originalCropAppearance.age);
+                    }
+                    case TORCH_FLOWER -> {
+                        wrappedBlockState = WrappedBlockState.getByString("minecraft:torchflower_crop[age=1]");
+                        wrappedBlockState.setAge(originalCropAppearance.age);
+                    }
+                    case PITCHER_PLANT -> {
+                        wrappedBlockState = WrappedBlockState.getByString("minecraft:pitcher_crop[age=1]");
+                        wrappedBlockState.setAge(originalCropAppearance.age);
+                    }
+                    default -> wrappedBlockState = WrappedBlockState.getByGlobalId(0);
                 }
-                return Block.getId(blockState);
+                return wrappedBlockState.getGlobalId();
             }
         }
 
