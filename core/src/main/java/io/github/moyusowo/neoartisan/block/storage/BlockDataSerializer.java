@@ -12,12 +12,10 @@ import io.github.moyusowo.neoartisanapi.api.block.thin.ArtisanThinBlockData;
 import io.github.moyusowo.neoartisanapi.api.block.transparent.ArtisanTransparentBlockData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.ChunkPos;
-import net.minecraft.world.level.Level;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.World;
-import org.bukkit.craftbukkit.CraftWorld;
 import org.bukkit.persistence.PersistentDataContainer;
 
 import java.io.*;
@@ -41,9 +39,7 @@ final class BlockDataSerializer {
             File dataFolder = new File(NeoArtisan.instance().getDataFolder(), "block/storage");
             if (!dataFolder.exists()) dataFolder.mkdirs();
             for (World world : Bukkit.getWorlds()) {
-                CraftWorld craftWorld = (CraftWorld) world;
-                Level level = craftWorld.getHandle();
-                Map<ChunkPos, Map<BlockPos, ArtisanBlockData>> chunkMap = ArtisanBlockStorageImpl.getInstance().getLevelArtisanBlocks(level);
+                Map<ChunkPos, Map<BlockPos, ArtisanBlockData>> chunkMap = ArtisanBlockStorageImpl.getInstance().getLevelArtisanBlocks(world.getUID());
                 File file = new File(dataFolder, world.getUID() + ".dat");
                 try (DataOutputStream out = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(file)))) {
                     out.writeInt(chunkMap.size());
@@ -123,7 +119,7 @@ final class BlockDataSerializer {
         }
     }
 
-    public static void load(Map<Level, Map<ChunkPos, Map<BlockPos, ArtisanBlockData>>> storage) {
+    public static void load(Map<UUID, Map<ChunkPos, Map<BlockPos, ArtisanBlockData>>> storage) {
         try {
             File dataFolder = new File(NeoArtisan.instance().getDataFolder(), "block/storage");
             if (!dataFolder.exists()) return;
@@ -134,11 +130,8 @@ final class BlockDataSerializer {
                 if (file.isFile() && file.getName().toLowerCase().endsWith(".dat")) {
                     UUID uuid = UUID.fromString(file.getName().substring(0, file.getName().length() - 4));
                     World world = Bukkit.getWorld(uuid);
-                    CraftWorld craftWorld = (CraftWorld) world;
-                    if (craftWorld == null) throw new IllegalArgumentException("UUID can not match!");
-                    Level level = craftWorld.getHandle();
-                    Map<ChunkPos, Map<BlockPos, ArtisanBlockData>> chunkMap = new HashMap<>();
-                    storage.put(level, chunkMap);
+                    if (world == null) throw new IllegalArgumentException("UUID can not match!");Map<ChunkPos, Map<BlockPos, ArtisanBlockData>> chunkMap = new HashMap<>();
+                    storage.put(uuid, chunkMap);
                     try (DataInputStream in = new DataInputStream(new BufferedInputStream(new FileInputStream(file)))) {
                         int chunkCount = in.readInt();
                         for (int i = 0; i < chunkCount; i++) {

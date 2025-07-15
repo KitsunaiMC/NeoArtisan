@@ -10,6 +10,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
+import java.util.UUID;
 
 @SuppressWarnings("unused")
 @ApiStatus.Internal
@@ -19,34 +20,34 @@ public interface ArtisanBlockStorageInternal {
         return Bukkit.getServicesManager().load(ArtisanBlockStorageInternal.class);
     }
 
-    void replaceArtisanBlock(Level level, BlockPos blockPos, ArtisanBlockData block);
+    void replaceArtisanBlock(UUID worldUUID, BlockPos blockPos, ArtisanBlockData block);
 
-    void placeArtisanBlock(Level level, BlockPos blockPos, ArtisanBlockData block);
+    void placeArtisanBlock(UUID worldUUID, BlockPos blockPos, ArtisanBlockData block);
 
-    void removeArtisanBlock(Level level, BlockPos blockPos);
+    void removeArtisanBlock(UUID worldUUID, BlockPos blockPos);
 
-    void removeArtisanBlock(Level level, int x, int y, int z);
+    void removeArtisanBlock(UUID worldUUID, int x, int y, int z);
 
     void removeArtisanBlock(Block block);
 
     @NotNull
-    ArtisanBlockData getArtisanBlock(Level level, BlockPos blockPos);
+    ArtisanBlockData getArtisanBlock(UUID worldUID, BlockPos blockPos);
 
-    ArtisanBlockData getArtisanBlock(Level level, int x, int y, int z);
+    ArtisanBlockData getArtisanBlock(UUID worldUID, int x, int y, int z);
 
-    Map<BlockPos, ArtisanBlockData> getChunkArtisanBlocks(Level level, ChunkPos chunkPos);
+    Map<BlockPos, ArtisanBlockData> getChunkArtisanBlocks(UUID worldUID, ChunkPos chunkPos);
 
-    Map<BlockPos, ArtisanBlockData> getChunkArtisanBlocks(Level level, int chunkX, int chunkZ);
+    Map<BlockPos, ArtisanBlockData> getChunkArtisanBlocks(UUID worldUID, int chunkX, int chunkZ);
 
-    Map<ChunkPos, Map<BlockPos, ArtisanBlockData>> getLevelArtisanBlocks(Level level);
+    Map<ChunkPos, Map<BlockPos, ArtisanBlockData>> getLevelArtisanBlocks(UUID worldUID);
 
-    boolean isArtisanBlock(Level level, BlockPos blockPos);
+    boolean isArtisanBlock(UUID worldUID, BlockPos blockPos);
 
-    boolean isArtisanBlock(Level level, int x, int y, int z);
+    boolean isArtisanBlock(UUID worldUID, int x, int y, int z);
 
-    boolean hasArtisanBlockInChunk(Level level, ChunkPos chunkPos);
+    boolean hasArtisanBlockInChunk(UUID worldUID, ChunkPos chunkPos);
 
-    boolean hasArtisanBlockInChunk(Level level, int chunkX, int chunkZ);
+    boolean hasArtisanBlockInChunk(UUID worldUID, int chunkX, int chunkZ);
 
-    boolean hasArtisanBlockInLevel(Level level);
+    boolean hasArtisanBlockInLevel(UUID worldUID);
 }

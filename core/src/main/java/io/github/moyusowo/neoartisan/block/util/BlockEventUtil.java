@@ -254,7 +254,7 @@ public final class BlockEventUtil {
         CraftWorld craftWorld = (CraftWorld) bukkitBlock.getWorld();
         Level nmsWorld = craftWorld.getHandle();
         BlockPos pos = new BlockPos(bukkitBlock.getX(), bukkitBlock.getY(), bukkitBlock.getZ());
-        ArtisanBlockStorageInternal.getInternal().placeArtisanBlock(nmsWorld, pos, artisanBlockData);
+        ArtisanBlockStorageInternal.getInternal().placeArtisanBlock(craftWorld.getUID(), pos, artisanBlockData);
         nmsWorld.setBlock(pos, stateById(artisanBlockData.getArtisanBlockState().actualState()), 3);
         if (artisanBlockData instanceof ArtisanHeadBlockData headBlockData) {
             nmsWorld.removeBlockEntity(pos);
@@ -296,7 +296,7 @@ public final class BlockEventUtil {
         CraftWorld craftWorld = (CraftWorld) bukkitBlock.getWorld();
         Level nmsWorld = craftWorld.getHandle();
         BlockPos pos = new BlockPos(bukkitBlock.getX(), bukkitBlock.getY(), bukkitBlock.getZ());
-        ArtisanBlockStorageInternal.getInternal().replaceArtisanBlock(nmsWorld, pos, artisanBlockData);
+        ArtisanBlockStorageInternal.getInternal().replaceArtisanBlock(craftWorld.getUID(), pos, artisanBlockData);
         nmsWorld.setBlock(pos, stateById(artisanBlockData.getArtisanBlockState().actualState()), 3);
         if (artisanBlockData instanceof ArtisanHeadBlockData headBlockData) {
             nmsWorld.removeBlockEntity(pos);
