@@ -6,6 +6,7 @@ import org.reflections.Reflections;
 import org.reflections.scanners.Scanners;
 import org.reflections.util.ConfigurationBuilder;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
 
@@ -27,18 +28,24 @@ public final class Initializer {
 
     public static void executeEnable() {
         ENABLE_METHODS.sort(Comparator.comparingInt(m -> m.getAnnotation(InitMethod.class).priority().priority()));
-        ENABLE_METHODS.forEach(method -> {
+        for (Method method : ENABLE_METHODS) {
             try {
                 method.invoke(null);
                 if (NeoArtisan.isDebugMode()) {
                     NeoArtisan.logger().info("successfully initialize method: " + method.getDeclaringClass().getName() + "." + method.getName());
                 }
+            } catch (InvocationTargetException e) {
+                NeoArtisan.logger().severe("fail to initialize method: " + method + ", " + e + ", cause: " + e.getCause());
+                NeoArtisan.logger().severe("fail to enable plugin. plugin disabling...");
+                Bukkit.getPluginManager().disablePlugin(NeoArtisan.instance());
+                return;
             } catch (Exception e) {
                 NeoArtisan.logger().severe("fail to initialize method: " + method + ", " + e);
                 NeoArtisan.logger().severe("fail to enable plugin. plugin disabling...");
                 Bukkit.getPluginManager().disablePlugin(NeoArtisan.instance());
+                return;
             }
-        });
+        }
         NeoArtisan.logger().info("successfully initialize and plugin is enabled.");
     }
 }

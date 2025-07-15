@@ -44,4 +44,14 @@ final class ArrayKeyUtil {
         NamespacedKey key = NeoArtisanAPI.getItemRegistry().getRegistryId(itemStack);
         return ArrayKey.from(new NamespacedKey[] {key}, RecipeType.CAMPFIRE);
     }
+
+    public static ArrayKey toSmokerKey(ItemStack itemStack) {
+        NamespacedKey key = NeoArtisanAPI.getItemRegistry().getRegistryId(itemStack);
+        return ArrayKey.from(new NamespacedKey[] {key}, RecipeType.SMOKING);
+    }
+
+    public static ArrayKey toBlastFurnaceKey(ItemStack itemStack) {
+        NamespacedKey key = NeoArtisanAPI.getItemRegistry().getRegistryId(itemStack);
+        return ArrayKey.from(new NamespacedKey[] {key}, RecipeType.BLASTING);
+    }
 }
