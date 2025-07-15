@@ -205,7 +205,7 @@ public void registerContent() {
 
 1. Develop content packs as separate plugins
 2. Extend `ArtisanBlockGUI` for custom GUIs
-3. Currently only guarantees 1.21.4 compatibility
+3. The project is currently in its infancy and has only tested compatibility with 1.21.4, but in theory it should be compatible with higher versions
 
 ## Future Plans
 
