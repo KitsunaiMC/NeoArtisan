@@ -3,7 +3,7 @@ version: ${version}
 main: io.github.moyusowo.neoartisan.NeoArtisan
 api-version: '1.21.4'
 authors: [ MoYuOwO ]
-description: A custom items, blocks, attributes plugin
+description: A lightweight, dynamic content framework for Minecraft that enables one-line registration of custom items, blocks, and recipes with zero NMS dependencies
 dependencies:
   bootstrap:
     packetevents:
