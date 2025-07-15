@@ -2,6 +2,8 @@ package io.github.moyusowo.neoartisan.block.storage;
 
 import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisan.block.base.internal.ArtisanBlockDataInternal;
+import io.github.moyusowo.neoartisan.util.BlockPos;
+import io.github.moyusowo.neoartisan.util.ChunkPos;
 import io.github.moyusowo.neoartisan.util.terminate.TerminateMethod;
 import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
 import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlockData;
@@ -10,8 +12,6 @@ import io.github.moyusowo.neoartisanapi.api.block.full.ArtisanFullBlockData;
 import io.github.moyusowo.neoartisanapi.api.block.head.ArtisanHeadBlockData;
 import io.github.moyusowo.neoartisanapi.api.block.thin.ArtisanThinBlockData;
 import io.github.moyusowo.neoartisanapi.api.block.transparent.ArtisanTransparentBlockData;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.ChunkPos;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
@@ -45,8 +45,8 @@ final class BlockDataSerializer {
                     out.writeInt(chunkMap.size());
                     for (Map.Entry<ChunkPos, Map<BlockPos, ArtisanBlockData>> chunkEntry : chunkMap.entrySet()) {
                         ChunkPos chunkPos = chunkEntry.getKey();
-                        out.writeInt(chunkPos.x);
-                        out.writeInt(chunkPos.z);
+                        out.writeInt(chunkPos.x());
+                        out.writeInt(chunkPos.z());
                         Map<BlockPos, ArtisanBlockData> blockMap = chunkEntry.getValue();
                         out.writeInt(blockMap.size());
                         for (Map.Entry<BlockPos, ArtisanBlockData> blockEntry : blockMap.entrySet()) {
@@ -54,9 +54,9 @@ final class BlockDataSerializer {
                                 case ArtisanCropData artisanCropData -> {
                                     out.writeUTF(CROP_BLOCK);
                                     BlockPos pos = blockEntry.getKey();
-                                    out.writeInt(pos.getX());
-                                    out.writeInt(pos.getY());
-                                    out.writeInt(pos.getZ());
+                                    out.writeInt(pos.x());
+                                    out.writeInt(pos.y());
+                                    out.writeInt(pos.z());
                                     out.writeUTF(artisanCropData.blockId().getNamespace());
                                     out.writeUTF(artisanCropData.blockId().getKey());
                                     out.writeInt(artisanCropData.stage());
@@ -64,9 +64,9 @@ final class BlockDataSerializer {
                                 case ArtisanTransparentBlockData artisanTransparentBlockData -> {
                                     out.writeUTF(TRANSPARENT_BLOCK);
                                     BlockPos pos = blockEntry.getKey();
-                                    out.writeInt(pos.getX());
-                                    out.writeInt(pos.getY());
-                                    out.writeInt(pos.getZ());
+                                    out.writeInt(pos.x());
+                                    out.writeInt(pos.y());
+                                    out.writeInt(pos.z());
                                     out.writeUTF(artisanTransparentBlockData.blockId().getNamespace());
                                     out.writeUTF(artisanTransparentBlockData.blockId().getKey());
                                     out.writeInt(artisanTransparentBlockData.stage());
@@ -74,9 +74,9 @@ final class BlockDataSerializer {
                                 case ArtisanThinBlockData artisanThinBlockData -> {
                                     out.writeUTF(THIN_BLOCK);
                                     BlockPos pos = blockEntry.getKey();
-                                    out.writeInt(pos.getX());
-                                    out.writeInt(pos.getY());
-                                    out.writeInt(pos.getZ());
+                                    out.writeInt(pos.x());
+                                    out.writeInt(pos.y());
+                                    out.writeInt(pos.z());
                                     out.writeUTF(artisanThinBlockData.blockId().getNamespace());
                                     out.writeUTF(artisanThinBlockData.blockId().getKey());
                                     out.writeInt(artisanThinBlockData.stage());
@@ -84,9 +84,9 @@ final class BlockDataSerializer {
                                 case ArtisanFullBlockData artisanFullBlockData -> {
                                     out.writeUTF(FULL_BLOCK);
                                     BlockPos pos = blockEntry.getKey();
-                                    out.writeInt(pos.getX());
-                                    out.writeInt(pos.getY());
-                                    out.writeInt(pos.getZ());
+                                    out.writeInt(pos.x());
+                                    out.writeInt(pos.y());
+                                    out.writeInt(pos.z());
                                     out.writeUTF(artisanFullBlockData.blockId().getNamespace());
                                     out.writeUTF(artisanFullBlockData.blockId().getKey());
                                     out.writeInt(artisanFullBlockData.stage());
@@ -94,9 +94,9 @@ final class BlockDataSerializer {
                                 case ArtisanHeadBlockData artisanHeadBlockData -> {
                                     out.writeUTF(HEAD_BLOCK);
                                     BlockPos pos = blockEntry.getKey();
-                                    out.writeInt(pos.getX());
-                                    out.writeInt(pos.getY());
-                                    out.writeInt(pos.getZ());
+                                    out.writeInt(pos.x());
+                                    out.writeInt(pos.y());
+                                    out.writeInt(pos.z());
                                     out.writeUTF(artisanHeadBlockData.blockId().getNamespace());
                                     out.writeUTF(artisanHeadBlockData.blockId().getKey());
                                     out.writeInt(artisanHeadBlockData.stage());
@@ -151,7 +151,7 @@ final class BlockDataSerializer {
                                         ArtisanCropData artisanCropData = ArtisanCropData.factory().builder()
                                                 .blockId(new NamespacedKey(in.readUTF(), in.readUTF()))
                                                 .stage(in.readInt())
-                                                .location(new Location(world, blockPos.getX(), blockPos.getY(), blockPos.getZ()))
+                                                .location(new Location(world, blockPos.x(), blockPos.y(), blockPos.z()))
                                                 .build();
                                         int length = in.readInt();
                                         byte[] pdcByte = in.readNBytes(length);
@@ -169,7 +169,7 @@ final class BlockDataSerializer {
                                         ArtisanTransparentBlockData artisanTransparentBlockData = ArtisanTransparentBlockData.factory().builder()
                                                 .blockId(new NamespacedKey(in.readUTF(), in.readUTF()))
                                                 .stage(in.readInt())
-                                                .location(new Location(world, blockPos.getX(), blockPos.getY(), blockPos.getZ()))
+                                                .location(new Location(world, blockPos.x(), blockPos.y(), blockPos.z()))
                                                 .build();
                                         int length = in.readInt();
                                         byte[] pdcByte = in.readNBytes(length);
@@ -187,7 +187,7 @@ final class BlockDataSerializer {
                                         ArtisanThinBlockData artisanThinBlockData = ArtisanThinBlockData.factory().builder()
                                                 .blockId(new NamespacedKey(in.readUTF(), in.readUTF()))
                                                 .stage(in.readInt())
-                                                .location(new Location(world, blockPos.getX(), blockPos.getY(), blockPos.getZ()))
+                                                .location(new Location(world, blockPos.x(), blockPos.y(), blockPos.z()))
                                                 .build();
                                         int length = in.readInt();
                                         byte[] pdcByte = in.readNBytes(length);
@@ -205,7 +205,7 @@ final class BlockDataSerializer {
                                         ArtisanFullBlockData artisanFullBlockData = ArtisanFullBlockData.factory().builder()
                                                 .blockId(new NamespacedKey(in.readUTF(), in.readUTF()))
                                                 .stage(in.readInt())
-                                                .location(new Location(world, blockPos.getX(), blockPos.getY(), blockPos.getZ()))
+                                                .location(new Location(world, blockPos.x(), blockPos.y(), blockPos.z()))
                                                 .build();
                                         int length = in.readInt();
                                         byte[] pdcByte = in.readNBytes(length);
@@ -223,7 +223,7 @@ final class BlockDataSerializer {
                                         ArtisanHeadBlockData artisanHeadBlockData = ArtisanHeadBlockData.factory().builder()
                                                 .blockId(new NamespacedKey(in.readUTF(), in.readUTF()))
                                                 .stage(in.readInt())
-                                                .location(new Location(world, blockPos.getX(), blockPos.getY(), blockPos.getZ()))
+                                                .location(new Location(world, blockPos.x(), blockPos.y(), blockPos.z()))
                                                 .build();
                                         int length = in.readInt();
                                         byte[] pdcByte = in.readNBytes(length);

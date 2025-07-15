@@ -1,5 +1,7 @@
 package io.github.moyusowo.neoartisan.block.full;
 
+import com.github.retrooper.packetevents.protocol.world.states.WrappedBlockState;
+import com.github.retrooper.packetevents.protocol.world.states.enums.Instrument;
 import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
@@ -7,11 +9,6 @@ import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlockStateBase;
 import io.github.moyusowo.neoartisanapi.api.block.full.ArtisanFullBlockState;
 import io.github.moyusowo.neoartisanapi.api.block.full.FullBlockAppearance;
 import io.github.moyusowo.neoartisanapi.api.item.ItemGenerator;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.ServicePriority;
 import org.jetbrains.annotations.NotNull;
@@ -39,40 +36,38 @@ final class ArtisanFullBlockStateImpl extends ArtisanBlockStateBase implements A
     private static class BuilderImpl implements Builder {
         protected FullBlockAppearance fullBlockAppearance;
         protected ItemGenerator[] generators;
-        private static final int actualState = Block.getId(
-                Blocks.STONE.defaultBlockState()
-        );
+        private static final int actualState = WrappedBlockState.getByString("minecraft:stone").getGlobalId();
 
         private int generateAppearanceState() {
-            BlockState blockState = Blocks.NOTE_BLOCK.defaultBlockState();
+            WrappedBlockState wrappedBlockState = WrappedBlockState.getByString("minecraft:note_block[instrument=harp,note=0,powered=false]");
             switch (this.fullBlockAppearance.noteBlockAppearance) {
-                case HAT -> blockState = blockState.setValue(BlockStateProperties.NOTEBLOCK_INSTRUMENT, NoteBlockInstrument.HAT);
-                case BASEDRUM -> blockState = blockState.setValue(BlockStateProperties.NOTEBLOCK_INSTRUMENT, NoteBlockInstrument.BASEDRUM);
-                case SNARE -> blockState = blockState.setValue(BlockStateProperties.NOTEBLOCK_INSTRUMENT, NoteBlockInstrument.SNARE);
-                case BASS -> blockState = blockState.setValue(BlockStateProperties.NOTEBLOCK_INSTRUMENT, NoteBlockInstrument.BASS);
-                case FLUTE -> blockState = blockState.setValue(BlockStateProperties.NOTEBLOCK_INSTRUMENT, NoteBlockInstrument.FLUTE);
-                case BELL -> blockState = blockState.setValue(BlockStateProperties.NOTEBLOCK_INSTRUMENT, NoteBlockInstrument.BELL);
-                case GUITAR -> blockState = blockState.setValue(BlockStateProperties.NOTEBLOCK_INSTRUMENT, NoteBlockInstrument.GUITAR);
-                case CHIME -> blockState = blockState.setValue(BlockStateProperties.NOTEBLOCK_INSTRUMENT, NoteBlockInstrument.CHIME);
-                case XYLOPHONE -> blockState = blockState.setValue(BlockStateProperties.NOTEBLOCK_INSTRUMENT, NoteBlockInstrument.XYLOPHONE);
-                case IRON_XYLOPHONE -> blockState = blockState.setValue(BlockStateProperties.NOTEBLOCK_INSTRUMENT, NoteBlockInstrument.IRON_XYLOPHONE);
-                case COW_BELL -> blockState = blockState.setValue(BlockStateProperties.NOTEBLOCK_INSTRUMENT, NoteBlockInstrument.COW_BELL);
-                case DIDGERIDOO -> blockState = blockState.setValue(BlockStateProperties.NOTEBLOCK_INSTRUMENT, NoteBlockInstrument.DIDGERIDOO);
-                case BIT -> blockState = blockState.setValue(BlockStateProperties.NOTEBLOCK_INSTRUMENT, NoteBlockInstrument.BIT);
-                case BANJO -> blockState = blockState.setValue(BlockStateProperties.NOTEBLOCK_INSTRUMENT, NoteBlockInstrument.BANJO);
-                case PLING -> blockState = blockState.setValue(BlockStateProperties.NOTEBLOCK_INSTRUMENT, NoteBlockInstrument.PLING);
-                case DRAGON -> blockState = blockState.setValue(BlockStateProperties.NOTEBLOCK_INSTRUMENT, NoteBlockInstrument.DRAGON);
-                case PIGLIN -> blockState = blockState.setValue(BlockStateProperties.NOTEBLOCK_INSTRUMENT, NoteBlockInstrument.PIGLIN);
-                case ZOMBIE -> blockState = blockState.setValue(BlockStateProperties.NOTEBLOCK_INSTRUMENT, NoteBlockInstrument.ZOMBIE);
-                case CREEPER -> blockState = blockState.setValue(BlockStateProperties.NOTEBLOCK_INSTRUMENT, NoteBlockInstrument.CREEPER);
-                case SKELETON -> blockState = blockState.setValue(BlockStateProperties.NOTEBLOCK_INSTRUMENT, NoteBlockInstrument.SKELETON);
-                case CUSTOM_HEAD -> blockState = blockState.setValue(BlockStateProperties.NOTEBLOCK_INSTRUMENT, NoteBlockInstrument.CUSTOM_HEAD);
-                case WITHER_SKELETON -> blockState = blockState.setValue(BlockStateProperties.NOTEBLOCK_INSTRUMENT, NoteBlockInstrument.WITHER_SKELETON);
+                case HAT -> wrappedBlockState.setInstrument(Instrument.HAT);
+                case BASEDRUM -> wrappedBlockState.setInstrument(Instrument.BASEDRUM);
+                case SNARE -> wrappedBlockState.setInstrument(Instrument.SNARE);
+                case BASS -> wrappedBlockState.setInstrument(Instrument.BASS);
+                case FLUTE -> wrappedBlockState.setInstrument(Instrument.FLUTE);
+                case BELL -> wrappedBlockState.setInstrument(Instrument.BELL);
+                case GUITAR -> wrappedBlockState.setInstrument(Instrument.GUITAR);
+                case CHIME -> wrappedBlockState.setInstrument(Instrument.CHIME);
+                case XYLOPHONE -> wrappedBlockState.setInstrument(Instrument.XYLOPHONE);
+                case IRON_XYLOPHONE -> wrappedBlockState.setInstrument(Instrument.IRON_XYLOPHONE);
+                case COW_BELL -> wrappedBlockState.setInstrument(Instrument.COW_BELL);
+                case DIDGERIDOO -> wrappedBlockState.setInstrument(Instrument.DIDGERIDOO);
+                case BIT -> wrappedBlockState.setInstrument(Instrument.BIT);
+                case BANJO -> wrappedBlockState.setInstrument(Instrument.BANJO);
+                case PLING -> wrappedBlockState.setInstrument(Instrument.PLING);
+                case DRAGON -> wrappedBlockState.setInstrument(Instrument.DRAGON);
+                case PIGLIN -> wrappedBlockState.setInstrument(Instrument.PIGLIN);
+                case ZOMBIE -> wrappedBlockState.setInstrument(Instrument.ZOMBIE);
+                case CREEPER -> wrappedBlockState.setInstrument(Instrument.CREEPER);
+                case SKELETON -> wrappedBlockState.setInstrument(Instrument.SKELETON);
+                case CUSTOM_HEAD -> wrappedBlockState.setInstrument(Instrument.CUSTOM_HEAD);
+                case WITHER_SKELETON -> wrappedBlockState.setInstrument(Instrument.WITHER_SKELETON);
             }
-            return Block.getId(
-                    blockState.setValue(BlockStateProperties.NOTE, this.fullBlockAppearance.note)
-                            .setValue(BlockStateProperties.POWERED, this.fullBlockAppearance.powered)
-            );
+            wrappedBlockState.setNote(this.fullBlockAppearance.note);
+            wrappedBlockState.setPowered(this.fullBlockAppearance.powered);
+            NeoArtisan.logger().info(wrappedBlockState.toString());
+            return wrappedBlockState.getGlobalId();
         }
 
         public BuilderImpl() {

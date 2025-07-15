@@ -1,5 +1,6 @@
 package io.github.moyusowo.neoartisan.block.transparent;
 
+import com.github.retrooper.packetevents.protocol.world.states.WrappedBlockState;
 import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
@@ -7,10 +8,6 @@ import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlockStateBase;
 import io.github.moyusowo.neoartisanapi.api.block.transparent.TransparentAppearance;
 import io.github.moyusowo.neoartisanapi.api.block.transparent.ArtisanTransparentBlockState;
 import io.github.moyusowo.neoartisanapi.api.item.ItemGenerator;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.ServicePriority;
 import org.jetbrains.annotations.NotNull;
@@ -39,33 +36,28 @@ final class ArtisanTransparentBlockStateImpl extends ArtisanBlockStateBase imple
     public static class BuilderImpl implements Builder {
         protected TransparentAppearance transparentAppearance;
         protected ItemGenerator[] generators;
-        private static final int actualState = Block.getId(
-                Blocks.OAK_LEAVES.defaultBlockState()
-                        .setValue(BlockStateProperties.DISTANCE, 7)
-                        .setValue(BlockStateProperties.PERSISTENT, true)
-                        .setValue(BlockStateProperties.WATERLOGGED, false)
-        );
+        private static final int actualState = WrappedBlockState.getByString("minecraft:oak_leaves[distance=7,persistent=true,waterlogged=false]").getGlobalId();
 
         private int generateAppearanceState() {
-            BlockState blockState;
+            WrappedBlockState wrappedBlockState;
             switch (this.transparentAppearance.leavesAppearance) {
-                case BIRCH_LEAVES -> blockState = Blocks.BIRCH_LEAVES.defaultBlockState();
-                case ACACIA_LEAVES -> blockState = Blocks.ACACIA_LEAVES.defaultBlockState();
-                case AZALEA_LEAVES -> blockState = Blocks.AZALEA_LEAVES.defaultBlockState();
-                case CHERRY_LEAVES -> blockState = Blocks.CHERRY_LEAVES.defaultBlockState();
-                case JUNGLE_LEAVES -> blockState = Blocks.JUNGLE_LEAVES.defaultBlockState();
-                case SPRUCE_LEAVES -> blockState = Blocks.SPRUCE_LEAVES.defaultBlockState();
-                case DARK_OAK_LEAVES -> blockState = Blocks.DARK_OAK_LEAVES.defaultBlockState();
-                case MANGROVE_LEAVES -> blockState = Blocks.MANGROVE_LEAVES.defaultBlockState();
-                case PALE_OAK_LEAVES -> blockState = Blocks.PALE_OAK_LEAVES.defaultBlockState();
-                case FLOWERING_AZALEA_LEAVES -> blockState = Blocks.FLOWERING_AZALEA_LEAVES.defaultBlockState();
-                default -> blockState = Blocks.OAK_LEAVES.defaultBlockState();
+                case OAK_LEAVES -> wrappedBlockState = WrappedBlockState.getByString("minecraft:oak_leaves[distance=7,persistent=true,waterlogged=false]");
+                case BIRCH_LEAVES -> wrappedBlockState = WrappedBlockState.getByString("minecraft:birch_leaves[distance=7,persistent=true,waterlogged=false]");
+                case ACACIA_LEAVES -> wrappedBlockState = WrappedBlockState.getByString("minecraft:acacia_leaves[distance=7,persistent=true,waterlogged=false]");
+                case AZALEA_LEAVES -> wrappedBlockState = WrappedBlockState.getByString("minecraft:azalea_leaves[distance=7,persistent=true,waterlogged=false]");
+                case CHERRY_LEAVES -> wrappedBlockState = WrappedBlockState.getByString("minecraft:cherry_leaves[distance=7,persistent=true,waterlogged=false]");
+                case JUNGLE_LEAVES -> wrappedBlockState = WrappedBlockState.getByString("minecraft:jungle_leaves[distance=7,persistent=true,waterlogged=false]");
+                case SPRUCE_LEAVES -> wrappedBlockState = WrappedBlockState.getByString("minecraft:spruce_leaves[distance=7,persistent=true,waterlogged=false]");
+                case DARK_OAK_LEAVES -> wrappedBlockState = WrappedBlockState.getByString("minecraft:dark_oak_leaves[distance=7,persistent=true,waterlogged=false]");
+                case MANGROVE_LEAVES -> wrappedBlockState = WrappedBlockState.getByString("minecraft:mangrove_leaves[distance=7,persistent=true,waterlogged=false]");
+                case PALE_OAK_LEAVES -> wrappedBlockState = WrappedBlockState.getByString("minecraft:pale_oak_leaves[distance=7,persistent=true,waterlogged=false]");
+                case FLOWERING_AZALEA_LEAVES -> wrappedBlockState = WrappedBlockState.getByString("minecraft:flowering_azalea_leaves[distance=7,persistent=true,waterlogged=false]");
+                default -> wrappedBlockState = WrappedBlockState.getByGlobalId(0);
             }
-            return Block.getId(
-                    blockState.setValue(BlockStateProperties.DISTANCE, this.transparentAppearance.distance)
-                            .setValue(BlockStateProperties.PERSISTENT, this.transparentAppearance.persistent)
-                            .setValue(BlockStateProperties.WATERLOGGED, this.transparentAppearance.waterlogged)
-            );
+            wrappedBlockState.setDistance(this.transparentAppearance.distance);
+            wrappedBlockState.setPersistent(this.transparentAppearance.persistent);
+            wrappedBlockState.setWaterlogged(this.transparentAppearance.waterlogged);
+            return wrappedBlockState.getGlobalId();
         }
 
         public BuilderImpl() {

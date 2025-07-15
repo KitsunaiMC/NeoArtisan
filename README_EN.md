@@ -56,18 +56,21 @@
 
 NeoArtisan is a custom content framework for Minecraft 1.21.4+, licensed under GPL3, focused on providing flexible content creation capabilities for plugin developers while maintaining good compatibility with PaperAPI.
 
+Use this plugin as a pre-implemented plugin:
+- [FarmersDelightRepaper(under development)](https://github.com/KitsunaiMC/FarmersDelightRepaper)
+
 ## Core Design Philosophy
 
 ### 🧩 Pure Foundation Framework
 - **No Default Content**: Only provides framework and tools
 - **Non-Comprehensive API**: Focused on core functionality
-- **PaperAPI Implementation**: Good compatibility, minimal NMS usage
+- **PaperAPI Implementation**: Good compatibility, no NMS usage
 - **Extension-Friendly**: Well-designed extension points
 
 ### 🧱 Custom Block System
 - Multiple block types supported
 - State management with multi-state transitions
-- NMS-optimized packet handling
+- [packetevents](https://www.packetevents.com/) packet handling
 - Complete event system
 
 ### 🛡️ Custom Item System
@@ -87,6 +90,10 @@ NeoArtisan is a custom content framework for Minecraft 1.21.4+, licensed under G
 
 
 ## Quick Start
+
+### Note:
+- When installing the plugin, you need to install [packetevents](https://www.packetevents.com/) as a prerequisite
+- It is not recommended to package this plugin directly into the auxiliary plugin for use
 
 ### Add Dependency
 

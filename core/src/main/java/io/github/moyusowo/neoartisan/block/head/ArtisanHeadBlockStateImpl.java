@@ -1,13 +1,12 @@
 package io.github.moyusowo.neoartisan.block.head;
 
+import com.github.retrooper.packetevents.protocol.world.states.WrappedBlockState;
 import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
 import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlockStateBase;
 import io.github.moyusowo.neoartisanapi.api.block.head.ArtisanHeadBlockState;
 import io.github.moyusowo.neoartisanapi.api.item.ItemGenerator;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.ServicePriority;
 import org.jetbrains.annotations.NotNull;
@@ -34,7 +33,7 @@ final class ArtisanHeadBlockStateImpl extends ArtisanBlockStateBase implements A
     private final String urlBase64;
 
     ArtisanHeadBlockStateImpl(ItemGenerator[] generators, String urlBase64) {
-        super(Block.getId(Blocks.PLAYER_HEAD.defaultBlockState()), Block.getId(Blocks.PLAYER_HEAD.defaultBlockState()), generators);
+        super(WrappedBlockState.getByString("minecraft:player_head[powered=false,rotation=0]").getGlobalId(), WrappedBlockState.getByString("minecraft:player_head[powered=false,rotation=0]").getGlobalId(), generators);
         this.urlBase64 = urlBase64;
     }
 

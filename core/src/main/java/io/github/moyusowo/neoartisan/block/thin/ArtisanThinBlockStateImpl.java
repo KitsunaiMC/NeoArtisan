@@ -1,5 +1,6 @@
 package io.github.moyusowo.neoartisan.block.thin;
 
+import com.github.retrooper.packetevents.protocol.world.states.WrappedBlockState;
 import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
@@ -7,10 +8,6 @@ import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlockStateBase;
 import io.github.moyusowo.neoartisanapi.api.block.thin.ThinBlockAppearance;
 import io.github.moyusowo.neoartisanapi.api.block.thin.ArtisanThinBlockState;
 import io.github.moyusowo.neoartisanapi.api.item.ItemGenerator;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.ServicePriority;
 import org.jetbrains.annotations.NotNull;
@@ -39,19 +36,17 @@ final class ArtisanThinBlockStateImpl extends ArtisanBlockStateBase implements A
     public static class BuilderImpl implements Builder {
         protected ThinBlockAppearance thinBlockAppearance;
         protected ItemGenerator[] generators;
-        private static final int actualState = Block.getId(
-                Blocks.OAK_PRESSURE_PLATE.defaultBlockState()
-        );
+        private static final int actualState = WrappedBlockState.getByString("minecraft:oak_pressure_plate[powered=false]").getGlobalId();
 
         private int generateAppearanceState() {
-            BlockState blockState;
+            final WrappedBlockState wrappedBlockState;
             switch (this.thinBlockAppearance.appearance) {
-                case HEAVY_WEIGHTED_PRESSURE_PLATE -> blockState = Blocks.HEAVY_WEIGHTED_PRESSURE_PLATE.defaultBlockState();
-                case null, default -> blockState = Blocks.LIGHT_WEIGHTED_PRESSURE_PLATE.defaultBlockState();
+                case HEAVY_WEIGHTED_PRESSURE_PLATE -> wrappedBlockState = WrappedBlockState.getByString("minecraft:heavy_weighted_pressure_plate[power=0]");
+                case LIGHT_WEIGHTED_PRESSURE_PLATE -> wrappedBlockState = WrappedBlockState.getByString("minecraft:light_weighted_pressure_plate[power=0]");
+                case null, default -> wrappedBlockState = WrappedBlockState.getByGlobalId(0);
             }
-            return Block.getId(
-                    blockState.setValue(BlockStateProperties.POWER, this.thinBlockAppearance.power)
-            );
+            wrappedBlockState.setPower(this.thinBlockAppearance.power);
+            return wrappedBlockState.getGlobalId();
         }
 
         public BuilderImpl() {
