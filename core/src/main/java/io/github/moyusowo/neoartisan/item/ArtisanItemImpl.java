@@ -492,7 +492,6 @@ final class ArtisanItemImpl implements ArtisanItem {
                 });
             }
             if (this.armorProperty != ArmorProperty.EMPTY) {
-                NeoArtisan.logger().info(armorProperty.toString());
                 if (this.armorProperty.slot() != null) {
                     itemStack.setData(DataComponentTypes.EQUIPPABLE, Equippable.equippable(this.armorProperty.slot()));
                     builder.addModifier(
@@ -514,9 +513,7 @@ final class ArtisanItemImpl implements ArtisanItem {
                             )
                     );
                 } else {
-                    NeoArtisan.logger().info(rawMaterial.name());
                     var slots = this.rawMaterial.getEquipmentSlot();
-                    NeoArtisan.logger().info(slots.name());
                     if (slots == EquipmentSlot.HAND) throw new IllegalArgumentException("You can not set null slot in a unequipped item!");
                     builder.addModifier(
                             Attribute.ARMOR,

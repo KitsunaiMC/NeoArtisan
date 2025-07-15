@@ -21,7 +21,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.File;
 import java.util.logging.Logger;
 
-@SuppressWarnings("unused")
 public final class NeoArtisan extends JavaPlugin implements EmptyPersistentDataContainer {
 
     private static final String pkg = "io.github.moyusowo.neoartisan";

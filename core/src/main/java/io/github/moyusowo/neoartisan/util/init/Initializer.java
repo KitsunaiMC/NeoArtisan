@@ -1,6 +1,7 @@
 package io.github.moyusowo.neoartisan.util.init;
 
 import io.github.moyusowo.neoartisan.NeoArtisan;
+import org.bukkit.Bukkit;
 import org.reflections.Reflections;
 import org.reflections.scanners.Scanners;
 import org.reflections.util.ConfigurationBuilder;
@@ -26,19 +27,19 @@ public final class Initializer {
 
     public static void executeEnable() {
         ENABLE_METHODS.sort(Comparator.comparingInt(m -> m.getAnnotation(InitMethod.class).priority().priority()));
-
         ENABLE_METHODS.forEach(method -> {
             try {
                 method.invoke(null);
                 if (NeoArtisan.isDebugMode()) {
-                    NeoArtisan.logger().info("成功初始化: " + method.getDeclaringClass().getName() + "." + method.getName());
+                    NeoArtisan.logger().info("successfully initialize method: " + method.getDeclaringClass().getName() + "." + method.getName());
                 }
             } catch (Exception e) {
-                throw new RuntimeException("初始化失败: " + method, e);
+                NeoArtisan.logger().severe("fail to initialize method: " + method + ", " + e);
+                NeoArtisan.logger().severe("fail to enable plugin. plugin disabling...");
+                Bukkit.getPluginManager().disablePlugin(NeoArtisan.instance());
             }
         });
-
-        NeoArtisan.logger().info("插件初始化成功！");
+        NeoArtisan.logger().info("successfully initialize and plugin is enabled.");
     }
 }
 

@@ -43,6 +43,7 @@ final class BlockRegistryImpl implements BlockRegistry {
     public void register(@NotNull ArtisanBlock artisanBlock) {
         if (RegisterManager.isOpen()) {
             registry.put(artisanBlock.getBlockId(), artisanBlock);
+            NeoArtisan.logger().info("successfully register block: " + artisanBlock.getBlockId().asString());
         } else {
             throw RegisterManager.REGISTRY_CLOSED;
         }

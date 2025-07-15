@@ -111,11 +111,8 @@ final class BlockDataSerializer {
                     }
                 }
             }
-            if (NeoArtisan.isDebugMode()) {
-                NeoArtisan.logger().info("自定义方块数据自动保存成功！");
-            }
         } catch (IOException e) {
-            NeoArtisan.logger().severe("自定义方块数据保存失败: " + e);
+            NeoArtisan.logger().severe("Fail to save custom block data: " + e);
         }
     }
 
@@ -130,7 +127,11 @@ final class BlockDataSerializer {
                 if (file.isFile() && file.getName().toLowerCase().endsWith(".dat")) {
                     UUID uuid = UUID.fromString(file.getName().substring(0, file.getName().length() - 4));
                     World world = Bukkit.getWorld(uuid);
-                    if (world == null) throw new IllegalArgumentException("UUID can not match!");Map<ChunkPos, Map<BlockPos, ArtisanBlockData>> chunkMap = new HashMap<>();
+                    if (world == null) {
+                        NeoArtisan.logger().severe("UUID " + uuid + "can not match world! ignoring file...");
+                        continue;
+                    }
+                    Map<ChunkPos, Map<BlockPos, ArtisanBlockData>> chunkMap = new HashMap<>();
                     storage.put(uuid, chunkMap);
                     try (DataInputStream in = new DataInputStream(new BufferedInputStream(new FileInputStream(file)))) {
                         int chunkCount = in.readInt();
@@ -240,9 +241,9 @@ final class BlockDataSerializer {
                     }
                 }
             }
-            NeoArtisan.logger().info("自定义方块数据读取成功！");
+            NeoArtisan.logger().info("successfully loaded custom block data from file!");
         } catch (IOException e) {
-            NeoArtisan.logger().severe("自定义方块数据读取失败: " + e);
+            NeoArtisan.logger().severe("fail to load custom block data from file: " + e);
         }
     }
 }

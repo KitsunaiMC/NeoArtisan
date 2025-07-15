@@ -48,7 +48,6 @@ final class FurnaceBehavior implements Listener {
         if (itemStack.isEmpty()) return;
         if (!hasRecipe(itemStack)) {
             ArrayKey furnaceKey = ArrayKeyUtil.toFurnaceKey(itemStack);
-            NeoArtisan.logger().info(furnaceKey.toString());
             RecipeRegistryInternal registryInternal = (RecipeRegistryInternal) NeoArtisanAPI.getRecipeRegistry();
             if (registryInternal.has(furnaceKey) && registryInternal.get(furnaceKey) instanceof ArtisanFurnaceRecipe r) {
                 FurnaceRecipe recipe = new FurnaceRecipe(

@@ -45,6 +45,7 @@ public class GlobalAttributeRegistryImpl implements GlobalAttributeRegistry {
     public void registerAttribute(@NotNull NamespacedKey attributeKey, @NotNull PersistentDataType<?, ?> pdcType) {
         if (RegisterManager.isOpen()) {
             globalAttributeRegistry.put(attributeKey, pdcType);
+            NeoArtisan.logger().info("successfully register global item attribute: " + attributeKey.asString());
         } else {
             throw RegisterManager.REGISTRY_CLOSED;
         }

@@ -47,6 +47,7 @@ public class ItemStackAttributeRegistryImpl implements ItemStackAttributeRegistr
     public void registerAttribute(@NotNull NamespacedKey attributeKey, @NotNull PersistentDataType<?, ?> pdcType) {
         if (RegisterManager.isOpen()) {
             ItemStackAttributeRegistry.put(attributeKey, pdcType);
+            NeoArtisan.logger().info("successfully register ItemStack attribute: " + attributeKey.asString());
         } else {
             throw RegisterManager.REGISTRY_CLOSED;
         }

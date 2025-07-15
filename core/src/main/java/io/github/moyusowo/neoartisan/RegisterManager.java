@@ -37,9 +37,6 @@ public final class RegisterManager {
 
     @InitMethod(priority = InitPriority.REGISTER)
     static void register() {
-        if (NeoArtisan.isDebugMode()) {
-            NeoArtisan.logger().info(Arrays.toString(Bukkit.getPluginManager().getPlugins()));
-        }
         for (
                 Plugin plugin : Arrays.stream(Bukkit.getPluginManager().getPlugins())
                 .filter(
@@ -65,9 +62,8 @@ public final class RegisterManager {
                 method.setAccessible(true);
                 try {
                     method.invoke(null);
-                    NeoArtisan.logger().info("成功执行注册方法："  + method.getDeclaringClass().getName() + "." + method.getName());
                 } catch (InvocationTargetException | IllegalAccessException e) {
-                    NeoArtisan.logger().severe("注册方法 "  + method.getDeclaringClass().getName() + "." + method.getName() + " 执行失败：" + e + ": " + e.getCause());
+                    NeoArtisan.logger().severe("fail to run register method: "  + method.getDeclaringClass().getName() + "." + method.getName() + ", cause: " + e + ": " + e.getCause());
                 }
             }
         }

@@ -19,7 +19,7 @@ public final class Terminator {
                 method.setAccessible(true);
                 method.invoke(null);
             } catch (ClassNotFoundException e) {
-                NeoArtisan.logger().severe("方法调用失败: " + className + "." + methodName + ": " + e);
+                NeoArtisan.logger().severe("fail to run terminate method: " + className + "." + methodName + ": " + e);
                 Class<?> clazz = Class.forName(className);
                 Method method = clazz.getDeclaredMethod(methodName);
                 method.invoke(null);
@@ -41,15 +41,13 @@ public final class Terminator {
     }
 
     public static void executeDisable() {
-
         DISABLE_METHODS.forEach(method -> {
             try {
                 method.execute();
             } catch (Exception e) {
-                NeoArtisan.logger().severe("方法调用失败: " + method.className + "." + method.methodName + ": " + e);
+                NeoArtisan.logger().severe("fail to run terminate method: " + method.className + "." + method.methodName + ": " + e);
             }
         });
-
-        NeoArtisan.logger().info("插件关闭成功！");
+        NeoArtisan.logger().info("plugin successfully disabled! See you next time!");
     }
 }

@@ -47,6 +47,7 @@ public class PlayerAttributeRegistryImpl implements PlayerAttributeRegistry {
     public void registerAttribute(@NotNull NamespacedKey attributeKey, @NotNull PersistentDataType<?, ?> pdcType) {
         if (RegisterManager.isOpen()) {
             playerAttributeRegistry.put(attributeKey, pdcType);
+            NeoArtisan.logger().info("successfully register player attribute: " + attributeKey.asString());
         } else {
             throw RegisterManager.REGISTRY_CLOSED;
         }

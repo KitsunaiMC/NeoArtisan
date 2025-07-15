@@ -52,6 +52,7 @@ final class ItemRegistryImpl implements ItemRegistry {
     public void registerItem(@NotNull ArtisanItem artisanItem) {
         if (RegisterManager.isOpen()) {
             registry.put(artisanItem.getRegistryId(), (ArtisanItemImpl) artisanItem);
+            NeoArtisan.logger().info("successfully register item: " + artisanItem.getRegistryId().asString());
         } else {
             throw RegisterManager.REGISTRY_CLOSED;
         }
