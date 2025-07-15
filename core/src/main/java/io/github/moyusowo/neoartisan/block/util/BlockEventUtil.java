@@ -32,7 +32,11 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.profile.PlayerTextures;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import java.net.URL;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -253,6 +257,7 @@ public final class BlockEventUtil {
             final PlayerProfile playerProfile = Bukkit.createProfile(UUID.randomUUID());
             playerProfile.setProperty(new ProfileProperty("textures", headBlockData.getArtisanBlockState().getUrlBase64()));
             skull.setPlayerProfile(playerProfile);
+            skull.update(true);
         }
         SoundProperty soundProperty = artisanBlockData.getArtisanBlock().getPlaceSoundProperty();
         if (soundProperty != null) {
