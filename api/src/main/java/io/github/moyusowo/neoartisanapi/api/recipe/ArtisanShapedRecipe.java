@@ -29,10 +29,9 @@ public interface ArtisanShapedRecipe extends ArtisanRecipe {
      * 此工厂用于创建全新的 {@link Builder} 实例，确保每次构建过程独立且线程安全。
      * </p>
      *
-     * @return 作物建造器工厂实例（非null）
+     * @return 建造器工厂实例（非null）
      * @throws IllegalStateException 如果工厂服务未注册
      * @see Builder 构建器接口
-     * @since 2.0.0
      */
     static BuilderFactory factory() {
         return Bukkit.getServicesManager().load(BuilderFactory.class);

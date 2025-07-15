@@ -18,7 +18,7 @@ public interface ItemStackAttributeRegistry extends AttributeRegistryBase {
      * @param <T> 属性值类型
      * @throws IllegalStateException 如果属性类型不匹配
      * @see #setItemStackAttributeValue(ItemStack, NamespacedKey, Object)
-     * @apiNote 调用该方法之前应该总是调用 {@link io.github.moyusowo.neoartisanapi.api.attribute.ItemStackAttributeRegistry#hasAttribute(NamespacedKey)} 以确保属性已注册
+     * @apiNote 调用该方法之前应该总是调用 {@link #hasAttribute(NamespacedKey)} 以确保属性已注册
      */
     @Nullable
     <T> T getItemStackAttributeValue(@NotNull ItemStack itemStack, @NotNull NamespacedKey attributeKey);
@@ -32,7 +32,7 @@ public interface ItemStackAttributeRegistry extends AttributeRegistryBase {
      * @param <T> 属性值类型
      * @throws IllegalArgumentException 如果属性未注册或值类型无效
      * @see #getItemStackAttributeValue(ItemStack, NamespacedKey)
-     * @apiNote 调用该方法之前应该总是调用 {@link io.github.moyusowo.neoartisanapi.api.attribute.ItemStackAttributeRegistry#hasAttribute(NamespacedKey)} 以确保属性已注册
+     * @apiNote 调用该方法之前应该总是调用 {@link #hasAttribute(NamespacedKey)} 以确保属性已注册
      */
     <T> void setItemStackAttributeValue(@NotNull ItemStack itemStack, @NotNull NamespacedKey attributeKey, @NotNull T value);
 }

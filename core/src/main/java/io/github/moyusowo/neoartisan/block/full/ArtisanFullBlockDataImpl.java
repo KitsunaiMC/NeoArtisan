@@ -56,25 +56,25 @@ final class ArtisanFullBlockDataImpl extends ArtisanBlockBaseDataInternal implem
         }
 
         @Override
-        public Builder blockId(NamespacedKey blockId) {
+        public @NotNull Builder blockId(@NotNull NamespacedKey blockId) {
             this.blockId = blockId;
             return this;
         }
 
         @Override
-        public Builder stage(int stage) {
+        public @NotNull Builder stage(int stage) {
             this.stage = stage;
             return this;
         }
 
         @Override
-        public Builder location(Location location) {
+        public @NotNull Builder location(@NotNull Location location) {
             this.location = location;
             return this;
         }
 
         @Override
-        public ArtisanFullBlockData build() {
+        public @NotNull ArtisanFullBlockData build() {
             if (blockId == null || stage < 0 || location == null) throw new IllegalArgumentException("You must fill all the param!");
             return new ArtisanFullBlockDataImpl(blockId, stage, location);
         }

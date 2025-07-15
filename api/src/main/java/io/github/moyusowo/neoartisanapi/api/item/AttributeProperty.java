@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * 物品属性存储容器接口，用于管理物品的全局默认属性和实例初始属性。
  *
- * <p>本接口实例通过 {@link #empty()} 工厂方法获取，通常不应直接实现。</p>
+ * <p>本接口实例通过 {@link #empty()} 工厂方法获取，不应直接实现。</p>
  *
  * <h3>属性存储机制：</h3>
  * <ul>

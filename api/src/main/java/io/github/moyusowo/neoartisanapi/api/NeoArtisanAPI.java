@@ -11,6 +11,7 @@ import io.github.moyusowo.neoartisanapi.api.persistence.EmptyPersistentDataConta
 import io.github.moyusowo.neoartisanapi.api.recipe.RecipeRegistry;
 import org.bukkit.Bukkit;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -32,7 +33,6 @@ import java.lang.annotation.Target;
  * @see org.bukkit.plugin.ServicesManager
  */
 public final class NeoArtisanAPI {
-
     /**
      * 获取物品全局属性注册表实例，用于管理不依赖特定物品/玩家的通用物品属性
      *
@@ -40,8 +40,11 @@ public final class NeoArtisanAPI {
      * @throws IllegalStateException 如果服务未正确注册
      * @see GlobalAttributeRegistry
      */
+    @NotNull
     public static GlobalAttributeRegistry getGlobalAttributeRegistry() {
-        return Bukkit.getServicesManager().load(GlobalAttributeRegistry.class);
+        final GlobalAttributeRegistry registry = Bukkit.getServicesManager().load(GlobalAttributeRegistry.class);
+        if (registry == null) throw new IllegalStateException("global item attribute registry has not yet loaded!");
+        return registry;
     }
 
     /**
@@ -53,8 +56,11 @@ public final class NeoArtisanAPI {
      * @throws IllegalStateException 如果服务未正确注册
      * @see ItemStackAttributeRegistry
      */
+    @NotNull
     public static ItemStackAttributeRegistry getItemStackAttributeRegistry() {
-        return Bukkit.getServicesManager().load(ItemStackAttributeRegistry.class);
+        final ItemStackAttributeRegistry registry = Bukkit.getServicesManager().load(ItemStackAttributeRegistry.class);
+        if (registry == null) throw new IllegalStateException("ItemStack attribute registry has not yet loaded!");
+        return registry;
     }
 
 
@@ -67,8 +73,11 @@ public final class NeoArtisanAPI {
      * @throws IllegalStateException 如果服务未正确注册
      * @see PlayerAttributeRegistry
      */
+    @NotNull
     public static PlayerAttributeRegistry getPlayerAttributeRegistry() {
-        return Bukkit.getServicesManager().load(PlayerAttributeRegistry.class);
+        final PlayerAttributeRegistry registry = Bukkit.getServicesManager().load(PlayerAttributeRegistry.class);
+        if (registry == null) throw new IllegalStateException("player attribute registry has not yet loaded!");
+        return registry;
     }
 
     /**
@@ -78,8 +87,11 @@ public final class NeoArtisanAPI {
      * @throws IllegalStateException 如果服务未正确注册
      * @see BlockRegistry
      */
+    @NotNull
     public static BlockRegistry getBlockRegistry() {
-        return Bukkit.getServicesManager().load(BlockRegistry.class);
+        final BlockRegistry registry = Bukkit.getServicesManager().load(BlockRegistry.class);
+        if (registry == null) throw new IllegalStateException("block registry has not yet loaded!");
+        return registry;
     }
 
     /**
@@ -89,8 +101,11 @@ public final class NeoArtisanAPI {
      * @throws IllegalStateException 如果服务未正确注册
      * @see ItemRegistry
      */
+    @NotNull
     public static ItemRegistry getItemRegistry() {
-        return Bukkit.getServicesManager().load(ItemRegistry.class);
+        final ItemRegistry registry = Bukkit.getServicesManager().load(ItemRegistry.class);
+        if (registry == null) throw new IllegalStateException("item registry has not yet loaded!");
+        return registry;
     }
 
     /**
@@ -100,8 +115,11 @@ public final class NeoArtisanAPI {
      * @throws IllegalStateException 如果服务未正确注册
      * @see RecipeRegistry
      */
+    @NotNull
     public static RecipeRegistry getRecipeRegistry() {
-        return Bukkit.getServicesManager().load(RecipeRegistry.class);
+        final RecipeRegistry registry = Bukkit.getServicesManager().load(RecipeRegistry.class);
+        if (registry == null) throw new IllegalStateException("recipe registry has not yet loaded!");
+        return registry;
     }
 
     /**
@@ -111,29 +129,34 @@ public final class NeoArtisanAPI {
      * @throws IllegalStateException 如果服务未正确注册
      * @see ArtisanBlockStorage
      */
+    @NotNull
     public static ArtisanBlockStorage getArtisanBlockStorage() {
-        return Bukkit.getServicesManager().load(ArtisanBlockStorage.class);
-    }
-
-    public static BlockProtection getBlockProtection() {
-        return Bukkit.getServicesManager().load(BlockProtection.class);
+        final ArtisanBlockStorage storage = Bukkit.getServicesManager().load(ArtisanBlockStorage.class);
+        if (storage == null) throw new IllegalStateException("block storage api has not yet loaded!");
+        return storage;
     }
 
     /**
-     * 获取空持久化数据容器实例（内部使用）
+     * 获取方块保护模块实现
      *
-     * @return 空数据容器实例
+     * @return 方块保护模块实现
      * @throws IllegalStateException 如果服务未正确注册
-     * @apiNote 该方法仅供NeoArtisan内部实现使用
+     * @see BlockProtection
      */
+    @NotNull
+    public static BlockProtection getBlockProtection() {
+        final BlockProtection protection = Bukkit.getServicesManager().load(BlockProtection.class);
+        if (protection == null) throw new IllegalStateException("block protection api has not yet loaded!");
+        return protection;
+    }
+
     @ApiStatus.Internal
     public static EmptyPersistentDataContainer emptyPersistentDataContainer() {
         return Bukkit.getServicesManager().load(EmptyPersistentDataContainer.class);
     }
 
-
     /**
-     * 标记注册表接口中的自动注册方法，该方法会被反射调用完成注册流程。
+     * 标记注册表接口中的自动注册方法，该方法会被反射在本插件的 {@code onEnable()} 方法内调用完成注册流程。
      * <p>
      * <b>约束条件：</b>
      * <ul>

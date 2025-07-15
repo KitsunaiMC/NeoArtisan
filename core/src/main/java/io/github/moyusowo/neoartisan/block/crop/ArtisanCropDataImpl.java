@@ -51,13 +51,13 @@ final class ArtisanCropDataImpl extends ArtisanBlockBaseDataInternal implements 
     }
 
     @Override
-    public ArtisanCropData getNextStage() {
+    public @NotNull ArtisanCropData getNextStage() {
         if (!hasNextStage()) throw new IllegalCallerException("use has to check the existence before get!");
         return new ArtisanCropDataImpl(super.blockId(), super.stage() + 1, super.getLocation());
     }
 
     @Override
-    public ArtisanCropData getNextFertilizeStage() {
+    public @NotNull ArtisanCropData getNextFertilizeStage() {
         if (!hasNextStage()) throw new IllegalCallerException("use has to check the existence before get!");
         int growth = ((ArtisanCropImpl) NeoArtisanAPI.getBlockRegistry().getArtisanBlock(super.blockId())).generateBoneMealGrowth();
         return new ArtisanCropDataImpl(super.blockId(), Math.min(super.stage() + growth, super.getArtisanBlock().getTotalStates()), super.getLocation());
@@ -76,25 +76,25 @@ final class ArtisanCropDataImpl extends ArtisanBlockBaseDataInternal implements 
         }
 
         @Override
-        public Builder blockId(NamespacedKey blockId) {
+        public @NotNull Builder blockId(@NotNull NamespacedKey blockId) {
             this.blockId = blockId;
             return this;
         }
 
         @Override
-        public Builder stage(int stage) {
+        public @NotNull Builder stage(int stage) {
             this.stage = stage;
             return this;
         }
 
         @Override
-        public Builder location(Location location) {
+        public @NotNull Builder location(@NotNull Location location) {
             this.location = location;
             return this;
         }
 
         @Override
-        public ArtisanCropData build() {
+        public @NotNull ArtisanCropData build() {
             if (blockId == null || stage == -1 || location == null) throw new IllegalArgumentException("You must fill all the param!");
             return new ArtisanCropDataImpl(blockId, stage, location);
         }

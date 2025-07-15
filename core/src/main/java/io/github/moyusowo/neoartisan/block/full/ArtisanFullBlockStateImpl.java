@@ -66,7 +66,6 @@ final class ArtisanFullBlockStateImpl extends ArtisanBlockStateBase implements A
             }
             wrappedBlockState.setNote(this.fullBlockAppearance.note);
             wrappedBlockState.setPowered(this.fullBlockAppearance.powered);
-            NeoArtisan.logger().info(wrappedBlockState.toString());
             return wrappedBlockState.getGlobalId();
         }
 

@@ -22,8 +22,21 @@ import java.util.function.Supplier;
  *
  */
 public interface ArtisanItem {
+    /**
+     * 获取工厂服务实例
+     * <p>
+     * 此工厂用于创建全新的 {@link Builder} 实例 或 {@link ComplexBuilder} 实例，确保每次构建过程独立且线程安全。
+     * </p>
+     *
+     * @return 建造器工厂实例（非null）
+     * @throws IllegalStateException 如果工厂服务未注册
+     * @see Builder 构建器接口
+     */
+    @NotNull
     static ItemBuilderFactory factory() {
-        return Bukkit.getServicesManager().load(ItemBuilderFactory.class);
+        ItemBuilderFactory builderFactory = Bukkit.getServicesManager().load(ItemBuilderFactory.class);
+        if (builderFactory == null) throw new IllegalStateException("factory has not yet registered.");
+        return builderFactory;
     }
 
     /**
@@ -155,6 +168,11 @@ public interface ArtisanItem {
          */
         @NotNull ComplexBuilder blockId(@NotNull NamespacedKey blockId);
 
+        /**
+         * 标注仅限内部使用，标注后这个物品将不会出现在命令补全中。
+         *
+         * @return 构建的自定义物品实例
+         */
         @NotNull ComplexBuilder internalUse();
 
         /**
@@ -329,6 +347,11 @@ public interface ArtisanItem {
          */
         @NotNull Builder skullProperty(@NotNull String textureUrl, boolean isBase64);
 
+        /**
+         * 标注仅限内部使用，标注后这个物品将不会出现在命令补全中。
+         *
+         * @return 构建的自定义物品实例
+         */
         @NotNull Builder internalUse();
 
         /**

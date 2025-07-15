@@ -20,7 +20,6 @@ import org.jetbrains.annotations.Nullable;
  * @see ArtisanItem
  * @see org.bukkit.plugin.ServicesManager
  */
-@SuppressWarnings({"unused"})
 public interface ItemRegistry {
 
     /**

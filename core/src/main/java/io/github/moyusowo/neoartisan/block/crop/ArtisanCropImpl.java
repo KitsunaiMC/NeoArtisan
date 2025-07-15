@@ -135,7 +135,7 @@ final class ArtisanCropImpl extends ArtisanBlockBase implements ArtisanCrop {
         }
 
         @Override
-        public ArtisanBlock build() {
+        public @NotNull ArtisanBlock build() {
             if (blockId == null || stages == null || boneMealMinGrowth == -1 || boneMealMaxGrowth == -1) throw new IllegalArgumentException("You must fill all the param!");
             if (boneMealMinGrowth < 0 || boneMealMinGrowth > boneMealMaxGrowth) throw new IllegalArgumentException("min can't larger than max!");
             return new ArtisanCropImpl(blockId, stages, boneMealMinGrowth, boneMealMaxGrowth, placeSound, breakSound, ArtisanBlockType.CROP_BLOCK);

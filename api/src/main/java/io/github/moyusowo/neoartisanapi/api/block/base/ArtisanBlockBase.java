@@ -45,7 +45,7 @@ public abstract class ArtisanBlockBase implements ArtisanBlock {
 
     @Override
     @Nullable
-    public ArtisanBlockGUI createGUI(Location location) {
+    public final ArtisanBlockGUI createGUI(Location location) {
         if (this.creator == null) return null;
         return this.creator.create(location);
     }

@@ -25,40 +25,22 @@ public interface ArtisanCrop extends ArtisanBlock {
      * 此工厂用于创建全新的 {@link Builder} 实例，确保每次构建过程独立且线程安全。
      * </p>
      *
-     * @return 作物建造器工厂实例（非null）
+     * @return 建造器工厂实例（非null）
      * @throws IllegalStateException 如果工厂服务未注册
      * @see Builder 构建器接口
-     * @since 2.0.0
      */
+    @NotNull
     static BuilderFactory factory() {
-        return Bukkit.getServicesManager().load(BuilderFactory.class);
+        BuilderFactory builderFactory = Bukkit.getServicesManager().load(BuilderFactory.class);
+        if (builderFactory == null) throw new IllegalStateException("factory has not yet registered.");
+        return builderFactory;
     }
 
-    /**
-     * 建造器工厂接口
-     * <p>
-     * 负责创建全新的 {@link Builder} 实例，确保每次构建过程独立。
-     * 实现必须保证每次调用 {@link #builder()} 都返回<strong>未使用过</strong>的构建器。
-     * </p>
-     *
-     * <p><b>实现要求：</b></p>
-     * <ol>
-     *   <li>禁止返回单例或共享实例</li>
-     *   <li>构建器初始状态必须完全重置</li>
-     * </ol>
-     */
     interface BuilderFactory {
         @NotNull
         Builder builder();
     }
 
-    /**
-     * 获取特定生长阶段的作物状态
-     *
-     * @param n 生长阶段索引 (0 ≤ n ≤ maxStage)
-     * @return 对应的不可变作物状态
-     * @see ArtisanCropState 作物状态详情
-     */
     @Override
     @NotNull
     ArtisanCropState getState(int n);
@@ -86,11 +68,6 @@ public interface ArtisanCrop extends ArtisanBlock {
      */
     int generateBoneMealGrowth();
 
-    /**
-     * 作物建造器接口，采用流式API设计
-     *
-     * @apiNote 所有setter方法返回建造器自身以实现链式调用
-     */
     interface Builder extends BaseBuilder {
 
         @NotNull Builder blockId(@NotNull NamespacedKey blockId);
@@ -105,11 +82,6 @@ public interface ArtisanCrop extends ArtisanBlock {
 
         @NotNull Builder boneMealMaxGrowth(int boneMealMaxGrowth);
 
-        /**
-         * 构建不可变的作物实例
-         *
-         * @throws IllegalArgumentException 如果必要参数未设置或设置有误
-         */
-        ArtisanBlock build();
+        @NotNull ArtisanBlock build();
     }
 }

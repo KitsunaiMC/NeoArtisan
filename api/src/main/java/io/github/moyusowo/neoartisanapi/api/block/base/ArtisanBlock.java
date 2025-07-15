@@ -17,18 +17,6 @@ import org.jetbrains.annotations.Nullable;
  * @see ArtisanBlockData 在世界中的方块数据
  */
 public interface ArtisanBlock {
-
-    /**
-     * 创建与此方块关联的GUI（内部使用）
-     * <p>
-     * 当一个 {@code BlockData} 被创建后，存在GUI的方块会自动创建GUI。
-     * 返回 {@code null} 表示此方块不支持GUI交互。
-     * </p>
-     *
-     * @param location 方块的物理位置（世界坐标）
-     * @return 新建的GUI实例，或 {@code null} 如果无GUI
-     * @apiNote 此方法仅由框架内部调用
-     */
     @ApiStatus.Internal
     @Nullable ArtisanBlockGUI createGUI(Location location);
 
@@ -49,7 +37,7 @@ public interface ArtisanBlock {
      * （如作物生长阶段、机械工作状态等）。
      * </p>
      *
-     * @param n 状态索引（0 ≤ n < {@link #getTotalStates()}）
+     * @param n 状态索引（0 <= n < {@link #getTotalStates()}）
      * @return 对应的不可变状态实例
      */
     @NotNull ArtisanBlockState getState(int n);
@@ -74,7 +62,6 @@ public interface ArtisanBlock {
      * 以字符串形式获取自定义方块放置方块时音效的键
      *
      * @return 对应自定义方块被放置时音效的命名空间键，如果没有则为空
-     * @since 1.0.1
      */
     @Nullable SoundProperty getPlaceSoundProperty();
 
@@ -82,7 +69,6 @@ public interface ArtisanBlock {
      * 以字符串形式获取自定义方块被破坏时音效的键
      *
      * @return 对应自定义方块被破坏时音效的命名空间键，如果没有则为空
-     * @since 1.0.1
      */
     @Nullable SoundProperty getBreakSoundProperty();
 
@@ -90,7 +76,6 @@ public interface ArtisanBlock {
      * 获取此方块在API的方块类型。
      *
      * @return 方块类型
-     * @since 1.0.1
      */
     @NotNull ArtisanBlockType getArtisanBlockType();
 

@@ -17,5 +17,6 @@ package io.github.moyusowo.neoartisanapi.api.recipe;
 public enum RecipeType {
     SHAPED,
     SHAPELESS,
-    FURNACE
+    FURNACE,
+    CAMPFIRE
 }

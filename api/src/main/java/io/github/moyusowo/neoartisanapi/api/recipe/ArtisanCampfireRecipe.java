@@ -6,7 +6,7 @@ import org.bukkit.NamespacedKey;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * 熔炉烧炼配方接口，继承自基础 {@link ArtisanRecipe}。
+ * 营火烧炼配方接口，继承自基础 {@link ArtisanRecipe}。
  *
  * <p><b>配方特性说明：</b></p>
  * <ul>
@@ -15,20 +15,9 @@ import org.jetbrains.annotations.NotNull;
  *   <li>相当于覆写了原版的MaterialChoice逻辑，原版的MaterialChoice不再适用！</li>
  * </ul>
  *
- * <p><b>典型示例：</b></p>
- * <pre>{@code
- * ArtisanFurnaceRecipe.builder()
- *     .key(new NamespacedKey("myplugin", "cooked_iron"))
- *     .inputItemId(Material.IRON_ORE.getKey())
- *     .cookTime(200)  // 原版煤炭烧炼时间为200tick
- *     .exp(0.7f)      // 产出经验值
- *     .resultGenerator(() -> new ItemStack(Material.IRON_INGOT))
- *     .build();
- * }</pre>
- *
  * @see ArtisanRecipe 基础配方接口
  */
-public interface ArtisanFurnaceRecipe extends ArtisanRecipe {
+public interface ArtisanCampfireRecipe extends ArtisanRecipe {
     /**
      * 获取工厂服务实例
      * <p>
@@ -74,7 +63,7 @@ public interface ArtisanFurnaceRecipe extends ArtisanRecipe {
     float getExp();
 
     /**
-     * 熔炉配方建造器接口
+     * 营火配方建造器接口
      *
      * <p><b>必须设置全部项！</b></p>
      */
@@ -129,6 +118,6 @@ public interface ArtisanFurnaceRecipe extends ArtisanRecipe {
          * @throws IllegalCallerException 如果缺少必要参数
          * @implSpec 实现必须保证烧炼时间与经验值的精度
          */
-        @NotNull ArtisanFurnaceRecipe build();
+        @NotNull ArtisanCampfireRecipe build();
     }
 }

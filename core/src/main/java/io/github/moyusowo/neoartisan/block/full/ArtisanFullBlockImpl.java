@@ -110,7 +110,7 @@ final class ArtisanFullBlockImpl extends ArtisanBlockBase implements ArtisanFull
         }
 
         @Override
-        public ArtisanFullBlock build() {
+        public @NotNull ArtisanFullBlock build() {
             if (blockId == null || stages == null) throw new IllegalArgumentException("You must fill all the param!");
             return new ArtisanFullBlockImpl(blockId, stages, ArtisanBlockType.FULL_BLOCK, creator, placeSound, breakSound);
         }
