@@ -3,6 +3,7 @@ package io.github.moyusowo.neoartisan.test;
 import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
 import io.github.moyusowo.neoartisanapi.api.item.ItemGenerator;
+import io.github.moyusowo.neoartisanapi.api.recipe.ArtisanCampfireRecipe;
 import io.github.moyusowo.neoartisanapi.api.recipe.ArtisanFurnaceRecipe;
 import io.github.moyusowo.neoartisanapi.api.recipe.ArtisanShapedRecipe;
 import io.github.moyusowo.neoartisanapi.api.recipe.ArtisanShapelessRecipe;
@@ -46,7 +47,21 @@ final class RecipeTest {
             );
             NeoArtisanAPI.getRecipeRegistry().register(
                     ArtisanFurnaceRecipe.factory().builder()
-                            .key(new NamespacedKey(NeoArtisan.instance(), "diamond"))
+                            .key(new NamespacedKey(NeoArtisan.instance(), "diamondF"))
+                            .inputItemId(ItemTest.magic_diamond)
+                            .resultGenerator(
+                                    ItemGenerator.simpleGenerator(
+                                            Material.IRON_INGOT.getKey(),
+                                            24
+                                    )
+                            )
+                            .exp(5.0f)
+                            .cookTime(100)
+                            .build()
+            );
+            NeoArtisanAPI.getRecipeRegistry().register(
+                    ArtisanCampfireRecipe.factory().builder()
+                            .key(new NamespacedKey(NeoArtisan.instance(), "diamondC"))
                             .inputItemId(ItemTest.magic_diamond)
                             .resultGenerator(
                                     ItemGenerator.simpleGenerator(

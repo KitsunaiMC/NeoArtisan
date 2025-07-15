@@ -5,16 +5,17 @@ public enum InitPriority {
     REGISTRY_LOAD(1),
     REGISTRAR(2),
     REGISTRY_OPEN(3),
-    REGISTER(4),
-    REGISTRY_CLOSED(5),
-    BLOCKDATA(6),
-    HIGHEST(7),
-    HIGH(8),
-    DEFAULT(9),
-    LOW(10),
-    LOWEST(11),
-    LISTENER(12),
-    COMMANDS(13);
+    INTERNAL_REGISTER(4),
+    REGISTER(5),
+    REGISTRY_CLOSED(6),
+    BLOCKDATA(7),
+    HIGHEST(8),
+    HIGH(9),
+    DEFAULT(10),
+    LOW(11),
+    LOWEST(12),
+    LISTENER(13),
+    COMMANDS(14);
 
     private final int priority;
 

@@ -6,7 +6,6 @@ import org.bukkit.NamespacedKey;
 import java.util.Arrays;
 import java.util.Objects;
 
-@SuppressWarnings("unused")
 public class ArrayKey {
 
     private final NamespacedKey[] array;
@@ -25,7 +24,17 @@ public class ArrayKey {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        return Arrays.equals(array, ((ArrayKey) o).array) && recipeType.equals(((ArrayKey) o).recipeType);
+        return keysEquals(((ArrayKey) o).array, array) && recipeType.equals(((ArrayKey) o).recipeType);
+    }
+
+    private static boolean keysEquals(NamespacedKey[] a1, NamespacedKey[] a2) {
+        if (a1.length != a2.length) return false;
+        for (int i = 0; i < a1.length; i++) {
+            if (!a1[i].equals(a2[i])) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override

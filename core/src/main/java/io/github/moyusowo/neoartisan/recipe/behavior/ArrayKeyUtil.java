@@ -10,7 +10,6 @@ import org.bukkit.inventory.ItemStack;
 import java.util.Arrays;
 
 final class ArrayKeyUtil {
-
     public static ArrayKey toShapedKey(ItemStack[] matrix) {
         NamespacedKey[] matrixKeys = new NamespacedKey[9];
         for (int i = 0; i < 9; i++) {
@@ -39,5 +38,10 @@ final class ArrayKeyUtil {
     public static ArrayKey toFurnaceKey(ItemStack itemStack) {
         NamespacedKey key = NeoArtisanAPI.getItemRegistry().getRegistryId(itemStack);
         return ArrayKey.from(new NamespacedKey[] {key}, RecipeType.FURNACE);
+    }
+
+    public static ArrayKey toCampfireKey(ItemStack itemStack) {
+        NamespacedKey key = NeoArtisanAPI.getItemRegistry().getRegistryId(itemStack);
+        return ArrayKey.from(new NamespacedKey[] {key}, RecipeType.CAMPFIRE);
     }
 }

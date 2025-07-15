@@ -122,6 +122,14 @@ final class ItemTest {
             );
             NeoArtisanAPI.getItemRegistry().registerItem(
                     ArtisanItem.factory().builder()
+                            .registryId(magic_diamond)
+                            .rawMaterial(Material.IRON_INGOT)
+                            .displayName("<aqua>魔法小钻石")
+                            .itemModel(Material.DIAMOND.getKey())
+                            .build()
+            );
+            NeoArtisanAPI.getItemRegistry().registerItem(
+                    ArtisanItem.factory().builder()
                             .registryId(cutting_board)
                             .rawMaterial(Material.PAPER)
                             .displayName("砧板")
