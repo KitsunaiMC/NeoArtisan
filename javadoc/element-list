@@ -7,6 +7,7 @@ io.github.moyusowo.neoartisanapi.api.block.event
 io.github.moyusowo.neoartisanapi.api.block.full
 io.github.moyusowo.neoartisanapi.api.block.gui
 io.github.moyusowo.neoartisanapi.api.block.head
+io.github.moyusowo.neoartisanapi.api.block.protection
 io.github.moyusowo.neoartisanapi.api.block.storage
 io.github.moyusowo.neoartisanapi.api.block.task
 io.github.moyusowo.neoartisanapi.api.block.thin
