@@ -14,7 +14,6 @@ import org.jetbrains.annotations.NotNull;
  *   <li>框架在方块放置时提供Location调用create()</li>
  * </ol>
  *
- * @see io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlock.BaseBuilder
  */
 @FunctionalInterface
 public interface GUICreator {

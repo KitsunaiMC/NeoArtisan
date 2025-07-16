@@ -2,15 +2,16 @@ package io.github.moyusowo.neoartisan.item;
 
 import com.destroystokyo.paper.profile.ProfileProperty;
 import io.github.moyusowo.neoartisan.NeoArtisan;
-import io.github.moyusowo.neoartisan.util.init.InitMethod;
-import io.github.moyusowo.neoartisan.util.init.InitPriority;
-import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
-import io.github.moyusowo.neoartisanapi.api.item.*;
-import io.github.moyusowo.neoartisan.util.NamespacedKeyDataType;
-import io.github.moyusowo.neoartisanapi.api.item.factory.ItemBuilderFactory;
 import io.github.moyusowo.neoartisan.item.property.ArmorProperty;
 import io.github.moyusowo.neoartisan.item.property.FoodProperty;
 import io.github.moyusowo.neoartisan.item.property.WeaponProperty;
+import io.github.moyusowo.neoartisan.util.NamespacedKeyDataType;
+import io.github.moyusowo.neoartisan.util.init.InitMethod;
+import io.github.moyusowo.neoartisan.util.init.InitPriority;
+import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
+import io.github.moyusowo.neoartisanapi.api.item.ArtisanItem;
+import io.github.moyusowo.neoartisanapi.api.item.AttributeProperty;
+import io.github.moyusowo.neoartisanapi.api.item.factory.ItemBuilderFactory;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.*;
 import net.kyori.adventure.text.Component;
@@ -30,7 +31,10 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Base64;
+import java.util.List;
+import java.util.Objects;
 import java.util.function.Supplier;
 
 final class ArtisanItemImpl implements ArtisanItem {

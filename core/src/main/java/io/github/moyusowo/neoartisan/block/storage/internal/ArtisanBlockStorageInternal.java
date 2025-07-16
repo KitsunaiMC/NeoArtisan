@@ -2,7 +2,7 @@ package io.github.moyusowo.neoartisan.block.storage.internal;
 
 import io.github.moyusowo.neoartisan.util.BlockPos;
 import io.github.moyusowo.neoartisan.util.ChunkPos;
-import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlockData;
+import io.github.moyusowo.neoartisanapi.api.block.blockdata.ArtisanBlockData;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.jetbrains.annotations.ApiStatus;

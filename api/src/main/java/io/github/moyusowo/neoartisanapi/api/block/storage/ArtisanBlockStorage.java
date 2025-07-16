@@ -1,6 +1,6 @@
 package io.github.moyusowo.neoartisanapi.api.block.storage;
 
-import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlockData;
+import io.github.moyusowo.neoartisanapi.api.block.blockdata.ArtisanBlockData;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.jetbrains.annotations.NotNull;

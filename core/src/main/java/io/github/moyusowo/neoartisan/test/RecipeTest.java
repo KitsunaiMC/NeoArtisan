@@ -16,7 +16,7 @@ final class RecipeTest {
     private static void register() {
         if (NeoArtisan.isDebugMode()) {
             NeoArtisanAPI.getRecipeRegistry().register(
-                    ArtisanShapedRecipe.factory().builder()
+                    ArtisanShapedRecipe.builder()
                             .key(new NamespacedKey(NeoArtisan.instance(), "aaaa"))
                             .set("A B")
                             .add('A', ItemTest.magic_bread)
@@ -31,7 +31,7 @@ final class RecipeTest {
 
             );
             NeoArtisanAPI.getRecipeRegistry().register(
-                    ArtisanShapelessRecipe.factory().builder()
+                    ArtisanShapelessRecipe.builder()
                             .key(new NamespacedKey(NeoArtisan.instance(), "bbbb"))
                             .add(
                                     ItemTest.magic_diamond,
@@ -46,7 +46,7 @@ final class RecipeTest {
                             .build()
             );
             NeoArtisanAPI.getRecipeRegistry().register(
-                    ArtisanFurnaceRecipe.factory().builder()
+                    ArtisanFurnaceRecipe.builder()
                             .key(new NamespacedKey(NeoArtisan.instance(), "diamondF"))
                             .inputItemId(ItemTest.magic_diamond)
                             .resultGenerator(
@@ -60,7 +60,7 @@ final class RecipeTest {
                             .build()
             );
             NeoArtisanAPI.getRecipeRegistry().register(
-                    ArtisanCampfireRecipe.factory().builder()
+                    ArtisanCampfireRecipe.builder()
                             .key(new NamespacedKey(NeoArtisan.instance(), "diamondC"))
                             .inputItemId(ItemTest.magic_diamond)
                             .resultGenerator(

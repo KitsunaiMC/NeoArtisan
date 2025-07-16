@@ -1,9 +1,9 @@
 package io.github.moyusowo.neoartisanapi.api.item;
 
 import io.github.moyusowo.neoartisanapi.api.item.factory.ItemBuilderFactory;
+import io.github.moyusowo.neoartisanapi.api.util.BuilderFactoryUtil;
 import io.papermc.paper.datacomponent.item.CustomModelData;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.EquipmentSlot;
@@ -22,21 +22,14 @@ import java.util.function.Supplier;
  *
  */
 public interface ArtisanItem {
-    /**
-     * 获取工厂服务实例
-     * <p>
-     * 此工厂用于创建全新的 {@link Builder} 实例 或 {@link ComplexBuilder} 实例，确保每次构建过程独立且线程安全。
-     * </p>
-     *
-     * @return 建造器工厂实例（非null）
-     * @throws IllegalStateException 如果工厂服务未注册
-     * @see Builder 构建器接口
-     */
     @NotNull
-    static ItemBuilderFactory factory() {
-        ItemBuilderFactory builderFactory = Bukkit.getServicesManager().load(ItemBuilderFactory.class);
-        if (builderFactory == null) throw new IllegalStateException("factory has not yet registered.");
-        return builderFactory;
+    static Builder builder() {
+        return BuilderFactoryUtil.getBuilder(ItemBuilderFactory.class).builder();
+    }
+
+    @NotNull
+    static ComplexBuilder complexBuilder() {
+        return BuilderFactoryUtil.getBuilder(ItemBuilderFactory.class).complexBuilder();
     }
 
     /**
@@ -164,7 +157,7 @@ public interface ArtisanItem {
          *
          * @param blockId 方块ID（不能为null）
          * @return 当前构建器实例
-         * @see io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlock
+         * @see io.github.moyusowo.neoartisanapi.api.block.block.ArtisanBaseBlock
          */
         @NotNull ComplexBuilder blockId(@NotNull NamespacedKey blockId);
 
@@ -324,7 +317,7 @@ public interface ArtisanItem {
          *
          * @param blockId 方块ID（不能为null）
          * @return 当前构建器实例
-         * @see io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlock
+         * @see io.github.moyusowo.neoartisanapi.api.block.block.ArtisanBaseBlock
          */
         @NotNull Builder blockId(@NotNull NamespacedKey blockId);
 

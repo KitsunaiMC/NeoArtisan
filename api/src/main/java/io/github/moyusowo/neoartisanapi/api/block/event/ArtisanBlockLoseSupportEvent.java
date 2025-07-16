@@ -1,6 +1,6 @@
 package io.github.moyusowo.neoartisanapi.api.block.event;
 
-import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlock;
+import io.github.moyusowo.neoartisanapi.api.block.block.ArtisanBaseBlock;
 import org.bukkit.block.Block;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.block.BlockExpEvent;
@@ -12,25 +12,25 @@ import org.jetbrains.annotations.NotNull;
  * 继承自 {@link BlockExpEvent}，事件不可取消。
  * </p>
  *
- * @see ArtisanBlock 自定义方块类型
+ * @see ArtisanBaseBlock 自定义方块类型
  * @see BlockExpEvent
  */
 public class ArtisanBlockLoseSupportEvent extends BlockExpEvent {
 
     private static final HandlerList handlers = new HandlerList();
-    private final ArtisanBlock artisanBlock;
+    private final ArtisanBaseBlock artisanBaseBlock;
     private boolean dropItems;
 
     /**
      * 构造失去支撑事件
      *
      * @param theBlock 即将掉落的方块实例（非null）
-     * @param artisanBlock 关联的自定义方块定义（非null）
+     * @param artisanBaseBlock 关联的自定义方块定义（非null）
      */
-    public ArtisanBlockLoseSupportEvent(@NotNull final Block theBlock, @NotNull ArtisanBlock artisanBlock) {
+    public ArtisanBlockLoseSupportEvent(@NotNull final Block theBlock, @NotNull ArtisanBaseBlock artisanBaseBlock) {
         super(theBlock, 0);
         this.dropItems = true;
-        this.artisanBlock = artisanBlock;
+        this.artisanBaseBlock = artisanBaseBlock;
     }
 
     /**
@@ -56,8 +56,8 @@ public class ArtisanBlockLoseSupportEvent extends BlockExpEvent {
      *
      * @return 自定义方块实例
      */
-    public @NotNull ArtisanBlock getArtisanBlock() {
-        return this.artisanBlock;
+    public @NotNull ArtisanBaseBlock getArtisanBlock() {
+        return this.artisanBaseBlock;
     }
 
     @Override

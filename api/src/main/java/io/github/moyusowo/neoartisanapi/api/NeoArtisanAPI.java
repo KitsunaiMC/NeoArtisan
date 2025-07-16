@@ -3,7 +3,7 @@ package io.github.moyusowo.neoartisanapi.api;
 import io.github.moyusowo.neoartisanapi.api.attribute.GlobalAttributeRegistry;
 import io.github.moyusowo.neoartisanapi.api.attribute.ItemStackAttributeRegistry;
 import io.github.moyusowo.neoartisanapi.api.attribute.PlayerAttributeRegistry;
-import io.github.moyusowo.neoartisanapi.api.block.base.BlockRegistry;
+import io.github.moyusowo.neoartisanapi.api.block.BlockRegistry;
 import io.github.moyusowo.neoartisanapi.api.block.protection.BlockProtection;
 import io.github.moyusowo.neoartisanapi.api.block.storage.ArtisanBlockStorage;
 import io.github.moyusowo.neoartisanapi.api.item.ItemRegistry;

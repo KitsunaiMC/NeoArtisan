@@ -1,7 +1,7 @@
 package io.github.moyusowo.neoartisanapi.api.recipe;
 
 import io.github.moyusowo.neoartisanapi.api.item.ItemGenerator;
-import org.bukkit.Bukkit;
+import io.github.moyusowo.neoartisanapi.api.util.BuilderFactoryUtil;
 import org.bukkit.NamespacedKey;
 import org.jetbrains.annotations.NotNull;
 
@@ -18,21 +18,9 @@ import org.jetbrains.annotations.NotNull;
  * @see ArtisanRecipe 基础配方接口
  */
 public interface ArtisanSmokingRecipe extends ArtisanRecipe {
-    /**
-     * 获取工厂服务实例
-     * <p>
-     * 此工厂用于创建全新的 {@link Builder} 实例，确保每次构建过程独立且线程安全。
-     * </p>
-     *
-     * @return 建造器工厂实例（非null）
-     * @throws IllegalStateException 如果工厂服务未注册
-     * @see Builder 构建器接口
-     */
     @NotNull
-    static BuilderFactory factory() {
-        BuilderFactory builderFactory = Bukkit.getServicesManager().load(BuilderFactory.class);
-        if (builderFactory == null) throw new IllegalStateException("factory has not yet registered.");
-        return builderFactory;
+    static Builder builder() {
+        return BuilderFactoryUtil.getBuilder(BuilderFactory.class).builder();
     }
 
     interface BuilderFactory {

@@ -3,11 +3,10 @@ package io.github.moyusowo.neoartisan.recipe;
 import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisan.RegisterManager;
 import io.github.moyusowo.neoartisan.recipe.internal.RecipeRegistryInternal;
+import io.github.moyusowo.neoartisan.util.ArrayKey;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
-import io.github.moyusowo.neoartisan.util.ArrayKey;
 import io.github.moyusowo.neoartisan.util.terminate.TerminateMethod;
-import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
 import io.github.moyusowo.neoartisanapi.api.item.ItemGenerator;
 import io.github.moyusowo.neoartisanapi.api.recipe.*;
 import org.bukkit.Bukkit;
@@ -59,7 +58,7 @@ final class RecipeRegistryImpl implements Listener, RecipeRegistry, RecipeRegist
                 if (furnaceRecipe.getInputChoice() instanceof RecipeChoice.MaterialChoice materialChoice) {
                     for (Material material : materialChoice.getChoices()) {
                         instance.internalRegister(
-                                ArtisanFurnaceRecipe.factory().builder()
+                                ArtisanFurnaceRecipe.builder()
                                         .key(NamespacedKey.minecraft(furnaceRecipe.getKey().getKey() + "_originalfurnace_" + UUID.randomUUID()))
                                         .inputItemId(material.getKey())
                                         .resultGenerator(
@@ -79,7 +78,7 @@ final class RecipeRegistryImpl implements Listener, RecipeRegistry, RecipeRegist
                 if (campfireRecipe.getInputChoice() instanceof RecipeChoice.MaterialChoice materialChoice) {
                     for (Material material : materialChoice.getChoices()) {
                         instance.internalRegister(
-                                ArtisanCampfireRecipe.factory().builder()
+                                ArtisanCampfireRecipe.builder()
                                         .key(NamespacedKey.minecraft(campfireRecipe.getKey().getKey() + "_originalcampfire_" + UUID.randomUUID() + "_" + UUID.randomUUID()))
                                         .inputItemId(material.getKey())
                                         .resultGenerator(
@@ -99,7 +98,7 @@ final class RecipeRegistryImpl implements Listener, RecipeRegistry, RecipeRegist
                 if (blastingRecipe.getInputChoice() instanceof RecipeChoice.MaterialChoice materialChoice) {
                     for (Material material : materialChoice.getChoices()) {
                         instance.internalRegister(
-                                ArtisanBlastingRecipe.factory().builder()
+                                ArtisanBlastingRecipe.builder()
                                         .key(NamespacedKey.minecraft(blastingRecipe.getKey().getKey() + "_originalblasting_" + UUID.randomUUID() + "_" + UUID.randomUUID()))
                                         .inputItemId(material.getKey())
                                         .resultGenerator(
@@ -119,7 +118,7 @@ final class RecipeRegistryImpl implements Listener, RecipeRegistry, RecipeRegist
                 if (smokingRecipe.getInputChoice() instanceof RecipeChoice.MaterialChoice materialChoice) {
                     for (Material material : materialChoice.getChoices()) {
                         instance.internalRegister(
-                                ArtisanSmokingRecipe.factory().builder()
+                                ArtisanSmokingRecipe.builder()
                                         .key(NamespacedKey.minecraft(smokingRecipe.getKey().getKey() + "_originalsmoking_" + UUID.randomUUID() + "_" + UUID.randomUUID()))
                                         .inputItemId(material.getKey())
                                         .resultGenerator(
