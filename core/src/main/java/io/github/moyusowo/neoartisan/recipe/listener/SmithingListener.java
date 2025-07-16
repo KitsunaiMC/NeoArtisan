@@ -1,4 +1,4 @@
-package io.github.moyusowo.neoartisan.recipe.behavior;
+package io.github.moyusowo.neoartisan.recipe.listener;
 
 import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
@@ -8,13 +8,13 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.PrepareSmithingEvent;
 
-final class SmithingBehavior implements Listener {
+final class SmithingListener implements Listener {
 
-    private SmithingBehavior() {}
+    private SmithingListener() {}
 
     @InitMethod(priority = InitPriority.LISTENER)
     static void registerListener() {
-        NeoArtisan.registerListener(new SmithingBehavior());
+        NeoArtisan.registerListener(new SmithingListener());
     }
 
     @EventHandler

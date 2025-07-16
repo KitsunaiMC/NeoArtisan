@@ -1,4 +1,4 @@
-package io.github.moyusowo.neoartisan.recipe.behavior;
+package io.github.moyusowo.neoartisan.recipe.listener;
 
 import io.github.moyusowo.neoartisan.util.ArrayKey;
 import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;

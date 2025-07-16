@@ -1,4 +1,4 @@
-package io.github.moyusowo.neoartisan.recipe.behavior;
+package io.github.moyusowo.neoartisan.recipe.listener;
 
 import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisan.recipe.internal.RecipeRegistryInternal;
@@ -18,12 +18,12 @@ import org.bukkit.inventory.*;
 
 import java.util.UUID;
 
-final class BlastFurnaceBehavior implements Listener {
-    private BlastFurnaceBehavior() {}
+final class BlastFurnaceListener implements Listener {
+    private BlastFurnaceListener() {}
 
     @InitMethod(priority = InitPriority.LISTENER)
     static void registerListener() {
-        NeoArtisan.registerListener(new BlastFurnaceBehavior());
+        NeoArtisan.registerListener(new BlastFurnaceListener());
     }
 
     private static boolean hasRecipe(ItemStack itemStack) {

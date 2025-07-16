@@ -1,4 +1,4 @@
-package io.github.moyusowo.neoartisan.recipe.behavior;
+package io.github.moyusowo.neoartisan.recipe.listener;
 
 import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
@@ -9,13 +9,13 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.PrepareAnvilEvent;
 import org.bukkit.inventory.ItemStack;
 
-final class AnvilBehavior implements Listener {
+final class AnvilListener implements Listener {
 
-    private AnvilBehavior() {}
+    private AnvilListener() {}
 
     @InitMethod(priority = InitPriority.LISTENER)
     static void registerListener() {
-        NeoArtisan.registerListener(new AnvilBehavior());
+        NeoArtisan.registerListener(new AnvilListener());
     }
 
     @EventHandler

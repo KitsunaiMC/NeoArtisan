@@ -1,4 +1,4 @@
-package io.github.moyusowo.neoartisan.recipe.behavior;
+package io.github.moyusowo.neoartisan.recipe.listener;
 
 import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisan.recipe.internal.RecipeRegistryInternal;
@@ -22,13 +22,13 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.Map;
 
-final class CraftingTableBehavior implements Listener {
+final class CraftingTableListener implements Listener {
 
-    private CraftingTableBehavior() {}
+    private CraftingTableListener() {}
 
     @InitMethod(priority = InitPriority.LISTENER)
     static void registerListener() {
-        NeoArtisan.registerListener(new CraftingTableBehavior());
+        NeoArtisan.registerListener(new CraftingTableListener());
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
