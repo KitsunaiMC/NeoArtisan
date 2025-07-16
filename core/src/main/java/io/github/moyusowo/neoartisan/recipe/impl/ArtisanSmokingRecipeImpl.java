@@ -1,17 +1,17 @@
-package io.github.moyusowo.neoartisan.recipe;
+package io.github.moyusowo.neoartisan.recipe.impl;
 
 import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
 import io.github.moyusowo.neoartisanapi.api.item.ItemGenerator;
-import io.github.moyusowo.neoartisanapi.api.recipe.ArtisanFurnaceRecipe;
+import io.github.moyusowo.neoartisanapi.api.recipe.ArtisanSmokingRecipe;
 import io.github.moyusowo.neoartisanapi.api.recipe.RecipeType;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.ServicePriority;
 import org.jetbrains.annotations.NotNull;
 
-final class ArtisanFurnaceRecipeImpl implements ArtisanFurnaceRecipe {
+final class ArtisanSmokingRecipeImpl implements ArtisanSmokingRecipe {
     private final NamespacedKey key;
     private final NamespacedKey input;
     private final int cookTime;
@@ -33,7 +33,7 @@ final class ArtisanFurnaceRecipeImpl implements ArtisanFurnaceRecipe {
         );
     }
 
-    private ArtisanFurnaceRecipeImpl(NamespacedKey key, NamespacedKey input, ItemGenerator resultGenerator, int cookTime, float exp) {
+    private ArtisanSmokingRecipeImpl(NamespacedKey key, NamespacedKey input, ItemGenerator resultGenerator, int cookTime, float exp) {
         this.key = key;
         this.input = input;
         this.resultGenerator = resultGenerator;
@@ -59,7 +59,7 @@ final class ArtisanFurnaceRecipeImpl implements ArtisanFurnaceRecipe {
 
     @Override
     public @NotNull RecipeType getType() {
-        return RecipeType.FURNACE;
+        return RecipeType.SMOKING;
     }
 
     @Override
@@ -118,9 +118,9 @@ final class ArtisanFurnaceRecipeImpl implements ArtisanFurnaceRecipe {
         }
 
         @Override
-        public @NotNull ArtisanFurnaceRecipe build() {
+        public @NotNull ArtisanSmokingRecipe build() {
             if (key == null || input == null || cookTime == null || resultGenerator == null || exp == null) throw new IllegalCallerException("You have to fill all the params before build!");
-            return new ArtisanFurnaceRecipeImpl(key, input, resultGenerator, cookTime, exp);
+            return new ArtisanSmokingRecipeImpl(key, input, resultGenerator, cookTime, exp);
         }
     }
 }

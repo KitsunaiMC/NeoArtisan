@@ -1,4 +1,4 @@
-package io.github.moyusowo.neoartisan.recipe;
+package io.github.moyusowo.neoartisan.recipe.impl;
 
 import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
