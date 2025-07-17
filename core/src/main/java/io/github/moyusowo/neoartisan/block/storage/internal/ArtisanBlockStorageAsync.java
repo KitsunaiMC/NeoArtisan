@@ -19,7 +19,7 @@ public interface ArtisanBlockStorageAsync {
 
     @SpecificThreadUse(thread = Threads.STRORAGE)
     @NotNull
-    ArtisanBlockDataView getArtisanBlockDataView(BlockPos blockPos);
+    ArtisanBlockDataView getArtisanBlockDataView(@NotNull BlockPos blockPos);
 
     @SpecificThreadUse(thread = Threads.STRORAGE)
     @NotNull
@@ -39,4 +39,7 @@ public interface ArtisanBlockStorageAsync {
 
     @SpecificThreadUse(thread = {Threads.STRORAGE, Threads.MAIN})
     boolean hasArtisanBlockInChunk(ChunkPos chunkPos);
+
+    @SpecificThreadUse(thread = Threads.STRORAGE)
+    boolean checkAndCleanDirtyChunk(ChunkPos chunkPos);
 }

@@ -24,11 +24,14 @@ final class BlockDataSerializer {
     @TerminateMethod
     public static void save() {
         for (World world : Bukkit.getWorlds()) {
-            try {
-                List<ChunkPos> chunkPosList = ArtisanBlockStorageAsync.getAsync().getWorldArtisanBlockChunks(world.getUID());
-                File worldFolder = new File(world.getWorldFolder(), "neoartisan");
-                if (!worldFolder.exists()) worldFolder.mkdirs();
-                for (ChunkPos chunkPos : chunkPosList) {
+            NeoArtisan.logger().warning("saving " + world.getName() + "...");
+            List<ChunkPos> chunkPosList = ArtisanBlockStorageAsync.getAsync().getWorldArtisanBlockChunks(world.getUID());
+            File worldFolder = new File(world.getWorldFolder(), "neoartisan");
+            if (!worldFolder.exists()) worldFolder.mkdirs();
+            for (ChunkPos chunkPos : chunkPosList) {
+                NeoArtisan.logger().warning("chunk: " + chunkPos.x() + ", " + chunkPos.z());
+                if (ArtisanBlockStorageAsync.getAsync().checkAndCleanDirtyChunk(chunkPos)) {
+                    NeoArtisan.logger().warning("save chunk: " + chunkPos.x() + ", " + chunkPos.z());
                     File chunkFile = new File(worldFolder, "r." + chunkPos.x() + "." + chunkPos.z() + ".neodat");
                     try (DataOutputStream out = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(chunkFile)))) {
                         List<ArtisanBlockDataView> views = ArtisanBlockStorageAsync.getAsync().getChunkArtisanBlockDataViews(chunkPos);
@@ -41,10 +44,10 @@ final class BlockDataSerializer {
                             out.writeUTF(view.blockId().getKey());
                             out.writeInt(view.stage());
                         }
+                    } catch (IOException e) {
+                        NeoArtisan.logger().severe("Fail to save custom block data at world: " + world.getName() + ", chunk: " + chunkPos.x() + "," + chunkPos.z() + ": " + e);
                     }
                 }
-            } catch (IOException e) {
-                NeoArtisan.logger().severe("Fail to save custom block data at world " + world.getName() + ": " + e);
             }
         }
     }

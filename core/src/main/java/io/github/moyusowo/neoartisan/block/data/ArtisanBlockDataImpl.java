@@ -22,7 +22,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 
 class ArtisanBlockDataImpl implements ArtisanBlockDataInternal {
@@ -48,7 +47,6 @@ class ArtisanBlockDataImpl implements ArtisanBlockDataInternal {
         this.location = location;
         this.artisanBlockGUI = this.getArtisanBlockInternal().createGUI(location);
         this.lifecycleTaskManager = this.getArtisanBlockInternal().createLifecycleTaskManager(location);
-        this.lifecycleTaskManager.addInitRunnable(() -> BlockEntityManager.spawn(location), SingleTaskPriority.BLOCK_ENTITY);
         this.lifecycleTaskManager.addTerminateRunnable(() -> BlockEntityManager.remove(location), SingleTaskPriority.BLOCK_ENTITY);
         if (this.artisanBlockGUI != null) {
             lifecycleTaskManager.addInitRunnable(artisanBlockGUI::onInit, SingleTaskPriority.GUI);
@@ -110,7 +108,7 @@ class ArtisanBlockDataImpl implements ArtisanBlockDataInternal {
     @Override
     @NotNull
     public PersistentDataContainer getPersistentDataContainer() {
-        return Objects.requireNonNull(BlockEntityManager.getPDC(location), "BlockEntity Error.");
+        return BlockEntityManager.getPDC(location);
     }
 
     @Override

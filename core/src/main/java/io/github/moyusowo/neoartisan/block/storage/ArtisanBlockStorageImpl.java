@@ -22,6 +22,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 final class ArtisanBlockStorageImpl implements ArtisanBlockStorage, ArtisanBlockStorageInternal, ArtisanBlockStorageAsync {
@@ -69,17 +70,20 @@ final class ArtisanBlockStorageImpl implements ArtisanBlockStorage, ArtisanBlock
     private final HashMultimap<ChunkPos, BlockPos> chunkStorage = HashMultimap.create();
     private final HashMultimap<UUID, ChunkPos> worldStorage = HashMultimap.create();
     private final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
+    private final ConcurrentHashMap<ChunkPos, Boolean> dirtyChunkMarker = new ConcurrentHashMap<>();
 
     @Override
     @SpecificThreadUse(thread = Threads.MAIN)
     public void replaceArtisanBlock(@NotNull ArtisanBlockData newData) {
         BlockPos blockPos = BlockPos.from(newData.getLocation());
+        ChunkPos chunkPos = new ChunkPos(blockPos);
         ((LifecycleTaskManagerInternal) blockStorage.get(blockPos).getLifecycleTaskManager()).runTerminate(newData.getLocation());
         lock.writeLock().lock();
         try {
             blockStorage.replace(blockPos, newData);
         } finally {
             lock.writeLock().unlock();
+            dirtyChunkMarker.putIfAbsent(chunkPos, true);
             ((LifecycleTaskManagerInternal) newData.getLifecycleTaskManager()).runInit(newData.getLocation());
         }
     }
@@ -92,10 +96,11 @@ final class ArtisanBlockStorageImpl implements ArtisanBlockStorage, ArtisanBlock
         lock.writeLock().lock();
         try {
             blockStorage.put(blockPos, data);
-            chunkStorage.put(chunkPos, blockPos);
-            worldStorage.put(blockPos.worldUID(), chunkPos);
+            if (!chunkStorage.containsEntry(chunkPos, blockPos)) chunkStorage.put(chunkPos, blockPos);
+            if (!worldStorage.containsEntry(blockPos.worldUID(), chunkPos)) worldStorage.put(blockPos.worldUID(), chunkPos);
         } finally {
             lock.writeLock().unlock();
+            dirtyChunkMarker.putIfAbsent(chunkPos, true);
             ((LifecycleTaskManagerInternal) data.getLifecycleTaskManager()).runInit(data.getLocation());
         }
     }
@@ -110,16 +115,16 @@ final class ArtisanBlockStorageImpl implements ArtisanBlockStorage, ArtisanBlock
         try {
             blockStorage.remove(blockPos);
             chunkStorage.remove(chunkPos, blockPos);
-            worldStorage.remove(blockPos.worldUID(), chunkPos);
         } finally {
             lock.writeLock().unlock();
+            dirtyChunkMarker.putIfAbsent(chunkPos, true);
         }
     }
 
     @Override
     @NotNull
     @SpecificThreadUse(thread = Threads.STRORAGE)
-    public ArtisanBlockDataView getArtisanBlockDataView(BlockPos blockPos) {
+    public ArtisanBlockDataView getArtisanBlockDataView(@NotNull BlockPos blockPos) {
         lock.readLock().lock();
         try {
             return ArtisanBlockDataView.from(Objects.requireNonNull(blockStorage.get(blockPos), "Please check before get!"));
@@ -202,6 +207,11 @@ final class ArtisanBlockStorageImpl implements ArtisanBlockStorage, ArtisanBlock
         } finally {
             lock.readLock().unlock();
         }
+    }
+
+    @Override
+    public boolean checkAndCleanDirtyChunk(ChunkPos chunkPos) {
+        return dirtyChunkMarker.remove(chunkPos, true);
     }
 
     @SpecificThreadUse(thread = Threads.STRORAGE)
