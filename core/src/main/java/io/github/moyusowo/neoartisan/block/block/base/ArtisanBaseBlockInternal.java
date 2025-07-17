@@ -1,8 +1,8 @@
 package io.github.moyusowo.neoartisan.block.block.base;
 
+import io.github.moyusowo.neoartisan.block.task.LifecycleTaskManagerInternal;
 import io.github.moyusowo.neoartisanapi.api.block.block.base.ArtisanBaseBlock;
 import io.github.moyusowo.neoartisanapi.api.block.gui.ArtisanBlockGUI;
-import io.github.moyusowo.neoartisanapi.api.block.task.LifecycleTaskManager;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -12,5 +12,5 @@ public interface ArtisanBaseBlockInternal extends ArtisanBaseBlock {
     ArtisanBlockGUI createGUI(@NotNull Location location);
 
     @NotNull
-    LifecycleTaskManager createLifecycleTaskManager(@NotNull Location location);
+    LifecycleTaskManagerInternal createLifecycleTaskManager(@NotNull Location location);
 }

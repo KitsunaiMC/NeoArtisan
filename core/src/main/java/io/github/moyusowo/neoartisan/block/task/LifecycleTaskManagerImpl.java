@@ -11,8 +11,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 final class LifecycleTaskManagerImpl implements LifecycleTaskManagerInternal {
     @InitMethod(priority = InitPriority.REGISTRAR)
@@ -26,7 +26,7 @@ final class LifecycleTaskManagerImpl implements LifecycleTaskManagerInternal {
     }
 
     private final List<LifecycleTask> lifecycleTasks;
-    private final List<Runnable> terminateTasks, initTasks;
+    private final List<PriorityRunnable> terminateTasks, initTasks;
     private boolean isInit = false;
 
     public LifecycleTaskManagerImpl(@NotNull Location location) {
@@ -42,22 +42,23 @@ final class LifecycleTaskManagerImpl implements LifecycleTaskManagerInternal {
     }
 
     @Override
-    public void addTerminateRunnable(@NotNull Runnable runnable) {
+    public void addTerminateRunnable(@NotNull Runnable runnable, SingleTaskPriority type) {
         if (isInit) throw new IllegalStateException("The LifecycleTaskManager has been init!");
-        terminateTasks.add(runnable);
+        terminateTasks.add(new PriorityRunnable(runnable, type));
     }
 
     @Override
-    public void addInitRunnable(@NotNull Runnable runnable) {
+    public void addInitRunnable(@NotNull Runnable runnable, SingleTaskPriority type) {
         if (isInit) throw new IllegalStateException("The LifecycleTaskManager has been init!");
-        initTasks.add(runnable);
+        initTasks.add(new PriorityRunnable(runnable, type));
     }
 
     @Override
     public void runInit(@NotNull Location location) {
-        for (Runnable runnable : initTasks) {
+        initTasks.sort(Comparator.comparingInt(p -> p.type.priority));
+        for (PriorityRunnable priorityRunnable : initTasks) {
             try {
-                runnable.run();
+                priorityRunnable.runnable.run();
             } catch (Exception e) {
                 NeoArtisan.logger().warning("error when block lifecycle init at location " + location + " of block " + NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlockData(location.getBlock()).blockId().asString() + ", " + e);
             }
@@ -73,12 +74,15 @@ final class LifecycleTaskManagerImpl implements LifecycleTaskManagerInternal {
         for (LifecycleTask lifecycleTask : lifecycleTasks) {
             lifecycleTask.cancel();
         }
-        for (Runnable runnable : terminateTasks) {
+        terminateTasks.sort((p1, p2) -> Integer.compare(p2.type.priority, p1.type.priority));
+        for (PriorityRunnable priorityRunnable : terminateTasks) {
             try {
-                runnable.run();
+                priorityRunnable.runnable.run();
             } catch (Exception e) {
                 NeoArtisan.logger().warning("error when block lifecycle terminate at location " + location + " of block " + NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlockData(location.getBlock()).blockId().asString() + ", " + e);
             }
         }
     }
+
+    private record PriorityRunnable(@NotNull Runnable runnable, @NotNull SingleTaskPriority type) {}
 }

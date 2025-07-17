@@ -150,11 +150,6 @@ public final class NeoArtisanAPI {
         return protection;
     }
 
-    @ApiStatus.Internal
-    public static EmptyPersistentDataContainer emptyPersistentDataContainer() {
-        return Bukkit.getServicesManager().load(EmptyPersistentDataContainer.class);
-    }
-
     /**
      * 标记注册表接口中的自动注册方法，该方法会被反射在本插件的 {@code onEnable()} 方法内调用完成注册流程。
      * <p>
