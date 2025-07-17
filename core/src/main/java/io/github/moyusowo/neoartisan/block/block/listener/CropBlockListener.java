@@ -95,23 +95,27 @@ final class CropBlockListener implements Listener {
         ArtisanBlockStorageInternal.getInternal().removeArtisanBlock(event.getBlock().getRelative(BlockFace.UP));
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void onFertilize(BlockFertilizeEvent event) {
-//        for (BlockState blockState : event.getBlocks()) {
-//            if (NeoArtisanAPI.getArtisanBlockStorage().isArtisanBlock(blockState.getBlock())) {
-//                ArtisanBlockData artisanBlockData = NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlockData(blockState.getBlock());
-//                if (artisanBlockData.getArtisanBlock().getType() == ArtisanBlocks.CROP) {
-//                    ArtisanBlockData formerData = grownCrop.get(blockState.getBlock());
-//                    Util.replace(blockState.getBlock(), formerData);
-//                    grownCrop.remove(blockState.getBlock());
-//                    event.setCancelled(true);
-//                    if (hasNextStage(artisanBlockData)) {
-//                        Util.replace(blockState.getBlock(), getNextFertilizeStage(artisanBlockData));
-//                        playBoneMealEffects(blockState.getLocation());
-//                    }
-//                }
-//            }
-//        }
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onFertilize(PlayerInteractEvent event) {
+        // is interact valid
+        if (event.useInteractedBlock() == Event.Result.DENY || event.useItemInHand() == Event.Result.DENY) return;
+        // ensure right click block
+        if (event.getAction() != Action.RIGHT_CLICK_BLOCK || event.getClickedBlock() == null) return;
+        // ensure player have an item when click
+        if (event.getItem() == null) return;
+        // is item boneMeal
+        if (!NeoArtisanAPI.getItemRegistry().getRegistryId(event.getItem()).equals(Material.BONE_MEAL.getKey())) return;
+        // check if ArtisanCropBlock
+        if (!NeoArtisanAPI.getArtisanBlockStorage().isArtisanBlock(event.getClickedBlock())) return;
+        if (NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlockData(event.getClickedBlock()).getArtisanBlock().getType() != ArtisanBlocks.CROP) return;
+        // check permission
+        if (!NeoArtisanAPI.getBlockProtection().canPlace(event.getPlayer(), event.getClickedBlock().getRelative(event.getBlockFace()).getLocation())) return;
+        event.setCancelled(true);
+        ArtisanBlockData artisanBlockData = NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlockData(event.getClickedBlock());
+        if (Util.hasNextStage(artisanBlockData)) {
+            Util.replace(event.getClickedBlock(), getNextFertilizeStage(artisanBlockData));
+            playBoneMealEffects(event.getClickedBlock().getLocation());
+        }
     }
 
     public static ArtisanBlockData getNextFertilizeStage(ArtisanBlockData artisanBlockData) {
