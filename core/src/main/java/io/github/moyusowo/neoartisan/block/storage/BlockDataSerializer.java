@@ -1,7 +1,6 @@
 package io.github.moyusowo.neoartisan.block.storage;
 
 import io.github.moyusowo.neoartisan.NeoArtisan;
-import io.github.moyusowo.neoartisan.block.data.ArtisanBlockDataInternal;
 import io.github.moyusowo.neoartisan.block.storage.internal.ArtisanBlockStorageInternal;
 import io.github.moyusowo.neoartisan.block.task.LifecycleTaskManagerInternal;
 import io.github.moyusowo.neoartisan.block.util.BlockPos;
@@ -9,13 +8,11 @@ import io.github.moyusowo.neoartisan.block.util.ChunkPos;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
 import io.github.moyusowo.neoartisan.util.terminate.TerminateMethod;
-import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
 import io.github.moyusowo.neoartisanapi.api.block.data.ArtisanBlockData;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.World;
-import org.bukkit.persistence.PersistentDataContainer;
 
 import java.io.*;
 import java.util.Map;
@@ -49,9 +46,6 @@ final class BlockDataSerializer {
                             out.writeUTF(blockEntry.getValue().blockId().getNamespace());
                             out.writeUTF(blockEntry.getValue().blockId().getKey());
                             out.writeInt(blockEntry.getValue().stage());
-                            byte[] pdcByte = blockEntry.getValue().getPersistentDataContainer().serializeToBytes();
-                            out.writeInt(pdcByte.length);
-                            out.write(pdcByte);
                         }
                     }
                 }
@@ -92,11 +86,6 @@ final class BlockDataSerializer {
                                         .stage(in.readInt())
                                         .location(new Location(world, blockPos.x(), blockPos.y(), blockPos.z()))
                                         .build();
-                                int length = in.readInt();
-                                byte[] pdcByte = in.readNBytes(length);
-                                PersistentDataContainer persistentDataContainer = NeoArtisanAPI.emptyPersistentDataContainer().emptyPersistentDataContainer();
-                                persistentDataContainer.readFromBytes(pdcByte, true);
-                                ((ArtisanBlockDataInternal) artisanBlockData).setPersistentDataContainer(persistentDataContainer);
                                 ArtisanBlockStorageInternal.getInternal().placeArtisanBlock(uuid, blockPos, artisanBlockData);
                                 ((LifecycleTaskManagerInternal) artisanBlockData.getLifecycleTaskManager()).runInit(new Location(world, blockPos.x(), blockPos.y(), blockPos.z()));
                             }

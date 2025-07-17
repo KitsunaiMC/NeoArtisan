@@ -34,7 +34,7 @@ public abstract class ArtisanBaseBlockImpl implements ArtisanBaseBlockInternal {
     }
 
     @NotNull
-    public LifecycleTaskManager createLifecycleTaskManager(@NotNull Location location) {
+    public LifecycleTaskManagerInternal createLifecycleTaskManager(@NotNull Location location) {
         return LifecycleTaskManagerInternal.create(location);
     }
 

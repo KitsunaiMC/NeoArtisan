@@ -2,6 +2,8 @@ package io.github.moyusowo.neoartisan.block.data;
 
 import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisan.block.block.base.ArtisanBaseBlockInternal;
+import io.github.moyusowo.neoartisan.block.task.LifecycleTaskManagerInternal;
+import io.github.moyusowo.neoartisan.block.task.SingleTaskPriority;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
 import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
@@ -20,6 +22,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 
 class ArtisanBlockDataImpl implements ArtisanBlockDataInternal {
@@ -36,19 +39,19 @@ class ArtisanBlockDataImpl implements ArtisanBlockDataInternal {
     private final Location location;
     private final NamespacedKey blockId;
     private final int stage;
-    private final PersistentDataContainer persistentDataContainer;
-    private final LifecycleTaskManager lifecycleTaskManager;
+    private final LifecycleTaskManagerInternal lifecycleTaskManager;
     private final ArtisanBlockGUI artisanBlockGUI;
 
     public ArtisanBlockDataImpl(@NotNull NamespacedKey blockId, int stage, @NotNull Location location) {
         this.blockId = blockId;
         this.stage = stage;
         this.location = location;
-        this.persistentDataContainer = NeoArtisanAPI.emptyPersistentDataContainer().emptyPersistentDataContainer();
         this.artisanBlockGUI = this.getArtisanBlockInternal().createGUI(location);
         this.lifecycleTaskManager = this.getArtisanBlockInternal().createLifecycleTaskManager(location);
+        this.lifecycleTaskManager.addInitRunnable(() -> BlockEntityManager.spawn(location), SingleTaskPriority.BLOCK_ENTITY);
+        this.lifecycleTaskManager.addTerminateRunnable(() -> BlockEntityManager.remove(location), SingleTaskPriority.BLOCK_ENTITY);
         if (this.artisanBlockGUI != null) {
-            lifecycleTaskManager.addInitRunnable(artisanBlockGUI::onInit);
+            lifecycleTaskManager.addInitRunnable(artisanBlockGUI::onInit, SingleTaskPriority.GUI);
         }
         if (getArtisanBlockInternal() instanceof ArtisanCropBlock artisanCropBlock) {
             this.lifecycleTaskManager.addLifecycleTask(
@@ -70,11 +73,6 @@ class ArtisanBlockDataImpl implements ArtisanBlockDataInternal {
                     false
             );
         }
-    }
-
-    @Override
-    public void setPersistentDataContainer(@NotNull PersistentDataContainer persistentDataContainer) {
-        persistentDataContainer.copyTo(this.persistentDataContainer, true);
     }
 
     @Override
@@ -112,7 +110,7 @@ class ArtisanBlockDataImpl implements ArtisanBlockDataInternal {
     @Override
     @NotNull
     public PersistentDataContainer getPersistentDataContainer() {
-        return this.persistentDataContainer;
+        return Objects.requireNonNull(BlockEntityManager.getPDC(location), "BlockEntity Error.");
     }
 
     @Override

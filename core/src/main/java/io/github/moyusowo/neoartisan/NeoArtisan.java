@@ -14,15 +14,13 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.persistence.PersistentDataAdapterContext;
-import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.util.logging.Logger;
 
-public final class NeoArtisan extends JavaPlugin implements EmptyPersistentDataContainer {
+public final class NeoArtisan extends JavaPlugin {
 
     private static final String pkg = "io.github.moyusowo.neoartisan";
     private final boolean isDebugMode;
@@ -30,7 +28,6 @@ public final class NeoArtisan extends JavaPlugin implements EmptyPersistentDataC
     private static NeoArtisan instance;
     private static NamespacedKey artisanItemIdKey;
     private static NamespacedKey artisanItemAttackDamageKey, artisanItemAttackKnockbackKey, artisanItemAttackSpeedKey;
-    private static PersistentDataAdapterContext persistentDataAdapterContext;
     private static AntiGriefLib antiGriefLib;
 
     public NeoArtisan() {
@@ -84,19 +81,10 @@ public final class NeoArtisan extends JavaPlugin implements EmptyPersistentDataC
         return instance().isDebugMode;
     }
 
-    public PersistentDataContainer emptyPersistentDataContainer() { return persistentDataAdapterContext.newPersistentDataContainer(); }
-
     @Override
     public void onEnable() {
         antiGriefLib = AntiGriefLib.builder(this).silentLogs(true).ignoreOP(true).build();
         ItemStackDataType.ITEM_STACK.getComplexType();
-        persistentDataAdapterContext = ItemStack.of(Material.STICK).getItemMeta().getPersistentDataContainer().getAdapterContext();
-        Bukkit.getServicesManager().register(
-                EmptyPersistentDataContainer.class,
-                this,
-                this,
-                ServicePriority.Normal
-        );
         Initializer.scanPackage(pkg);
         Initializer.executeEnable();
         Terminator.scanPackage(pkg);
