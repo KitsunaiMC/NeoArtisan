@@ -57,11 +57,8 @@ class ArtisanBlockDataImpl implements ArtisanBlockDataInternal {
                         @Override
                         public void run() {
                             if (location.isChunkLoaded()) {
-                                int random = ThreadLocalRandom.current().nextInt(0, 1000);
+                                int random = ThreadLocalRandom.current().nextInt(0, 5000);
                                 if (random > 3) return;
-                                if (NeoArtisan.isDebugMode()) {
-                                    NeoArtisan.logger().info("grow at location: " + location);
-                                }
                                 artisanCropBlock.onRamdomTick(ArtisanBlockDataImpl.this);
                             }
                         }

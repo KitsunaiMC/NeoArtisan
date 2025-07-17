@@ -5,13 +5,13 @@ import org.bukkit.NamespacedKey;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * 自定义方块注册表，负责管理所有 {@link ArtisanBlock} 的注册和查询。
+ * 自定义方块注册表，负责管理所有 {@link ArtisanBaseBlock} 的注册和查询。
  * <p>
  * 本注册表通过 {@link io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI#getBlockRegistry()} 获取实例，
  * 所有注册操作必须通过 {@link io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI.Register} 注解标记的方法执行。
  * </p>
  *
- * @see ArtisanBlock 自定义方块接口
+ * @see ArtisanBaseBlock 自定义方块接口
  * @see io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI.Register 注册方法标记注解
  */
 public interface BlockRegistry {

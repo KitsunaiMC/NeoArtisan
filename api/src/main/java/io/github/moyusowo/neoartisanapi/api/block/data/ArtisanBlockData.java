@@ -66,7 +66,7 @@ public interface ArtisanBlockData {
     /**
      * 获取当前方块状态索引
      *
-     * @return 0到{@link ArtisanBlock#getTotalStates()}之间的整数
+     * @return 0 到 {@link ArtisanBaseBlock#getTotalStates()} 之间的整数（不包括右边界）
      * @implNote 该值应与 {@link #getArtisanBlockState()} 返回的状态一致
      */
     int stage();
