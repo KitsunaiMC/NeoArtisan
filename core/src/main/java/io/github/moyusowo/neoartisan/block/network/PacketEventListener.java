@@ -9,7 +9,9 @@ import com.github.retrooper.packetevents.protocol.world.chunk.BaseChunk;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerBlockChange;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerChunkData;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerMultiBlockChange;
+import io.github.moyusowo.neoartisan.block.storage.internal.ArtisanBlockStorageAsync;
 import io.github.moyusowo.neoartisan.block.storage.internal.ArtisanBlockStorageInternal;
+import io.github.moyusowo.neoartisan.block.util.BlockPos;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
 
@@ -53,8 +55,9 @@ final class PacketEventListener implements PacketListener {
                         final int z = (chunkZ << 4) + sectionZ;
                         final int blockStateId = baseChunk.getBlockId(sectionX, sectionY, sectionZ);
                         final Integer toBlockStateId;
-                        if (ArtisanBlockStorageInternal.getInternal().isArtisanBlock(worldUID, x, y, z)) {
-                            toBlockStateId = ArtisanBlockStorageInternal.getInternal().getArtisanBlock(worldUID, x, y, z).getArtisanBlockState().appearanceState();
+                        final BlockPos blockPos = new BlockPos(worldUID, x, y, z);
+                        if (ArtisanBlockStorageAsync.getAsync().isArtisanBlock(blockPos)) {
+                            toBlockStateId = ArtisanBlockStorageAsync.getAsync().getArtisanBlockDataView(blockPos).state().appearanceState();
                         } else {
                             toBlockStateId = BlockMappingsManager.getMappedStateId(blockStateId);
                         }
@@ -75,8 +78,9 @@ final class PacketEventListener implements PacketListener {
         final Integer toBlockStateId;
         final UUID worldUID = AsyncPlayerWorld.getPlayerWorld(playerUUID);
         final int x = wrapperPlayServerBlockChange.getBlockPosition().x, y = wrapperPlayServerBlockChange.getBlockPosition().y, z = wrapperPlayServerBlockChange.getBlockPosition().z;
-        if (ArtisanBlockStorageInternal.getInternal().isArtisanBlock(worldUID, x, y, z)) {
-            toBlockStateId = ArtisanBlockStorageInternal.getInternal().getArtisanBlock(worldUID, x, y, z).getArtisanBlockState().appearanceState();
+        final BlockPos blockPos = new BlockPos(worldUID, x, y, z);
+        if (ArtisanBlockStorageAsync.getAsync().isArtisanBlock(blockPos)) {
+            toBlockStateId = ArtisanBlockStorageAsync.getAsync().getArtisanBlockDataView(blockPos).state().appearanceState();
         } else {
             toBlockStateId = BlockMappingsManager.getMappedStateId(blockStateId);
         }
@@ -93,8 +97,9 @@ final class PacketEventListener implements PacketListener {
         for (WrapperPlayServerMultiBlockChange.EncodedBlock encodedBlock : wrapperPlayServerMultiBlockChange.getBlocks()) {
             final int blockStateId = encodedBlock.getBlockId();
             final Integer toBlockStateId;
-            if (ArtisanBlockStorageInternal.getInternal().isArtisanBlock(worldUID, encodedBlock.getX(), encodedBlock.getY(), encodedBlock.getZ())) {
-                toBlockStateId = ArtisanBlockStorageInternal.getInternal().getArtisanBlock(worldUID, encodedBlock.getX(), encodedBlock.getY(), encodedBlock.getZ()).getArtisanBlockState().appearanceState();
+            final BlockPos blockPos = new BlockPos(worldUID, encodedBlock.getX(), encodedBlock.getY(), encodedBlock.getZ());
+            if (ArtisanBlockStorageAsync.getAsync().isArtisanBlock(blockPos)) {
+                toBlockStateId = ArtisanBlockStorageAsync.getAsync().getArtisanBlockDataView(blockPos).state().appearanceState();
             } else {
                 toBlockStateId = BlockMappingsManager.getMappedStateId(blockStateId);
             }

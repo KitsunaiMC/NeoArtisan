@@ -9,14 +9,13 @@ import org.jetbrains.annotations.NotNull;
  * 自定义方块数据存储服务，负责管理所有已放置的自定义方块实例。
  * <p>
  * 提供对自定义方块的查询和类型检查功能，支持通过坐标或{@link Block}实例访问。
- * 所有方法都是线程安全的，可在异步环境下调用。
+ * 所有方法不是线程安全的，都不能异步环境下调用。
  * </p>
  *
  * @see ArtisanBlockData 基础方块数据接口
  * @see io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI#getArtisanBlockStorage() 获取服务实例
  */
 public interface ArtisanBlockStorage {
-
     /**
      * 通过世界坐标获取自定义方块数据
      *
@@ -28,6 +27,7 @@ public interface ArtisanBlockStorage {
      * @throws IllegalArgumentException 如果不存在
      * @apiNote 使用该方法前应先调用 {@link #isArtisanBlock(World, int, int, int)} 检查
      */
+    @NotNull
     ArtisanBlockData getArtisanBlockData(@NotNull World world, int x, int y, int z);
 
     /**
@@ -38,7 +38,10 @@ public interface ArtisanBlockStorage {
      * @throws IllegalArgumentException 如果不存在
      * @apiNote 使用该方法前应先调用 {@link #isArtisanBlock(Block)} 检查
      */
-    ArtisanBlockData getArtisanBlockData(@NotNull Block block);
+    @NotNull
+    default ArtisanBlockData getArtisanBlockData(@NotNull Block block) {
+        return getArtisanBlockData(block.getWorld(), block.getX(), block.getY(), block.getZ());
+    }
 
     /**
      * 检查方块是否为已注册的自定义方块
@@ -46,7 +49,9 @@ public interface ArtisanBlockStorage {
      * @param block 待检查方块（非null）
      * @return 如果是有效的自定义方块返回true
      */
-    boolean isArtisanBlock(@NotNull Block block);
+    default boolean isArtisanBlock(@NotNull Block block) {
+        return isArtisanBlock(block.getWorld(), block.getX(), block.getY(), block.getZ());
+    }
 
     /**
      * 检查坐标位置是否为已注册的自定义方块

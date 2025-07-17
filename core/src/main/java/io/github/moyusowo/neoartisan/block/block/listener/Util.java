@@ -23,9 +23,7 @@ public final class Util {
 
     public static void place(Block bukkitBlock, ArtisanBlockData artisanBlockData) {
         World world = bukkitBlock.getWorld();
-        BlockPos blockPos = new BlockPos(bukkitBlock.getX(), bukkitBlock.getY(), bukkitBlock.getZ());
-        ArtisanBlockStorageInternal.getInternal().placeArtisanBlock(world.getUID(), blockPos, artisanBlockData);
-        ((LifecycleTaskManagerInternal) artisanBlockData.getLifecycleTaskManager()).runInit(bukkitBlock.getLocation());
+        ArtisanBlockStorageInternal.getInternal().placeArtisanBlock(artisanBlockData);
         BlockData blockData = Bukkit.createBlockData(WrappedBlockState.getByGlobalId(artisanBlockData.getArtisanBlockState().actualState()).toString());
         world.setBlockData(bukkitBlock.getLocation(), blockData);
         if (artisanBlockData.getArtisanBlockState() instanceof ArtisanSkullState state) {
@@ -53,10 +51,7 @@ public final class Util {
 
     public static void replace(Block bukkitBlock, ArtisanBlockData artisanBlockData) {
         World world = bukkitBlock.getWorld();
-        BlockPos pos = new BlockPos(bukkitBlock.getX(), bukkitBlock.getY(), bukkitBlock.getZ());
-        ((LifecycleTaskManagerInternal) NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlockData(bukkitBlock).getLifecycleTaskManager()).runTerminate(bukkitBlock.getLocation());
-        ArtisanBlockStorageInternal.getInternal().replaceArtisanBlock(world.getUID(), pos, artisanBlockData);
-        ((LifecycleTaskManagerInternal) artisanBlockData.getLifecycleTaskManager()).runInit(bukkitBlock.getLocation());
+        ArtisanBlockStorageInternal.getInternal().replaceArtisanBlock(artisanBlockData);
         BlockData blockData = Bukkit.createBlockData(WrappedBlockState.getByGlobalId(artisanBlockData.getArtisanBlockState().actualState()).toString());
         world.setBlockData(bukkitBlock.getLocation(), blockData);
         if (artisanBlockData.getArtisanBlockState() instanceof ArtisanSkullState state) {

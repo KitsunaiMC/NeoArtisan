@@ -1,9 +1,9 @@
 package io.github.moyusowo.neoartisan.block.storage;
 
 import io.github.moyusowo.neoartisan.NeoArtisan;
+import io.github.moyusowo.neoartisan.block.data.ArtisanBlockDataView;
+import io.github.moyusowo.neoartisan.block.storage.internal.ArtisanBlockStorageAsync;
 import io.github.moyusowo.neoartisan.block.storage.internal.ArtisanBlockStorageInternal;
-import io.github.moyusowo.neoartisan.block.task.LifecycleTaskManagerInternal;
-import io.github.moyusowo.neoartisan.block.util.BlockPos;
 import io.github.moyusowo.neoartisan.block.util.ChunkPos;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
@@ -15,8 +15,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.World;
 
 import java.io.*;
-import java.util.Map;
-import java.util.UUID;
+import java.util.List;
 
 final class BlockDataSerializer {
 
@@ -24,78 +23,60 @@ final class BlockDataSerializer {
 
     @TerminateMethod
     public static void save() {
-        try {
-            File dataFolder = new File(NeoArtisan.instance().getDataFolder(), "block/storage");
-            if (!dataFolder.exists()) dataFolder.mkdirs();
-            for (World world : Bukkit.getWorlds()) {
-                Map<ChunkPos, Map<BlockPos, ArtisanBlockData>> chunkMap = ArtisanBlockStorageImpl.getInstance().getLevelArtisanBlocks(world.getUID());
-                File file = new File(dataFolder, world.getUID() + ".dat");
-                try (DataOutputStream out = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(file)))) {
-                    out.writeInt(chunkMap.size());
-                    for (Map.Entry<ChunkPos, Map<BlockPos, ArtisanBlockData>> chunkEntry : chunkMap.entrySet()) {
-                        ChunkPos chunkPos = chunkEntry.getKey();
-                        out.writeInt(chunkPos.x());
-                        out.writeInt(chunkPos.z());
-                        Map<BlockPos, ArtisanBlockData> blockMap = chunkEntry.getValue();
-                        out.writeInt(blockMap.size());
-                        for (Map.Entry<BlockPos, ArtisanBlockData> blockEntry : blockMap.entrySet()) {
-                            BlockPos pos = blockEntry.getKey();
-                            out.writeInt(pos.x());
-                            out.writeInt(pos.y());
-                            out.writeInt(pos.z());
-                            out.writeUTF(blockEntry.getValue().blockId().getNamespace());
-                            out.writeUTF(blockEntry.getValue().blockId().getKey());
-                            out.writeInt(blockEntry.getValue().stage());
+        for (World world : Bukkit.getWorlds()) {
+            try {
+                List<ChunkPos> chunkPosList = ArtisanBlockStorageAsync.getAsync().getWorldArtisanBlockChunks(world.getUID());
+                File worldFolder = new File(world.getWorldFolder(), "neoartisan");
+                if (!worldFolder.exists()) worldFolder.mkdirs();
+                for (ChunkPos chunkPos : chunkPosList) {
+                    File chunkFile = new File(worldFolder, "r." + chunkPos.x() + "." + chunkPos.z() + ".neodat");
+                    try (DataOutputStream out = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(chunkFile)))) {
+                        List<ArtisanBlockDataView> views = ArtisanBlockStorageAsync.getAsync().getChunkArtisanBlockDataViews(chunkPos);
+                        out.writeInt(views.size());
+                        for (ArtisanBlockDataView view : views) {
+                            out.writeInt(view.location().getBlockX());
+                            out.writeInt(view.location().getBlockY());
+                            out.writeInt(view.location().getBlockZ());
+                            out.writeUTF(view.blockId().getNamespace());
+                            out.writeUTF(view.blockId().getKey());
+                            out.writeInt(view.stage());
                         }
                     }
                 }
+            } catch (IOException e) {
+                NeoArtisan.logger().severe("Fail to save custom block data at world " + world.getName() + ": " + e);
             }
-        } catch (IOException e) {
-            NeoArtisan.logger().severe("Fail to save custom block data: " + e);
         }
     }
 
     @InitMethod(priority = InitPriority.STORAGE_LOAD)
     public static void load() {
-        try {
-            File dataFolder = new File(NeoArtisan.instance().getDataFolder(), "block/storage");
-            if (!dataFolder.exists()) return;
-            File[] files = dataFolder.listFiles();
-            if (files == null) return;
-            for (File file : files) {
-                if (file.isFile() && file.getName().toLowerCase().endsWith(".dat")) {
-                    UUID uuid = UUID.fromString(file.getName().substring(0, file.getName().length() - 4));
-                    World world = Bukkit.getWorld(uuid);
-                    if (world == null) {
-                        NeoArtisan.logger().severe("UUID " + uuid + "can not match world! ignoring file...");
-                        continue;
-                    }
+        for (World world : Bukkit.getWorlds()) {
+            try {
+                File worldFolder = new File(world.getWorldFolder(), "neoartisan");
+                if (!worldFolder.exists()) continue;
+                File[] files = worldFolder.listFiles(file -> file.getName().endsWith(".neodat"));
+                if (files == null) continue;
+                for (File file : files) {
                     try (DataInputStream in = new DataInputStream(new BufferedInputStream(new FileInputStream(file)))) {
-                        int chunkCount = in.readInt();
-                        for (int i = 0; i < chunkCount; i++) {
-                            ChunkPos chunkPos = new ChunkPos(in.readInt(), in.readInt());
-                            int blockCount = in.readInt();
-                            for (int j = 0; j < blockCount; j++) {
-                                BlockPos blockPos = new BlockPos(
-                                        in.readInt(),
-                                        in.readInt(),
-                                        in.readInt()
-                                );
-                                ArtisanBlockData artisanBlockData = ArtisanBlockData.builder()
-                                        .blockId(new NamespacedKey(in.readUTF(), in.readUTF()))
-                                        .stage(in.readInt())
-                                        .location(new Location(world, blockPos.x(), blockPos.y(), blockPos.z()))
-                                        .build();
-                                ArtisanBlockStorageInternal.getInternal().placeArtisanBlock(uuid, blockPos, artisanBlockData);
-                                ((LifecycleTaskManagerInternal) artisanBlockData.getLifecycleTaskManager()).runInit(new Location(world, blockPos.x(), blockPos.y(), blockPos.z()));
-                            }
+                        int size = in.readInt();
+                        for (int i = 0; i < size; i++) {
+                            Location location = new Location(
+                                    world, in.readInt(), in.readInt(), in.readInt()
+                            );
+                            NamespacedKey blockId = new NamespacedKey(
+                                    in.readUTF(), in.readUTF()
+                            );
+                            int stateId = in.readInt();
+                            ArtisanBlockStorageInternal.getInternal().placeArtisanBlock(ArtisanBlockData.builder().blockId(blockId).location(location).stage(stateId).build());
                         }
                     }
                 }
+            } catch (IOException e) {
+                NeoArtisan.logger().severe("Fail to load custom block data at world " + world.getName() + ": " + e);
             }
-            NeoArtisan.logger().info("successfully loaded custom block data from file!");
-        } catch (IOException e) {
-            NeoArtisan.logger().severe("fail to load custom block data from file: " + e);
+            NeoArtisan.logger().info("successfully loaded custom block data at world " + world.getName());
         }
+        NeoArtisan.logger().info("successfully loaded custom block data at all worlds");
     }
 }
