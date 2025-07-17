@@ -15,10 +15,12 @@ import io.github.moyusowo.neoartisan.util.multithread.Threads;
 import io.github.moyusowo.neoartisanapi.api.block.data.ArtisanBlockData;
 import io.github.moyusowo.neoartisanapi.api.block.storage.ArtisanBlockStorage;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.*;
@@ -157,6 +159,24 @@ final class ArtisanBlockStorageImpl implements ArtisanBlockStorage, ArtisanBlock
     @SpecificThreadUse(thread = Threads.MAIN)
     public boolean isArtisanBlock(@NotNull World world, int x, int y, int z) {
         return isArtisanBlock(new BlockPos(world.getUID(), x, y, z));
+    }
+
+    @Override
+    @SpecificThreadUse(thread = Threads.MAIN)
+    public void setArtisanBlockData(@NotNull World world, int x, int y, int z, @Nullable ArtisanBlockData artisanBlockData) {
+        if (isArtisanBlock(world, x, y, z)) {
+            if (artisanBlockData == null) {
+                removeArtisanBlock(new BlockPos(world.getUID(), x, y, z));
+            } else {
+                replaceArtisanBlock(artisanBlockData);
+            }
+        } else {
+            if (artisanBlockData == null) {
+                world.getBlockAt(x, y, z).setType(Material.AIR);
+            } else {
+                placeArtisanBlock(artisanBlockData);
+            }
+        }
     }
 
     @SpecificThreadUse(thread = Threads.STRORAGE)
