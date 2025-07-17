@@ -1,6 +1,6 @@
 package io.github.moyusowo.neoartisan;
 
-import io.github.moyusowo.neoartisan.util.Util;
+import io.github.moyusowo.neoartisan.util.file.FileUtil;
 import io.github.moyusowo.neoartisan.util.init.Initializer;
 import io.github.moyusowo.neoartisan.util.terminate.Terminator;
 import io.github.moyusowo.neoartisanapi.api.persistence.EmptyPersistentDataContainer;
@@ -11,6 +11,7 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Server;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataAdapterContext;
@@ -39,7 +40,7 @@ public final class NeoArtisan extends JavaPlugin implements EmptyPersistentDataC
         artisanItemAttackDamageKey = new NamespacedKey("minecraft", "base_attack_damage");
         artisanItemAttackKnockbackKey = new NamespacedKey("minecraft", "base_attack_knockback");
         artisanItemAttackSpeedKey = new NamespacedKey("minecraft", "base_attack_speed");
-        Util.saveDefaultIfNotExists("config.yml");
+        FileUtil.saveDefaultIfNotExists("config.yml");
         File configFile = new File(getDataFolder(), "config.yml");
         YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
         isDebugMode = config.getBoolean("debug");
@@ -103,6 +104,7 @@ public final class NeoArtisan extends JavaPlugin implements EmptyPersistentDataC
 
     @Override
     public void onDisable() {
+        HandlerList.unregisterAll(this);
         Terminator.executeDisable();
     }
 }

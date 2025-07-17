@@ -1,22 +1,28 @@
 package io.github.moyusowo.neoartisan.block.blockdata;
 
 import io.github.moyusowo.neoartisan.NeoArtisan;
+import io.github.moyusowo.neoartisan.block.block.ArtisanBaseBlockInternal;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
 import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
 import io.github.moyusowo.neoartisanapi.api.block.block.ArtisanBaseBlock;
+import io.github.moyusowo.neoartisanapi.api.block.block.ArtisanCropBlock;
 import io.github.moyusowo.neoartisanapi.api.block.blockdata.ArtisanBlockData;
 import io.github.moyusowo.neoartisanapi.api.block.blockstate.ArtisanBaseBlockState;
 import io.github.moyusowo.neoartisanapi.api.block.gui.ArtisanBlockGUI;
+import io.github.moyusowo.neoartisanapi.api.block.task.LifecycleTaskManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.plugin.ServicePriority;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class ArtisanBlockDataImpl implements ArtisanBlockDataInternal {
+import java.util.concurrent.ThreadLocalRandom;
+
+class ArtisanBlockDataImpl implements ArtisanBlockDataInternal {
     @InitMethod(priority = InitPriority.BLOCKDATA)
     private static void init() {
         Bukkit.getServicesManager().register(
@@ -31,6 +37,7 @@ public class ArtisanBlockDataImpl implements ArtisanBlockDataInternal {
     private final NamespacedKey blockId;
     private final int stage;
     private final PersistentDataContainer persistentDataContainer;
+    private final LifecycleTaskManager lifecycleTaskManager;
     private final ArtisanBlockGUI artisanBlockGUI;
 
     public ArtisanBlockDataImpl(@NotNull NamespacedKey blockId, int stage, @NotNull Location location) {
@@ -38,7 +45,25 @@ public class ArtisanBlockDataImpl implements ArtisanBlockDataInternal {
         this.stage = stage;
         this.location = location;
         this.persistentDataContainer = NeoArtisanAPI.emptyPersistentDataContainer().emptyPersistentDataContainer();
-        this.artisanBlockGUI = this.getArtisanBlock().createGUI(location);
+        this.artisanBlockGUI = this.getArtisanBlockInternal().createGUI(location);
+        this.lifecycleTaskManager = this.getArtisanBlockInternal().createLifecycleTaskManager(location);
+        if (this.artisanBlockGUI != null) {
+            lifecycleTaskManager.addInitRunnable(artisanBlockGUI::onInit);
+        }
+        if (getArtisanBlockInternal() instanceof ArtisanCropBlock artisanCropBlock) {
+            this.lifecycleTaskManager.addLifecycleTask(
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            if (ThreadLocalRandom.current().nextDouble() > 0.003) return;
+                            artisanCropBlock.onRamdomTick(ArtisanBlockDataImpl.this);
+                        }
+                    },
+                    0L,
+                    1L,
+                    false
+            );
+        }
     }
 
     @Override
@@ -73,13 +98,24 @@ public class ArtisanBlockDataImpl implements ArtisanBlockDataInternal {
     }
 
     @Override
-    public @NotNull ArtisanBaseBlockState getArtisanBlockState() {
+    @NotNull
+    public ArtisanBaseBlockState getArtisanBlockState() {
         return NeoArtisanAPI.getBlockRegistry().getArtisanBlock(blockId).getState(stage);
     }
 
     @Override
-    public @NotNull PersistentDataContainer getPersistentDataContainer() {
+    @NotNull
+    public PersistentDataContainer getPersistentDataContainer() {
         return this.persistentDataContainer;
+    }
+
+    @Override
+    public @NotNull LifecycleTaskManager getLifecycleTaskManager() {
+        return this.lifecycleTaskManager;
+    }
+
+    private ArtisanBaseBlockInternal getArtisanBlockInternal() {
+        return (ArtisanBaseBlockInternal) getArtisanBlock();
     }
 
     private static class BuilderImpl implements Builder {

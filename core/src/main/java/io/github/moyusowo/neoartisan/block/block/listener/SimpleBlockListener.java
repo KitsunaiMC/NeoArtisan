@@ -11,6 +11,7 @@ import io.github.moyusowo.neoartisanapi.api.block.blockdata.ArtisanBlockData;
 import io.github.moyusowo.neoartisanapi.api.block.event.ArtisanBlockPlaceEvent;
 import io.github.moyusowo.neoartisanapi.api.item.ArtisanItem;
 import org.bukkit.GameMode;
+import org.bukkit.Material;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -19,7 +20,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 
-public final class SimpleBlockListener implements Listener {
+final class SimpleBlockListener implements Listener {
     private SimpleBlockListener() {}
 
     @InitMethod(priority = InitPriority.LISTENER)
@@ -35,6 +36,8 @@ public final class SimpleBlockListener implements Listener {
         if (event.getAction() != Action.RIGHT_CLICK_BLOCK || event.getClickedBlock() == null) return;
         // ensure player have a item when click
         if (event.getItem() == null) return;
+        // ensure the block is air
+        if (event.getClickedBlock().getRelative(event.getBlockFace()).getType() != Material.AIR) return;
         // is item ArtisanItem
         if (!NeoArtisanAPI.getItemRegistry().isArtisanItem(event.getItem())) return;
         ArtisanItem artisanItem = NeoArtisanAPI.getItemRegistry().getArtisanItem(event.getItem());

@@ -4,12 +4,14 @@ import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
 import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
 import org.bukkit.Bukkit;
+import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 import org.reflections.Reflections;
 import org.reflections.scanners.Scanners;
 import org.reflections.util.ConfigurationBuilder;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Set;
@@ -51,20 +53,28 @@ public final class RegisterManager {
             if (NeoArtisan.isDebugMode()) {
                 NeoArtisan.logger().info(pkg);
             }
-            Reflections reflections = new Reflections(
-                    new ConfigurationBuilder()
-                            .forPackage(pkg, plugin.getClass().getClassLoader())
-                            .addClassLoaders(plugin.getClass().getClassLoader())
-                            .setScanners(Scanners.MethodsAnnotated)
-            );
-            Set<Method> methods = reflections.getMethodsAnnotatedWith(NeoArtisanAPI.Register.class);
-            for (Method method : methods) {
-                method.setAccessible(true);
-                try {
-                    method.invoke(null);
-                } catch (InvocationTargetException | IllegalAccessException e) {
-                    NeoArtisan.logger().severe("fail to run register method: "  + method.getDeclaringClass().getName() + "." + method.getName() + ", cause: " + e + ": " + e.getCause());
+            try {
+                Reflections reflections = new Reflections(
+                        new ConfigurationBuilder()
+                                .forPackage(pkg, plugin.getClass().getClassLoader())
+                                .addClassLoaders(plugin.getClass().getClassLoader())
+                                .setScanners(Scanners.MethodsAnnotated)
+                );
+                Set<Method> methods = reflections.getMethodsAnnotatedWith(NeoArtisanAPI.Register.class);
+                for (Method method : methods) {
+                    try {
+                        method.setAccessible(true);
+                        method.invoke(null);
+                    } catch (Exception e) {
+                        NeoArtisan.logger().severe("fail to run register method: "  + method.getDeclaringClass().getName() + "." + method.getName() + ", cause: " + e + ": " + e.getCause());
+                    }
                 }
+            } catch (Throwable e) {
+                NeoArtisan.logger().severe("fail to load plugin class: "  + pkg + ", " + e + ": " + e.getCause());
+                NeoArtisan.logger().severe("disabling plugin: " + plugin.getName());
+                HandlerList.unregisterAll(plugin);
+                Bukkit.getScheduler().cancelTasks(plugin);
+                Bukkit.getPluginManager().disablePlugin(plugin);
             }
         }
     }

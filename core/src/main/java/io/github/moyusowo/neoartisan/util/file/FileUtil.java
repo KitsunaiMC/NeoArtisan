@@ -1,14 +1,13 @@
-package io.github.moyusowo.neoartisan.util;
+package io.github.moyusowo.neoartisan.util.file;
 
 import io.github.moyusowo.neoartisan.NeoArtisan;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 
 @SuppressWarnings("unused")
-public final class Util {
+public final class FileUtil {
 
-    private Util() {}
+    private FileUtil() {}
 
     public static void saveDefaultIfNotExists(String resourcePath) {
         String targetPath = resourcePath.replace('/', File.separatorChar);
@@ -17,12 +16,6 @@ public final class Util {
             return;
         }
         NeoArtisan.instance().saveResource(resourcePath, false);
-    }
-
-    public static boolean isYmlFile(@NotNull File file) {
-        if (!file.isFile()) return false;
-        String name = file.getName().toLowerCase();
-        return name.endsWith(".yml") || name.endsWith(".yaml");
     }
 
 }

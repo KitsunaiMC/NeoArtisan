@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
-public class ArtisanSkullStateImpl extends ArtisanBaseBlockStateImpl implements ArtisanSkullState {
+final class ArtisanSkullStateImpl extends ArtisanBaseBlockStateImpl implements ArtisanSkullState {
     @InitMethod(priority = InitPriority.REGISTRAR)
     private static void init() {
         Bukkit.getServicesManager().register(

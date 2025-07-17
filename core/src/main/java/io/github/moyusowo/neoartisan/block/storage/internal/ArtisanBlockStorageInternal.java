@@ -1,7 +1,9 @@
 package io.github.moyusowo.neoartisan.block.storage.internal;
 
-import io.github.moyusowo.neoartisan.util.BlockPos;
-import io.github.moyusowo.neoartisan.util.ChunkPos;
+import io.github.moyusowo.neoartisan.block.util.BlockPos;
+import io.github.moyusowo.neoartisan.block.util.ChunkPos;
+import io.github.moyusowo.neoartisan.util.multithread.SpecificThreadUse;
+import io.github.moyusowo.neoartisan.util.multithread.Threads;
 import io.github.moyusowo.neoartisanapi.api.block.blockdata.ArtisanBlockData;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
@@ -11,7 +13,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Map;
 import java.util.UUID;
 
-@SuppressWarnings("unused")
 @ApiStatus.Internal
 public interface ArtisanBlockStorageInternal {
 
@@ -19,14 +20,19 @@ public interface ArtisanBlockStorageInternal {
         return Bukkit.getServicesManager().load(ArtisanBlockStorageInternal.class);
     }
 
+    @SpecificThreadUse(thread = Threads.MAIN)
     void replaceArtisanBlock(UUID worldUUID, BlockPos blockPos, ArtisanBlockData block);
 
+    @SpecificThreadUse(thread = Threads.MAIN)
     void placeArtisanBlock(UUID worldUUID, BlockPos blockPos, ArtisanBlockData block);
 
+    @SpecificThreadUse(thread = Threads.MAIN)
     void removeArtisanBlock(UUID worldUUID, BlockPos blockPos);
 
+    @SpecificThreadUse(thread = Threads.MAIN)
     void removeArtisanBlock(UUID worldUUID, int x, int y, int z);
 
+    @SpecificThreadUse(thread = Threads.MAIN)
     void removeArtisanBlock(Block block);
 
     @NotNull

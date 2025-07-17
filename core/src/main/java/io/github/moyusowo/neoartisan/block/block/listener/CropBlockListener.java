@@ -12,28 +12,21 @@ import io.github.moyusowo.neoartisanapi.api.block.blockdata.ArtisanBlockData;
 import io.github.moyusowo.neoartisanapi.api.block.event.ArtisanBlockPlaceEvent;
 import io.github.moyusowo.neoartisanapi.api.item.ArtisanItem;
 import org.bukkit.*;
-import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.block.BlockState;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockFertilizeEvent;
-import org.bukkit.event.block.BlockGrowEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.HashMap;
 import java.util.concurrent.ThreadLocalRandom;
 
-public final class CropBlockListener implements Listener {
-    private static final HashMap<Block, ArtisanBlockData> grownCrop = new HashMap<>();
-
+final class CropBlockListener implements Listener {
     private CropBlockListener() {}
 
     @InitMethod(priority = InitPriority.LISTENER)
@@ -103,55 +96,25 @@ public final class CropBlockListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void onGrow(BlockGrowEvent event) {
-        if (!NeoArtisanAPI.getArtisanBlockStorage().isArtisanBlock(event.getBlock())) return;
-        ArtisanBlockData blockData = NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlockData(event.getBlock());
-        if (blockData.getArtisanBlock().getType() != ArtisanBlocks.CROP) return;
-        event.setCancelled(true);
-        if (hasNextStage(blockData)) {
-            grownCrop.put(event.getBlock(), blockData);
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    grownCrop.remove(event.getBlock());
-                }
-            }.runTaskLater(NeoArtisan.instance(), 0L);
-            Util.replace(event.getBlock(), getNextStage(blockData));
-        }
-    }
-
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onFertilize(BlockFertilizeEvent event) {
-        for (BlockState blockState : event.getBlocks()) {
-            if (NeoArtisanAPI.getArtisanBlockStorage().isArtisanBlock(blockState.getBlock())) {
-                ArtisanBlockData artisanBlockData = NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlockData(blockState.getBlock());
-                if (artisanBlockData.getArtisanBlock().getType() == ArtisanBlocks.CROP) {
-                    ArtisanBlockData formerData = grownCrop.get(blockState.getBlock());
-                    Util.replace(blockState.getBlock(), formerData);
-                    grownCrop.remove(blockState.getBlock());
-                    event.setCancelled(true);
-                    if (hasNextStage(artisanBlockData)) {
-                        Util.replace(blockState.getBlock(), getNextFertilizeStage(artisanBlockData));
-                        playBoneMealEffects(blockState.getLocation());
-                    }
-                }
-            }
-        }
+//        for (BlockState blockState : event.getBlocks()) {
+//            if (NeoArtisanAPI.getArtisanBlockStorage().isArtisanBlock(blockState.getBlock())) {
+//                ArtisanBlockData artisanBlockData = NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlockData(blockState.getBlock());
+//                if (artisanBlockData.getArtisanBlock().getType() == ArtisanBlocks.CROP) {
+//                    ArtisanBlockData formerData = grownCrop.get(blockState.getBlock());
+//                    Util.replace(blockState.getBlock(), formerData);
+//                    grownCrop.remove(blockState.getBlock());
+//                    event.setCancelled(true);
+//                    if (hasNextStage(artisanBlockData)) {
+//                        Util.replace(blockState.getBlock(), getNextFertilizeStage(artisanBlockData));
+//                        playBoneMealEffects(blockState.getLocation());
+//                    }
+//                }
+//            }
+//        }
     }
 
-    private static boolean hasNextStage(ArtisanBlockData artisanBlockData) {
-        return artisanBlockData.stage() < artisanBlockData.getArtisanBlock().getTotalStates() - 1;
-    }
-
-    private static ArtisanBlockData getNextStage(ArtisanBlockData artisanBlockData) {
-        return ArtisanBlockData.builder()
-                .blockId(artisanBlockData.blockId())
-                .location(artisanBlockData.getLocation())
-                .stage(artisanBlockData.stage() + 1)
-                .build();
-    }
-
-    private static ArtisanBlockData getNextFertilizeStage(ArtisanBlockData artisanBlockData) {
+    public static ArtisanBlockData getNextFertilizeStage(ArtisanBlockData artisanBlockData) {
         ArtisanCropBlock artisanCropBlock = (ArtisanCropBlock) artisanBlockData.getArtisanBlock();
         int grow = artisanCropBlock.generateBoneMealGrowth();
         if (grow + artisanBlockData.stage() >= artisanCropBlock.getTotalStates()) grow = artisanCropBlock.getTotalStates() - 1 - artisanBlockData.stage();

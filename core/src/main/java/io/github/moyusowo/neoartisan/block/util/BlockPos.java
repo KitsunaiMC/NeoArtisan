@@ -1,4 +1,4 @@
-package io.github.moyusowo.neoartisan.util;
+package io.github.moyusowo.neoartisan.block.util;
 
 public record BlockPos(
         int x,

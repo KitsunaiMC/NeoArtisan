@@ -1,9 +1,11 @@
 package io.github.moyusowo.neoartisan.block.block;
 
 import io.github.moyusowo.neoartisan.NeoArtisan;
+import io.github.moyusowo.neoartisan.block.block.listener.Util;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
 import io.github.moyusowo.neoartisanapi.api.block.block.ArtisanCropBlock;
+import io.github.moyusowo.neoartisanapi.api.block.blockdata.ArtisanBlockData;
 import io.github.moyusowo.neoartisanapi.api.block.blockstate.ArtisanBaseBlockState;
 import io.github.moyusowo.neoartisanapi.api.block.util.SoundProperty;
 import org.bukkit.Bukkit;
@@ -14,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class ArtisanCropBlockImpl extends ArtisanBaseBlockImpl implements ArtisanCropBlock {
+final class ArtisanCropBlockImpl extends ArtisanBaseBlockImpl implements ArtisanCropBlock {
     @InitMethod(priority = InitPriority.REGISTRAR)
     private static void init() {
         Bukkit.getServicesManager().register(
@@ -46,6 +48,13 @@ public class ArtisanCropBlockImpl extends ArtisanBaseBlockImpl implements Artisa
     @Override
     public int generateBoneMealGrowth() {
         return ThreadLocalRandom.current().nextInt(this.boneMealMinGrowth, this.boneMealMaxGrowth + 1);
+    }
+
+    @Override
+    public void onRamdomTick(ArtisanBlockData cropData) {
+        if (Util.hasNextStage(cropData)) {
+            Util.replace(cropData.getLocation().getBlock(), Util.getNextStage(cropData));
+        }
     }
 
     public static final class BuilderImpl implements Builder {

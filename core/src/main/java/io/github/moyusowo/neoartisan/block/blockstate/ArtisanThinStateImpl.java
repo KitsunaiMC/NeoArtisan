@@ -11,7 +11,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.ServicePriority;
 import org.jetbrains.annotations.NotNull;
 
-public class ArtisanThinStateImpl extends ArtisanBaseBlockStateImpl implements ArtisanThinState {
+final class ArtisanThinStateImpl extends ArtisanBaseBlockStateImpl implements ArtisanThinState {
     @InitMethod(priority = InitPriority.REGISTRAR)
     private static void init() {
         Bukkit.getServicesManager().register(

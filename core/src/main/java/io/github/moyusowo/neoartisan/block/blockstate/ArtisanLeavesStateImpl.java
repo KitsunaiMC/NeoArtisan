@@ -11,7 +11,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.ServicePriority;
 import org.jetbrains.annotations.NotNull;
 
-public class ArtisanLeavesStateImpl extends ArtisanBaseBlockStateImpl implements ArtisanLeavesState {
+final class ArtisanLeavesStateImpl extends ArtisanBaseBlockStateImpl implements ArtisanLeavesState {
     @InitMethod(priority = InitPriority.REGISTRAR)
     private static void init() {
         Bukkit.getServicesManager().register(

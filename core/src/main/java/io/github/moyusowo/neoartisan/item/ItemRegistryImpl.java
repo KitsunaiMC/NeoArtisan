@@ -2,7 +2,7 @@ package io.github.moyusowo.neoartisan.item;
 
 import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisan.RegisterManager;
-import io.github.moyusowo.neoartisan.util.NamespacedKeyDataType;
+import io.github.moyusowo.neoartisan.util.data.NamespacedKeyDataType;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
 import io.github.moyusowo.neoartisanapi.api.item.ArtisanItem;

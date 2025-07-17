@@ -32,7 +32,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
-public final class BaseStateListener implements Listener {
+final class BaseStateListener implements Listener {
     private BaseStateListener() {}
 
     @InitMethod(priority = InitPriority.LISTENER)

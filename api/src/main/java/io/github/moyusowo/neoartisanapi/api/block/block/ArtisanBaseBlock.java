@@ -2,16 +2,11 @@ package io.github.moyusowo.neoartisanapi.api.block.block;
 
 import io.github.moyusowo.neoartisanapi.api.block.blockstate.ArtisanBaseBlockState;
 import io.github.moyusowo.neoartisanapi.api.block.util.SoundProperty;
-import io.github.moyusowo.neoartisanapi.api.block.gui.ArtisanBlockGUI;
-import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public interface ArtisanBaseBlock {
-    @Nullable
-    ArtisanBlockGUI createGUI(Location location);
-
     /**
      * 获取此自定义方块的唯一标识符
      * <p>

@@ -1,5 +1,6 @@
 package io.github.moyusowo.neoartisanapi.api.block.block;
 
+import io.github.moyusowo.neoartisanapi.api.block.blockdata.ArtisanBlockData;
 import io.github.moyusowo.neoartisanapi.api.block.util.SoundProperty;
 import io.github.moyusowo.neoartisanapi.api.block.blockstate.ArtisanBaseBlockState;
 import io.github.moyusowo.neoartisanapi.api.util.BuilderFactoryUtil;
@@ -41,6 +42,8 @@ public interface ArtisanCropBlock extends ArtisanBaseBlock {
      * @implSpec 满足 minGrowth ≤ 返回值 ≤ maxGrowth
      */
     int generateBoneMealGrowth();
+
+    void onRamdomTick(ArtisanBlockData cropData);
 
     @Override
     @NotNull

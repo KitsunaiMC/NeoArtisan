@@ -1,9 +1,8 @@
 package io.github.moyusowo.neoartisanapi.api.block.blockdata;
 
 import io.github.moyusowo.neoartisanapi.api.block.block.ArtisanBaseBlock;
-import io.github.moyusowo.neoartisanapi.api.block.block.ArtisanBlocks;
 import io.github.moyusowo.neoartisanapi.api.block.blockstate.ArtisanBaseBlockState;
-import io.github.moyusowo.neoartisanapi.api.block.blockstate.ArtisanBlockStates;
+import io.github.moyusowo.neoartisanapi.api.block.task.LifecycleTaskManager;
 import io.github.moyusowo.neoartisanapi.api.util.BuilderFactoryUtil;
 import io.github.moyusowo.neoartisanapi.api.block.gui.ArtisanBlockGUI;
 import org.bukkit.Location;
@@ -83,6 +82,9 @@ public interface ArtisanBlockData {
      */
     @NotNull
     PersistentDataContainer getPersistentDataContainer();
+
+    @NotNull
+    LifecycleTaskManager getLifecycleTaskManager();
 
     interface Builder {
         @NotNull

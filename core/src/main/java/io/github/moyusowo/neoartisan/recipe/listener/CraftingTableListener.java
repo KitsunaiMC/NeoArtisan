@@ -2,7 +2,7 @@ package io.github.moyusowo.neoartisan.recipe.listener;
 
 import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisan.recipe.internal.RecipeRegistryInternal;
-import io.github.moyusowo.neoartisan.util.ArrayKey;
+import io.github.moyusowo.neoartisan.util.data.ArrayKey;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
 import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;

@@ -13,7 +13,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.ServicePriority;
 import org.jetbrains.annotations.NotNull;
 
-public class ArtisanCommonStateImpl extends ArtisanBaseBlockStateImpl implements ArtisanCommonState {
+final class ArtisanCommonStateImpl extends ArtisanBaseBlockStateImpl implements ArtisanCommonState {
     @InitMethod(priority = InitPriority.REGISTRAR)
     private static void init() {
         Bukkit.getServicesManager().register(

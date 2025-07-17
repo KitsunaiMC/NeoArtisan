@@ -3,8 +3,11 @@ package io.github.moyusowo.neoartisan.block.block.listener;
 import com.destroystokyo.paper.profile.PlayerProfile;
 import com.destroystokyo.paper.profile.ProfileProperty;
 import com.github.retrooper.packetevents.protocol.world.states.WrappedBlockState;
+import io.github.moyusowo.neoartisan.block.blockdata.ArtisanBlockDataInternal;
 import io.github.moyusowo.neoartisan.block.storage.internal.ArtisanBlockStorageInternal;
-import io.github.moyusowo.neoartisan.util.BlockPos;
+import io.github.moyusowo.neoartisan.block.task.LifecycleTaskManagerInternal;
+import io.github.moyusowo.neoartisan.block.util.BlockPos;
+import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
 import io.github.moyusowo.neoartisanapi.api.block.blockdata.ArtisanBlockData;
 import io.github.moyusowo.neoartisanapi.api.block.blockstate.ArtisanSkullState;
 import io.github.moyusowo.neoartisanapi.api.block.util.SoundProperty;
@@ -16,13 +19,14 @@ import org.bukkit.block.data.BlockData;
 
 import java.util.UUID;
 
-final class Util {
+public final class Util {
     private Util() {}
 
-    static void place(Block bukkitBlock, ArtisanBlockData artisanBlockData) {
+    public static void place(Block bukkitBlock, ArtisanBlockData artisanBlockData) {
         World world = bukkitBlock.getWorld();
         BlockPos blockPos = new BlockPos(bukkitBlock.getX(), bukkitBlock.getY(), bukkitBlock.getZ());
         ArtisanBlockStorageInternal.getInternal().placeArtisanBlock(world.getUID(), blockPos, artisanBlockData);
+        ((LifecycleTaskManagerInternal) artisanBlockData.getLifecycleTaskManager()).runInit(bukkitBlock.getLocation());
         BlockData blockData = Bukkit.createBlockData(WrappedBlockState.getByGlobalId(artisanBlockData.getArtisanBlockState().actualState()).toString());
         world.setBlockData(bukkitBlock.getLocation(), blockData);
         if (artisanBlockData.getArtisanBlockState() instanceof ArtisanSkullState state) {
@@ -48,10 +52,12 @@ final class Util {
         }
     }
 
-    static void replace(Block bukkitBlock, ArtisanBlockData artisanBlockData) {
+    public static void replace(Block bukkitBlock, ArtisanBlockData artisanBlockData) {
         World world = bukkitBlock.getWorld();
         BlockPos pos = new BlockPos(bukkitBlock.getX(), bukkitBlock.getY(), bukkitBlock.getZ());
+        ((LifecycleTaskManagerInternal) NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlockData(bukkitBlock).getLifecycleTaskManager()).runTerminate(bukkitBlock.getLocation());
         ArtisanBlockStorageInternal.getInternal().replaceArtisanBlock(world.getUID(), pos, artisanBlockData);
+        ((LifecycleTaskManagerInternal) artisanBlockData.getLifecycleTaskManager()).runInit(bukkitBlock.getLocation());
         BlockData blockData = Bukkit.createBlockData(WrappedBlockState.getByGlobalId(artisanBlockData.getArtisanBlockState().actualState()).toString());
         world.setBlockData(bukkitBlock.getLocation(), blockData);
         if (artisanBlockData.getArtisanBlockState() instanceof ArtisanSkullState state) {
@@ -61,6 +67,18 @@ final class Util {
             skull.setPlayerProfile(playerProfile);
             skull.update(true);
         }
+    }
+
+    public static boolean hasNextStage(ArtisanBlockData artisanBlockData) {
+        return artisanBlockData.stage() < artisanBlockData.getArtisanBlock().getTotalStates() - 1;
+    }
+
+    public static ArtisanBlockData getNextStage(ArtisanBlockData artisanBlockData) {
+        return ArtisanBlockData.builder()
+                .blockId(artisanBlockData.blockId())
+                .location(artisanBlockData.getLocation())
+                .stage(artisanBlockData.stage() + 1)
+                .build();
     }
 
 }

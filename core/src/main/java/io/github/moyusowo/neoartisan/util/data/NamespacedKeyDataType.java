@@ -1,4 +1,4 @@
-package io.github.moyusowo.neoartisan.util;
+package io.github.moyusowo.neoartisan.util.data;
 
 import org.bukkit.NamespacedKey;
 import org.bukkit.persistence.PersistentDataAdapterContext;

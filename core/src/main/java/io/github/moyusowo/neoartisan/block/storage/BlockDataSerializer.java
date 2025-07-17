@@ -2,8 +2,8 @@ package io.github.moyusowo.neoartisan.block.storage;
 
 import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisan.block.blockdata.ArtisanBlockDataInternal;
-import io.github.moyusowo.neoartisan.util.BlockPos;
-import io.github.moyusowo.neoartisan.util.ChunkPos;
+import io.github.moyusowo.neoartisan.block.util.BlockPos;
+import io.github.moyusowo.neoartisan.block.util.ChunkPos;
 import io.github.moyusowo.neoartisan.util.terminate.TerminateMethod;
 import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
 import io.github.moyusowo.neoartisanapi.api.block.blockdata.ArtisanBlockData;

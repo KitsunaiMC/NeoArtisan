@@ -2,11 +2,11 @@ package io.github.moyusowo.neoartisan.block.storage;
 
 import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisan.block.storage.internal.ArtisanBlockStorageInternal;
-import io.github.moyusowo.neoartisan.util.BlockPos;
-import io.github.moyusowo.neoartisan.util.ChunkPos;
+import io.github.moyusowo.neoartisan.block.task.LifecycleTaskManagerInternal;
+import io.github.moyusowo.neoartisan.block.util.BlockPos;
+import io.github.moyusowo.neoartisan.block.util.ChunkPos;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisanapi.api.block.blockdata.ArtisanBlockData;
-import io.github.moyusowo.neoartisanapi.api.block.gui.ArtisanBlockGUI;
 import io.github.moyusowo.neoartisanapi.api.block.storage.ArtisanBlockStorage;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
@@ -126,10 +126,8 @@ final class ArtisanBlockStorageImpl implements ArtisanBlockStorage, ArtisanBlock
         lock.writeLock().lock();
         try {
             if (storage.get(worldUID).get(chunkPos).containsKey(blockPos)) {
-                ArtisanBlockGUI gui = storage.get(worldUID).get(chunkPos).get(blockPos).getGUI();
-                if (gui != null) {
-                    gui.onTerminate();
-                }
+                ArtisanBlockData blockData = storage.get(worldUID).get(chunkPos).get(blockPos);
+                ((LifecycleTaskManagerInternal) blockData.getLifecycleTaskManager()).runTerminate(blockData.getLocation());
                 storage.get(worldUID).get(chunkPos).remove(blockPos);
             }
             if (storage.get(worldUID).get(chunkPos).isEmpty()) {

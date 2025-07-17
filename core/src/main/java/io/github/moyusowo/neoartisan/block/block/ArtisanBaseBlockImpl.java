@@ -1,9 +1,10 @@
 package io.github.moyusowo.neoartisan.block.block;
 
-import io.github.moyusowo.neoartisanapi.api.block.block.ArtisanBaseBlock;
+import io.github.moyusowo.neoartisan.block.task.LifecycleTaskManagerInternal;
 import io.github.moyusowo.neoartisanapi.api.block.blockstate.ArtisanBaseBlockState;
 import io.github.moyusowo.neoartisanapi.api.block.gui.ArtisanBlockGUI;
 import io.github.moyusowo.neoartisanapi.api.block.gui.GUICreator;
+import io.github.moyusowo.neoartisanapi.api.block.task.LifecycleTaskManager;
 import io.github.moyusowo.neoartisanapi.api.block.util.SoundProperty;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
@@ -13,7 +14,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class ArtisanBaseBlockImpl implements ArtisanBaseBlock {
+public abstract class ArtisanBaseBlockImpl implements ArtisanBaseBlockInternal {
     private final NamespacedKey blockId;
     private final List<ArtisanBaseBlockState> stages;
     private final GUICreator creator;
@@ -27,9 +28,14 @@ public abstract class ArtisanBaseBlockImpl implements ArtisanBaseBlock {
     }
 
     @Override
-    public @Nullable ArtisanBlockGUI createGUI(Location location) {
+    public @Nullable ArtisanBlockGUI createGUI(@NotNull Location location) {
         if (this.creator == null) return null;
         return this.creator.create(location);
+    }
+
+    @NotNull
+    public LifecycleTaskManager createLifecycleTaskManager(@NotNull Location location) {
+        return LifecycleTaskManagerInternal.create(location);
     }
 
     @Override

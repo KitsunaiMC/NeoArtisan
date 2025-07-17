@@ -1,4 +1,4 @@
-package io.github.moyusowo.neoartisan.util;
+package io.github.moyusowo.neoartisan.util.data;
 
 import io.github.moyusowo.neoartisanapi.api.recipe.RecipeType;
 import org.bukkit.NamespacedKey;

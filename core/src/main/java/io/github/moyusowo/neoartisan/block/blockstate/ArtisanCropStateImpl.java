@@ -18,7 +18,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.ServicePriority;
 import org.jetbrains.annotations.NotNull;
 
-public class ArtisanCropStateImpl extends ArtisanBaseBlockStateImpl implements ArtisanCropState {
+final class ArtisanCropStateImpl extends ArtisanBaseBlockStateImpl implements ArtisanCropState {
     @InitMethod(priority = InitPriority.REGISTRAR)
     private static void init() {
         Bukkit.getServicesManager().register(

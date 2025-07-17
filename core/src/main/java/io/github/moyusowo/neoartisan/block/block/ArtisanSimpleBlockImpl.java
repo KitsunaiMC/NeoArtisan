@@ -15,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class ArtisanSimpleBlockImpl extends ArtisanBaseBlockImpl implements ArtisanSimpleBlock {
+final class ArtisanSimpleBlockImpl extends ArtisanBaseBlockImpl implements ArtisanSimpleBlock {
     @InitMethod(priority = InitPriority.REGISTRAR)
     private static void init() {
         Bukkit.getServicesManager().register(
