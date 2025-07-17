@@ -8,6 +8,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
@@ -39,7 +40,7 @@ final class AsyncPlayerWorld implements Listener {
         playerWorld.replace(event.getPlayer().getUniqueId(), event.getPlayer().getWorld().getUID());
     }
 
-    public static @Nullable UUID getPlayerWorld(UUID playerUUID) {
-        return playerWorld.getOrDefault(playerUUID, null);
+    public static @NotNull UUID getPlayerWorld(UUID playerUUID) {
+        return playerWorld.get(playerUUID);
     }
 }

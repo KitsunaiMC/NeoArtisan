@@ -1,7 +1,7 @@
 package io.github.moyusowo.neoartisanapi.api.block.event;
 
-import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlock;
-import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlockData;
+import io.github.moyusowo.neoartisanapi.api.block.block.base.ArtisanBaseBlock;
+import io.github.moyusowo.neoartisanapi.api.block.data.ArtisanBlockData;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
@@ -18,13 +18,13 @@ import org.jetbrains.annotations.NotNull;
  * 可用于取消放置行为或修改放置后的方块状态。
  * </p>
  *
- * @see ArtisanBlock 自定义方块类型
+ * @see ArtisanBaseBlock 自定义方块类型
  */
 public class ArtisanBlockPlaceEvent extends BlockPlaceEvent {
 
     private static final HandlerList handlers = new HandlerList();
 
-    protected ArtisanBlock artisanBlock;
+    protected ArtisanBaseBlock artisanBaseBlock;
     protected ArtisanBlockData placedArtisanBlockData;
 
     /**
@@ -37,12 +37,12 @@ public class ArtisanBlockPlaceEvent extends BlockPlaceEvent {
      * @param thePlayer 放置方块的玩家（非null）
      * @param canBuild 是否有建造权限
      * @param hand 使用的手持装备槽（非null）
-     * @param artisanBlock 关联的自定义方块定义（非null）
+     * @param artisanBaseBlock 关联的自定义方块定义（非null）
      */
     @SuppressWarnings("UnstableApiUsage")
-    public ArtisanBlockPlaceEvent(@NotNull Block placedBlock, @NotNull BlockState replacedBlockState, @NotNull Block placedAgainst, @NotNull ItemStack itemInHand, @NotNull Player thePlayer, boolean canBuild, @NotNull EquipmentSlot hand, @NotNull ArtisanBlock artisanBlock, @NotNull ArtisanBlockData placedArtisanBlockData) {
+    public ArtisanBlockPlaceEvent(@NotNull Block placedBlock, @NotNull BlockState replacedBlockState, @NotNull Block placedAgainst, @NotNull ItemStack itemInHand, @NotNull Player thePlayer, boolean canBuild, @NotNull EquipmentSlot hand, @NotNull ArtisanBaseBlock artisanBaseBlock, @NotNull ArtisanBlockData placedArtisanBlockData) {
         super(placedBlock, replacedBlockState, placedAgainst, itemInHand, thePlayer, canBuild, hand);
-        this.artisanBlock = artisanBlock;
+        this.artisanBaseBlock = artisanBaseBlock;
         this.placedArtisanBlockData = placedArtisanBlockData;
     }
 
@@ -51,8 +51,8 @@ public class ArtisanBlockPlaceEvent extends BlockPlaceEvent {
      *
      * @return 自定义方块实例，包含方块类型和状态信息
      */
-    public @NotNull ArtisanBlock getArtisanBlock() {
-        return this.artisanBlock;
+    public @NotNull ArtisanBaseBlock getArtisanBlock() {
+        return this.artisanBaseBlock;
     }
 
     /**
@@ -60,7 +60,6 @@ public class ArtisanBlockPlaceEvent extends BlockPlaceEvent {
      *
      * @return 即将被储存的自定义方块BlockData
      * @see ArtisanBlockData
-     * @since 1.0.1
      */
     public ArtisanBlockData getPlacedArtisanBlockData() { return this.placedArtisanBlockData; }
 
@@ -68,7 +67,6 @@ public class ArtisanBlockPlaceEvent extends BlockPlaceEvent {
      * 设置即将被储存的自定义方块BlockData
      *
      * @see ArtisanBlockData
-     * @since 1.0.1
      */
     public void setPlacedArtisanBlockData(ArtisanBlockData placedArtisanBlockData) { this.placedArtisanBlockData = placedArtisanBlockData; }
 

@@ -1,8 +1,7 @@
 package io.github.moyusowo.neoartisanapi.api.block.gui;
 
 import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
-import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlockData;
-import io.github.moyusowo.neoartisanapi.api.block.task.LifecycleTask;
+import io.github.moyusowo.neoartisanapi.api.block.data.ArtisanBlockData;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
@@ -17,11 +16,8 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -32,16 +28,16 @@ import java.util.Objects;
  *   <li><b>自动事件管理</b> - 自动注册所需事件监听器</li>
  *   <li><b>生命周期控制</b> - 提供初始化(init)和终止(terminate)钩子</li>
  *   <li><b>延迟初始化</b> - 确保方块数据加载完成后再初始化</li>
- *   <li><b>任务调度</b> - 支持注册GUI生命周期任务</li>
+ *   <li><b>任务调度</b> - 绑定方块的任务调度器，确保方块数据加载完成后再初始化，支持注册初始化、终止和生命周期任务</li>
  *   <li><b>位置绑定</b> - 与特定方块位置严格关联</li>
  * </ul>
  *
  * <b>继承要求：</b>
  * <ol>
- *   <li>必须实现 {@link #init()} 方法进行初始化</li>
+ *   <li>必须实现 {@link #init()} 方法进行初始化，可在内调用 {@link ArtisanBlockData#getLifecycleTaskManager()} 注册</li>
  *   <li>可通过重写 {@link #terminate()} 实现清理逻辑</li>
  *   <li>在构造函数中<b>禁止直接调用</b> {@link #getArtisanBlockData()}，必须通过重写 {@link #init()} 方法以使用内置的延迟初始化机制</li>
- *   <li>如需与GUI生命周期相关的周期性任务，使用 {@link #addLifecycleTask(LifecycleTask)} 注册</li>
+ *   <li>如需与GUI生命周期相关的周期性任务，使用  注册</li>
  * </ol>
  *
  * <p><b>生命周期流程图：</b></p>
@@ -52,16 +48,11 @@ import java.util.Objects;
  * </pre>
  *
  * @see BlockInventoryHolder Bukkit库存持有者接口
- * @see Listener 事件监听标记
- * @see LifecycleTask
- */
+ * @see Listener 事件监听标记*/
 public abstract class ArtisanBlockGUI implements BlockInventoryHolder, Listener {
 
     protected final Inventory inventory;
     protected final Location location;
-    protected final Plugin plugin;
-    private final List<LifecycleTask> lifecycleTasks;
-    private boolean isInit = false;
 
     /**
      * 基础构造器（不应该在 {@link GUICreator#create(Location)} 之外的地方调用）
@@ -78,19 +69,8 @@ public abstract class ArtisanBlockGUI implements BlockInventoryHolder, Listener 
      */
     protected ArtisanBlockGUI(Plugin plugin, int size, Component title, Location location) {
         this.location = location;
-        this.plugin = plugin;
         inventory = plugin.getServer().createInventory(this, size, title);
         Bukkit.getPluginManager().registerEvents(this, plugin);
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                if (NeoArtisanAPI.getArtisanBlockStorage().isArtisanBlock(location.getBlock())) {
-                    onInit();
-                    cancel();
-                }
-            }
-        }.runTaskTimer(plugin, 0L, 1L);
-        this.lifecycleTasks = new ArrayList<>();
     }
 
     /**
@@ -103,19 +83,8 @@ public abstract class ArtisanBlockGUI implements BlockInventoryHolder, Listener 
      */
     protected ArtisanBlockGUI(Plugin plugin, InventoryType inventoryType, Component title, Location location) {
         this.location = location;
-        this.plugin = plugin;
         inventory = plugin.getServer().createInventory(this, inventoryType, title);
         Bukkit.getPluginManager().registerEvents(this, plugin);
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                if (NeoArtisanAPI.getArtisanBlockStorage().isArtisanBlock(location.getBlock())) {
-                    onInit();
-                    cancel();
-                }
-            }
-        }.runTaskTimer(plugin, 0L, 1L);
-        this.lifecycleTasks = new ArrayList<>();
     }
 
     /**
@@ -171,64 +140,31 @@ public abstract class ArtisanBlockGUI implements BlockInventoryHolder, Listener 
      * </ul>
      *
      * @return 该位置的自定义方块数据（不会为null）
-     * @throws IllegalStateException 如果方块数据尚未加载
+     * @throws NullPointerException 如果方块数据尚未加载
      */
     public @NotNull ArtisanBlockData getArtisanBlockData() {
-        ArtisanBlockData artisanBlockData = NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlockData(this.location.getBlock());
-        if (artisanBlockData == null) {
-            throw new IllegalStateException("ArtisanBlockData not yet loaded!");
-        }
-        return artisanBlockData;
+        return NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlockData(this.location.getBlock());
     }
 
     /**
      * 添加GUI生命周期任务
+     *
      * <p>
      * 用于注册需要在GUI初始化后运行的周期性任务（如库存刷新）。
      * 必须在 {@link #init()} 方法执行前调用，可在构造函数或 {@link #init()} 方法中注册。
      * </p>
      *
-     * @param lifecycleTask 要添加的任务（非null）
-     * @throws IllegalStateException 如果初始化已完成
-     * @see LifecycleTask 生命周期任务接口
-     */
-    @ApiStatus.Internal
-    protected void addLifecycleTask(@NotNull LifecycleTask lifecycleTask) {
-        if (isInit) throw new IllegalStateException("Cannot add tasks after initialization");
-        lifecycleTasks.add(lifecycleTask);
-    }
-
-    /**
-     * 添加GUI生命周期任务
      * <p>
-     * 用于注册需要在GUI初始化后运行的周期性任务（如库存刷新）。
-     * 必须在 {@link #init()} 方法执行前调用，可在构造函数或 {@link #init()} 方法中注册。
-     * </p>
-     *
-     * @param bukkitRunnable 要添加的任务（非null）
-     * @param delay 任务开始时的延迟（Tick为单位）
-     * @param period 任务执行的周期（Tick为单位）
-     * @throws IllegalStateException 如果初始化已完成
-     */
-    protected void addLifecycleTask(@NotNull BukkitRunnable bukkitRunnable, long delay, long period) {
-        addLifecycleTask(new LifecycleTask(plugin, bukkitRunnable, delay, period));
-    }
-
-    /**
-     * 添加GUI生命周期任务
-     * <p>
-     * 用于注册需要在GUI初始化后运行的周期性任务（如库存刷新）。
-     * 必须在 {@link #init()} 方法执行前调用，可在构造函数或 {@link #init()} 方法中注册。
+     * 效果和手动调用 {@link ArtisanBlockData#getLifecycleTaskManager()} 相同。
      * </p>
      *
      * @param bukkitRunnable 要添加的任务（非null）
      * @param delay 任务开始时的延迟（Tick为单位）
      * @param period 任务执行的周期（Tick为单位）
      * @param isAsynchronous 是否异步执行
-     * @throws IllegalStateException 如果初始化已完成
      */
     protected void addLifecycleTask(@NotNull BukkitRunnable bukkitRunnable, long delay, long period, boolean isAsynchronous) {
-        addLifecycleTask(new LifecycleTask(plugin, bukkitRunnable, delay, period, isAsynchronous));
+        getArtisanBlockData().getLifecycleTaskManager().addLifecycleTask(bukkitRunnable, delay, period, isAsynchronous);
     }
 
     /**
@@ -245,14 +181,12 @@ public abstract class ArtisanBlockGUI implements BlockInventoryHolder, Listener 
      *
      * @implNote 保证在主线程同步执行
      * @see #init() 抽象初始化方法
-     * @since 2.0.0
      */
-    private void onInit() {
+    public final void onInit() {
         try {
             init();
         } finally {
-            lifecycleTasks.forEach(LifecycleTask::run);
-            isInit = true;
+            getArtisanBlockData().getLifecycleTaskManager().addTerminateRunnable(this::onTerminate);
         }
     }
 
@@ -285,12 +219,8 @@ public abstract class ArtisanBlockGUI implements BlockInventoryHolder, Listener 
      *   → 注销事件
      * </pre>
      *
-     * @apiNote 此方法仅由NeoArtisan框架调用
-     * @implSpec 实现保证线程安全（主线程执行）
-     * @since 2.0.0
      */
-    @ApiStatus.Internal
-    public final void onTerminate() {
+    private void onTerminate() {
         try {
             terminate();
         } finally {
@@ -298,7 +228,6 @@ public abstract class ArtisanBlockGUI implements BlockInventoryHolder, Listener 
                     .filter(p -> p.getOpenInventory().getTopInventory().getHolder() == this)
                     .forEach(player -> player.closeInventory(InventoryCloseEvent.Reason.PLUGIN));
             HandlerList.unregisterAll(this);
-            lifecycleTasks.forEach(LifecycleTask::cancel);
         }
     }
 
@@ -335,8 +264,6 @@ public abstract class ArtisanBlockGUI implements BlockInventoryHolder, Listener 
      * 当GUI关联的方块被破坏时调用，用于执行资源清理操作。
      * </p>
      *
-     *
-     * @since 2.0.0
      */
     protected void terminate() {}
 

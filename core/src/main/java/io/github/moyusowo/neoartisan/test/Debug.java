@@ -1,7 +1,6 @@
 package io.github.moyusowo.neoartisan.test;
 
 import io.github.moyusowo.neoartisan.NeoArtisan;
-
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
 import org.bukkit.event.EventHandler;

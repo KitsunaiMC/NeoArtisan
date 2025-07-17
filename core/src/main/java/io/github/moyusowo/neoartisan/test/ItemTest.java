@@ -2,7 +2,7 @@ package io.github.moyusowo.neoartisan.test;
 
 import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
-import io.github.moyusowo.neoartisanapi.api.item.*;
+import io.github.moyusowo.neoartisanapi.api.item.ArtisanItem;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.FoodProperties;
 import io.papermc.paper.datacomponent.item.ItemLore;
@@ -35,7 +35,7 @@ final class ItemTest {
     private static void register() {
         if (NeoArtisan.isDebugMode()) {
             NeoArtisanAPI.getItemRegistry().registerItem(
-                    ArtisanItem.factory().complexBuilder()
+                    ArtisanItem.complexBuilder()
                             .registryId(broken_stick)
                             .itemStack(() -> {
                                 ItemStack itemStack = ItemStack.of(Material.STICK);
@@ -54,7 +54,7 @@ final class ItemTest {
                             .build()
             );
             NeoArtisanAPI.getItemRegistry().registerItem(
-                    ArtisanItem.factory().complexBuilder()
+                    ArtisanItem.complexBuilder()
                             .registryId(magic_bread)
                             .itemStack(() -> {
                                 ItemStack itemStack = ItemStack.of(Material.BREAD);
@@ -74,7 +74,7 @@ final class ItemTest {
                             .build()
             );
             NeoArtisanAPI.getItemRegistry().registerItem(
-                    ArtisanItem.factory().builder()
+                    ArtisanItem.builder()
                             .registryId(magic_helmet)
                             .rawMaterial(Material.IRON_HELMET)
                             .displayName("<aqua>魔法头盔~")
@@ -93,7 +93,7 @@ final class ItemTest {
                             .build()
             );
             NeoArtisanAPI.getItemRegistry().registerItem(
-                    ArtisanItem.factory().builder()
+                    ArtisanItem.builder()
                             .registryId(magic_sword)
                             .rawMaterial(Material.IRON_SWORD)
                             .displayName("<yellow>魔法剑~")
@@ -112,7 +112,7 @@ final class ItemTest {
                             .build()
             );
             NeoArtisanAPI.getItemRegistry().registerItem(
-                    ArtisanItem.factory().builder()
+                    ArtisanItem.builder()
                             .registryId(cooking_pot)
                             .rawMaterial(Material.PAPER)
                             .displayName("烹饪锅")
@@ -121,7 +121,7 @@ final class ItemTest {
                             .build()
             );
             NeoArtisanAPI.getItemRegistry().registerItem(
-                    ArtisanItem.factory().builder()
+                    ArtisanItem.builder()
                             .registryId(magic_diamond)
                             .rawMaterial(Material.IRON_INGOT)
                             .displayName("<aqua>魔法小钻石")
@@ -129,7 +129,7 @@ final class ItemTest {
                             .build()
             );
             NeoArtisanAPI.getItemRegistry().registerItem(
-                    ArtisanItem.factory().builder()
+                    ArtisanItem.builder()
                             .registryId(cutting_board)
                             .rawMaterial(Material.PAPER)
                             .displayName("砧板")
@@ -138,7 +138,7 @@ final class ItemTest {
                             .build()
             );
             NeoArtisanAPI.getItemRegistry().registerItem(
-                    ArtisanItem.factory().builder()
+                    ArtisanItem.builder()
                             .registryId(magic_block)
                             .rawMaterial(Material.GRASS_BLOCK)
                             .displayName("<gold>魔法小方块")
@@ -146,7 +146,7 @@ final class ItemTest {
                             .build()
             );
             NeoArtisanAPI.getItemRegistry().registerItem(
-                    ArtisanItem.factory().builder()
+                    ArtisanItem.builder()
                             .registryId(soup_block)
                             .rawMaterial(Material.PLAYER_HEAD)
                             .displayName("<aqua>汤锅")
@@ -156,7 +156,7 @@ final class ItemTest {
                             .build()
             );
             NeoArtisanAPI.getItemRegistry().registerItem(
-                    ArtisanItem.factory().builder()
+                    ArtisanItem.builder()
                             .registryId(paper_soup_block)
                             .rawMaterial(Material.PAPER)
                             .displayName("<aqua>汤锅")
@@ -166,7 +166,7 @@ final class ItemTest {
                             .build()
             );
             NeoArtisanAPI.getItemRegistry().registerItem(
-                    ArtisanItem.factory().builder()
+                    ArtisanItem.builder()
                             .registryId(useless_emerald)
                             .rawMaterial(Material.EMERALD)
                             .displayName("<green>无用的绿宝石")

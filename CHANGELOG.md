@@ -50,6 +50,25 @@
   </p>
 </div>
 
+## [0.9.0] - 2025-07-18
+### 新增 / Added
+- 新增营火、高炉、烟熏炉配方支持 / Added support for campfire, blast furnace, and smoker recipes
+- 新增自定义方块生命周期管理系统 / Added custom block lifecycle management system
+- 新增直接操作ArtisanBlockData的API / Added direct ArtisanBlockData manipulation API
+
+### 变更 / Changed
+- 全面优化错误提示与信息反馈系统 / Completely overhauled error messaging and notification system
+- 重构并重命名核心实现类提升代码可读性 / Refactored and renamed core implementation classes for better readability
+- 解耦自定义方块系统：Block作为状态协调器，BlockState定义行为 / Decoupled custom block system: Block as state coordinator, BlockState defines behavior
+- PDC存储迁移至Marker实体，利用原生游戏机制 / Migrated PDC storage to Marker entities using native game mechanics
+- 重构方块存储系统：区块级存储 + 脏标记优化 / Refactored block storage: Chunk-level storage with dirty flag optimization
+- 作物生长系统转为框架原生实现，支持多状态组合 / Crop growth system converted to native implementation with multi-state support
+- 强化插件加载依赖顺序要求 / Enforced stricter plugin loading dependency order
+
+### 修复 / Fixed
+- 修复自定义头颅方块放置后状态未更新问题 / Fixed custom skull block state not updating after placement
+- 修复附属插件加载时的兼容性问题 / Fixed compatibility issues during addon plugin loading
+
 ## [0.8.0 and 0.7.0] - 2025-07-15
 ### 新增 / Added
 - 引入保护插件钩子库，在方块交互前检查权限 / Added protection plugin hook library to check permissions before block interactions

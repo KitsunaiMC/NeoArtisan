@@ -3,7 +3,7 @@ package io.github.moyusowo.neoartisanapi.api;
 import io.github.moyusowo.neoartisanapi.api.attribute.GlobalAttributeRegistry;
 import io.github.moyusowo.neoartisanapi.api.attribute.ItemStackAttributeRegistry;
 import io.github.moyusowo.neoartisanapi.api.attribute.PlayerAttributeRegistry;
-import io.github.moyusowo.neoartisanapi.api.block.base.BlockRegistry;
+import io.github.moyusowo.neoartisanapi.api.block.BlockRegistry;
 import io.github.moyusowo.neoartisanapi.api.block.protection.BlockProtection;
 import io.github.moyusowo.neoartisanapi.api.block.storage.ArtisanBlockStorage;
 import io.github.moyusowo.neoartisanapi.api.item.ItemRegistry;
@@ -148,11 +148,6 @@ public final class NeoArtisanAPI {
         final BlockProtection protection = Bukkit.getServicesManager().load(BlockProtection.class);
         if (protection == null) throw new IllegalStateException("block protection api has not yet loaded!");
         return protection;
-    }
-
-    @ApiStatus.Internal
-    public static EmptyPersistentDataContainer emptyPersistentDataContainer() {
-        return Bukkit.getServicesManager().load(EmptyPersistentDataContainer.class);
     }
 
     /**

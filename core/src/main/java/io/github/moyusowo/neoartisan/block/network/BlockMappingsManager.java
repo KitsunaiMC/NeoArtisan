@@ -10,7 +10,7 @@ import java.io.File;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static io.github.moyusowo.neoartisan.util.Util.saveDefaultIfNotExists;
+import static io.github.moyusowo.neoartisan.util.file.FileUtil.saveDefaultIfNotExists;
 
 public final class BlockMappingsManager {
 

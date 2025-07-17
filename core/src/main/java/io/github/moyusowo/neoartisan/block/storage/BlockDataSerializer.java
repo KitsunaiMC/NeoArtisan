@@ -1,249 +1,82 @@
 package io.github.moyusowo.neoartisan.block.storage;
 
 import io.github.moyusowo.neoartisan.NeoArtisan;
-import io.github.moyusowo.neoartisan.block.base.internal.ArtisanBlockDataInternal;
-import io.github.moyusowo.neoartisan.util.BlockPos;
-import io.github.moyusowo.neoartisan.util.ChunkPos;
+import io.github.moyusowo.neoartisan.block.data.ArtisanBlockDataView;
+import io.github.moyusowo.neoartisan.block.storage.internal.ArtisanBlockStorageAsync;
+import io.github.moyusowo.neoartisan.block.storage.internal.ArtisanBlockStorageInternal;
+import io.github.moyusowo.neoartisan.block.util.ChunkPos;
+import io.github.moyusowo.neoartisan.util.init.InitMethod;
+import io.github.moyusowo.neoartisan.util.init.InitPriority;
 import io.github.moyusowo.neoartisan.util.terminate.TerminateMethod;
-import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
-import io.github.moyusowo.neoartisanapi.api.block.base.ArtisanBlockData;
-import io.github.moyusowo.neoartisanapi.api.block.crop.ArtisanCropData;
-import io.github.moyusowo.neoartisanapi.api.block.full.ArtisanFullBlockData;
-import io.github.moyusowo.neoartisanapi.api.block.head.ArtisanHeadBlockData;
-import io.github.moyusowo.neoartisanapi.api.block.thin.ArtisanThinBlockData;
-import io.github.moyusowo.neoartisanapi.api.block.transparent.ArtisanTransparentBlockData;
+import io.github.moyusowo.neoartisanapi.api.block.data.ArtisanBlockData;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.World;
-import org.bukkit.persistence.PersistentDataContainer;
 
 import java.io.*;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.List;
 
 final class BlockDataSerializer {
 
     private BlockDataSerializer() {}
 
-    private static final String CROP_BLOCK = "crop";
-    private static final String TRANSPARENT_BLOCK = "transparent_block";
-    private static final String THIN_BLOCK = "thin_block";
-    private static final String FULL_BLOCK = "full_block";
-    private static final String HEAD_BLOCK = "head_block";
-
     @TerminateMethod
     public static void save() {
-        try {
-            File dataFolder = new File(NeoArtisan.instance().getDataFolder(), "block/storage");
-            if (!dataFolder.exists()) dataFolder.mkdirs();
-            for (World world : Bukkit.getWorlds()) {
-                Map<ChunkPos, Map<BlockPos, ArtisanBlockData>> chunkMap = ArtisanBlockStorageImpl.getInstance().getLevelArtisanBlocks(world.getUID());
-                File file = new File(dataFolder, world.getUID() + ".dat");
-                try (DataOutputStream out = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(file)))) {
-                    out.writeInt(chunkMap.size());
-                    for (Map.Entry<ChunkPos, Map<BlockPos, ArtisanBlockData>> chunkEntry : chunkMap.entrySet()) {
-                        ChunkPos chunkPos = chunkEntry.getKey();
-                        out.writeInt(chunkPos.x());
-                        out.writeInt(chunkPos.z());
-                        Map<BlockPos, ArtisanBlockData> blockMap = chunkEntry.getValue();
-                        out.writeInt(blockMap.size());
-                        for (Map.Entry<BlockPos, ArtisanBlockData> blockEntry : blockMap.entrySet()) {
-                            switch (blockEntry.getValue()) {
-                                case ArtisanCropData artisanCropData -> {
-                                    out.writeUTF(CROP_BLOCK);
-                                    BlockPos pos = blockEntry.getKey();
-                                    out.writeInt(pos.x());
-                                    out.writeInt(pos.y());
-                                    out.writeInt(pos.z());
-                                    out.writeUTF(artisanCropData.blockId().getNamespace());
-                                    out.writeUTF(artisanCropData.blockId().getKey());
-                                    out.writeInt(artisanCropData.stage());
-                                }
-                                case ArtisanTransparentBlockData artisanTransparentBlockData -> {
-                                    out.writeUTF(TRANSPARENT_BLOCK);
-                                    BlockPos pos = blockEntry.getKey();
-                                    out.writeInt(pos.x());
-                                    out.writeInt(pos.y());
-                                    out.writeInt(pos.z());
-                                    out.writeUTF(artisanTransparentBlockData.blockId().getNamespace());
-                                    out.writeUTF(artisanTransparentBlockData.blockId().getKey());
-                                    out.writeInt(artisanTransparentBlockData.stage());
-                                }
-                                case ArtisanThinBlockData artisanThinBlockData -> {
-                                    out.writeUTF(THIN_BLOCK);
-                                    BlockPos pos = blockEntry.getKey();
-                                    out.writeInt(pos.x());
-                                    out.writeInt(pos.y());
-                                    out.writeInt(pos.z());
-                                    out.writeUTF(artisanThinBlockData.blockId().getNamespace());
-                                    out.writeUTF(artisanThinBlockData.blockId().getKey());
-                                    out.writeInt(artisanThinBlockData.stage());
-                                }
-                                case ArtisanFullBlockData artisanFullBlockData -> {
-                                    out.writeUTF(FULL_BLOCK);
-                                    BlockPos pos = blockEntry.getKey();
-                                    out.writeInt(pos.x());
-                                    out.writeInt(pos.y());
-                                    out.writeInt(pos.z());
-                                    out.writeUTF(artisanFullBlockData.blockId().getNamespace());
-                                    out.writeUTF(artisanFullBlockData.blockId().getKey());
-                                    out.writeInt(artisanFullBlockData.stage());
-                                }
-                                case ArtisanHeadBlockData artisanHeadBlockData -> {
-                                    out.writeUTF(HEAD_BLOCK);
-                                    BlockPos pos = blockEntry.getKey();
-                                    out.writeInt(pos.x());
-                                    out.writeInt(pos.y());
-                                    out.writeInt(pos.z());
-                                    out.writeUTF(artisanHeadBlockData.blockId().getNamespace());
-                                    out.writeUTF(artisanHeadBlockData.blockId().getKey());
-                                    out.writeInt(artisanHeadBlockData.stage());
-                                }
-                                case null, default ->
-                                        throw new IllegalArgumentException("BlockType can not be Serializer!");
-                            }
-                            byte[] pdcByte = blockEntry.getValue().getPersistentDataContainer().serializeToBytes();
-                            out.writeInt(pdcByte.length);
-                            out.write(pdcByte);
+        for (World world : Bukkit.getWorlds()) {
+            List<ChunkPos> chunkPosList = ArtisanBlockStorageAsync.getAsync().getWorldArtisanBlockChunks(world.getUID());
+            File worldFolder = new File(world.getWorldFolder(), "neoartisan");
+            if (!worldFolder.exists()) worldFolder.mkdirs();
+            for (ChunkPos chunkPos : chunkPosList) {
+                if (ArtisanBlockStorageAsync.getAsync().checkAndCleanDirtyChunk(chunkPos)) {
+                    File chunkFile = new File(worldFolder, "r." + chunkPos.x() + "." + chunkPos.z() + ".neodat");
+                    try (DataOutputStream out = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(chunkFile)))) {
+                        List<ArtisanBlockDataView> views = ArtisanBlockStorageAsync.getAsync().getChunkArtisanBlockDataViews(chunkPos);
+                        out.writeInt(views.size());
+                        for (ArtisanBlockDataView view : views) {
+                            out.writeInt(view.location().getBlockX());
+                            out.writeInt(view.location().getBlockY());
+                            out.writeInt(view.location().getBlockZ());
+                            out.writeUTF(view.blockId().getNamespace());
+                            out.writeUTF(view.blockId().getKey());
+                            out.writeInt(view.stage());
                         }
+                    } catch (IOException e) {
+                        NeoArtisan.logger().severe("Fail to save custom block data at world: " + world.getName() + ", chunk: " + chunkPos.x() + "," + chunkPos.z() + ": " + e);
                     }
                 }
             }
-        } catch (IOException e) {
-            NeoArtisan.logger().severe("Fail to save custom block data: " + e);
         }
     }
 
-    public static void load(Map<UUID, Map<ChunkPos, Map<BlockPos, ArtisanBlockData>>> storage) {
-        try {
-            File dataFolder = new File(NeoArtisan.instance().getDataFolder(), "block/storage");
-            if (!dataFolder.exists()) return;
-            File[] files = dataFolder.listFiles();
-            if (files == null) return;
-            storage.clear();
-            for (File file : files) {
-                if (file.isFile() && file.getName().toLowerCase().endsWith(".dat")) {
-                    UUID uuid = UUID.fromString(file.getName().substring(0, file.getName().length() - 4));
-                    World world = Bukkit.getWorld(uuid);
-                    if (world == null) {
-                        NeoArtisan.logger().severe("UUID " + uuid + "can not match world! ignoring file...");
-                        continue;
-                    }
-                    Map<ChunkPos, Map<BlockPos, ArtisanBlockData>> chunkMap = new HashMap<>();
-                    storage.put(uuid, chunkMap);
+    @InitMethod(priority = InitPriority.STORAGE_LOAD)
+    public static void load() {
+        for (World world : Bukkit.getWorlds()) {
+            try {
+                File worldFolder = new File(world.getWorldFolder(), "neoartisan");
+                if (!worldFolder.exists()) continue;
+                File[] files = worldFolder.listFiles(file -> file.getName().endsWith(".neodat"));
+                if (files == null) continue;
+                for (File file : files) {
                     try (DataInputStream in = new DataInputStream(new BufferedInputStream(new FileInputStream(file)))) {
-                        int chunkCount = in.readInt();
-                        for (int i = 0; i < chunkCount; i++) {
-                            ChunkPos chunkPos = new ChunkPos(in.readInt(), in.readInt());
-                            Map<BlockPos, ArtisanBlockData> blockMap = new HashMap<>();
-                            chunkMap.put(chunkPos, blockMap);
-                            int blockCount = in.readInt();
-                            for (int j = 0; j < blockCount; j++) {
-                                String type = in.readUTF();
-                                switch (type) {
-                                    case CROP_BLOCK -> {
-                                        BlockPos blockPos = new BlockPos(
-                                                in.readInt(),
-                                                in.readInt(),
-                                                in.readInt()
-                                        );
-                                        ArtisanCropData artisanCropData = ArtisanCropData.factory().builder()
-                                                .blockId(new NamespacedKey(in.readUTF(), in.readUTF()))
-                                                .stage(in.readInt())
-                                                .location(new Location(world, blockPos.x(), blockPos.y(), blockPos.z()))
-                                                .build();
-                                        int length = in.readInt();
-                                        byte[] pdcByte = in.readNBytes(length);
-                                        PersistentDataContainer persistentDataContainer = NeoArtisanAPI.emptyPersistentDataContainer().emptyPersistentDataContainer();
-                                        persistentDataContainer.readFromBytes(pdcByte, true);
-                                        ArtisanBlockDataInternal.asInternal(artisanCropData).setPersistentDataContainer(persistentDataContainer);
-                                        blockMap.put(blockPos, artisanCropData);
-                                    }
-                                    case TRANSPARENT_BLOCK -> {
-                                        BlockPos blockPos = new BlockPos(
-                                                in.readInt(),
-                                                in.readInt(),
-                                                in.readInt()
-                                        );
-                                        ArtisanTransparentBlockData artisanTransparentBlockData = ArtisanTransparentBlockData.factory().builder()
-                                                .blockId(new NamespacedKey(in.readUTF(), in.readUTF()))
-                                                .stage(in.readInt())
-                                                .location(new Location(world, blockPos.x(), blockPos.y(), blockPos.z()))
-                                                .build();
-                                        int length = in.readInt();
-                                        byte[] pdcByte = in.readNBytes(length);
-                                        PersistentDataContainer persistentDataContainer = NeoArtisanAPI.emptyPersistentDataContainer().emptyPersistentDataContainer();
-                                        persistentDataContainer.readFromBytes(pdcByte, true);
-                                        ArtisanBlockDataInternal.asInternal(artisanTransparentBlockData).setPersistentDataContainer(persistentDataContainer);
-                                        blockMap.put(blockPos, artisanTransparentBlockData);
-                                    }
-                                    case THIN_BLOCK -> {
-                                        BlockPos blockPos = new BlockPos(
-                                                in.readInt(),
-                                                in.readInt(),
-                                                in.readInt()
-                                        );
-                                        ArtisanThinBlockData artisanThinBlockData = ArtisanThinBlockData.factory().builder()
-                                                .blockId(new NamespacedKey(in.readUTF(), in.readUTF()))
-                                                .stage(in.readInt())
-                                                .location(new Location(world, blockPos.x(), blockPos.y(), blockPos.z()))
-                                                .build();
-                                        int length = in.readInt();
-                                        byte[] pdcByte = in.readNBytes(length);
-                                        PersistentDataContainer persistentDataContainer = NeoArtisanAPI.emptyPersistentDataContainer().emptyPersistentDataContainer();
-                                        persistentDataContainer.readFromBytes(pdcByte, true);
-                                        ArtisanBlockDataInternal.asInternal(artisanThinBlockData).setPersistentDataContainer(persistentDataContainer);
-                                        blockMap.put(blockPos, artisanThinBlockData);
-                                    }
-                                    case FULL_BLOCK -> {
-                                        BlockPos blockPos = new BlockPos(
-                                                in.readInt(),
-                                                in.readInt(),
-                                                in.readInt()
-                                        );
-                                        ArtisanFullBlockData artisanFullBlockData = ArtisanFullBlockData.factory().builder()
-                                                .blockId(new NamespacedKey(in.readUTF(), in.readUTF()))
-                                                .stage(in.readInt())
-                                                .location(new Location(world, blockPos.x(), blockPos.y(), blockPos.z()))
-                                                .build();
-                                        int length = in.readInt();
-                                        byte[] pdcByte = in.readNBytes(length);
-                                        PersistentDataContainer persistentDataContainer = NeoArtisanAPI.emptyPersistentDataContainer().emptyPersistentDataContainer();
-                                        persistentDataContainer.readFromBytes(pdcByte, true);
-                                        ArtisanBlockDataInternal.asInternal(artisanFullBlockData).setPersistentDataContainer(persistentDataContainer);
-                                        blockMap.put(blockPos, artisanFullBlockData);
-                                    }
-                                    case HEAD_BLOCK -> {
-                                        BlockPos blockPos = new BlockPos(
-                                                in.readInt(),
-                                                in.readInt(),
-                                                in.readInt()
-                                        );
-                                        ArtisanHeadBlockData artisanHeadBlockData = ArtisanHeadBlockData.factory().builder()
-                                                .blockId(new NamespacedKey(in.readUTF(), in.readUTF()))
-                                                .stage(in.readInt())
-                                                .location(new Location(world, blockPos.x(), blockPos.y(), blockPos.z()))
-                                                .build();
-                                        int length = in.readInt();
-                                        byte[] pdcByte = in.readNBytes(length);
-                                        PersistentDataContainer persistentDataContainer = NeoArtisanAPI.emptyPersistentDataContainer().emptyPersistentDataContainer();
-                                        persistentDataContainer.readFromBytes(pdcByte, true);
-                                        ArtisanBlockDataInternal.asInternal(artisanHeadBlockData).setPersistentDataContainer(persistentDataContainer);
-                                        blockMap.put(blockPos, artisanHeadBlockData);
-                                    }
-                                    default -> throw new IllegalArgumentException("BlockType can not be Serializer!");
-
-                                }
-                            }
+                        int size = in.readInt();
+                        for (int i = 0; i < size; i++) {
+                            Location location = new Location(
+                                    world, in.readInt(), in.readInt(), in.readInt()
+                            );
+                            NamespacedKey blockId = new NamespacedKey(
+                                    in.readUTF(), in.readUTF()
+                            );
+                            int stateId = in.readInt();
+                            ArtisanBlockStorageInternal.getInternal().placeArtisanBlock(ArtisanBlockData.builder().blockId(blockId).location(location).stage(stateId).build());
                         }
                     }
                 }
+            } catch (IOException e) {
+                NeoArtisan.logger().severe("Fail to load custom block data at world " + world.getName() + ": " + e);
             }
-            NeoArtisan.logger().info("successfully loaded custom block data from file!");
-        } catch (IOException e) {
-            NeoArtisan.logger().severe("fail to load custom block data from file: " + e);
+            NeoArtisan.logger().info("successfully loaded custom block data at world " + world.getName());
         }
+        NeoArtisan.logger().info("successfully loaded custom block data at all worlds");
     }
 }

@@ -1,6 +1,6 @@
 package io.github.moyusowo.neoartisan.recipe.listener;
 
-import io.github.moyusowo.neoartisan.util.ArrayKey;
+import io.github.moyusowo.neoartisan.util.data.ArrayKey;
 import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
 import io.github.moyusowo.neoartisanapi.api.item.ArtisanItem;
 import io.github.moyusowo.neoartisanapi.api.recipe.RecipeType;
