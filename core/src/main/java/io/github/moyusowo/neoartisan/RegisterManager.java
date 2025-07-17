@@ -4,10 +4,7 @@ import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
 import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
 import org.bukkit.Bukkit;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
-import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.plugin.Plugin;
 import org.reflections.Reflections;
 import org.reflections.scanners.Scanners;
@@ -15,15 +12,13 @@ import org.reflections.util.ConfigurationBuilder;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Set;
 
 @SuppressWarnings("UnstableApiUsage")
-public final class RegisterManager implements Listener {
+public final class RegisterManager {
 
     public static final IllegalAccessError REGISTRY_CLOSED = new IllegalAccessError("Registry closed! Please register in the methods with annotation.");
     public static final String eTips = "只能在使用注解的方法内注册！";
-    private static final Set<Plugin> willDisable = new HashSet<>();
 
     private RegisterManager() {}
 
@@ -48,6 +43,9 @@ public final class RegisterManager implements Listener {
                         p.getPluginMeta().getPluginDependencies().contains("NeoArtisan") ||
                         p.getPluginMeta().getPluginSoftDependencies().contains("NeoArtisan") ||
                         p.getName().equals("NeoArtisan")
+                )
+                .filter(
+                    p -> p.isEnabled() || p.getName().equals("NeoArtisan")
                 )
                 .toList()
         ) {
@@ -74,7 +72,9 @@ public final class RegisterManager implements Listener {
             } catch (Throwable e) {
                 NeoArtisan.logger().severe("fail to load plugin class: "  + pkg + ", " + e + ": " + e.getCause());
                 NeoArtisan.logger().severe("plugin: " + plugin.getName() + " will not enable");
-                willDisable.add(plugin);
+                HandlerList.unregisterAll(plugin);
+                Bukkit.getScheduler().cancelTasks(plugin);
+                Bukkit.getPluginManager().disablePlugin(plugin);
             }
         }
     }
@@ -87,20 +87,6 @@ public final class RegisterManager implements Listener {
         NOT_YET_OPEN,
         OPEN,
         CLOSED;
-    }
-
-    @InitMethod(priority = InitPriority.LISTENER)
-    static void init() {
-        NeoArtisan.registerListener(new RegisterManager());
-    }
-
-    @EventHandler
-    public void onPluginEnable(PluginEnableEvent event) {
-        if (willDisable.contains(event.getPlugin())) {
-            HandlerList.unregisterAll(event.getPlugin());
-            Bukkit.getScheduler().cancelTasks(event.getPlugin());
-            Bukkit.getPluginManager().disablePlugin(event.getPlugin());
-        }
     }
 
 }
