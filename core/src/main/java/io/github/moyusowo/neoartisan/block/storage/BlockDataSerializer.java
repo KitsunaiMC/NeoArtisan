@@ -6,6 +6,8 @@ import io.github.moyusowo.neoartisan.block.storage.internal.ArtisanBlockStorageI
 import io.github.moyusowo.neoartisan.block.task.LifecycleTaskManagerInternal;
 import io.github.moyusowo.neoartisan.block.util.BlockPos;
 import io.github.moyusowo.neoartisan.block.util.ChunkPos;
+import io.github.moyusowo.neoartisan.util.init.InitMethod;
+import io.github.moyusowo.neoartisan.util.init.InitPriority;
 import io.github.moyusowo.neoartisan.util.terminate.TerminateMethod;
 import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
 import io.github.moyusowo.neoartisanapi.api.block.data.ArtisanBlockData;
@@ -59,6 +61,7 @@ final class BlockDataSerializer {
         }
     }
 
+    @InitMethod(priority = InitPriority.STORAGE_LOAD)
     public static void load() {
         try {
             File dataFolder = new File(NeoArtisan.instance().getDataFolder(), "block/storage");

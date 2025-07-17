@@ -55,9 +55,14 @@ class ArtisanBlockDataImpl implements ArtisanBlockDataInternal {
                     new BukkitRunnable() {
                         @Override
                         public void run() {
-                            int random = ThreadLocalRandom.current().nextInt(0, 1000);
-                            if (random > 3) return;
-                            artisanCropBlock.onRamdomTick(ArtisanBlockDataImpl.this);
+                            if (location.isChunkLoaded()) {
+                                int random = ThreadLocalRandom.current().nextInt(0, 1000);
+                                if (random > 3) return;
+                                if (NeoArtisan.isDebugMode()) {
+                                    NeoArtisan.logger().info("grow at location: " + location);
+                                }
+                                artisanCropBlock.onRamdomTick(ArtisanBlockDataImpl.this);
+                            }
                         }
                     },
                     0L,

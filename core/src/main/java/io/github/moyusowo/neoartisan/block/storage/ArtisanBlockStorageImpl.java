@@ -1,22 +1,17 @@
 package io.github.moyusowo.neoartisan.block.storage;
 
 import io.github.moyusowo.neoartisan.NeoArtisan;
-import io.github.moyusowo.neoartisan.RegisterManager;
 import io.github.moyusowo.neoartisan.block.storage.internal.ArtisanBlockStorageInternal;
 import io.github.moyusowo.neoartisan.block.task.LifecycleTaskManagerInternal;
 import io.github.moyusowo.neoartisan.block.util.BlockPos;
 import io.github.moyusowo.neoartisan.block.util.ChunkPos;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
+import io.github.moyusowo.neoartisan.util.init.InitPriority;
 import io.github.moyusowo.neoartisanapi.api.block.data.ArtisanBlockData;
 import io.github.moyusowo.neoartisanapi.api.block.storage.ArtisanBlockStorage;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
-import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
@@ -27,7 +22,6 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-@SuppressWarnings("UnstableApiUsage")
 final class ArtisanBlockStorageImpl implements ArtisanBlockStorage, ArtisanBlockStorageInternal {
 
     private static ArtisanBlockStorageImpl instance;
@@ -36,7 +30,7 @@ final class ArtisanBlockStorageImpl implements ArtisanBlockStorage, ArtisanBlock
         return instance;
     }
 
-    @InitMethod
+    @InitMethod(priority = InitPriority.STORAGE_INIT)
     public static void init() {
         new ArtisanBlockStorageImpl();
     }
@@ -57,29 +51,6 @@ final class ArtisanBlockStorageImpl implements ArtisanBlockStorage, ArtisanBlock
         );
         this.storage = new HashMap<>();
         this.lock = new ReentrantReadWriteLock();
-        Bukkit.getPluginManager().registerEvents(new Listener() {
-            @EventHandler(priority = EventPriority.MONITOR)
-            public void onPluginEnabled(PluginEnableEvent event) {
-                final Listener listener = this;
-                if (event.getPlugin().getName().equals("NeoArtisan")) {
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            HandlerList.unregisterAll(listener);
-                        }
-                    }.runTaskLater(NeoArtisan.instance(), 10L);
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            if (!RegisterManager.isOpen()) {
-                                BlockDataSerializer.load();
-                                cancel();
-                            }
-                        }
-                    }.runTaskTimer(NeoArtisan.instance(), 1L, 5L);
-                }
-            }
-        }, NeoArtisan.instance());
         new BukkitRunnable() {
             @Override
             public void run() {
