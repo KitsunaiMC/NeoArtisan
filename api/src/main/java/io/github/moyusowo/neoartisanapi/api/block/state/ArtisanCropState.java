@@ -8,6 +8,14 @@ import io.github.moyusowo.neoartisanapi.api.item.ItemGenerator;
 import io.github.moyusowo.neoartisanapi.api.util.BuilderFactoryUtil;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * 作物型方块状态定义。
+ *
+ * <p>
+ * 推动破坏、不可悬空、能被水冲走的作物型方块。
+ * </p>
+ *
+ */
 public interface ArtisanCropState extends ArtisanBaseBlockState {
     @NotNull
     static Builder builder() {

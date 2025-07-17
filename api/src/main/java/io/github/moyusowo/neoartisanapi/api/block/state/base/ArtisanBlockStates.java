@@ -2,6 +2,9 @@ package io.github.moyusowo.neoartisanapi.api.block.state.base;
 
 import io.github.moyusowo.neoartisanapi.api.block.state.*;
 
+/**
+ * 自定义方块状态枚举。
+ */
 public enum ArtisanBlockStates {
     COMMON(ArtisanCommonState.class),
     CROP(ArtisanCropState.class),

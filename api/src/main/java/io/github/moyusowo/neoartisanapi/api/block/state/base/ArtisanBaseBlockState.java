@@ -8,6 +8,19 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
+/**
+ * 表示自定义方块的一个特定状态，包含视觉表现和实际行为定义。
+ * <p>
+ * 每个状态对应方块在特定条件下的：
+ * <ul>
+ *   <li><b>视觉表现</b> - 客户端看到的方块外观</li>
+ *   <li><b>实际状态</b> - 服务端使用的逻辑状态</li>
+ *   <li><b>掉落物</b> - 被破坏时产生的物品</li>
+ *   <li><b>部分交互表现</b> - 活塞推动、是否可然、是否漂浮等</li>
+ * </ul>
+ * </p>
+ *
+ */
 public interface ArtisanBaseBlockState {
     /**
      * 获取客户端显示的Minecraft Internal BlockState ID

@@ -8,6 +8,14 @@ import io.github.moyusowo.neoartisanapi.api.item.ItemGenerator;
 import io.github.moyusowo.neoartisanapi.api.util.BuilderFactoryUtil;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * 通常型方块状态定义。
+ *
+ * <p>
+ * 不可推动、可悬空、不能被水冲走的最常见的方块。
+ * </p>
+ *
+ */
 public interface ArtisanCommonState extends ArtisanBaseBlockState {
     @NotNull
     static Builder builder() {

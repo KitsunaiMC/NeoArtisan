@@ -7,6 +7,9 @@ import io.github.moyusowo.neoartisanapi.api.item.ItemGenerator;
 import io.github.moyusowo.neoartisanapi.api.util.BuilderFactoryUtil;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * 头颅型方块状态定义。
+ */
 public interface ArtisanSkullState extends ArtisanBaseBlockState {
     @NotNull
     static Builder builder() {

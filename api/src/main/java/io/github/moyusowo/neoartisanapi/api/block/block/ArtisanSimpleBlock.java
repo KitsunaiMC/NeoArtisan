@@ -9,6 +9,15 @@ import io.github.moyusowo.neoartisanapi.api.util.BuilderFactoryUtil;
 import org.bukkit.NamespacedKey;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * 表示一个简单方块的接口。
+ *
+ * <p>
+ * 该简单方块类型只有一个方块状态，适合装饰方块或GUI型方块。
+ * </p>
+ *
+ * @see ArtisanBaseBlock 基础方块接口
+ */
 public interface ArtisanSimpleBlock extends ArtisanBaseBlock {
     @NotNull
     static Builder builder() {

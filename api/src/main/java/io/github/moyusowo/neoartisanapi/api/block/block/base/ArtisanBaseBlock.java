@@ -1,11 +1,23 @@
 package io.github.moyusowo.neoartisanapi.api.block.block.base;
 
+import io.github.moyusowo.neoartisanapi.api.block.data.ArtisanBlockData;
 import io.github.moyusowo.neoartisanapi.api.block.state.base.ArtisanBaseBlockState;
 import io.github.moyusowo.neoartisanapi.api.block.util.SoundProperty;
 import org.bukkit.NamespacedKey;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * 自定义方块的基础接口，定义所有自定义方块的类型，如作物、机器等。
+ *
+ * <p>本接口只沟通方块状态之间的转变，或方块类型整体的行为。</p>
+ *
+ * <p>
+ * 每个自定义方块实例应当是不可变的，所有状态变更应通过 {@link ArtisanBlockData} 处理。
+ * </p>
+ *
+ * @see ArtisanBlockData 在世界中的方块数据
+ */
 public interface ArtisanBaseBlock {
     /**
      * 获取此自定义方块的唯一标识符

@@ -11,6 +11,22 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * 表示世界中实际存在的自定义方块实例的数据容器。
+ * <p>
+ * 此接口封装了一个已放置的自定义方块的所有运行时状态，包括：
+ * <ul>
+ *   <li>物理位置和显示状态</li>
+ *   <li>关联的GUI实例（如果有）</li>
+ *   <li>方块生命周期事件管理器</li>
+ *   <li>自定义持久化数据储存器</li>
+ *   <li>当前方块状态索引</li>
+ * </ul>
+ * </p>
+ *
+ * @see ArtisanBaseBlock 自定义方块类型定义
+ * @see ArtisanBaseBlockState 方块状态系统
+ */
 public interface ArtisanBlockData {
     @NotNull
     static Builder builder() {

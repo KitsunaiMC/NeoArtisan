@@ -11,6 +11,15 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
+/**
+ * 表示一个自定义作物方块的接口，扩展基础 {@link ArtisanBaseBlock} 功能。
+ *
+ * <p>
+ * 提供作物特有的生长控制功能，包括骨粉加速生长行为配置。
+ * </p>
+ *
+ * @see ArtisanBaseBlock 基础方块接口
+ */
 public interface ArtisanCropBlock extends ArtisanBaseBlock {
     @NotNull
     static Builder builder() {

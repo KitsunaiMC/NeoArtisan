@@ -1,7 +1,6 @@
 package io.github.moyusowo.neoartisanapi.api.block.gui;
 
 import org.bukkit.Location;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -17,14 +16,11 @@ import org.jetbrains.annotations.NotNull;
  */
 @FunctionalInterface
 public interface GUICreator {
-
     /**
      * 在指定位置创建GUI实例
      * @param location GUI绑定的方块位置
      * @return 新建的GUI实例（不为null）
      */
     @NotNull
-    @ApiStatus.Internal
     ArtisanBlockGUI create(Location location);
-
 }

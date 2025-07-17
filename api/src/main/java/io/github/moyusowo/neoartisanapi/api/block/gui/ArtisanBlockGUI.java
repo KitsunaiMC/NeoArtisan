@@ -140,14 +140,10 @@ public abstract class ArtisanBlockGUI implements BlockInventoryHolder, Listener 
      * </ul>
      *
      * @return 该位置的自定义方块数据（不会为null）
-     * @throws IllegalStateException 如果方块数据尚未加载
+     * @throws NullPointerException 如果方块数据尚未加载
      */
     public @NotNull ArtisanBlockData getArtisanBlockData() {
-        ArtisanBlockData artisanBlockData = NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlockData(this.location.getBlock());
-        if (artisanBlockData == null) {
-            throw new IllegalStateException("ArtisanBlockData not yet loaded!");
-        }
-        return artisanBlockData;
+        return NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlockData(this.location.getBlock());
     }
 
     /**
