@@ -5,7 +5,7 @@ import io.github.moyusowo.neoartisan.RegisterManager;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
 import io.github.moyusowo.neoartisanapi.api.block.BlockRegistry;
-import io.github.moyusowo.neoartisanapi.api.block.block.ArtisanBaseBlock;
+import io.github.moyusowo.neoartisanapi.api.block.block.base.ArtisanBaseBlock;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.ServicePriority;

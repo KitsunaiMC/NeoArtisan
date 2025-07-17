@@ -1,12 +1,13 @@
 package io.github.moyusowo.neoartisan.block.storage;
 
 import io.github.moyusowo.neoartisan.NeoArtisan;
+import io.github.moyusowo.neoartisan.RegisterManager;
 import io.github.moyusowo.neoartisan.block.storage.internal.ArtisanBlockStorageInternal;
 import io.github.moyusowo.neoartisan.block.task.LifecycleTaskManagerInternal;
 import io.github.moyusowo.neoartisan.block.util.BlockPos;
 import io.github.moyusowo.neoartisan.block.util.ChunkPos;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
-import io.github.moyusowo.neoartisanapi.api.block.blockdata.ArtisanBlockData;
+import io.github.moyusowo.neoartisanapi.api.block.data.ArtisanBlockData;
 import io.github.moyusowo.neoartisanapi.api.block.storage.ArtisanBlockStorage;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
@@ -16,7 +17,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.server.PluginEnableEvent;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
@@ -69,19 +69,10 @@ final class ArtisanBlockStorageImpl implements ArtisanBlockStorage, ArtisanBlock
                         }
                     }.runTaskLater(NeoArtisan.instance(), 10L);
                     new BukkitRunnable() {
-                        private boolean isAllLoaded() {
-                            for (Plugin otherPlugin : Bukkit.getPluginManager().getPlugins()) {
-                                if (otherPlugin.getPluginMeta().getPluginDependencies().contains("NeoArtisan") ||
-                                        otherPlugin.getPluginMeta().getPluginSoftDependencies().contains("NeoArtisan")) {
-                                    if (!otherPlugin.isEnabled()) return false;
-                                }
-                            }
-                            return true;
-                        }
                         @Override
                         public void run() {
-                            if (isAllLoaded()) {
-                                BlockDataSerializer.load(ArtisanBlockStorageImpl.instance.storage);
+                            if (!RegisterManager.isOpen()) {
+                                BlockDataSerializer.load();
                                 cancel();
                             }
                         }

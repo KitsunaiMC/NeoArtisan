@@ -1,6 +1,6 @@
 package io.github.moyusowo.neoartisanapi.api.block.event;
 
-import io.github.moyusowo.neoartisanapi.api.block.block.ArtisanBaseBlock;
+import io.github.moyusowo.neoartisanapi.api.block.block.base.ArtisanBaseBlock;
 import org.bukkit.block.Block;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.block.BlockExpEvent;

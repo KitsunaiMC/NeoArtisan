@@ -1,7 +1,7 @@
 package io.github.moyusowo.neoartisanapi.api.block.event;
 
-import io.github.moyusowo.neoartisanapi.api.block.block.ArtisanBaseBlock;
-import io.github.moyusowo.neoartisanapi.api.block.blockdata.ArtisanBlockData;
+import io.github.moyusowo.neoartisanapi.api.block.block.base.ArtisanBaseBlock;
+import io.github.moyusowo.neoartisanapi.api.block.data.ArtisanBlockData;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;

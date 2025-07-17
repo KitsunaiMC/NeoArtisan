@@ -1,5 +1,6 @@
 package io.github.moyusowo.neoartisanapi.api.item;
 
+import io.github.moyusowo.neoartisanapi.api.block.block.base.ArtisanBaseBlock;
 import io.github.moyusowo.neoartisanapi.api.item.factory.ItemBuilderFactory;
 import io.github.moyusowo.neoartisanapi.api.util.BuilderFactoryUtil;
 import io.papermc.paper.datacomponent.item.CustomModelData;
@@ -157,7 +158,7 @@ public interface ArtisanItem {
          *
          * @param blockId 方块ID（不能为null）
          * @return 当前构建器实例
-         * @see io.github.moyusowo.neoartisanapi.api.block.block.ArtisanBaseBlock
+         * @see ArtisanBaseBlock
          */
         @NotNull ComplexBuilder blockId(@NotNull NamespacedKey blockId);
 
@@ -317,7 +318,7 @@ public interface ArtisanItem {
          *
          * @param blockId 方块ID（不能为null）
          * @return 当前构建器实例
-         * @see io.github.moyusowo.neoartisanapi.api.block.block.ArtisanBaseBlock
+         * @see ArtisanBaseBlock
          */
         @NotNull Builder blockId(@NotNull NamespacedKey blockId);
 

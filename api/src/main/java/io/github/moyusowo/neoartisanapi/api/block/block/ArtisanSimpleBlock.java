@@ -1,8 +1,10 @@
 package io.github.moyusowo.neoartisanapi.api.block.block;
 
+import io.github.moyusowo.neoartisanapi.api.block.block.base.ArtisanBaseBlock;
+import io.github.moyusowo.neoartisanapi.api.block.block.base.ArtisanBlocks;
 import io.github.moyusowo.neoartisanapi.api.block.util.SoundProperty;
 import io.github.moyusowo.neoartisanapi.api.block.gui.GUICreator;
-import io.github.moyusowo.neoartisanapi.api.block.blockstate.ArtisanBaseBlockState;
+import io.github.moyusowo.neoartisanapi.api.block.state.base.ArtisanBaseBlockState;
 import io.github.moyusowo.neoartisanapi.api.util.BuilderFactoryUtil;
 import org.bukkit.NamespacedKey;
 import org.jetbrains.annotations.NotNull;

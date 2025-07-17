@@ -4,7 +4,7 @@ import io.github.moyusowo.neoartisan.block.util.BlockPos;
 import io.github.moyusowo.neoartisan.block.util.ChunkPos;
 import io.github.moyusowo.neoartisan.util.multithread.SpecificThreadUse;
 import io.github.moyusowo.neoartisan.util.multithread.Threads;
-import io.github.moyusowo.neoartisanapi.api.block.blockdata.ArtisanBlockData;
+import io.github.moyusowo.neoartisanapi.api.block.data.ArtisanBlockData;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.jetbrains.annotations.ApiStatus;

@@ -1,6 +1,6 @@
 package io.github.moyusowo.neoartisanapi.api.block;
 
-import io.github.moyusowo.neoartisanapi.api.block.block.ArtisanBaseBlock;
+import io.github.moyusowo.neoartisanapi.api.block.block.base.ArtisanBaseBlock;
 import org.bukkit.NamespacedKey;
 import org.jetbrains.annotations.NotNull;
 

@@ -1,12 +1,13 @@
 package io.github.moyusowo.neoartisan.block.block;
 
 import io.github.moyusowo.neoartisan.NeoArtisan;
+import io.github.moyusowo.neoartisan.block.block.base.ArtisanBaseBlockImpl;
 import io.github.moyusowo.neoartisan.block.block.listener.Util;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
 import io.github.moyusowo.neoartisanapi.api.block.block.ArtisanCropBlock;
-import io.github.moyusowo.neoartisanapi.api.block.blockdata.ArtisanBlockData;
-import io.github.moyusowo.neoartisanapi.api.block.blockstate.ArtisanBaseBlockState;
+import io.github.moyusowo.neoartisanapi.api.block.data.ArtisanBlockData;
+import io.github.moyusowo.neoartisanapi.api.block.state.base.ArtisanBaseBlockState;
 import io.github.moyusowo.neoartisanapi.api.block.util.SoundProperty;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;

@@ -1,12 +1,14 @@
 package io.github.moyusowo.neoartisan.block.storage;
 
 import io.github.moyusowo.neoartisan.NeoArtisan;
-import io.github.moyusowo.neoartisan.block.blockdata.ArtisanBlockDataInternal;
+import io.github.moyusowo.neoartisan.block.data.ArtisanBlockDataInternal;
+import io.github.moyusowo.neoartisan.block.storage.internal.ArtisanBlockStorageInternal;
+import io.github.moyusowo.neoartisan.block.task.LifecycleTaskManagerInternal;
 import io.github.moyusowo.neoartisan.block.util.BlockPos;
 import io.github.moyusowo.neoartisan.block.util.ChunkPos;
 import io.github.moyusowo.neoartisan.util.terminate.TerminateMethod;
 import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
-import io.github.moyusowo.neoartisanapi.api.block.blockdata.ArtisanBlockData;
+import io.github.moyusowo.neoartisanapi.api.block.data.ArtisanBlockData;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
@@ -14,7 +16,6 @@ import org.bukkit.World;
 import org.bukkit.persistence.PersistentDataContainer;
 
 import java.io.*;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -58,13 +59,12 @@ final class BlockDataSerializer {
         }
     }
 
-    public static void load(Map<UUID, Map<ChunkPos, Map<BlockPos, ArtisanBlockData>>> storage) {
+    public static void load() {
         try {
             File dataFolder = new File(NeoArtisan.instance().getDataFolder(), "block/storage");
             if (!dataFolder.exists()) return;
             File[] files = dataFolder.listFiles();
             if (files == null) return;
-            storage.clear();
             for (File file : files) {
                 if (file.isFile() && file.getName().toLowerCase().endsWith(".dat")) {
                     UUID uuid = UUID.fromString(file.getName().substring(0, file.getName().length() - 4));
@@ -73,14 +73,10 @@ final class BlockDataSerializer {
                         NeoArtisan.logger().severe("UUID " + uuid + "can not match world! ignoring file...");
                         continue;
                     }
-                    Map<ChunkPos, Map<BlockPos, ArtisanBlockData>> chunkMap = new HashMap<>();
-                    storage.put(uuid, chunkMap);
                     try (DataInputStream in = new DataInputStream(new BufferedInputStream(new FileInputStream(file)))) {
                         int chunkCount = in.readInt();
                         for (int i = 0; i < chunkCount; i++) {
                             ChunkPos chunkPos = new ChunkPos(in.readInt(), in.readInt());
-                            Map<BlockPos, ArtisanBlockData> blockMap = new HashMap<>();
-                            chunkMap.put(chunkPos, blockMap);
                             int blockCount = in.readInt();
                             for (int j = 0; j < blockCount; j++) {
                                 BlockPos blockPos = new BlockPos(
@@ -98,7 +94,8 @@ final class BlockDataSerializer {
                                 PersistentDataContainer persistentDataContainer = NeoArtisanAPI.emptyPersistentDataContainer().emptyPersistentDataContainer();
                                 persistentDataContainer.readFromBytes(pdcByte, true);
                                 ((ArtisanBlockDataInternal) artisanBlockData).setPersistentDataContainer(persistentDataContainer);
-                                blockMap.put(blockPos, artisanBlockData);
+                                ArtisanBlockStorageInternal.getInternal().placeArtisanBlock(uuid, blockPos, artisanBlockData);
+                                ((LifecycleTaskManagerInternal) artisanBlockData.getLifecycleTaskManager()).runInit(new Location(world, blockPos.x(), blockPos.y(), blockPos.z()));
                             }
                         }
                     }

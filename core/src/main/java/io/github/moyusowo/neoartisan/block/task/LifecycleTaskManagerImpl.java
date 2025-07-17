@@ -55,10 +55,6 @@ final class LifecycleTaskManagerImpl implements LifecycleTaskManagerInternal {
 
     @Override
     public void runInit(@NotNull Location location) {
-        isInit = true;
-        for (LifecycleTask lifecycleTask : lifecycleTasks) {
-            lifecycleTask.run();
-        }
         for (Runnable runnable : initTasks) {
             try {
                 runnable.run();
@@ -66,10 +62,17 @@ final class LifecycleTaskManagerImpl implements LifecycleTaskManagerInternal {
                 NeoArtisan.logger().warning("error when block lifecycle init at location " + location + " of block " + NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlockData(location.getBlock()).blockId().asString() + ", " + e);
             }
         }
+        isInit = true;
+        for (LifecycleTask lifecycleTask : lifecycleTasks) {
+            lifecycleTask.run();
+        }
     }
 
     @Override
     public void runTerminate(@NotNull Location location) {
+        for (LifecycleTask lifecycleTask : lifecycleTasks) {
+            lifecycleTask.cancel();
+        }
         for (Runnable runnable : terminateTasks) {
             try {
                 runnable.run();
