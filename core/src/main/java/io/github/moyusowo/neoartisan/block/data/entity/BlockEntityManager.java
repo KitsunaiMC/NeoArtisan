@@ -1,6 +1,10 @@
-package io.github.moyusowo.neoartisan.block.data;
+package io.github.moyusowo.neoartisan.block.data.entity;
 
+import io.github.moyusowo.neoartisan.util.init.InitMethod;
+import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.entity.Marker;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.jetbrains.annotations.NotNull;
@@ -9,6 +13,17 @@ public final class BlockEntityManager {
     private BlockEntityManager() {}
 
     private static final String TAG = "NeoArtisan";
+
+    @InitMethod
+    static void init() {
+        for (World world : Bukkit.getWorlds()) {
+            for (Marker marker : world.getEntitiesByClass(Marker.class)) {
+                if (marker.getScoreboardTags().contains(TAG) && !NeoArtisanAPI.getArtisanBlockStorage().isArtisanBlock(marker.getLocation())) {
+                    marker.remove();
+                }
+            }
+        }
+    }
 
     @NotNull
     private static Marker spawn(@NotNull Location location) {

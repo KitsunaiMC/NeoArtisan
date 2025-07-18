@@ -2,6 +2,7 @@ package io.github.moyusowo.neoartisan.block.data;
 
 import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisan.block.block.base.ArtisanBaseBlockInternal;
+import io.github.moyusowo.neoartisan.block.data.entity.BlockEntityManager;
 import io.github.moyusowo.neoartisan.block.task.LifecycleTaskManagerInternal;
 import io.github.moyusowo.neoartisan.block.task.SingleTaskPriority;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
