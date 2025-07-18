@@ -272,8 +272,9 @@ final class BaseStateListener implements Listener {
         for (Block block : event.getBlocks()) {
             if (!NeoArtisanAPI.getArtisanBlockStorage().isArtisanBlock(block)) continue;
             ArtisanBlockData artisanBlockData = NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlockData(block);
-            if (artisanBlockData.getArtisanBlockState().pistonMoveReaction() == PistonMoveBlockReaction.BREAK) continue;
-            event.setCancelled(true);
+            if (artisanBlockData.getArtisanBlockState().pistonMoveReaction() == PistonMoveBlockReaction.RESIST || artisanBlockData.getArtisanBlock().hasBlockEntity()) {
+                event.setCancelled(true);
+            }
         }
     }
 

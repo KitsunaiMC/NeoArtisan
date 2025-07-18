@@ -54,7 +54,12 @@ public interface ArtisanCropBlock extends ArtisanBaseBlock {
      */
     int generateBoneMealGrowth();
 
-    void onRamdomTick(ArtisanBlockData cropData);
+    void onRandomTick(ArtisanBlockData cropData);
+
+    @Override
+    default boolean hasBlockEntity() {
+        return false;
+    }
 
     @Override
     @NotNull

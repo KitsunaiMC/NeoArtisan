@@ -52,7 +52,7 @@ final class ArtisanCropBlockImpl extends ArtisanBaseBlockImpl implements Artisan
     }
 
     @Override
-    public void onRamdomTick(ArtisanBlockData cropData) {
+    public void onRandomTick(ArtisanBlockData cropData) {
         if (Util.hasNextStage(cropData)) {
             Util.replace(cropData.getLocation().getBlock(), Util.getNextStage(cropData));
         }

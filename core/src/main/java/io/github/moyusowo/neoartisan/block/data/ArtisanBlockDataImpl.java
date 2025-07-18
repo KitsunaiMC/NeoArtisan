@@ -59,7 +59,7 @@ class ArtisanBlockDataImpl implements ArtisanBlockDataInternal {
                             if (location.isChunkLoaded()) {
                                 int random = ThreadLocalRandom.current().nextInt(0, 5000);
                                 if (random > 3) return;
-                                artisanCropBlock.onRamdomTick(ArtisanBlockDataImpl.this);
+                                artisanCropBlock.onRandomTick(ArtisanBlockDataImpl.this);
                             }
                         }
                     },
@@ -103,9 +103,13 @@ class ArtisanBlockDataImpl implements ArtisanBlockDataInternal {
     }
 
     @Override
-    @NotNull
+    @Nullable
     public PersistentDataContainer getPersistentDataContainer() {
-        return BlockEntityManager.getPDC(location);
+        if (getArtisanBlock().hasBlockEntity()) {
+            return BlockEntityManager.getPDC(location);
+        } else {
+            return null;
+        }
     }
 
     @Override

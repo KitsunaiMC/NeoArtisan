@@ -49,6 +49,9 @@ public interface ArtisanSimpleBlock extends ArtisanBaseBlock {
         Builder guiCreator(@NotNull GUICreator guiCreator);
 
         @NotNull
+        Builder blockEntity();
+
+        @NotNull
         ArtisanSimpleBlock build();
     }
 }

@@ -28,10 +28,12 @@ final class ArtisanSimpleBlockImpl extends ArtisanBaseBlockImpl implements Artis
     }
 
     private final ArtisanBaseBlockState state;
+    private final boolean hasBlockEntity;
 
-    private ArtisanSimpleBlockImpl(@NotNull NamespacedKey blockId, @NotNull ArtisanBaseBlockState state, @Nullable GUICreator creator, SoundProperty placeSound) {
+    private ArtisanSimpleBlockImpl(@NotNull NamespacedKey blockId, @NotNull ArtisanBaseBlockState state, @Nullable GUICreator creator, SoundProperty placeSound, boolean hasBlockEntity) {
         super(blockId, List.of(), creator, placeSound);
         this.state = state;
+        this.hasBlockEntity = hasBlockEntity;
     }
 
     @Override
@@ -39,17 +41,24 @@ final class ArtisanSimpleBlockImpl extends ArtisanBaseBlockImpl implements Artis
         return state;
     }
 
+    @Override
+    public boolean hasBlockEntity() {
+        return hasBlockEntity;
+    }
+
     public static final class BuilderImpl implements Builder {
         private NamespacedKey blockId;
         private ArtisanBaseBlockState state;
         private SoundProperty placeSound;
         private GUICreator guiCreator;
+        private boolean hasBlockEntity;
 
         public BuilderImpl() {
             blockId = null;
             state = null;
             placeSound = null;
             guiCreator = null;
+            hasBlockEntity = false;
         }
 
         @Override
@@ -77,9 +86,15 @@ final class ArtisanSimpleBlockImpl extends ArtisanBaseBlockImpl implements Artis
         }
 
         @Override
+        public @NotNull Builder blockEntity() {
+            this.hasBlockEntity = true;
+            return this;
+        }
+
+        @Override
         public @NotNull ArtisanSimpleBlock build() {
             if (blockId == null || state == null) throw new IllegalArgumentException("You must fill all the param!");
-            return new ArtisanSimpleBlockImpl(blockId, state, guiCreator, placeSound);
+            return new ArtisanSimpleBlockImpl(blockId, state, guiCreator, placeSound, hasBlockEntity);
         }
     }
 }

@@ -70,4 +70,6 @@ public interface ArtisanBaseBlock {
 
     @NotNull
     ArtisanBlocks getType();
+
+    boolean hasBlockEntity();
 }
