@@ -43,9 +43,4 @@ public abstract class ArtisanBaseBlockStateImpl implements ArtisanBaseBlockState
     public @Nullable Integer getBrightness() {
         return null;
     }
-
-    @Override
-    public @Nullable Integer getHardness() {
-        return null;
-    }
 }

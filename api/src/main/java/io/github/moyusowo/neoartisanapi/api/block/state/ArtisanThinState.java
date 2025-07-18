@@ -7,6 +7,7 @@ import io.github.moyusowo.neoartisanapi.api.block.util.PistonMoveBlockReaction;
 import io.github.moyusowo.neoartisanapi.api.item.ItemGenerator;
 import io.github.moyusowo.neoartisanapi.api.util.BuilderFactoryUtil;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * 薄型方块状态定义。
@@ -31,6 +32,12 @@ public interface ArtisanThinState extends ArtisanBaseBlockState {
     @Override
     default boolean canSurviveFloating() {
         return false;
+    }
+
+    @Override
+    @Nullable
+    default Integer getHardness() {
+        return null;
     }
 
     @Override

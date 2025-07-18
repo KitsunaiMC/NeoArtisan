@@ -10,6 +10,7 @@ import io.github.moyusowo.neoartisanapi.api.item.ItemGenerator;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.ServicePriority;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
@@ -27,7 +28,7 @@ final class ArtisanSkullStateImpl extends ArtisanBaseBlockStateImpl implements A
 
     private final String urlBase64;
 
-    protected ArtisanSkullStateImpl(ItemGenerator[] generators, String urlBase64) {
+    private ArtisanSkullStateImpl(ItemGenerator[] generators, String urlBase64) {
         super(WrappedBlockState.getByString("minecraft:player_head[powered=false,rotation=0]").getGlobalId(), WrappedBlockState.getByString("minecraft:player_head[powered=false,rotation=0]").getGlobalId(), generators);
         this.urlBase64 = urlBase64;
     }
@@ -40,6 +41,11 @@ final class ArtisanSkullStateImpl extends ArtisanBaseBlockStateImpl implements A
     @Override
     public boolean canSurviveFloating() {
         return true;
+    }
+
+    @Override
+    public @Nullable Integer getHardness() {
+        return null;
     }
 
     private static final class BuilderImpl implements Builder {
@@ -64,6 +70,11 @@ final class ArtisanSkullStateImpl extends ArtisanBaseBlockStateImpl implements A
         @Override
         public @NotNull Builder generators(ItemGenerator[] generators) {
             this.generators = generators;
+            return this;
+        }
+
+        @Override
+        public @NotNull Builder hardness(int hardness) {
             return this;
         }
 

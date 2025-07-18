@@ -13,6 +13,7 @@ import io.github.moyusowo.neoartisanapi.api.item.ItemGenerator;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.ServicePriority;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 final class ArtisanCommonStateImpl extends ArtisanBaseBlockStateImpl implements ArtisanCommonState {
     @InitMethod(priority = InitPriority.REGISTRAR)
@@ -25,8 +26,13 @@ final class ArtisanCommonStateImpl extends ArtisanBaseBlockStateImpl implements 
         );
     }
 
-    protected ArtisanCommonStateImpl(int appearanceState, int actualState, ItemGenerator[] generators) {
+    private ArtisanCommonStateImpl(int appearanceState, int actualState, ItemGenerator[] generators) {
         super(appearanceState, actualState, generators);
+    }
+
+    @Override
+    public @Nullable Integer getHardness() {
+        return null;
     }
 
     private static final class BuilderImpl implements Builder {

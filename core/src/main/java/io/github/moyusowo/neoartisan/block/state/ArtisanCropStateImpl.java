@@ -30,7 +30,7 @@ final class ArtisanCropStateImpl extends ArtisanBaseBlockStateImpl implements Ar
         );
     }
 
-    protected ArtisanCropStateImpl(int appearanceState, int actualState, ItemGenerator[] generators) {
+    private ArtisanCropStateImpl(int appearanceState, int actualState, ItemGenerator[] generators) {
         super(appearanceState, actualState, generators);
     }
 

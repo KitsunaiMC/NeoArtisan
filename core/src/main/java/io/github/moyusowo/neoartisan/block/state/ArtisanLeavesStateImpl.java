@@ -11,6 +11,7 @@ import io.github.moyusowo.neoartisanapi.api.item.ItemGenerator;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.ServicePriority;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 final class ArtisanLeavesStateImpl extends ArtisanBaseBlockStateImpl implements ArtisanLeavesState {
     @InitMethod(priority = InitPriority.REGISTRAR)
@@ -25,7 +26,7 @@ final class ArtisanLeavesStateImpl extends ArtisanBaseBlockStateImpl implements 
 
     private final boolean canBurn;
 
-    protected ArtisanLeavesStateImpl(int appearanceState, int actualState, ItemGenerator[] generators, boolean canBurn) {
+    private ArtisanLeavesStateImpl(int appearanceState, int actualState, ItemGenerator[] generators, boolean canBurn) {
         super(appearanceState, actualState, generators);
         this.canBurn = canBurn;
     }
@@ -33,6 +34,11 @@ final class ArtisanLeavesStateImpl extends ArtisanBaseBlockStateImpl implements 
     @Override
     public boolean canSurviveFloating() {
         return true;
+    }
+
+    @Override
+    public @Nullable Integer getHardness() {
+        return null;
     }
 
     @Override
@@ -84,6 +90,11 @@ final class ArtisanLeavesStateImpl extends ArtisanBaseBlockStateImpl implements 
         @Override
         public @NotNull Builder generators(ItemGenerator[] generators) {
             this.generators = generators;
+            return this;
+        }
+
+        @Override
+        public @NotNull Builder hardness(int hardness) {
             return this;
         }
 

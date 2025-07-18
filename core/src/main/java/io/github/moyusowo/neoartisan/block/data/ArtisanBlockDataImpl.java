@@ -42,7 +42,7 @@ class ArtisanBlockDataImpl implements ArtisanBlockDataInternal {
     private final LifecycleTaskManagerInternal lifecycleTaskManager;
     private final ArtisanBlockGUI artisanBlockGUI;
 
-    public ArtisanBlockDataImpl(@NotNull NamespacedKey blockId, int stage, @NotNull Location location) {
+    private ArtisanBlockDataImpl(@NotNull NamespacedKey blockId, int stage, @NotNull Location location) {
         this.blockId = blockId;
         this.stage = stage;
         this.location = location;

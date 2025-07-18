@@ -49,6 +49,9 @@ public interface ArtisanSkullState extends ArtisanBaseBlockState {
         Builder generators(@NotNull ItemGenerator[] generators);
 
         @NotNull
+        Builder hardness(int hardness);
+
+        @NotNull
         ArtisanSkullState build();
     }
 }

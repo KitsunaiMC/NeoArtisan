@@ -23,7 +23,7 @@ final class ArtisanThinStateImpl extends ArtisanBaseBlockStateImpl implements Ar
         );
     }
 
-    protected ArtisanThinStateImpl(int appearanceState, int actualState, ItemGenerator[] generators) {
+    private ArtisanThinStateImpl(int appearanceState, int actualState, ItemGenerator[] generators) {
         super(appearanceState, actualState, generators);
     }
 

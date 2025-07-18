@@ -57,6 +57,9 @@ public interface ArtisanCommonState extends ArtisanBaseBlockState {
         Builder generators(@NotNull ItemGenerator[] generators);
 
         @NotNull
+        Builder hardness(int hardness);
+
+        @NotNull
         ArtisanCommonState build();
     }
 }
