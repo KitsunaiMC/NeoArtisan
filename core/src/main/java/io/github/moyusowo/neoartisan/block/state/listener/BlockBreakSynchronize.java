@@ -13,6 +13,7 @@ import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
 import io.github.moyusowo.neoartisanapi.api.block.data.ArtisanBlockData;
 import io.github.moyusowo.neoartisanapi.api.block.state.ArtisanCommonState;
 import io.github.moyusowo.neoartisanapi.api.block.state.ArtisanLeavesState;
+import io.github.moyusowo.neoartisanapi.api.block.state.ArtisanSkullState;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
@@ -173,5 +174,20 @@ public class BlockBreakSynchronize implements Listener {
                 )
         );
         PacketEvents.getAPI().getPlayerManager().sendPacket(player, wrapperPlayServerUpdateAttributes);
+    }
+
+    private void onSkullStateBreakStart(BlockDamageEvent event, ArtisanBlockData blockData) {
+        final Player player = event.getPlayer();
+        final AttributeInstance attributeInstance = player.getAttribute(Attribute.BLOCK_BREAK_SPEED);
+        if (attributeInstance == null) throw new InternalException("why the fuck is null????? IT SHOULD NOT BE!!!!");
+        final float realHardness = event.getBlock().getType().getHardness();
+        final float hardness = ((ArtisanSkullState) blockData.getArtisanBlockState()).getHardness();
+        attributeInstance.addTransientModifier(
+                new AttributeModifier(
+                        TEMPLATE_MULTIPLY,
+                        (realHardness / hardness) - 1,
+                        AttributeModifier.Operation.MULTIPLY_SCALAR_1
+                )
+        );
     }
 }
