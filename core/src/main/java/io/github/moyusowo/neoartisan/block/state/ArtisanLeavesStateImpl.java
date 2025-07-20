@@ -81,7 +81,7 @@ final class ArtisanLeavesStateImpl extends ArtisanBaseBlockStateImpl implements 
             leavesAppearance = null;
             generators = null;
             canBurn = false;
-            hardness = Float.MIN_VALUE;
+            hardness = -Float.MAX_VALUE;
         }
 
 

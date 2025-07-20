@@ -58,7 +58,7 @@ final class ArtisanSkullStateImpl extends ArtisanBaseBlockStateImpl implements A
         private BuilderImpl() {
             urlBase64 = null;
             generators = null;
-            hardness = Float.MIN_VALUE;
+            hardness = -Float.MAX_VALUE;
         }
 
         @Override

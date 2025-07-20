@@ -80,7 +80,7 @@ final class ArtisanCommonStateImpl extends ArtisanBaseBlockStateImpl implements 
         private BuilderImpl() {
             commonAppearance = null;
             generators = null;
-            hardness = Float.MIN_VALUE;
+            hardness = -Float.MAX_VALUE;
         }
 
 
