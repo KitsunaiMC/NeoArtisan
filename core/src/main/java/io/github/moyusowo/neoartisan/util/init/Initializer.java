@@ -2,6 +2,7 @@ package io.github.moyusowo.neoartisan.util.init;
 
 import io.github.moyusowo.neoartisan.NeoArtisan;
 import org.bukkit.Bukkit;
+import org.bukkit.plugin.Plugin;
 import org.reflections.Reflections;
 import org.reflections.scanners.Scanners;
 import org.reflections.util.ConfigurationBuilder;
@@ -55,6 +56,7 @@ public final class Initializer {
         NeoArtisan.logger().info("successfully initialize and plugin is enabled.");
     }
 
+    @SuppressWarnings("UnstableApiUsage")
     public static void executeStartup() {
         for (Method method : STARTUP_METHODS) {
             try {
@@ -64,12 +66,19 @@ public final class Initializer {
                 }
             } catch (InvocationTargetException e) {
                 NeoArtisan.logger().severe("fail to initialize method: " + method + ", " + e + ", cause: " + e.getCause());
-                NeoArtisan.logger().severe("fail to enable plugin. plugin disabling...");
+                NeoArtisan.logger().severe("fail to startup plugin. plugin disabling...");
                 Bukkit.getPluginManager().disablePlugin(NeoArtisan.instance());
                 return;
             } catch (Exception e) {
                 NeoArtisan.logger().severe("fail to initialize method: " + method + ", " + e);
-                NeoArtisan.logger().severe("fail to enable plugin. plugin disabling...");
+                NeoArtisan.logger().severe("fail to startup plugin. plugin disabling...");
+                for (Plugin plugin : Bukkit.getPluginManager().getPlugins()) {
+                    if (plugin.isEnabled() && plugin.getPluginMeta().getPluginDependencies().contains("NeoArtisan")) {
+                        Bukkit.getPluginManager().disablePlugin(plugin);
+                    } else if (plugin.isEnabled() && plugin.getPluginMeta().getPluginSoftDependencies().contains("NeoArtisan")) {
+                        Bukkit.getPluginManager().disablePlugin(plugin);
+                    }
+                }
                 Bukkit.getPluginManager().disablePlugin(NeoArtisan.instance());
                 return;
             }
