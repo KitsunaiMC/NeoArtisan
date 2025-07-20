@@ -55,7 +55,6 @@ final class BlockUpdateListener implements PacketListener {
         final int minHeight = event.getUser().getMinWorldHeight();
         final WrapperPlayServerChunkData wrapperPlayServerChunkData = new WrapperPlayServerChunkData(event);
         final int chunkX = wrapperPlayServerChunkData.getColumn().getX(), chunkZ = wrapperPlayServerChunkData.getColumn().getZ();
-        if (!ArtisanBlockStorageAsync.getAsync().hasArtisanBlockInChunk(new ChunkPos(worldUID, chunkX, chunkZ))) return;
         final BaseChunk[] baseChunks = wrapperPlayServerChunkData.getColumn().getChunks();
         for (int sectionIndex = 0; sectionIndex < baseChunks.length; sectionIndex++) {
             final BaseChunk baseChunk = baseChunks[sectionIndex];
