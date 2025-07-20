@@ -2,7 +2,10 @@ package io.github.moyusowo.neoartisan.block.block.listener;
 
 import com.destroystokyo.paper.profile.PlayerProfile;
 import com.destroystokyo.paper.profile.ProfileProperty;
+import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.protocol.world.states.WrappedBlockState;
+import com.github.retrooper.packetevents.util.Vector3i;
+import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerBlockChange;
 import io.github.moyusowo.neoartisan.block.storage.internal.ArtisanBlockStorageInternal;
 import io.github.moyusowo.neoartisanapi.api.block.data.ArtisanBlockData;
 import io.github.moyusowo.neoartisanapi.api.block.state.ArtisanSkullState;
@@ -12,6 +15,7 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.Skull;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
@@ -51,6 +55,15 @@ public final class Util {
         ArtisanBlockStorageInternal.getInternal().replaceArtisanBlock(artisanBlockData);
         BlockData blockData = Bukkit.createBlockData(WrappedBlockState.getByGlobalId(artisanBlockData.getArtisanBlockState().actualState()).toString());
         world.setBlockData(bukkitBlock.getLocation(), blockData);
+        for (Player player : bukkitBlock.getLocation().getNearbyPlayers(64)) {
+            PacketEvents.getAPI().getPlayerManager().sendPacket(
+                    player,
+                    new WrapperPlayServerBlockChange(
+                            new Vector3i(bukkitBlock.getX(), bukkitBlock.getY(), bukkitBlock.getZ()),
+                            artisanBlockData.getArtisanBlockState().appearanceState()
+                    )
+            );
+        }
         if (artisanBlockData.getArtisanBlockState() instanceof ArtisanSkullState state) {
             Skull skull = (Skull) bukkitBlock.getState();
             final PlayerProfile playerProfile = Bukkit.createProfile(UUID.randomUUID());

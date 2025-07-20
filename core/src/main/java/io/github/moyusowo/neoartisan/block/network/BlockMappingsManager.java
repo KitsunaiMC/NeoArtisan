@@ -21,14 +21,10 @@ public final class BlockMappingsManager {
     @InitMethod(priority = InitPriority.HIGHEST)
     public static void init() {
         File dataFolder = NeoArtisan.instance().getDataFolder();
-        File itemFolder = new File(dataFolder, "block");
-        if (!itemFolder.exists()) {
-            itemFolder.mkdirs();
-        }
-        File configFile = new File(itemFolder, "mappings.yml");
+        File configFile = new File(dataFolder, "mappings.yml");
         if (!configFile.exists()) {
             NeoArtisan.logger().warning("missing mappings.yml. Regenerated.");
-            saveDefaultIfNotExists("block/mappings.yml");
+            saveDefaultIfNotExists("mappings.yml");
         }
         YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
         for (String key : config.getKeys(false)) {
