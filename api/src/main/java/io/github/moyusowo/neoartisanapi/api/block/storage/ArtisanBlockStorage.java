@@ -2,6 +2,7 @@ package io.github.moyusowo.neoartisanapi.api.block.storage;
 
 import io.github.moyusowo.neoartisanapi.api.block.data.ArtisanBlockData;
 import org.bukkit.Location;
+import org.bukkit.NamespacedKey;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.jetbrains.annotations.NotNull;
@@ -118,5 +119,39 @@ public interface ArtisanBlockStorage {
      */
     default void setArtisanBlockData(@NotNull Location location, @Nullable ArtisanBlockData artisanBlockData) {
         setArtisanBlockData(location.getBlock(), artisanBlockData);
+    }
+
+    /**
+     * 获取指定位置的方块ID（包括原版）
+     *
+     * @param world 目标世界（非null）
+     * @param x X坐标
+     * @param y Y坐标
+     * @param z Z坐标
+     */
+    @NotNull
+    default NamespacedKey getBlockId(@NotNull World world, int x, int y, int z) {
+        if (isArtisanBlock(world, x, y, z)) return getArtisanBlockData(world, x, y, z).blockId();
+        else return world.getBlockAt(x, y, z).getType().getKey();
+    }
+
+    /**
+     * 获取指定位置的方块ID（包括原版）
+     *
+     * @param block 目标方块（非null）
+     */
+    @NotNull
+    default NamespacedKey getBlockId(@NotNull Block block) {
+        return getBlockId(block.getWorld(), block.getX(), block.getY(), block.getZ());
+    }
+
+    /**
+     * 获取指定位置的方块ID（包括原版）
+     *
+     * @param location 目标位置（非null）
+     */
+    @NotNull
+    default NamespacedKey getBlockId(@NotNull Location location) {
+        return getBlockId(location.getBlock());
     }
 }
