@@ -150,29 +150,29 @@ final class ArtisanBlockStorageImpl implements ArtisanBlockStorage, ArtisanBlock
     @Override
     @NotNull
     @SpecificThreadUse(thread = Threads.MAIN)
-    public ArtisanBlockData getArtisanBlockData(@NotNull World world, int x, int y, int z) {
-        BlockPos blockPos = new BlockPos(world.getUID(), x, y, z);
+    public ArtisanBlockData getArtisanBlockData(@NotNull UUID worldUID, int x, int y, int z) {
+        BlockPos blockPos = new BlockPos(worldUID, x, y, z);
         return getArtisanBlockData(blockPos);
     }
 
     @Override
     @SpecificThreadUse(thread = Threads.MAIN)
-    public boolean isArtisanBlock(@NotNull World world, int x, int y, int z) {
-        return isArtisanBlock(new BlockPos(world.getUID(), x, y, z));
+    public boolean isArtisanBlock(@NotNull UUID worldUID, int x, int y, int z) {
+        return isArtisanBlock(new BlockPos(worldUID, x, y, z));
     }
 
     @Override
     @SpecificThreadUse(thread = Threads.MAIN)
-    public void setArtisanBlockData(@NotNull World world, int x, int y, int z, @Nullable ArtisanBlockData artisanBlockData) {
-        if (isArtisanBlock(world, x, y, z)) {
+    public void setArtisanBlockData(@NotNull UUID worldUID, int x, int y, int z, @Nullable ArtisanBlockData artisanBlockData) {
+        if (isArtisanBlock(worldUID, x, y, z)) {
             if (artisanBlockData == null) {
-                removeArtisanBlock(new BlockPos(world.getUID(), x, y, z));
+                removeArtisanBlock(new BlockPos(worldUID, x, y, z));
             } else {
                 replaceArtisanBlock(artisanBlockData);
             }
         } else {
             if (artisanBlockData == null) {
-                world.getBlockAt(x, y, z).setType(Material.AIR);
+                removeArtisanBlock(new BlockPos(worldUID, x, y, z));
             } else {
                 placeArtisanBlock(artisanBlockData);
             }
