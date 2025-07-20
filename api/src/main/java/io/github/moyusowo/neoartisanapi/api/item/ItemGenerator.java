@@ -1,9 +1,11 @@
 package io.github.moyusowo.neoartisanapi.api.item;
 
+import com.google.common.base.Preconditions;
 import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Range;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -45,12 +47,25 @@ public interface ItemGenerator {
         return new RangedItemGenerator(registryId, min, max);
     }
 
+    /**
+     * 创建有概率生成物品的生成器
+     *
+     * @param registryId 物品注册ID，不能为null
+     * @param amount 生成数量
+     * @param chance 生成几率（0到1的小数）
+     * @return 配置好的物品生成器实例
+     * @see ChanceItemGenerator
+     */
+    static ItemGenerator chanceGenerator(@NotNull NamespacedKey registryId, int amount, @Range(from = 0, to = 1) double chance) {
+        return new ChanceItemGenerator(registryId, amount, chance);
+    }
+
     class SimpleItemGenerator implements ItemGenerator {
 
-        private final int amount;
-        private final NamespacedKey registryId;
+        protected final int amount;
+        protected final NamespacedKey registryId;
 
-        private SimpleItemGenerator(NamespacedKey registryId, int amount) {
+        protected SimpleItemGenerator(@NotNull NamespacedKey registryId, int amount) {
             this.amount = amount;
             this.registryId = registryId;
         }
@@ -68,10 +83,10 @@ public interface ItemGenerator {
 
     class RangedItemGenerator implements ItemGenerator {
 
-        private final int min, max;
-        private final NamespacedKey registryId;
+        protected final int min, max;
+        protected final NamespacedKey registryId;
 
-        private RangedItemGenerator(NamespacedKey registryId, int min, int max) {
+        protected RangedItemGenerator(@NotNull NamespacedKey registryId, int min, int max) {
             this.min = min;
             this.max = max;
             this.registryId = registryId;
@@ -85,6 +100,34 @@ public interface ItemGenerator {
         @Override
         public @NotNull ItemStack generate() {
             return NeoArtisanAPI.getItemRegistry().getItemStack(this.registryId, ThreadLocalRandom.current().nextInt(min, max + 1));
+        }
+    }
+
+    class ChanceItemGenerator implements ItemGenerator {
+
+        protected final int amount;
+        protected final double chance;
+        protected final NamespacedKey registryId;
+
+        protected ChanceItemGenerator(@NotNull NamespacedKey registryId, int amount, double chance) {
+            this.amount = amount;
+            Preconditions.checkArgument(chance > 0 && chance < 1);
+            this.chance = chance;
+            this.registryId = registryId;
+        }
+
+        @Override
+        public @NotNull NamespacedKey registryId() {
+            return this.registryId;
+        }
+
+        @Override
+        public @NotNull ItemStack generate() {
+            if (ThreadLocalRandom.current().nextDouble() < chance) {
+                return NeoArtisanAPI.getItemRegistry().getItemStack(this.registryId, amount);
+            } else {
+                return ItemStack.empty();
+            }
         }
     }
 
