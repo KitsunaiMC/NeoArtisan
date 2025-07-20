@@ -30,6 +30,9 @@ public interface ArtisanLeavesState extends ArtisanBaseBlockState {
 
     boolean canBurn();
 
+    @NotNull
+    Float getHardness();
+
     @Override
     @NotNull
     default ArtisanBlockStates getType() {
@@ -49,7 +52,7 @@ public interface ArtisanLeavesState extends ArtisanBaseBlockState {
         Builder generators(@NotNull ItemGenerator[] generators);
 
         @NotNull
-        Builder hardness(int hardness);
+        Builder hardness(float hardness);
 
         @NotNull
         Builder burnable();

@@ -13,7 +13,6 @@ import io.github.moyusowo.neoartisanapi.api.item.ItemGenerator;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.ServicePriority;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 final class ArtisanCommonStateImpl extends ArtisanBaseBlockStateImpl implements ArtisanCommonState {
     @InitMethod(priority = InitPriority.REGISTRAR)
@@ -26,18 +25,23 @@ final class ArtisanCommonStateImpl extends ArtisanBaseBlockStateImpl implements 
         );
     }
 
-    private ArtisanCommonStateImpl(int appearanceState, int actualState, ItemGenerator[] generators) {
+    private final float hardness;
+
+    private ArtisanCommonStateImpl(int appearanceState, int actualState, ItemGenerator[] generators, float hardness) {
         super(appearanceState, actualState, generators);
+        this.hardness = hardness;
     }
 
     @Override
-    public @Nullable Integer getHardness() {
-        return null;
+    @NotNull
+    public Float getHardness() {
+        return hardness;
     }
 
     private static final class BuilderImpl implements Builder {
         private CommonAppearance commonAppearance;
         private ItemGenerator[] generators;
+        private float hardness;
         private static final int actualState = WrappedBlockState.getByString("minecraft:stone").getGlobalId();
 
         private int generateAppearanceState() {
@@ -76,6 +80,7 @@ final class ArtisanCommonStateImpl extends ArtisanBaseBlockStateImpl implements 
         private BuilderImpl() {
             commonAppearance = null;
             generators = null;
+            hardness = Float.MIN_VALUE;
         }
 
 
@@ -92,9 +97,15 @@ final class ArtisanCommonStateImpl extends ArtisanBaseBlockStateImpl implements 
         }
 
         @Override
+        public @NotNull Builder hardness(float hardness) {
+            this.hardness = hardness;
+            return this;
+        }
+
+        @Override
         public @NotNull ArtisanCommonState build() {
-            if (generators == null || commonAppearance == null) throw new IllegalArgumentException("You must fill all the param!");
-            return new ArtisanCommonStateImpl(generateAppearanceState(), actualState, generators);
+            if (generators == null || commonAppearance == null || hardness <= 0) throw new IllegalArgumentException("You must fill all the param correctly!");
+            return new ArtisanCommonStateImpl(generateAppearanceState(), actualState, generators, hardness);
         }
     }
 }

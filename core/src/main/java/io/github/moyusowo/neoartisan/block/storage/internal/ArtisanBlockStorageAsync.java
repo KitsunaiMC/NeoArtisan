@@ -17,29 +17,29 @@ public interface ArtisanBlockStorageAsync {
         return Bukkit.getServicesManager().load(ArtisanBlockStorageAsync.class);
     }
 
-    @SpecificThreadUse(thread = Threads.STRORAGE)
+    @SpecificThreadUse(thread = Threads.STORAGE)
     @NotNull
     ArtisanBlockDataView getArtisanBlockDataView(@NotNull BlockPos blockPos);
 
-    @SpecificThreadUse(thread = Threads.STRORAGE)
+    @SpecificThreadUse(thread = Threads.STORAGE)
     @NotNull
     @UnmodifiableView
     List<ChunkPos> getWorldArtisanBlockChunks(UUID worldUID);
 
-    @SpecificThreadUse(thread = Threads.STRORAGE)
+    @SpecificThreadUse(thread = Threads.STORAGE)
     @NotNull
     @UnmodifiableView
     List<ArtisanBlockDataView> getChunkArtisanBlockDataViews(ChunkPos chunkPos);
 
-    @SpecificThreadUse(thread = Threads.STRORAGE)
+    @SpecificThreadUse(thread = Threads.STORAGE)
     boolean isArtisanBlock(BlockPos blockPos);
 
-    @SpecificThreadUse(thread = {Threads.STRORAGE, Threads.MAIN})
+    @SpecificThreadUse(thread = {Threads.STORAGE, Threads.MAIN})
     boolean hasArtisanBlockInWorld(UUID worldUID);
 
-    @SpecificThreadUse(thread = {Threads.STRORAGE, Threads.MAIN})
+    @SpecificThreadUse(thread = {Threads.STORAGE, Threads.MAIN})
     boolean hasArtisanBlockInChunk(ChunkPos chunkPos);
 
-    @SpecificThreadUse(thread = Threads.STRORAGE)
+    @SpecificThreadUse(thread = Threads.STORAGE)
     boolean checkAndCleanDirtyChunk(ChunkPos chunkPos);
 }

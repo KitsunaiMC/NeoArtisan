@@ -10,10 +10,9 @@ import io.github.moyusowo.neoartisanapi.api.recipe.ArtisanShapelessRecipe;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 
-final class RecipeTest {
+public final class RecipeTest {
 
-    @NeoArtisanAPI.Register
-    private static void register() {
+    public static void register() {
         if (NeoArtisan.isDebugMode()) {
             NeoArtisanAPI.getRecipeRegistry().register(
                     ArtisanShapedRecipe.builder()

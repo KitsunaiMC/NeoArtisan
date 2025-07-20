@@ -14,7 +14,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.List;
 
 @SuppressWarnings("UnstableApiUsage")
-final class ItemTest {
+public final class ItemTest {
 
     static final String namespace = "neoartisan";
     static final NamespacedKey broken_stick = new NamespacedKey(namespace, "broken_stick"),
@@ -31,8 +31,7 @@ final class ItemTest {
 
     static final String soup_block_skull = "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvM2UwYzE3MTFhNzU2MmEyNGE3MDgzOWUyY2YyNDZiYTE2ZGE0MzFmZGNiNzRkNTA2Zjc3OWRlYjA1YzNhNDEzNSJ9fX0=";
 
-    @NeoArtisanAPI.Register
-    private static void register() {
+    public static void register() {
         if (NeoArtisan.isDebugMode()) {
             NeoArtisanAPI.getItemRegistry().registerItem(
                     ArtisanItem.complexBuilder()

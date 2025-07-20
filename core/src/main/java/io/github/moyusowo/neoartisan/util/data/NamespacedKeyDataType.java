@@ -5,7 +5,6 @@ import org.bukkit.persistence.PersistentDataAdapterContext;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 
-@SuppressWarnings("unused")
 public class NamespacedKeyDataType implements PersistentDataType<String, NamespacedKey> {
 
     public static final NamespacedKeyDataType NAMESPACED_KEY = new NamespacedKeyDataType();

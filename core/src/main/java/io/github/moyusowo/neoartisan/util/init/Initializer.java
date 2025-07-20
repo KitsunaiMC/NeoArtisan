@@ -12,6 +12,7 @@ import java.util.*;
 
 public final class Initializer {
     private static final List<Method> ENABLE_METHODS = Collections.synchronizedList(new ArrayList<>());
+    private static final List<Method> STARTUP_METHODS = Collections.synchronizedList(new ArrayList<>());
 
     public static void scanPackage(String pkg) {
         Reflections reflections = new Reflections(
@@ -21,8 +22,13 @@ public final class Initializer {
         );
         Set<Method> methods = reflections.getMethodsAnnotatedWith(InitMethod.class);
         for (Method method : methods) {
-            method.setAccessible(true);
-            ENABLE_METHODS.add(method);
+            if (method.getAnnotation(InitMethod.class).priority() != InitPriority.STARTUP) {
+                method.setAccessible(true);
+                ENABLE_METHODS.add(method);
+            } else {
+                method.setAccessible(true);
+                STARTUP_METHODS.add(method);
+            }
         }
     }
 
@@ -47,6 +53,28 @@ public final class Initializer {
             }
         }
         NeoArtisan.logger().info("successfully initialize and plugin is enabled.");
+    }
+
+    public static void executeStartup() {
+        for (Method method : STARTUP_METHODS) {
+            try {
+                method.invoke(null);
+                if (NeoArtisan.isDebugMode()) {
+                    NeoArtisan.logger().info("successfully initialize method: " + method.getDeclaringClass().getName() + "." + method.getName());
+                }
+            } catch (InvocationTargetException e) {
+                NeoArtisan.logger().severe("fail to initialize method: " + method + ", " + e + ", cause: " + e.getCause());
+                NeoArtisan.logger().severe("fail to enable plugin. plugin disabling...");
+                Bukkit.getPluginManager().disablePlugin(NeoArtisan.instance());
+                return;
+            } catch (Exception e) {
+                NeoArtisan.logger().severe("fail to initialize method: " + method + ", " + e);
+                NeoArtisan.logger().severe("fail to enable plugin. plugin disabling...");
+                Bukkit.getPluginManager().disablePlugin(NeoArtisan.instance());
+                return;
+            }
+        }
+        NeoArtisan.logger().info("plugin successfully startup.");
     }
 }
 

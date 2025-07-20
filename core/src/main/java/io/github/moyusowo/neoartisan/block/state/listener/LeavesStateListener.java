@@ -11,6 +11,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBurnEvent;
+import org.bukkit.event.block.BlockFertilizeEvent;
 import org.bukkit.event.block.BlockIgniteEvent;
 
 final class LeavesStateListener implements Listener {
@@ -36,6 +37,15 @@ final class LeavesStateListener implements Listener {
         ArtisanBlockData artisanBlockData = NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlockData(event.getBlock());
         if (artisanBlockData.getArtisanBlockState() instanceof ArtisanLeavesState artisanLeavesState) {
             if (!artisanLeavesState.canBurn()) event.setCancelled(true);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onFFertilize(BlockFertilizeEvent event) {
+        if (!NeoArtisanAPI.getArtisanBlockStorage().isArtisanBlock(event.getBlock())) return;
+        ArtisanBlockData artisanBlockData = NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlockData(event.getBlock());
+        if (artisanBlockData.getArtisanBlockState().getType() == ArtisanBlockStates.LEAVES) {
+            event.setCancelled(true);
         }
     }
 }

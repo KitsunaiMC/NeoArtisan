@@ -125,7 +125,7 @@ final class ArtisanBlockStorageImpl implements ArtisanBlockStorage, ArtisanBlock
 
     @Override
     @NotNull
-    @SpecificThreadUse(thread = Threads.STRORAGE)
+    @SpecificThreadUse(thread = Threads.STORAGE)
     public ArtisanBlockDataView getArtisanBlockDataView(@NotNull BlockPos blockPos) {
         lock.readLock().lock();
         try {
@@ -179,7 +179,7 @@ final class ArtisanBlockStorageImpl implements ArtisanBlockStorage, ArtisanBlock
         }
     }
 
-    @SpecificThreadUse(thread = Threads.STRORAGE)
+    @SpecificThreadUse(thread = Threads.STORAGE)
     @NotNull
     @UnmodifiableView
     public List<ArtisanBlockDataView> getChunkArtisanBlockDataViews(ChunkPos chunkPos) {
@@ -197,7 +197,7 @@ final class ArtisanBlockStorageImpl implements ArtisanBlockStorage, ArtisanBlock
     }
 
     @Override
-    @SpecificThreadUse(thread = Threads.STRORAGE)
+    @SpecificThreadUse(thread = Threads.STORAGE)
     public boolean isArtisanBlock(BlockPos blockPos) {
         lock.readLock().lock();
         try {
@@ -208,7 +208,7 @@ final class ArtisanBlockStorageImpl implements ArtisanBlockStorage, ArtisanBlock
     }
 
     @Override
-    @SpecificThreadUse(thread = Threads.STRORAGE)
+    @SpecificThreadUse(thread = Threads.STORAGE)
     public boolean hasArtisanBlockInWorld(UUID worldUID) {
         lock.readLock().lock();
         try {
@@ -219,7 +219,7 @@ final class ArtisanBlockStorageImpl implements ArtisanBlockStorage, ArtisanBlock
     }
 
     @Override
-    @SpecificThreadUse(thread = Threads.STRORAGE)
+    @SpecificThreadUse(thread = Threads.STORAGE)
     public boolean hasArtisanBlockInChunk(ChunkPos chunkPos) {
         lock.readLock().lock();
         try {
@@ -234,7 +234,7 @@ final class ArtisanBlockStorageImpl implements ArtisanBlockStorage, ArtisanBlock
         return dirtyChunkMarker.remove(chunkPos, true);
     }
 
-    @SpecificThreadUse(thread = Threads.STRORAGE)
+    @SpecificThreadUse(thread = Threads.STORAGE)
     @NotNull
     @UnmodifiableView
     public List<ChunkPos> getWorldArtisanBlockChunks(UUID worldUID) {

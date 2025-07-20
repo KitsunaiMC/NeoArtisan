@@ -4,7 +4,6 @@ import io.github.moyusowo.neoartisan.NeoArtisan;
 
 import java.io.File;
 
-@SuppressWarnings("unused")
 public final class FileUtil {
 
     private FileUtil() {}

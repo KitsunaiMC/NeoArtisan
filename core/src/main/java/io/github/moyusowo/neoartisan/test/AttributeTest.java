@@ -7,14 +7,13 @@ import org.bukkit.persistence.PersistentDataType;
 
 import static io.github.moyusowo.neoartisan.test.ItemTest.namespace;
 
-final class AttributeTest {
+public final class AttributeTest {
 
     static final NamespacedKey global = new NamespacedKey(namespace, "global"),
                     itemstack = new NamespacedKey(namespace, "itemstack"),
                     player = new NamespacedKey(namespace, "player");
 
-    @NeoArtisanAPI.Register
-    private static void register() {
+    public static void register() {
         if (NeoArtisan.isDebugMode()) {
             NeoArtisanAPI.getGlobalAttributeRegistry().registerAttribute(
                     global,

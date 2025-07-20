@@ -10,7 +10,6 @@ import io.github.moyusowo.neoartisanapi.api.item.ItemGenerator;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.ServicePriority;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
@@ -27,10 +26,12 @@ final class ArtisanSkullStateImpl extends ArtisanBaseBlockStateImpl implements A
     }
 
     private final String urlBase64;
+    private final float hardness;
 
-    private ArtisanSkullStateImpl(ItemGenerator[] generators, String urlBase64) {
+    private ArtisanSkullStateImpl(ItemGenerator[] generators, String urlBase64, float hardness) {
         super(WrappedBlockState.getByString("minecraft:player_head[powered=false,rotation=0]").getGlobalId(), WrappedBlockState.getByString("minecraft:player_head[powered=false,rotation=0]").getGlobalId(), generators);
         this.urlBase64 = urlBase64;
+        this.hardness = hardness;
     }
 
     @Override
@@ -44,17 +45,20 @@ final class ArtisanSkullStateImpl extends ArtisanBaseBlockStateImpl implements A
     }
 
     @Override
-    public @Nullable Integer getHardness() {
-        return null;
+    @NotNull
+    public Float getHardness() {
+        return hardness;
     }
 
     private static final class BuilderImpl implements Builder {
         private String urlBase64;
         private ItemGenerator[] generators;
+        private float hardness;
 
         private BuilderImpl() {
             urlBase64 = null;
             generators = null;
+            hardness = Float.MIN_VALUE;
         }
 
         @Override
@@ -74,14 +78,15 @@ final class ArtisanSkullStateImpl extends ArtisanBaseBlockStateImpl implements A
         }
 
         @Override
-        public @NotNull Builder hardness(int hardness) {
+        public @NotNull Builder hardness(float hardness) {
+            this.hardness = hardness;
             return this;
         }
 
         @Override
         public @NotNull ArtisanSkullState build() {
-            if (generators == null || urlBase64 == null) throw new IllegalArgumentException("You must fill all the param!");
-            return new ArtisanSkullStateImpl(generators, urlBase64);
+            if (generators == null || urlBase64 == null || hardness <= 0) throw new IllegalArgumentException("You must fill all the param correctly!");
+            return new ArtisanSkullStateImpl(generators, urlBase64, hardness);
         }
     }
 }

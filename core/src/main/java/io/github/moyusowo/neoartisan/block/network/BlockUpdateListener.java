@@ -4,29 +4,32 @@ import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.event.PacketListener;
 import com.github.retrooper.packetevents.event.PacketListenerPriority;
 import com.github.retrooper.packetevents.event.PacketSendEvent;
+import com.github.retrooper.packetevents.protocol.attribute.Attributes;
 import com.github.retrooper.packetevents.protocol.packettype.PacketType;
 import com.github.retrooper.packetevents.protocol.world.chunk.BaseChunk;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerBlockChange;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerChunkData;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerMultiBlockChange;
+import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerUpdateAttributes;
+import io.github.moyusowo.neoartisan.block.state.listener.BlockBreakSynchronize;
 import io.github.moyusowo.neoartisan.block.storage.internal.ArtisanBlockStorageAsync;
-import io.github.moyusowo.neoartisan.block.storage.internal.ArtisanBlockStorageInternal;
 import io.github.moyusowo.neoartisan.block.util.BlockPos;
+import io.github.moyusowo.neoartisan.block.util.ChunkPos;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
 
 import java.util.UUID;
 
-final class PacketEventListener implements PacketListener {
+final class BlockUpdateListener implements PacketListener {
 
     @InitMethod(priority = InitPriority.DEFAULT)
     static void init() {
         PacketEvents.getAPI().getEventManager().registerListener(
-                new PacketEventListener(), PacketListenerPriority.NORMAL
+                new BlockUpdateListener(), PacketListenerPriority.NORMAL
         );
     }
 
-    private PacketEventListener() {}
+    private BlockUpdateListener() {}
 
     @Override
     public void onPacketSend(PacketSendEvent event) {
@@ -34,6 +37,14 @@ final class PacketEventListener implements PacketListener {
             case PacketType.Play.Server.CHUNK_DATA -> onChunkDataSend(event);
             case PacketType.Play.Server.BLOCK_CHANGE -> onSingleBlockChange(event);
             case PacketType.Play.Server.MULTI_BLOCK_CHANGE -> onMultiBlockChange(event);
+            case PacketType.Play.Server.UPDATE_ATTRIBUTES -> {
+                WrapperPlayServerUpdateAttributes wrapperPlayServerUpdateAttributes = new WrapperPlayServerUpdateAttributes(event);
+                if (wrapperPlayServerUpdateAttributes.getProperties().stream().anyMatch(property -> property.getAttribute() == Attributes.BLOCK_BREAK_SPEED)) {
+                    if (wrapperPlayServerUpdateAttributes.getProperties().stream().anyMatch(property -> property.getModifiers().stream().anyMatch(propertyModifier -> propertyModifier.getName().getNamespace().equals(BlockBreakSynchronize.TEMPLATE_HIDDEN_MULTIPLY.getNamespace()) && propertyModifier.getName().getKey().equals(BlockBreakSynchronize.TEMPLATE_HIDDEN_MULTIPLY.getKey())))) {
+                        event.setCancelled(true);
+                    }
+                }
+            }
             default -> {}
         }
     }
@@ -44,6 +55,7 @@ final class PacketEventListener implements PacketListener {
         final int minHeight = event.getUser().getMinWorldHeight();
         final WrapperPlayServerChunkData wrapperPlayServerChunkData = new WrapperPlayServerChunkData(event);
         final int chunkX = wrapperPlayServerChunkData.getColumn().getX(), chunkZ = wrapperPlayServerChunkData.getColumn().getZ();
+        if (!ArtisanBlockStorageAsync.getAsync().hasArtisanBlockInChunk(new ChunkPos(worldUID, chunkX, chunkZ))) return;
         final BaseChunk[] baseChunks = wrapperPlayServerChunkData.getColumn().getChunks();
         for (int sectionIndex = 0; sectionIndex < baseChunks.length; sectionIndex++) {
             final BaseChunk baseChunk = baseChunks[sectionIndex];

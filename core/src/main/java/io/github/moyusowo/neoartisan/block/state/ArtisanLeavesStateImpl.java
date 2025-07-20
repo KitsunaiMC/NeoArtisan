@@ -11,7 +11,6 @@ import io.github.moyusowo.neoartisanapi.api.item.ItemGenerator;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.ServicePriority;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 final class ArtisanLeavesStateImpl extends ArtisanBaseBlockStateImpl implements ArtisanLeavesState {
     @InitMethod(priority = InitPriority.REGISTRAR)
@@ -25,9 +24,11 @@ final class ArtisanLeavesStateImpl extends ArtisanBaseBlockStateImpl implements 
     }
 
     private final boolean canBurn;
+    private final float hardness;
 
-    private ArtisanLeavesStateImpl(int appearanceState, int actualState, ItemGenerator[] generators, boolean canBurn) {
+    private ArtisanLeavesStateImpl(int appearanceState, int actualState, ItemGenerator[] generators, float hardness, boolean canBurn) {
         super(appearanceState, actualState, generators);
+        this.hardness = hardness;
         this.canBurn = canBurn;
     }
 
@@ -37,8 +38,9 @@ final class ArtisanLeavesStateImpl extends ArtisanBaseBlockStateImpl implements 
     }
 
     @Override
-    public @Nullable Integer getHardness() {
-        return null;
+    @NotNull
+    public Float getHardness() {
+        return hardness;
     }
 
     @Override
@@ -50,6 +52,7 @@ final class ArtisanLeavesStateImpl extends ArtisanBaseBlockStateImpl implements 
         private LeavesAppearance leavesAppearance;
         private ItemGenerator[] generators;
         private boolean canBurn;
+        private float hardness;
         private static final int actualState = WrappedBlockState.getByString("minecraft:oak_leaves[distance=7,persistent=true,waterlogged=false]").getGlobalId();
 
         private int generateAppearanceState() {
@@ -78,6 +81,7 @@ final class ArtisanLeavesStateImpl extends ArtisanBaseBlockStateImpl implements 
             leavesAppearance = null;
             generators = null;
             canBurn = false;
+            hardness = Float.MIN_VALUE;
         }
 
 
@@ -94,7 +98,8 @@ final class ArtisanLeavesStateImpl extends ArtisanBaseBlockStateImpl implements 
         }
 
         @Override
-        public @NotNull Builder hardness(int hardness) {
+        public @NotNull Builder hardness(float hardness) {
+            this.hardness = hardness;
             return this;
         }
 
@@ -106,8 +111,8 @@ final class ArtisanLeavesStateImpl extends ArtisanBaseBlockStateImpl implements 
 
         @Override
         public @NotNull ArtisanLeavesState build() {
-            if (generators == null || leavesAppearance == null) throw new IllegalArgumentException("You must fill all the param!");
-            return new ArtisanLeavesStateImpl(generateAppearanceState(), actualState, generators, canBurn);
+            if (generators == null || leavesAppearance == null || hardness <= 0) throw new IllegalArgumentException("You must fill all the param correctly!");
+            return new ArtisanLeavesStateImpl(generateAppearanceState(), actualState, generators, hardness, canBurn);
         }
     }
 }

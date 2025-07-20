@@ -3,18 +3,14 @@ package io.github.moyusowo.neoartisan;
 import io.github.moyusowo.neoartisan.util.file.FileUtil;
 import io.github.moyusowo.neoartisan.util.init.Initializer;
 import io.github.moyusowo.neoartisan.util.terminate.Terminator;
-import io.github.moyusowo.neoartisanapi.api.persistence.EmptyPersistentDataContainer;
 import io.github.moyusowo.neoartisanapi.api.persistence.type.ItemStackDataType;
 import net.momirealms.antigrieflib.AntiGriefLib;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Server;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;

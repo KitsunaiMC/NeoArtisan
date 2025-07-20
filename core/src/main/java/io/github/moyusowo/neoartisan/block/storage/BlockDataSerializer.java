@@ -49,7 +49,7 @@ final class BlockDataSerializer {
         }
     }
 
-    @InitMethod(priority = InitPriority.STORAGE_LOAD)
+    @InitMethod(priority = InitPriority.STARTUP)
     public static void load() {
         for (World world : Bukkit.getWorlds()) {
             try {

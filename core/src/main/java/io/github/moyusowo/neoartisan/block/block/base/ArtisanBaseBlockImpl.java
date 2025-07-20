@@ -4,7 +4,6 @@ import io.github.moyusowo.neoartisan.block.task.LifecycleTaskManagerInternal;
 import io.github.moyusowo.neoartisanapi.api.block.state.base.ArtisanBaseBlockState;
 import io.github.moyusowo.neoartisanapi.api.block.gui.ArtisanBlockGUI;
 import io.github.moyusowo.neoartisanapi.api.block.gui.GUICreator;
-import io.github.moyusowo.neoartisanapi.api.block.task.LifecycleTaskManager;
 import io.github.moyusowo.neoartisanapi.api.block.util.SoundProperty;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;

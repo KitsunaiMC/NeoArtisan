@@ -30,6 +30,9 @@ public interface ArtisanSkullState extends ArtisanBaseBlockState {
     @NotNull
     String getUrlBase64();
 
+    @NotNull
+    Float getHardness();
+
     @Override
     @NotNull
     default ArtisanBlockStates getType() {
@@ -49,7 +52,7 @@ public interface ArtisanSkullState extends ArtisanBaseBlockState {
         Builder generators(@NotNull ItemGenerator[] generators);
 
         @NotNull
-        Builder hardness(int hardness);
+        Builder hardness(float hardness);
 
         @NotNull
         ArtisanSkullState build();

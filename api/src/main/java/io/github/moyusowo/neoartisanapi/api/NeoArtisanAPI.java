@@ -7,16 +7,9 @@ import io.github.moyusowo.neoartisanapi.api.block.BlockRegistry;
 import io.github.moyusowo.neoartisanapi.api.block.protection.BlockProtection;
 import io.github.moyusowo.neoartisanapi.api.block.storage.ArtisanBlockStorage;
 import io.github.moyusowo.neoartisanapi.api.item.ItemRegistry;
-import io.github.moyusowo.neoartisanapi.api.persistence.EmptyPersistentDataContainer;
 import io.github.moyusowo.neoartisanapi.api.recipe.RecipeRegistry;
 import org.bukkit.Bukkit;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
-
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
 
 /**
  * NeoArtisan 插件的主API入口，提供对所有注册表系统的访问接口。
@@ -149,29 +142,5 @@ public final class NeoArtisanAPI {
         if (protection == null) throw new IllegalStateException("block protection api has not yet loaded!");
         return protection;
     }
-
-    /**
-     * 标记注册表接口中的自动注册方法，该方法会被反射在本插件的 {@code onEnable()} 方法内调用完成注册流程。
-     * <p>
-     * <b>约束条件：</b>
-     * <ul>
-     *   <li>只能在被注解的方法内使用注册表接口中的注册方法，否则抛出异常</li>
-     *   <li>被标记的方法必须满足：
-     *     <ul>
-     *       <li>返回类型为 {@code static void}</li>
-     *       <li>参数列表为空</li>
-     *     </ul>
-     *   </li>
-     * </ul>
-     *
-     * <b>工作原理：</b>
-     * <p>
-     * 插件启动时会扫描所有注册表接口，反射调用被 {@code @Register} 标记的方法，
-     * 自动完成物品/方块/配方的注册。
-     *
-     */
-    @Retention(RetentionPolicy.RUNTIME)
-    @Target(ElementType.METHOD)
-    public @interface Register {}
 
 }

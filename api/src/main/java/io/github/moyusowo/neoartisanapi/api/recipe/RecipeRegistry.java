@@ -36,7 +36,6 @@ public interface RecipeRegistry {
      *
      * @param recipe 要注册的配方实例（非null）
      * @throws IllegalArgumentException 使用了相同的配方ID
-     * @see NeoArtisanAPI.Register 合法的注册入口注解
      */
     void register(@NotNull ArtisanRecipe recipe);
 

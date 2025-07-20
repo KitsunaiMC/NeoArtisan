@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
+import java.util.Optional;
 
 /**
  * 表示自定义方块的一个特定状态，包含视觉表现和实际行为定义。
@@ -85,7 +86,7 @@ public interface ArtisanBaseBlockState {
      * @return 该状态下方块的亮度，{@code null} 表示采用原版的硬度
      */
     @Nullable
-    Integer getHardness();
+    Float getHardness();
 
     @NotNull
     ArtisanBlockStates getType();

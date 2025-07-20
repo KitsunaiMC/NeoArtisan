@@ -9,6 +9,8 @@ import io.github.moyusowo.neoartisanapi.api.util.BuilderFactoryUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Optional;
+
 /**
  * 薄型方块状态定义。
  */
@@ -36,7 +38,7 @@ public interface ArtisanThinState extends ArtisanBaseBlockState {
 
     @Override
     @Nullable
-    default Integer getHardness() {
+    default Float getHardness() {
         return null;
     }
 

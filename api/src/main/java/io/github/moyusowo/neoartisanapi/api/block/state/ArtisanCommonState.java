@@ -7,6 +7,7 @@ import io.github.moyusowo.neoartisanapi.api.block.util.PistonMoveBlockReaction;
 import io.github.moyusowo.neoartisanapi.api.item.ItemGenerator;
 import io.github.moyusowo.neoartisanapi.api.util.BuilderFactoryUtil;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * 通常型方块状态定义。
@@ -38,6 +39,9 @@ public interface ArtisanCommonState extends ArtisanBaseBlockState {
         return true;
     }
 
+    @NotNull
+    Float getHardness();
+
     @Override
     @NotNull
     default ArtisanBlockStates getType() {
@@ -57,7 +61,7 @@ public interface ArtisanCommonState extends ArtisanBaseBlockState {
         Builder generators(@NotNull ItemGenerator[] generators);
 
         @NotNull
-        Builder hardness(int hardness);
+        Builder hardness(float hardness);
 
         @NotNull
         ArtisanCommonState build();

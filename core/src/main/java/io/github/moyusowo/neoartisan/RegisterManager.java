@@ -1,24 +1,19 @@
 package io.github.moyusowo.neoartisan;
 
+import io.github.moyusowo.neoartisan.test.AttributeTest;
+import io.github.moyusowo.neoartisan.test.BlockTest;
+import io.github.moyusowo.neoartisan.test.ItemTest;
+import io.github.moyusowo.neoartisan.test.RecipeTest;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
-import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
-import org.bukkit.Bukkit;
-import org.bukkit.event.HandlerList;
-import org.bukkit.plugin.Plugin;
-import org.reflections.Reflections;
-import org.reflections.scanners.Scanners;
-import org.reflections.util.ConfigurationBuilder;
+import io.github.moyusowo.neoartisan.util.init.Initializer;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.server.ServerLoadEvent;
 
-import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.Set;
+public final class RegisterManager implements Listener {
 
-@SuppressWarnings("UnstableApiUsage")
-public final class RegisterManager {
-
-    public static final IllegalAccessError REGISTRY_CLOSED = new IllegalAccessError("Registry closed! Please register in the methods with annotation.");
-    public static final String eTips = "只能在使用注解的方法内注册！";
+    public static final IllegalAccessError REGISTRY_CLOSED = new IllegalAccessError("Registry closed! Please register in the Enable method.");
 
     private RegisterManager() {}
 
@@ -29,54 +24,9 @@ public final class RegisterManager {
         status = Status.OPEN;
     }
 
-    @InitMethod(priority = InitPriority.REGISTRY_CLOSED)
-    static void closeRegister() {
-        status = Status.CLOSED;
-    }
-
-    @InitMethod(priority = InitPriority.REGISTER)
-    static void register() {
-        for (
-                Plugin plugin : Arrays.stream(Bukkit.getPluginManager().getPlugins())
-                .filter(
-                    p ->
-                        p.getPluginMeta().getPluginDependencies().contains("NeoArtisan") ||
-                        p.getPluginMeta().getPluginSoftDependencies().contains("NeoArtisan") ||
-                        p.getName().equals("NeoArtisan")
-                )
-                .filter(
-                    p -> p.isEnabled() || p.getName().equals("NeoArtisan")
-                )
-                .toList()
-        ) {
-            String pkg = plugin.getClass().getPackageName();
-            if (NeoArtisan.isDebugMode()) {
-                NeoArtisan.logger().info(pkg);
-            }
-            try {
-                Reflections reflections = new Reflections(
-                        new ConfigurationBuilder()
-                                .forPackage(pkg, plugin.getClass().getClassLoader())
-                                .addClassLoaders(plugin.getClass().getClassLoader())
-                                .setScanners(Scanners.MethodsAnnotated)
-                );
-                Set<Method> methods = reflections.getMethodsAnnotatedWith(NeoArtisanAPI.Register.class);
-                for (Method method : methods) {
-                    try {
-                        method.setAccessible(true);
-                        method.invoke(null);
-                    } catch (Exception e) {
-                        NeoArtisan.logger().severe("fail to run register method: "  + method.getDeclaringClass().getName() + "." + method.getName() + ", cause: " + e + ": " + e.getCause());
-                    }
-                }
-            } catch (Throwable e) {
-                NeoArtisan.logger().severe("fail to load plugin class: "  + pkg + ", " + e + ": " + e.getCause());
-                NeoArtisan.logger().severe("plugin: " + plugin.getName() + " will not enable");
-                HandlerList.unregisterAll(plugin);
-                Bukkit.getScheduler().cancelTasks(plugin);
-                Bukkit.getPluginManager().disablePlugin(plugin);
-            }
-        }
+    @InitMethod(priority = InitPriority.LISTENER)
+    static void init() {
+        NeoArtisan.registerListener(new RegisterManager());
     }
 
     public static boolean isOpen() {
@@ -84,9 +34,20 @@ public final class RegisterManager {
     }
 
     private enum Status {
-        NOT_YET_OPEN,
         OPEN,
-        CLOSED;
+        CLOSED
+    }
+
+    @EventHandler
+    public void onStartup(ServerLoadEvent event) {
+        if (event.getType() == ServerLoadEvent.LoadType.STARTUP) {
+            AttributeTest.register();
+            ItemTest.register();
+            RecipeTest.register();
+            BlockTest.register();
+            status = Status.CLOSED;
+            Initializer.executeStartup();
+        }
     }
 
 }
