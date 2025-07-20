@@ -127,6 +127,7 @@ public final class BlockTest {
                                                             ItemGenerator.simpleGenerator(ItemTest.soup_block, 1)
                                                     }
                                             )
+                                            .hardness(1.5f)
                                             .build()
                             )
                             .build()
