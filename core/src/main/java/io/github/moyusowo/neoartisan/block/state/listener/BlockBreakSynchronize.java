@@ -50,6 +50,7 @@ public class BlockBreakSynchronize implements Listener {
         switch (blockData.getArtisanBlockState().getType()) {
             case COMMON -> onCommonStateBreakStart(event, blockData);
             case LEAVES -> onLeavesStateBreakStart(event, blockData);
+            case SKULL -> onSkullStateBreakStart(event, blockData);
             default -> {}
         }
     }
