@@ -37,7 +37,7 @@ final class ArtisanCropStateImpl extends ArtisanBaseBlockStateImpl implements Ar
     private static final class BuilderImpl implements Builder {
         private CropAppearance cropAppearance;
         private ItemGenerator[] generators;
-        private static final int actualState = WrappedBlockState.getByString("minecraft:wheat[age=1]").getGlobalId();
+        private static final int actualState = WrappedBlockState.getByString("minecraft:wheat[age=7]").getGlobalId();
 
         private int generateAppearanceState() {
             if (this.cropAppearance instanceof TripwireAppearance tripwireAppearance) {
