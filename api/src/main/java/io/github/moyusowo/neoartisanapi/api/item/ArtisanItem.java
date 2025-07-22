@@ -11,8 +11,10 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.List;
+import java.util.Set;
 import java.util.function.Supplier;
 
 /**
@@ -35,9 +37,13 @@ public interface ArtisanItem {
 
     /**
      * 空命名空间键，物品为空时的物品注册ID
-     *
      */
     NamespacedKey EMPTY = new NamespacedKey("neoartisan", "empty_item_registry_id");
+
+    /**
+     * 物品类别命名空间键的命名空间
+     */
+    String TAG_NAMESPACE = "neoartisan_item_tag";
 
     /**
      * 通过物品堆判断是否为此自定义物品。
@@ -100,6 +106,10 @@ public interface ArtisanItem {
     @Nullable NamespacedKey getBlockId();
 
     boolean isInternal();
+
+    @Unmodifiable
+    @NotNull
+    Set<String> getTags();
 
     /**
      * 构建复杂自定义物品的构建器接口，可以完全自定义物品堆的各项数据。
@@ -168,6 +178,8 @@ public interface ArtisanItem {
          * @return 构建的自定义物品实例
          */
         @NotNull ComplexBuilder internalUse();
+
+        @NotNull ComplexBuilder tags(@NotNull Set<String> tags);
 
         /**
          * 按照所给的参数构建自定义物品。
@@ -347,6 +359,8 @@ public interface ArtisanItem {
          * @return 构建的自定义物品实例
          */
         @NotNull Builder internalUse();
+
+        @NotNull Builder tags(@NotNull Set<String> tags);
 
         /**
          * 按照所给的参数构建自定义物品。

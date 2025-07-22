@@ -1,5 +1,7 @@
 package io.github.moyusowo.neoartisan.item;
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
 import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisan.RegisterManager;
 import io.github.moyusowo.neoartisan.util.data.NamespacedKeyDataType;
@@ -14,11 +16,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.ServicePriority;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Unmodifiable;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -32,6 +32,7 @@ final class ItemRegistryImpl implements ItemRegistry {
 
     private final ConcurrentHashMap<NamespacedKey, ArtisanItemImpl> registry;
     private final Set<NamespacedKey> cachedItemList;
+    private final Multimap<String, NamespacedKey> tagToId;
     private final AtomicBoolean cached;
 
     private ItemRegistryImpl() {
@@ -39,6 +40,7 @@ final class ItemRegistryImpl implements ItemRegistry {
         registry = new ConcurrentHashMap<>();
         cachedItemList = new HashSet<>();
         cached = new AtomicBoolean(false);
+        tagToId = HashMultimap.create();
         Bukkit.getServicesManager().register(
                 ItemRegistry.class,
                 ItemRegistryImpl.getInstance(),
@@ -50,6 +52,15 @@ final class ItemRegistryImpl implements ItemRegistry {
     @InitMethod(priority = InitPriority.REGISTRY_LOAD)
     public static void init() {
         new ItemRegistryImpl();
+    }
+
+    @InitMethod(priority = InitPriority.STARTUP)
+    public static void initTagToId() {
+        instance.registry.values().forEach(
+                artisanItem -> artisanItem.getTags().forEach(
+                        tag -> instance.tagToId.put(tag, artisanItem.getRegistryId())
+                )
+        );
     }
 
     @Override
@@ -130,5 +141,13 @@ final class ItemRegistryImpl implements ItemRegistry {
         ArtisanItem artisanItem = registry.get(getRegistryId(itemStack));
         if (artisanItem == null) throw new IllegalArgumentException("You should use has method to check before get!");
         return artisanItem;
+    }
+
+    @Override
+    public @NotNull @Unmodifiable Collection<NamespacedKey> getIdByTag(String tag) {
+        if (tagToId.containsKey(tag)) {
+            return Collections.unmodifiableCollection(tagToId.get(tag));
+        }
+        return Collections.emptySet();
     }
 }

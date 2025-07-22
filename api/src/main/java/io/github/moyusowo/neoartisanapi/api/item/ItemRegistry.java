@@ -4,6 +4,9 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Unmodifiable;
+
+import java.util.Collection;
 
 /**
  * 自定义物品注册表核心接口，提供完整的自定义物品生命周期管理。
@@ -114,4 +117,8 @@ public interface ItemRegistry {
      */
     @NotNull
     ArtisanItem getArtisanItem(ItemStack itemStack);
+
+    @NotNull
+    @Unmodifiable
+    Collection<NamespacedKey> getIdByTag(String tag);
 }

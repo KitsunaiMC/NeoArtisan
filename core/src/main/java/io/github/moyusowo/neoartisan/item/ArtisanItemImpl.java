@@ -29,12 +29,10 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.ServicePriority;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Unmodifiable;
 
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.Supplier;
 
 final class ArtisanItemImpl implements ArtisanItem {
@@ -66,6 +64,7 @@ final class ArtisanItemImpl implements ArtisanItem {
     private final ItemStack itemStack;
     private final Supplier<ItemStack> itemStackSupplier;
     private final boolean isInternal;
+    private final Set<String> tags;
 
     ArtisanItemImpl(
             NamespacedKey registryId,
@@ -73,7 +72,8 @@ final class ArtisanItemImpl implements ArtisanItem {
             boolean hasOriginalCraft,
             @NotNull AttributeProperty attributeProperty,
             @Nullable NamespacedKey blockId,
-            boolean isInternal
+            boolean isInternal,
+            @NotNull Set<String> tags
     ) {
         this.registryId = registryId;
         this.itemStack = itemStack.clone();
@@ -83,6 +83,7 @@ final class ArtisanItemImpl implements ArtisanItem {
         addIdAndAttribute(this.itemStack);
         this.itemStackSupplier = null;
         this.isInternal = isInternal;
+        this.tags = new HashSet<>(tags);
     }
 
     ArtisanItemImpl(
@@ -91,7 +92,8 @@ final class ArtisanItemImpl implements ArtisanItem {
             boolean hasOriginalCraft,
             @NotNull AttributeProperty attributeProperty,
             @Nullable NamespacedKey blockId,
-            boolean isInternal
+            boolean isInternal,
+            @NotNull Set<String> tags
     ) {
         this.registryId = registryId;
         this.itemStack = null;
@@ -100,6 +102,7 @@ final class ArtisanItemImpl implements ArtisanItem {
         this.blockId = blockId;
         this.itemStackSupplier = itemStackSupplier;
         this.isInternal = isInternal;
+        this.tags = new HashSet<>(tags);
     }
 
     public @NotNull ItemStack getItemStack(int count) {
@@ -161,6 +164,11 @@ final class ArtisanItemImpl implements ArtisanItem {
         return this.isInternal;
     }
 
+    @Override
+    public @Unmodifiable @NotNull Set<String> getTags() {
+        return Collections.unmodifiableSet(tags);
+    }
+
     private void addIdAndAttribute(ItemStack itemStack) {
         ItemMeta itemMeta = itemStack.getItemMeta();
         if (!this.attributeProperty.isEmpty()) {
@@ -181,6 +189,7 @@ final class ArtisanItemImpl implements ArtisanItem {
         private NamespacedKey blockId;
         private Supplier<ItemStack> itemStackSupplier;
         private boolean isInternal;
+        private Set<String> tags;
 
         private ComplexBuilderImpl() {
             this.registryId = null;
@@ -189,6 +198,7 @@ final class ArtisanItemImpl implements ArtisanItem {
             this.blockId = null;
             this.itemStackSupplier = null;
             this.isInternal = false;
+            this.tags = new HashSet<>();
         }
 
         @NotNull
@@ -231,6 +241,12 @@ final class ArtisanItemImpl implements ArtisanItem {
         }
 
         @Override
+        public @NotNull ComplexBuilder tags(@NotNull Set<String> tags) {
+            this.tags = tags;
+            return this;
+        }
+
+        @Override
         @NotNull
         public ArtisanItem build() {
             if (registryId == null || itemStackSupplier == null) {
@@ -242,7 +258,8 @@ final class ArtisanItemImpl implements ArtisanItem {
                     hasOriginalCraft,
                     attributeProperty,
                     blockId,
-                    isInternal
+                    isInternal,
+                    tags
             );
         }
     }
@@ -264,6 +281,7 @@ final class ArtisanItemImpl implements ArtisanItem {
         private ArmorProperty armorProperty;
         private String skullTextureUrlBase64;
         private boolean isInternal;
+        private Set<String> tags;
 
         private BuilderImpl() {
             this.registryId = null;
@@ -281,6 +299,7 @@ final class ArtisanItemImpl implements ArtisanItem {
             this.weaponProperty = WeaponProperty.EMPTY;
             this.skullTextureUrlBase64 = null;
             this.isInternal = false;
+            this.tags = new HashSet<>();
         }
 
         @NotNull
@@ -405,6 +424,12 @@ final class ArtisanItemImpl implements ArtisanItem {
         }
 
         @Override
+        public @NotNull Builder tags(@NotNull Set<String> tags) {
+            this.tags = tags;
+            return this;
+        }
+
+        @Override
         @NotNull
         public ArtisanItem build() {
             if (registryId == null || rawMaterial == null) {
@@ -416,7 +441,8 @@ final class ArtisanItemImpl implements ArtisanItem {
                     hasOriginalCraft,
                     attributeProperty,
                     blockId,
-                    isInternal
+                    isInternal,
+                    tags
             );
         }
 
