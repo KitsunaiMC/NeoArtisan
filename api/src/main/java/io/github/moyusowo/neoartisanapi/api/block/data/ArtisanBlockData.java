@@ -94,10 +94,11 @@ public interface ArtisanBlockData {
      * 用于存储一些要添加的其他自定义数据
      * </p>
      *
-     * @return 可读写的bukkitAPI数据容器，生命周期与方块实例相同。若方块不存在方块实体则返回null
-     * @see ArtisanBaseBlock#hasBlockEntity()
+     * @return 可读写的bukkitAPI数据容器，生命周期与方块实例相同。
+     * @throws IllegalStateException 若该自定义方块并未携带方块实体则抛出异常。
+     * @apiNote 调用该方法之前请确保该自定义方块绑定了方块实体，或用 {@link ArtisanBaseBlock#hasBlockEntity()} 检查。
      */
-    @Nullable
+    @NotNull
     PersistentDataContainer getPersistentDataContainer();
 
     @NotNull

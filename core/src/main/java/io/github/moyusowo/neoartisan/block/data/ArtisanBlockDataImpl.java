@@ -104,12 +104,12 @@ class ArtisanBlockDataImpl implements ArtisanBlockDataInternal {
     }
 
     @Override
-    @Nullable
+    @NotNull
     public PersistentDataContainer getPersistentDataContainer() {
         if (getArtisanBlock().hasBlockEntity()) {
             return BlockEntityManager.getPDC(location);
         } else {
-            return null;
+            throw new IllegalStateException("You can NOT get PDC from a block which doesn't have block entity!");
         }
     }
 
