@@ -3,6 +3,7 @@ package io.github.moyusowo.neoartisan.recipe.impl;
 import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
+import io.github.moyusowo.neoartisanapi.api.item.ArtisanItem;
 import io.github.moyusowo.neoartisanapi.api.item.ItemGenerator;
 import io.github.moyusowo.neoartisanapi.api.recipe.ArtisanSmokingRecipe;
 import io.github.moyusowo.neoartisanapi.api.recipe.RecipeType;
@@ -120,6 +121,7 @@ final class ArtisanSmokingRecipeImpl implements ArtisanSmokingRecipe {
         @Override
         public @NotNull ArtisanSmokingRecipe build() {
             if (key == null || input == null || cookTime == null || resultGenerator == null || exp == null) throw new IllegalCallerException("You have to fill all the params before build!");
+            if (input.getNamespace().equals(ArtisanItem.TAG_NAMESPACE)) throw new IllegalArgumentException("You can not use tag in furnace like recipe!");
             return new ArtisanSmokingRecipeImpl(key, input, resultGenerator, cookTime, exp);
         }
     }
