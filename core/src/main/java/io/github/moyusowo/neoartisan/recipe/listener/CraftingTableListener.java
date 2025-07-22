@@ -37,25 +37,26 @@ final class CraftingTableListener implements Listener {
         ItemStack[] matrix = inventory.getMatrix();
         if (matrix.length == 4) return;
         if (event.getRecipe() != null) {
+            boolean hasArtisan = false;
             for (int i = 0; i < 9; i++) {
                 if (matrix[i] == null) continue;
                 NamespacedKey registryId = NeoArtisanAPI.getItemRegistry().getRegistryId(matrix[i]);
                 if (NeoArtisanAPI.getItemRegistry().isArtisanItem(registryId) && (!NeoArtisanAPI.getItemRegistry().getArtisanItem(registryId).hasOriginalCraft())) {
                     event.getInventory().setResult(null);
+                    hasArtisan = true;
                     break;
-                } else {
-                    return;
                 }
             }
+            if (!hasArtisan) return;
         }
         ArrayKey shapedKey = ArrayKeyUtil.toShapedKey(matrix);
         RecipeRegistryInternal registryInternal = (RecipeRegistryInternal) NeoArtisanAPI.getRecipeRegistry();
         if (registryInternal.has(shapedKey) && registryInternal.get(shapedKey) instanceof ArtisanShapedRecipe r) {
-            event.getInventory().setResult(r.getResultGenerator().generate());
+            event.getInventory().setResult(r.getResultGenerator()[0].generate());
         } else {
             ArrayKey shapelessKey = ArrayKeyUtil.toShapelessKey(matrix);
             if (registryInternal.has(shapelessKey) && registryInternal.get(shapelessKey) instanceof ArtisanShapelessRecipe r) {
-                event.getInventory().setResult(r.getResultGenerator().generate());
+                event.getInventory().setResult(r.getResultGenerator()[0].generate());
             }
         }
     }
