@@ -120,6 +120,9 @@ final class CropBlockListener implements Listener {
             Util.replace(event.getClickedBlock(), getNextFertilizeStage(artisanBlockData));
             playBoneMealEffects(event.getClickedBlock().getLocation());
         }
+        if (event.getPlayer().getGameMode() != GameMode.CREATIVE) {
+            event.getItem().setAmount(event.getItem().getAmount() - 1);
+        }
     }
 
     public static ArtisanBlockData getNextFertilizeStage(ArtisanBlockData artisanBlockData) {
