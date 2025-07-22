@@ -55,7 +55,7 @@ final class FurnaceListener implements Listener {
             if (registryInternal.has(furnaceKey) && registryInternal.get(furnaceKey) instanceof ArtisanFurnaceRecipe r) {
                 FurnaceRecipe recipe = new FurnaceRecipe(
                         new NamespacedKey(r.getKey().namespace(), r.getKey().getKey() + "_" + System.currentTimeMillis() + "_" + UUID.randomUUID().toString().toLowerCase()),
-                        r.getResultGenerator().generate(),
+                        r.getResultGenerator()[0].generate(),
                         new RecipeChoice.ExactChoice(itemStack),
                         r.getExp(),
                         r.getCookTime()

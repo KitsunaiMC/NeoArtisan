@@ -2,8 +2,11 @@ package io.github.moyusowo.neoartisanapi.api.recipe;
 
 import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
 import org.bukkit.NamespacedKey;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Optional;
 
 /**
  * 自定义合成配方注册表API，提供标准化的配方创建接口。
@@ -57,5 +60,18 @@ public interface RecipeRegistry {
      * @implNote 返回的配方实例是不可变对象
      */
     @NotNull ArtisanRecipe getRecipe(@NotNull NamespacedKey key);
+
+    /**
+     * 根据配方的输入数组，获取已注册的配方实例
+     *
+     * <p>数组内的每个位置的物品ID，包括数组长度，都需要和已注册配方内的 {@link ArtisanRecipe#getInputs()} 一致</p>
+     *
+     * @param items 配方物品输入矩阵（非null且无null）
+     * @param recipeType 配方类型（非null）
+     * @return 对应的配方实例（不可变）
+     * @see RecipeType 已有的配方类型，配方类型可用自己的命名空间。
+     */
+    @NotNull
+    Optional<ArtisanRecipe> getRecipe(@NotNull NamespacedKey[] items, @NotNull NamespacedKey recipeType);
 
 }

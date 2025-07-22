@@ -56,7 +56,7 @@ final class ArtisanShapelessRecipeImpl implements ArtisanShapelessRecipe {
     }
 
     @Override
-    public @NotNull RecipeType getType() {
+    public @NotNull NamespacedKey getType() {
         return RecipeType.SHAPELESS;
     }
 
@@ -66,8 +66,8 @@ final class ArtisanShapelessRecipeImpl implements ArtisanShapelessRecipe {
     }
 
     @Override
-    public @NotNull ItemGenerator getResultGenerator() {
-        return resultGenerator;
+    public @NotNull ItemGenerator[] getResultGenerator() {
+        return new ItemGenerator[]{ resultGenerator };
     }
 
     public static final class BuilderImpl implements Builder {

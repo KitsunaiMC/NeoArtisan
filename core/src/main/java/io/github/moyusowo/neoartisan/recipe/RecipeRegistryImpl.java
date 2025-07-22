@@ -7,6 +7,8 @@ import io.github.moyusowo.neoartisan.util.data.ArrayKey;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
 import io.github.moyusowo.neoartisan.util.terminate.TerminateMethod;
+import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
+import io.github.moyusowo.neoartisanapi.api.item.ArtisanItem;
 import io.github.moyusowo.neoartisanapi.api.item.ItemGenerator;
 import io.github.moyusowo.neoartisanapi.api.recipe.*;
 import org.bukkit.Bukkit;
@@ -19,6 +21,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -148,14 +151,7 @@ final class RecipeRegistryImpl implements Listener, RecipeRegistry, RecipeRegist
             ArrayKey arrayKey = ArrayKey.from(recipe.getInputs(), recipe.getType());
             toKey.put(recipe.getKey(), arrayKey);
             recipeRegistry.put(arrayKey, recipe);
-            switch (recipe.getType()) {
-                case SHAPED -> NeoArtisan.logger().info("successfully register shaped recipe: " + recipe.getKey().asString());
-                case SHAPELESS -> NeoArtisan.logger().info("successfully register shapeless recipe: " + recipe.getKey().asString());
-                case FURNACE -> NeoArtisan.logger().info("successfully register furnace recipe: " + recipe.getKey().asString());
-                case CAMPFIRE -> NeoArtisan.logger().info("successfully register campfire recipe: " + recipe.getKey().asString());
-                case SMOKING -> NeoArtisan.logger().info("successfully register smoking recipe: " + recipe.getKey().asString());
-                case BLASTING -> NeoArtisan.logger().info("successfully register blasting recipe: " + recipe.getKey().asString());
-            }
+            NeoArtisan.logger().info("successfully register recipe " + recipe.getType().asString() + ": " + recipe.getKey().asString());
         } else {
             throw RegisterManager.REGISTRY_CLOSED;
         }
@@ -167,14 +163,7 @@ final class RecipeRegistryImpl implements Listener, RecipeRegistry, RecipeRegist
             toKey.put(recipe.getKey(), arrayKey);
             recipeRegistry.put(arrayKey, recipe);
             if (NeoArtisan.isDebugMode()) {
-                switch (recipe.getType()) {
-                    case SHAPED -> NeoArtisan.logger().info("successfully register shaped recipe: " + recipe.getKey().asString());
-                    case SHAPELESS -> NeoArtisan.logger().info("successfully register shapeless recipe: " + recipe.getKey().asString());
-                    case FURNACE -> NeoArtisan.logger().info("successfully register furnace recipe: " + recipe.getKey().asString());
-                    case CAMPFIRE -> NeoArtisan.logger().info("successfully register campfire recipe: " + recipe.getKey().asString());
-                    case SMOKING -> NeoArtisan.logger().info("successfully register smoking recipe: " + recipe.getKey().asString());
-                    case BLASTING -> NeoArtisan.logger().info("successfully register blasting recipe: " + recipe.getKey().asString());
-                }
+                NeoArtisan.logger().info("successfully register recipe " + recipe.getType().asString() + ": " + recipe.getKey().asString());
             }
         } else {
             throw RegisterManager.REGISTRY_CLOSED;
@@ -189,6 +178,13 @@ final class RecipeRegistryImpl implements Listener, RecipeRegistry, RecipeRegist
     @Override
     public @NotNull ArtisanRecipe getRecipe(@NotNull NamespacedKey key) {
         return recipeRegistry.get(toKey.get(key));
+    }
+
+    @Override
+    public @NotNull Optional<ArtisanRecipe> getRecipe(@NotNull NamespacedKey[] items, @NotNull NamespacedKey recipeType) {
+        final ArtisanRecipe r = recipeRegistry.getOrDefault(ArrayKey.from(items, recipeType), null);
+        if (r == null) return Optional.empty();
+        else return Optional.of(r);
     }
 
     @TerminateMethod

@@ -1,5 +1,7 @@
 package io.github.moyusowo.neoartisanapi.api.recipe;
 
+import org.bukkit.NamespacedKey;
+
 /**
  * 定义配方类型的枚举，标识不同合成方式。
  *
@@ -20,11 +22,11 @@ package io.github.moyusowo.neoartisanapi.api.recipe;
  * @see ArtisanSmokingRecipe
  * @see ArtisanBlastingRecipe
  */
-public enum RecipeType {
-    SHAPED,
-    SHAPELESS,
-    FURNACE,
-    CAMPFIRE,
-    SMOKING,
-    BLASTING
+public final class RecipeType {
+    public static final NamespacedKey SHAPED = NamespacedKey.minecraft("shaped"),
+        SHAPELESS = NamespacedKey.minecraft("shapeless"),
+        FURNACE = NamespacedKey.minecraft("furnace"),
+        CAMPFIRE = NamespacedKey.minecraft("campfire"),
+        SMOKING = NamespacedKey.minecraft("smoking"),
+        BLASTING = NamespacedKey.minecraft("blasting");
 }

@@ -54,7 +54,7 @@ final class SmokerListener implements Listener {
             if (registryInternal.has(smokerKey) && registryInternal.get(smokerKey) instanceof ArtisanSmokingRecipe r) {
                 SmokingRecipe recipe = new SmokingRecipe(
                         new NamespacedKey(r.getKey().namespace(), r.getKey().getKey() + "_" + System.currentTimeMillis() + "_" + UUID.randomUUID().toString().toLowerCase()),
-                        r.getResultGenerator().generate(),
+                        r.getResultGenerator()[0].generate(),
                         new RecipeChoice.ExactChoice(itemStack),
                         r.getExp(),
                         r.getCookTime()

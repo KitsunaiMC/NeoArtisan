@@ -1,7 +1,7 @@
 package io.github.moyusowo.neoartisan.util.data;
 
-import io.github.moyusowo.neoartisanapi.api.recipe.RecipeType;
 import org.bukkit.NamespacedKey;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -9,14 +9,15 @@ import java.util.Objects;
 public class ArrayKey {
 
     private final NamespacedKey[] array;
-    private final RecipeType recipeType;
+    private final NamespacedKey recipeType;
 
-    private ArrayKey(NamespacedKey[] array, RecipeType recipeType) {
+    private ArrayKey(NamespacedKey[] array, NamespacedKey recipeType) {
         this.array = array.clone();
         this.recipeType = recipeType;
     }
 
-    public static ArrayKey from(NamespacedKey[] array, RecipeType recipeType) {
+    @NotNull
+    public static ArrayKey from(@NotNull NamespacedKey[] array, @NotNull NamespacedKey recipeType) {
         return new ArrayKey(array, recipeType);
     }
 

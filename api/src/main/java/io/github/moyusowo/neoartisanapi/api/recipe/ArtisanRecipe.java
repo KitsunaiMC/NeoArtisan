@@ -16,6 +16,10 @@ import org.jetbrains.annotations.NotNull;
  * @see ArtisanShapedRecipe 有序合成配方
  * @see ArtisanShapelessRecipe 无序合成配方
  * @see ArtisanFurnaceRecipe 熔炉配方
+ * @see ArtisanSmokingRecipe 烟熏炉配方
+ * @see ArtisanCampfireRecipe 营火配方
+ * @see ArtisanBlastingRecipe 高炉配方
+ * @implNote 可以实现自己的配方类型
  */
 public interface ArtisanRecipe {
 
@@ -33,7 +37,7 @@ public interface ArtisanRecipe {
      * @return 非null的配方类型
      * @see RecipeType
      */
-    @NotNull RecipeType getType();
+    @NotNull NamespacedKey getType();
 
     /**
      * 获取配方所需的输入材料数组
@@ -46,15 +50,17 @@ public interface ArtisanRecipe {
      *
      * @return 非null的材料键数组（可能包含空元素但数组本身非null）
      * @see io.github.moyusowo.neoartisanapi.api.item.ItemRegistry 材料键的合法来源
+     * @implNote 必须返回可安全修改的数组
      */
     @NotNull NamespacedKey[] getInputs();
 
     /**
-     * 获取结果物品生成器
+     * 获取结果物品生成器数组
      *
-     * @return 非null的物品生成器实例
+     * @return 非null的物品生成器实例数组
      * @see ItemGenerator
+     * @implNote 必须返回可安全修改的数组
      */
-    @NotNull ItemGenerator getResultGenerator();
+    @NotNull ItemGenerator[] getResultGenerator();
 
 }

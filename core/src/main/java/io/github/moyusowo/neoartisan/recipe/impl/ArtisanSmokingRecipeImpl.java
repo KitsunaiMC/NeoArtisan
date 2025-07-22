@@ -58,7 +58,7 @@ final class ArtisanSmokingRecipeImpl implements ArtisanSmokingRecipe {
     }
 
     @Override
-    public @NotNull RecipeType getType() {
+    public @NotNull NamespacedKey getType() {
         return RecipeType.SMOKING;
     }
 
@@ -68,8 +68,8 @@ final class ArtisanSmokingRecipeImpl implements ArtisanSmokingRecipe {
     }
 
     @Override
-    public @NotNull ItemGenerator getResultGenerator() {
-        return resultGenerator;
+    public @NotNull ItemGenerator[] getResultGenerator() {
+        return new ItemGenerator[]{ resultGenerator };
     }
 
     public static final class BuilderImpl implements Builder {

@@ -55,7 +55,7 @@ final class CampfireListener implements Listener {
             if (registryInternal.has(campfireKey) && registryInternal.get(campfireKey) instanceof ArtisanCampfireRecipe r) {
                 CampfireRecipe recipe = new CampfireRecipe(
                         new NamespacedKey(r.getKey().namespace(), r.getKey().getKey() + "_" + System.currentTimeMillis() + "_" + UUID.randomUUID().toString().toLowerCase()),
-                        r.getResultGenerator().generate(),
+                        r.getResultGenerator()[0].generate(),
                         new RecipeChoice.ExactChoice(itemStack),
                         r.getExp(),
                         r.getCookTime()
