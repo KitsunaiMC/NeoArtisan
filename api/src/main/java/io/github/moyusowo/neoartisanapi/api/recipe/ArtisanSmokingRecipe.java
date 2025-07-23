@@ -1,6 +1,7 @@
 package io.github.moyusowo.neoartisanapi.api.recipe;
 
 import io.github.moyusowo.neoartisanapi.api.item.ItemGenerator;
+import io.github.moyusowo.neoartisanapi.api.recipe.choice.Choice;
 import io.github.moyusowo.neoartisanapi.api.util.BuilderFactoryUtil;
 import org.bukkit.NamespacedKey;
 import org.jetbrains.annotations.NotNull;
@@ -28,6 +29,11 @@ public interface ArtisanSmokingRecipe extends ArtisanRecipe {
         Builder builder();
     }
 
+    @NotNull
+    default NamespacedKey getKey() {
+        return RecipeType.SMOKING;
+    }
+
     /**
      * 获取烧炼原料物品ID
      *
@@ -35,7 +41,7 @@ public interface ArtisanSmokingRecipe extends ArtisanRecipe {
      * @implNote 应与 {@link #getInputs()} 的首元素一致
      */
     @NotNull
-    NamespacedKey getInput();
+    Choice getInput();
 
     /**
      * 获取标准烧炼所需时间（tick）
@@ -51,6 +57,11 @@ public interface ArtisanSmokingRecipe extends ArtisanRecipe {
      */
     float getExp();
 
+    @NotNull
+    default ItemGenerator getResultGenerator() {
+        return getResultGenerators().getFirst();
+    }
+
     /**
      * 营火配方建造器接口
      *
@@ -64,16 +75,16 @@ public interface ArtisanSmokingRecipe extends ArtisanRecipe {
          * @param key 符合命名空间规范的键（非null）
          * @return 当前建造器实例
          */
-        @NotNull Builder key(NamespacedKey key);
+        @NotNull Builder key(@NotNull NamespacedKey key);
 
         /**
          * 设置烧炼原料物品ID
          *
-         * @param inputItemId 原料物品ID（非null）
+         * @param choice 原料物品选择器（非null）
          * @return 当前建造器实例
          * @throws IllegalArgumentException 如果物品未注册
          */
-        @NotNull Builder inputItemId(NamespacedKey inputItemId);
+        @NotNull Builder input(@NotNull Choice choice);
 
         /**
          * 设置烧炼结果生成器
@@ -82,7 +93,7 @@ public interface ArtisanSmokingRecipe extends ArtisanRecipe {
          * @return 当前建造器实例
          * @see ItemGenerator 生成器接口
          */
-        @NotNull Builder resultGenerator(ItemGenerator resultGenerator);
+        @NotNull Builder resultGenerator(@NotNull ItemGenerator resultGenerator);
 
         /**
          * 设置标准烧炼时间

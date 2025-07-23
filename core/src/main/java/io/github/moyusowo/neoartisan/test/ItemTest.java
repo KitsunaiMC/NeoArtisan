@@ -7,11 +7,13 @@ import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.FoodProperties;
 import io.papermc.paper.datacomponent.item.ItemLore;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
+import java.util.Set;
 
 @SuppressWarnings("UnstableApiUsage")
 public final class ItemTest {
@@ -57,7 +59,7 @@ public final class ItemTest {
                             .registryId(magic_bread)
                             .itemStack(() -> {
                                 ItemStack itemStack = ItemStack.of(Material.BREAD);
-                                itemStack.setData(DataComponentTypes.ITEM_NAME, Component.text("<red>魔法面包~"));
+                                itemStack.setData(DataComponentTypes.ITEM_NAME, MiniMessage.miniMessage().deserialize("<red>魔法面包~"));
                                 ItemLore itemLore = ItemLore.lore(
                                         List.of(
                                                 Component.text("魔法面包好"),
@@ -70,6 +72,7 @@ public final class ItemTest {
                                 itemStack.setData(DataComponentTypes.FOOD, foodProperties);
                                 return itemStack;
                             })
+                            .tags(Set.of("item/magic"))
                             .build()
             );
             NeoArtisanAPI.getItemRegistry().registerItem(
@@ -89,6 +92,7 @@ public final class ItemTest {
                                     null
                             )
                             .maxDurability(2500)
+                            .tags(Set.of("item/magic"))
                             .build()
             );
             NeoArtisanAPI.getItemRegistry().registerItem(
@@ -108,15 +112,7 @@ public final class ItemTest {
                                     11.0f
                             )
                             .maxDurability(5000)
-                            .build()
-            );
-            NeoArtisanAPI.getItemRegistry().registerItem(
-                    ArtisanItem.builder()
-                            .registryId(cooking_pot)
-                            .rawMaterial(Material.PAPER)
-                            .displayName("烹饪锅")
-                            .blockId(cooking_pot)
-                            .itemModel(cooking_pot)
+                            .tags(Set.of("item/magic"))
                             .build()
             );
             NeoArtisanAPI.getItemRegistry().registerItem(
@@ -125,15 +121,7 @@ public final class ItemTest {
                             .rawMaterial(Material.IRON_INGOT)
                             .displayName("<aqua>魔法小钻石")
                             .itemModel(Material.DIAMOND.getKey())
-                            .build()
-            );
-            NeoArtisanAPI.getItemRegistry().registerItem(
-                    ArtisanItem.builder()
-                            .registryId(cutting_board)
-                            .rawMaterial(Material.PAPER)
-                            .displayName("砧板")
-                            .blockId(cutting_board)
-                            .itemModel(cutting_board)
+                            .tags(Set.of("item/magic"))
                             .build()
             );
             NeoArtisanAPI.getItemRegistry().registerItem(
@@ -142,6 +130,7 @@ public final class ItemTest {
                             .rawMaterial(Material.GRASS_BLOCK)
                             .displayName("<gold>魔法小方块")
                             .blockId(magic_block)
+                            .tags(Set.of("item/magic"))
                             .build()
             );
             NeoArtisanAPI.getItemRegistry().registerItem(

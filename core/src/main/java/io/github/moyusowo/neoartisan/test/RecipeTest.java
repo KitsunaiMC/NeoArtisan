@@ -7,6 +7,8 @@ import io.github.moyusowo.neoartisanapi.api.recipe.ArtisanCampfireRecipe;
 import io.github.moyusowo.neoartisanapi.api.recipe.ArtisanFurnaceRecipe;
 import io.github.moyusowo.neoartisanapi.api.recipe.ArtisanShapedRecipe;
 import io.github.moyusowo.neoartisanapi.api.recipe.ArtisanShapelessRecipe;
+import io.github.moyusowo.neoartisanapi.api.recipe.choice.ItemChoice;
+import io.github.moyusowo.neoartisanapi.api.recipe.choice.TagChoice;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 
@@ -18,8 +20,8 @@ public final class RecipeTest {
                     ArtisanShapedRecipe.builder()
                             .key(new NamespacedKey(NeoArtisan.instance(), "aaaa"))
                             .set("A B")
-                            .add('A', ItemTest.magic_bread)
-                            .add('B', ItemTest.magic_sword)
+                            .add('A', new TagChoice("item/magic"))
+                            .add('B', new ItemChoice(ItemTest.magic_sword))
                             .resultGenerator(
                                     ItemGenerator.simpleGenerator(
                                             Material.APPLE.getKey(),
@@ -33,9 +35,9 @@ public final class RecipeTest {
                     ArtisanShapelessRecipe.builder()
                             .key(new NamespacedKey(NeoArtisan.instance(), "bbbb"))
                             .add(
-                                    ItemTest.magic_diamond,
-                                    ItemTest.magic_bread,
-                                    Material.IRON_INGOT.getKey()
+                                    new ItemChoice(ItemTest.magic_diamond),
+                                    new TagChoice("item/magic"),
+                                    new ItemChoice(Material.IRON_INGOT.getKey())
                             )
                             .resultGenerator(
                                     ItemGenerator.simpleGenerator(
@@ -47,7 +49,7 @@ public final class RecipeTest {
             NeoArtisanAPI.getRecipeRegistry().register(
                     ArtisanFurnaceRecipe.builder()
                             .key(new NamespacedKey(NeoArtisan.instance(), "diamondF"))
-                            .inputItemId(ItemTest.magic_diamond)
+                            .input(new ItemChoice(ItemTest.magic_diamond))
                             .resultGenerator(
                                     ItemGenerator.simpleGenerator(
                                             Material.IRON_INGOT.getKey(),
@@ -61,7 +63,7 @@ public final class RecipeTest {
             NeoArtisanAPI.getRecipeRegistry().register(
                     ArtisanCampfireRecipe.builder()
                             .key(new NamespacedKey(NeoArtisan.instance(), "diamondC"))
-                            .inputItemId(ItemTest.magic_diamond)
+                            .input(new ItemChoice(ItemTest.magic_diamond))
                             .resultGenerator(
                                     ItemGenerator.simpleGenerator(
                                             Material.IRON_INGOT.getKey(),

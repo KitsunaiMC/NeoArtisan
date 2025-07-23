@@ -1,12 +1,12 @@
 package io.github.moyusowo.neoartisan.recipe.listener;
 
 import io.github.moyusowo.neoartisan.NeoArtisan;
-import io.github.moyusowo.neoartisan.recipe.internal.RecipeRegistryInternal;
-import io.github.moyusowo.neoartisan.util.data.ArrayKey;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
 import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
 import io.github.moyusowo.neoartisanapi.api.recipe.ArtisanBlastingRecipe;
+import io.github.moyusowo.neoartisanapi.api.recipe.ArtisanRecipe;
+import io.github.moyusowo.neoartisanapi.api.recipe.RecipeType;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -16,6 +16,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.*;
 
+import java.util.Collection;
 import java.util.UUID;
 
 final class BlastFurnaceListener implements Listener {
@@ -49,17 +50,21 @@ final class BlastFurnaceListener implements Listener {
         final ItemStack itemStack = event.getCursor();
         if (itemStack.isEmpty()) return;
         if (!hasRecipe(itemStack)) {
-            ArrayKey blastFurnaceKey = ArrayKeyUtil.toBlastFurnaceKey(itemStack);
-            RecipeRegistryInternal registryInternal = (RecipeRegistryInternal) NeoArtisanAPI.getRecipeRegistry();
-            if (registryInternal.has(blastFurnaceKey) && registryInternal.get(blastFurnaceKey) instanceof ArtisanBlastingRecipe r) {
-                BlastingRecipe recipe = new BlastingRecipe(
-                        new NamespacedKey(r.getKey().namespace(), r.getKey().getKey() + "_" + System.currentTimeMillis() + "_" + UUID.randomUUID().toString().toLowerCase()),
-                        r.getResultGenerator()[0].generate(),
-                        new RecipeChoice.ExactChoice(itemStack),
-                        r.getExp(),
-                        r.getCookTime()
-                );
-                Bukkit.addRecipe(recipe);
+            final Collection<ArtisanRecipe> blastingRecipes = NeoArtisanAPI.getRecipeRegistry().getRecipes(RecipeType.BLASTING);
+            for (ArtisanRecipe artisanRecipe : blastingRecipes) {
+                if (artisanRecipe instanceof ArtisanBlastingRecipe blastingRecipe) {
+                    if (blastingRecipe.matches(new ItemStack[] { itemStack })) {
+                        FurnaceRecipe recipe = new FurnaceRecipe(
+                                new NamespacedKey(blastingRecipe.getKey().namespace(), blastingRecipe.getKey().getKey() + "_" + System.currentTimeMillis() + "_" + UUID.randomUUID().toString().toLowerCase()),
+                                blastingRecipe.getResultGenerator().generate(),
+                                new RecipeChoice.ExactChoice(itemStack),
+                                blastingRecipe.getExp(),
+                                blastingRecipe.getCookTime()
+                        );
+                        Bukkit.addRecipe(recipe);
+                        return;
+                    }
+                }
             }
         }
     }

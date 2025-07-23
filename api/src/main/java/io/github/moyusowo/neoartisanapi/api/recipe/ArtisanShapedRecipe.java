@@ -1,6 +1,7 @@
 package io.github.moyusowo.neoartisanapi.api.recipe;
 
 import io.github.moyusowo.neoartisanapi.api.item.ItemGenerator;
+import io.github.moyusowo.neoartisanapi.api.recipe.choice.Choice;
 import io.github.moyusowo.neoartisanapi.api.util.BuilderFactoryUtil;
 import org.bukkit.NamespacedKey;
 import org.jetbrains.annotations.NotNull;
@@ -28,6 +29,16 @@ public interface ArtisanShapedRecipe extends ArtisanRecipe {
         return BuilderFactoryUtil.getBuilder(BuilderFactory.class).builder();
     }
 
+    @NotNull
+    default NamespacedKey getKey() {
+        return RecipeType.SHAPED;
+    }
+
+    @NotNull
+    default ItemGenerator getResultGenerator() {
+        return getResultGenerators().getFirst();
+    }
+
     /**
      * 建造器工厂接口
      * <p>
@@ -53,7 +64,7 @@ public interface ArtisanShapedRecipe extends ArtisanRecipe {
      * <ol>
      *    <li>必须调用 {@link #key(NamespacedKey)} 设置唯一配方命名空间键</li>
      *   <li>必须调用 {@link #set} 设置布局</li>
-     *   <li>必须调用 {@link #add(char, NamespacedKey)} 绑定材料</li>
+     *   <li>必须调用 {@link #add(char, Choice)} 绑定材料</li>
      *   <li>必须调用 {@link #resultGenerator(ItemGenerator)} 设置结果生成器</li>
      *   <li>必须调用 {@link #build()} 完成构建</li>
      * </ol>
@@ -67,7 +78,7 @@ public interface ArtisanShapedRecipe extends ArtisanRecipe {
          * @return 当前建造器实例（链式调用）
          * @see ArtisanRecipe#getKey() 命名规范
          */
-        @NotNull Builder key(NamespacedKey key);
+        @NotNull Builder key(@NotNull NamespacedKey key);
 
         /**
          * 设置三行配方布局
@@ -101,10 +112,10 @@ public interface ArtisanShapedRecipe extends ArtisanRecipe {
          * 绑定材料字符映射
          *
          * @param c 布局中的占位字符
-         * @param itemId 对应的材料ID（非null）
+         * @param choice 对应的材料选择
          * @return 当前建造器实例
          */
-        @NotNull Builder add(char c, @NotNull NamespacedKey itemId);
+        @NotNull Builder add(char c, @NotNull Choice choice);
 
         /**
          * 设置结果物品生成器
@@ -113,7 +124,7 @@ public interface ArtisanShapedRecipe extends ArtisanRecipe {
          * @return 当前建造器实例
          * @see ItemGenerator 生成器接口
          */
-        @NotNull Builder resultGenerator(ItemGenerator resultGenerator);
+        @NotNull Builder resultGenerator(@NotNull ItemGenerator resultGenerator);
 
         /**
          * 构建不可变的有序配方实例

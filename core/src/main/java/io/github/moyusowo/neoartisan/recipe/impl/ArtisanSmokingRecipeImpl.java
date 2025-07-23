@@ -3,18 +3,22 @@ package io.github.moyusowo.neoartisan.recipe.impl;
 import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
-import io.github.moyusowo.neoartisanapi.api.item.ArtisanItem;
 import io.github.moyusowo.neoartisanapi.api.item.ItemGenerator;
 import io.github.moyusowo.neoartisanapi.api.recipe.ArtisanSmokingRecipe;
 import io.github.moyusowo.neoartisanapi.api.recipe.RecipeType;
+import io.github.moyusowo.neoartisanapi.api.recipe.choice.Choice;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.ServicePriority;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Unmodifiable;
+
+import java.util.List;
 
 final class ArtisanSmokingRecipeImpl implements ArtisanSmokingRecipe {
     private final NamespacedKey key;
-    private final NamespacedKey input;
+    private final Choice input;
     private final int cookTime;
     private final float exp;
     private final ItemGenerator resultGenerator;
@@ -34,7 +38,7 @@ final class ArtisanSmokingRecipeImpl implements ArtisanSmokingRecipe {
         );
     }
 
-    private ArtisanSmokingRecipeImpl(NamespacedKey key, NamespacedKey input, ItemGenerator resultGenerator, int cookTime, float exp) {
+    private ArtisanSmokingRecipeImpl(NamespacedKey key, Choice input, ItemGenerator resultGenerator, int cookTime, float exp) {
         this.key = key;
         this.input = input;
         this.resultGenerator = resultGenerator;
@@ -43,7 +47,7 @@ final class ArtisanSmokingRecipeImpl implements ArtisanSmokingRecipe {
     }
 
     @Override
-    public @NotNull NamespacedKey getInput() {
+    public @NotNull Choice getInput() {
         return input;
     }
 
@@ -64,18 +68,28 @@ final class ArtisanSmokingRecipeImpl implements ArtisanSmokingRecipe {
     }
 
     @Override
-    public @NotNull NamespacedKey[] getInputs() {
-        return new NamespacedKey[] { input };
+    @Unmodifiable
+    @NotNull
+    public List<Choice> getInputs() {
+        return List.of(input);
     }
 
     @Override
-    public @NotNull ItemGenerator[] getResultGenerator() {
-        return new ItemGenerator[]{ resultGenerator };
+    @Unmodifiable
+    @NotNull
+    public List<ItemGenerator> getResultGenerators() {
+        return List.of(resultGenerator);
+    }
+
+    @Override
+    public boolean matches(ItemStack @NotNull [] matrix) {
+        if (matrix.length != 1) return false;
+        return input.matches(matrix[0]);
     }
 
     public static final class BuilderImpl implements Builder {
         private NamespacedKey key;
-        private NamespacedKey input;
+        private Choice input;
         private Integer cookTime;
         private Float exp;
         private ItemGenerator resultGenerator;
@@ -89,19 +103,19 @@ final class ArtisanSmokingRecipeImpl implements ArtisanSmokingRecipe {
         }
 
         @Override
-        public @NotNull Builder key(NamespacedKey key) {
+        public @NotNull Builder key(@NotNull NamespacedKey key) {
             this.key = key;
             return this;
         }
 
         @Override
-        public @NotNull Builder inputItemId(NamespacedKey inputItemId) {
-            this.input = inputItemId;
+        public @NotNull Builder input(@NotNull Choice choice) {
+            this.input = choice;
             return this;
         }
 
         @Override
-        public @NotNull Builder resultGenerator(ItemGenerator resultGenerator) {
+        public @NotNull Builder resultGenerator(@NotNull ItemGenerator resultGenerator) {
             this.resultGenerator = resultGenerator;
             return this;
         }
@@ -121,7 +135,6 @@ final class ArtisanSmokingRecipeImpl implements ArtisanSmokingRecipe {
         @Override
         public @NotNull ArtisanSmokingRecipe build() {
             if (key == null || input == null || cookTime == null || resultGenerator == null || exp == null) throw new IllegalCallerException("You have to fill all the params before build!");
-            if (input.getNamespace().equals(ArtisanItem.TAG_NAMESPACE)) throw new IllegalArgumentException("You can not use tag in furnace like recipe!");
             return new ArtisanSmokingRecipeImpl(key, input, resultGenerator, cookTime, exp);
         }
     }

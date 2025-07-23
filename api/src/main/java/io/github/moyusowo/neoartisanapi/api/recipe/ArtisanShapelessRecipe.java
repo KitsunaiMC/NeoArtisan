@@ -1,6 +1,7 @@
 package io.github.moyusowo.neoartisanapi.api.recipe;
 
 import io.github.moyusowo.neoartisanapi.api.item.ItemGenerator;
+import io.github.moyusowo.neoartisanapi.api.recipe.choice.Choice;
 import io.github.moyusowo.neoartisanapi.api.util.BuilderFactoryUtil;
 import org.bukkit.NamespacedKey;
 import org.jetbrains.annotations.NotNull;
@@ -31,6 +32,16 @@ public interface ArtisanShapelessRecipe extends ArtisanRecipe {
     @NotNull
     static Builder builder() {
         return BuilderFactoryUtil.getBuilder(BuilderFactory.class).builder();
+    }
+
+    @NotNull
+    default NamespacedKey getKey() {
+        return RecipeType.SHAPELESS;
+    }
+
+    @NotNull
+    default ItemGenerator getResultGenerator() {
+        return getResultGenerators().getFirst();
     }
 
     /**
@@ -69,35 +80,34 @@ public interface ArtisanShapelessRecipe extends ArtisanRecipe {
          * @param key 符合命名空间规范的键（非null）
          * @return 当前建造器实例
          */
-        @NotNull Builder key(NamespacedKey key);
+        @NotNull Builder key(@NotNull NamespacedKey key);
 
         /**
-         * 添加单个材料（数量默认为1）
+         * 添加单个材料
          *
-         * @param itemId 材料ID（非null）
+         * @param choice 材料选择（非null）
          * @return 当前建造器实例
-         * @see #add(NamespacedKey, int) 指定数量的版本
+         * @see #add(Choice, int) 指定数量的版本
          */
-        @NotNull Builder add(@NotNull NamespacedKey itemId);
+        @NotNull Builder add(@NotNull Choice choice);
 
         /**
-         * 批量添加多个材料（每个数量默认为1）
+         * 批量添加多个材料
          *
-         * @param itemIds 材料ID数组（非null，可空数组）
+         * @param choices 材料选择数组（非null）
          * @return 当前建造器实例
-         * @throws IllegalArgumentException 如果数组为null
          */
-        @NotNull Builder add(@NotNull NamespacedKey... itemIds);
+        @NotNull Builder add(@NotNull Choice... choices);
 
         /**
          * 添加指定数量的材料
          *
-         * @param itemId 材料ID（非null）
+         * @param choice 材料选择（非null）
          * @param count 材料数量（≥1）
          * @return 当前建造器实例
          * @throws IllegalArgumentException 如果数量无效
          */
-        @NotNull Builder add(@NotNull NamespacedKey itemId, int count);
+        @NotNull Builder add(@NotNull Choice choice, int count);
 
         /**
          * 设置结果物品生成器
@@ -106,7 +116,7 @@ public interface ArtisanShapelessRecipe extends ArtisanRecipe {
          * @return 当前建造器实例
          * @see ItemGenerator 生成器接口
          */
-        @NotNull Builder resultGenerator(ItemGenerator resultGenerator);
+        @NotNull Builder resultGenerator(@NotNull ItemGenerator resultGenerator);
 
         /**
          * 构建不可变的无序配方实例

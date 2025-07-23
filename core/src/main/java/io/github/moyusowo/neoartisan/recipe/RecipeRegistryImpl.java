@@ -1,16 +1,17 @@
 package io.github.moyusowo.neoartisan.recipe;
 
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
 import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisan.RegisterManager;
-import io.github.moyusowo.neoartisan.recipe.internal.RecipeRegistryInternal;
-import io.github.moyusowo.neoartisan.util.data.ArrayKey;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
 import io.github.moyusowo.neoartisan.util.terminate.TerminateMethod;
-import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
-import io.github.moyusowo.neoartisanapi.api.item.ArtisanItem;
 import io.github.moyusowo.neoartisanapi.api.item.ItemGenerator;
 import io.github.moyusowo.neoartisanapi.api.recipe.*;
+import io.github.moyusowo.neoartisanapi.api.recipe.choice.Choice;
+import io.github.moyusowo.neoartisanapi.api.recipe.choice.ItemChoice;
+import io.github.moyusowo.neoartisanapi.api.recipe.choice.MultiChoice;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -18,14 +19,11 @@ import org.bukkit.event.Listener;
 import org.bukkit.inventory.*;
 import org.bukkit.plugin.ServicePriority;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Unmodifiable;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.*;
 
-final class RecipeRegistryImpl implements Listener, RecipeRegistry, RecipeRegistryInternal {
+final class RecipeRegistryImpl implements Listener, RecipeRegistry {
 
     private static RecipeRegistryImpl instance;
 
@@ -40,8 +38,8 @@ final class RecipeRegistryImpl implements Listener, RecipeRegistry, RecipeRegist
 
     private RecipeRegistryImpl() {
         instance = this;
-        toKey = new ConcurrentHashMap<>();
-        recipeRegistry = new ConcurrentHashMap<>();
+        recipeByType = ArrayListMultimap.create();
+        recipeByKey = new HashMap<>();
         NeoArtisan.registerListener(instance);
         Bukkit.getServicesManager().register(
                 RecipeRegistry.class,
@@ -59,82 +57,90 @@ final class RecipeRegistryImpl implements Listener, RecipeRegistry, RecipeRegist
             Recipe recipe = it.next();
             if (recipe instanceof FurnaceRecipe furnaceRecipe) {
                 if (furnaceRecipe.getInputChoice() instanceof RecipeChoice.MaterialChoice materialChoice) {
+                    final List<Choice> itemChoices = new ArrayList<>();
                     for (Material material : materialChoice.getChoices()) {
-                        instance.internalRegister(
-                                ArtisanFurnaceRecipe.builder()
-                                        .key(NamespacedKey.minecraft(furnaceRecipe.getKey().getKey() + "_originalfurnace_" + UUID.randomUUID()))
-                                        .inputItemId(material.getKey())
-                                        .resultGenerator(
-                                                ItemGenerator.simpleGenerator(
-                                                        furnaceRecipe.getResult().getType().getKey(),
-                                                        furnaceRecipe.getResult().getAmount()
-                                                )
-                                        )
-                                        .cookTime(furnaceRecipe.getCookingTime())
-                                        .exp(furnaceRecipe.getExperience())
-                                        .build()
-                        );
+                        itemChoices.add(new ItemChoice(material.getKey()));
                     }
+                    instance.internalRegister(
+                            ArtisanFurnaceRecipe.builder()
+                                    .key(furnaceRecipe.getKey())
+                                    .input(new MultiChoice(itemChoices))
+                                    .resultGenerator(
+                                            ItemGenerator.simpleGenerator(
+                                                    furnaceRecipe.getResult().getType().getKey(),
+                                                    furnaceRecipe.getResult().getAmount()
+                                            )
+                                    )
+                                    .cookTime(furnaceRecipe.getCookingTime())
+                                    .exp(furnaceRecipe.getExperience())
+                                    .build()
+                    );
                     remove.add(furnaceRecipe.getKey());
                 }
             } else if (recipe instanceof CampfireRecipe campfireRecipe) {
                 if (campfireRecipe.getInputChoice() instanceof RecipeChoice.MaterialChoice materialChoice) {
+                    final List<Choice> itemChoices = new ArrayList<>();
                     for (Material material : materialChoice.getChoices()) {
-                        instance.internalRegister(
-                                ArtisanCampfireRecipe.builder()
-                                        .key(NamespacedKey.minecraft(campfireRecipe.getKey().getKey() + "_originalcampfire_" + UUID.randomUUID() + "_" + UUID.randomUUID()))
-                                        .inputItemId(material.getKey())
-                                        .resultGenerator(
-                                                ItemGenerator.simpleGenerator(
-                                                        campfireRecipe.getResult().getType().getKey(),
-                                                        campfireRecipe.getResult().getAmount()
-                                                )
-                                        )
-                                        .cookTime(campfireRecipe.getCookingTime())
-                                        .exp(campfireRecipe.getExperience())
-                                        .build()
-                        );
+                        itemChoices.add(new ItemChoice(material.getKey()));
                     }
+                    instance.internalRegister(
+                            ArtisanFurnaceRecipe.builder()
+                                    .key(campfireRecipe.getKey())
+                                    .input(new MultiChoice(itemChoices))
+                                    .resultGenerator(
+                                            ItemGenerator.simpleGenerator(
+                                                    campfireRecipe.getResult().getType().getKey(),
+                                                    campfireRecipe.getResult().getAmount()
+                                            )
+                                    )
+                                    .cookTime(campfireRecipe.getCookingTime())
+                                    .exp(campfireRecipe.getExperience())
+                                    .build()
+                    );
                     remove.add(campfireRecipe.getKey());
                 }
             } else if (recipe instanceof BlastingRecipe blastingRecipe) {
                 if (blastingRecipe.getInputChoice() instanceof RecipeChoice.MaterialChoice materialChoice) {
+                    final List<Choice> itemChoices = new ArrayList<>();
                     for (Material material : materialChoice.getChoices()) {
-                        instance.internalRegister(
-                                ArtisanBlastingRecipe.builder()
-                                        .key(NamespacedKey.minecraft(blastingRecipe.getKey().getKey() + "_originalblasting_" + UUID.randomUUID() + "_" + UUID.randomUUID()))
-                                        .inputItemId(material.getKey())
-                                        .resultGenerator(
-                                                ItemGenerator.simpleGenerator(
-                                                        blastingRecipe.getResult().getType().getKey(),
-                                                        blastingRecipe.getResult().getAmount()
-                                                )
-                                        )
-                                        .cookTime(blastingRecipe.getCookingTime())
-                                        .exp(blastingRecipe.getExperience())
-                                        .build()
-                        );
+                        itemChoices.add(new ItemChoice(material.getKey()));
                     }
+                    instance.internalRegister(
+                            ArtisanFurnaceRecipe.builder()
+                                    .key(blastingRecipe.getKey())
+                                    .input(new MultiChoice(itemChoices))
+                                    .resultGenerator(
+                                            ItemGenerator.simpleGenerator(
+                                                    blastingRecipe.getResult().getType().getKey(),
+                                                    blastingRecipe.getResult().getAmount()
+                                            )
+                                    )
+                                    .cookTime(blastingRecipe.getCookingTime())
+                                    .exp(blastingRecipe.getExperience())
+                                    .build()
+                    );
                     remove.add(blastingRecipe.getKey());
                 }
             } else if (recipe instanceof SmokingRecipe smokingRecipe) {
                 if (smokingRecipe.getInputChoice() instanceof RecipeChoice.MaterialChoice materialChoice) {
+                    final List<Choice> itemChoices = new ArrayList<>();
                     for (Material material : materialChoice.getChoices()) {
-                        instance.internalRegister(
-                                ArtisanSmokingRecipe.builder()
-                                        .key(NamespacedKey.minecraft(smokingRecipe.getKey().getKey() + "_originalsmoking_" + UUID.randomUUID() + "_" + UUID.randomUUID()))
-                                        .inputItemId(material.getKey())
-                                        .resultGenerator(
-                                                ItemGenerator.simpleGenerator(
-                                                        smokingRecipe.getResult().getType().getKey(),
-                                                        smokingRecipe.getResult().getAmount()
-                                                )
-                                        )
-                                        .cookTime(smokingRecipe.getCookingTime())
-                                        .exp(smokingRecipe.getExperience())
-                                        .build()
-                        );
+                        itemChoices.add(new ItemChoice(material.getKey()));
                     }
+                    instance.internalRegister(
+                            ArtisanFurnaceRecipe.builder()
+                                    .key(smokingRecipe.getKey())
+                                    .input(new MultiChoice(itemChoices))
+                                    .resultGenerator(
+                                            ItemGenerator.simpleGenerator(
+                                                    smokingRecipe.getResult().getType().getKey(),
+                                                    smokingRecipe.getResult().getAmount()
+                                            )
+                                    )
+                                    .cookTime(smokingRecipe.getCookingTime())
+                                    .exp(smokingRecipe.getExperience())
+                                    .build()
+                    );
                     remove.add(smokingRecipe.getKey());
                 }
             }
@@ -142,15 +148,14 @@ final class RecipeRegistryImpl implements Listener, RecipeRegistry, RecipeRegist
         remove.forEach(Bukkit::removeRecipe);
     }
 
-    private final ConcurrentHashMap<NamespacedKey, ArrayKey> toKey;
-    private final ConcurrentHashMap<ArrayKey, ArtisanRecipe> recipeRegistry;
+    private final Map<NamespacedKey, ArtisanRecipe> recipeByKey;
+    private final Multimap<NamespacedKey, ArtisanRecipe> recipeByType;
 
     @Override
     public void register(@NotNull ArtisanRecipe recipe) {
         if (RegisterManager.isOpen()) {
-            ArrayKey arrayKey = ArrayKey.from(recipe.getInputs(), recipe.getType());
-            toKey.put(recipe.getKey(), arrayKey);
-            recipeRegistry.put(arrayKey, recipe);
+            recipeByKey.put(recipe.getKey(), recipe);
+            recipeByType.put(recipe.getType(), recipe);
             NeoArtisan.logger().info("successfully register recipe " + recipe.getType().asString() + ": " + recipe.getKey().asString());
         } else {
             throw RegisterManager.REGISTRY_CLOSED;
@@ -159,9 +164,8 @@ final class RecipeRegistryImpl implements Listener, RecipeRegistry, RecipeRegist
 
     public void internalRegister(@NotNull ArtisanRecipe recipe) {
         if (RegisterManager.isOpen()) {
-            ArrayKey arrayKey = ArrayKey.from(recipe.getInputs(), recipe.getType());
-            toKey.put(recipe.getKey(), arrayKey);
-            recipeRegistry.put(arrayKey, recipe);
+            recipeByKey.put(recipe.getKey(), recipe);
+            recipeByType.put(recipe.getType(), recipe);
             if (NeoArtisan.isDebugMode()) {
                 NeoArtisan.logger().info("successfully register recipe " + recipe.getType().asString() + ": " + recipe.getKey().asString());
             }
@@ -172,34 +176,25 @@ final class RecipeRegistryImpl implements Listener, RecipeRegistry, RecipeRegist
 
     @Override
     public boolean hasRecipe(NamespacedKey key) {
-        return toKey.containsKey(key);
+        return recipeByKey.containsKey(key);
     }
 
     @Override
     public @NotNull ArtisanRecipe getRecipe(@NotNull NamespacedKey key) {
-        return recipeRegistry.get(toKey.get(key));
+        return recipeByKey.get(key);
     }
 
     @Override
-    public @NotNull Optional<ArtisanRecipe> getRecipe(@NotNull NamespacedKey[] items, @NotNull NamespacedKey recipeType) {
-        final ArtisanRecipe r = recipeRegistry.getOrDefault(ArrayKey.from(items, recipeType), null);
-        if (r == null) return Optional.empty();
-        else return Optional.of(r);
+    @Unmodifiable
+    @NotNull
+    public Collection<ArtisanRecipe> getRecipes(@NotNull NamespacedKey recipeType) {
+        if (!recipeByType.containsKey(recipeType)) return List.of();
+        else return Collections.unmodifiableCollection(recipeByType.get(recipeType));
     }
 
     @TerminateMethod
     static void resetRecipe() {
         Bukkit.resetRecipes();
         NeoArtisan.logger().info("Successfully reset recipes.");
-    }
-
-    @Override
-    public boolean has(ArrayKey arrayKey) {
-        return recipeRegistry.containsKey(arrayKey);
-    }
-
-    @Override
-    public @NotNull ArtisanRecipe get(ArrayKey arrayKey) {
-        return recipeRegistry.get(arrayKey);
     }
 }
