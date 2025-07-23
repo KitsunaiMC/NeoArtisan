@@ -1,5 +1,6 @@
 package io.github.moyusowo.neoartisanapi.api.item;
 
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -32,6 +33,8 @@ public interface ItemRegistry {
      * @throws IllegalArgumentException 如果builder为null或包含无效参数
      */
     void registerItem(@NotNull ArtisanItem artisanItem);
+
+    void registerTagToMaterial(@NotNull Material material, @NotNull String... tags);
 
     /**
      * 从物品堆解析注册ID。
@@ -121,4 +124,8 @@ public interface ItemRegistry {
     @NotNull
     @Unmodifiable
     Collection<NamespacedKey> getIdByTag(String tag);
+
+    @NotNull
+    @Unmodifiable
+    Collection<String> getTagsById(NamespacedKey id);
 }

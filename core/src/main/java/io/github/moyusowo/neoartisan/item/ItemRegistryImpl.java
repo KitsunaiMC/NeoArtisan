@@ -33,6 +33,7 @@ final class ItemRegistryImpl implements ItemRegistry {
     private final ConcurrentHashMap<NamespacedKey, ArtisanItemImpl> registry;
     private final Set<NamespacedKey> cachedItemList;
     private final Multimap<String, NamespacedKey> tagToId;
+    private final Multimap<Material, String> originalItemTag;
     private final AtomicBoolean cached;
 
     private ItemRegistryImpl() {
@@ -41,6 +42,7 @@ final class ItemRegistryImpl implements ItemRegistry {
         cachedItemList = new HashSet<>();
         cached = new AtomicBoolean(false);
         tagToId = HashMultimap.create();
+        originalItemTag = HashMultimap.create();
         Bukkit.getServicesManager().register(
                 ItemRegistry.class,
                 ItemRegistryImpl.getInstance(),
@@ -68,6 +70,22 @@ final class ItemRegistryImpl implements ItemRegistry {
         if (RegisterManager.isOpen()) {
             registry.put(artisanItem.getRegistryId(), (ArtisanItemImpl) artisanItem);
             NeoArtisan.logger().info("successfully register item: " + artisanItem.getRegistryId().asString());
+        } else {
+            throw RegisterManager.REGISTRY_CLOSED;
+        }
+    }
+
+    @Override
+    public void registerTagToMaterial(@NotNull Material material, @NotNull String... tags) {
+        if (RegisterManager.isOpen()) {
+            originalItemTag.putAll(material, Arrays.asList(tags));
+            StringBuilder builder = new StringBuilder();
+            builder.append("successfully register tags: ");
+            for (String tag : tags) {
+                builder.append(tag).append(", ");
+            }
+            builder.append("to material: ").append(material.name());
+            NeoArtisan.logger().info(builder.toString());
         } else {
             throw RegisterManager.REGISTRY_CLOSED;
         }
@@ -149,5 +167,17 @@ final class ItemRegistryImpl implements ItemRegistry {
             return Collections.unmodifiableCollection(tagToId.get(tag));
         }
         return Collections.emptySet();
+    }
+
+    @Override
+    public @NotNull @Unmodifiable Collection<String> getTagsById(NamespacedKey id) {
+        if (isArtisanItem(id)) return getArtisanItem(id).getTags();
+        else if (id.getNamespace().equals("minecraft")) {
+            Material material = Material.matchMaterial(id.getKey());
+            if (material == null) return Set.of();
+            if (originalItemTag.containsKey(material)) return Collections.unmodifiableCollection(originalItemTag.get(material));
+            return Set.of();
+        }
+        return Set.of();
     }
 }
