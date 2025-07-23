@@ -1,12 +1,12 @@
 package io.github.moyusowo.neoartisan.recipe.listener;
 
 import io.github.moyusowo.neoartisan.NeoArtisan;
-import io.github.moyusowo.neoartisan.recipe.internal.RecipeRegistryInternal;
-import io.github.moyusowo.neoartisan.util.data.ArrayKey;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
 import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
 import io.github.moyusowo.neoartisanapi.api.recipe.ArtisanCampfireRecipe;
+import io.github.moyusowo.neoartisanapi.api.recipe.ArtisanRecipe;
+import io.github.moyusowo.neoartisanapi.api.recipe.RecipeType;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -14,11 +14,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.CampfireRecipe;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.Recipe;
-import org.bukkit.inventory.RecipeChoice;
+import org.bukkit.inventory.*;
 
+import java.util.Collection;
 import java.util.UUID;
 
 final class CampfireListener implements Listener {
@@ -50,17 +48,21 @@ final class CampfireListener implements Listener {
         final ItemStack itemStack = event.getItem();
         if (itemStack == null || itemStack.isEmpty()) return;
         if (!hasRecipe(itemStack)) {
-            ArrayKey campfireKey = ArrayKeyUtil.toCampfireKey(itemStack);
-            RecipeRegistryInternal registryInternal = (RecipeRegistryInternal) NeoArtisanAPI.getRecipeRegistry();
-            if (registryInternal.has(campfireKey) && registryInternal.get(campfireKey) instanceof ArtisanCampfireRecipe r) {
-                CampfireRecipe recipe = new CampfireRecipe(
-                        new NamespacedKey(r.getKey().namespace(), r.getKey().getKey() + "_" + System.currentTimeMillis() + "_" + UUID.randomUUID().toString().toLowerCase()),
-                        r.getResultGenerator()[0].generate(),
-                        new RecipeChoice.ExactChoice(itemStack),
-                        r.getExp(),
-                        r.getCookTime()
-                );
-                Bukkit.addRecipe(recipe);
+            final Collection<ArtisanRecipe> campfireRecipes = NeoArtisanAPI.getRecipeRegistry().getRecipes(RecipeType.CAMPFIRE);
+            for (ArtisanRecipe artisanRecipe : campfireRecipes) {
+                if (artisanRecipe instanceof ArtisanCampfireRecipe campfireRecipe) {
+                    if (campfireRecipe.matches(new ItemStack[] { itemStack })) {
+                        FurnaceRecipe recipe = new FurnaceRecipe(
+                                new NamespacedKey(campfireRecipe.getKey().namespace(), campfireRecipe.getKey().getKey() + "_" + System.currentTimeMillis() + "_" + UUID.randomUUID().toString().toLowerCase()),
+                                campfireRecipe.getResultGenerator().generate(),
+                                new RecipeChoice.ExactChoice(itemStack),
+                                campfireRecipe.getExp(),
+                                campfireRecipe.getCookTime()
+                        );
+                        Bukkit.addRecipe(recipe);
+                        return;
+                    }
+                }
             }
         }
     }

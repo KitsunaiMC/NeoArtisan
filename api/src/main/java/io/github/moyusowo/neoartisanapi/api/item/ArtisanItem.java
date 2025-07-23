@@ -41,11 +41,6 @@ public interface ArtisanItem {
     NamespacedKey EMPTY = new NamespacedKey("neoartisan", "empty_item_registry_id");
 
     /**
-     * 物品类别命名空间键的命名空间
-     */
-    String TAG_NAMESPACE = "neoartisan_item_tag";
-
-    /**
      * 通过物品堆判断是否为此自定义物品。
      *
      * @param itemStack 要比较的物品堆（不能为null）

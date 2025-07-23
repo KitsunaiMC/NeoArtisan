@@ -1,8 +1,13 @@
 package io.github.moyusowo.neoartisanapi.api.recipe;
 
 import io.github.moyusowo.neoartisanapi.api.item.ItemGenerator;
+import io.github.moyusowo.neoartisanapi.api.recipe.choice.Choice;
 import org.bukkit.NamespacedKey;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Unmodifiable;
+
+import java.util.List;
 
 /**
  * 自定义配方系统的核心抽象接口，定义所有配方类型的公共契约。
@@ -22,45 +27,38 @@ import org.jetbrains.annotations.NotNull;
  * @implNote 可以实现自己的配方类型
  */
 public interface ArtisanRecipe {
-
     /**
      * 获取配方的全局唯一标识符
-     *
-     * @return 非null的命名空间键
-     * @implSpec 实现应当缓存此值而非每次重新生成
      */
-    @NotNull NamespacedKey getKey();
+    @NotNull
+    NamespacedKey getKey();
 
     /**
      * 获取配方类型
      *
-     * @return 非null的配方类型
      * @see RecipeType
      */
-    @NotNull NamespacedKey getType();
+    @NotNull
+    NamespacedKey getType();
 
     /**
-     * 获取配方所需的输入材料数组
+     * 获取配方所需的输入材料的不可变列表
      *
-     * <p><b>注意事项：</b></p>
-     * <ul>
-     *   <li>即使只有一个输入格的配方也可以返回正确的结果</li>
-     *   <li>空槽位应当用{@link io.github.moyusowo.neoartisanapi.api.item.ArtisanItem#EMPTY}表示空气</li>
-     * </ul>
-     *
-     * @return 非null的材料键数组（可能包含空元素但数组本身非null）
-     * @see io.github.moyusowo.neoartisanapi.api.item.ItemRegistry 材料键的合法来源
-     * @implNote 必须返回可安全修改的数组
+     * @see Choice
      */
-    @NotNull NamespacedKey[] getInputs();
+    @Unmodifiable
+    @NotNull
+    List<Choice> getInputs();
 
     /**
-     * 获取结果物品生成器数组
+     * 获取结果物品生成器的不可变列表
      *
-     * @return 非null的物品生成器实例数组
      * @see ItemGenerator
-     * @implNote 必须返回可安全修改的数组
      */
-    @NotNull ItemGenerator[] getResultGenerator();
+    @Unmodifiable
+    @NotNull
+    List<ItemGenerator> getResultGenerators();
+
+    boolean matches(ItemStack @NotNull [] matrix);
 
 }

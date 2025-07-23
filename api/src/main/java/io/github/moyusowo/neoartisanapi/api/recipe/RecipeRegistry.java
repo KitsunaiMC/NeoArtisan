@@ -5,7 +5,10 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Unmodifiable;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -21,9 +24,6 @@ import java.util.Optional;
  * <p>通过 {@link NeoArtisanAPI#getRecipeRegistry()} ()} 获取实例。</p>
  *
  * @see ArtisanRecipe
- * @see ArtisanShapedRecipe
- * @see ArtisanShapelessRecipe
- * @see ArtisanFurnaceRecipe
  */
 public interface RecipeRegistry {
 
@@ -62,16 +62,14 @@ public interface RecipeRegistry {
     @NotNull ArtisanRecipe getRecipe(@NotNull NamespacedKey key);
 
     /**
-     * 根据配方的输入数组，获取已注册的配方实例
+     * 获取所有同类别的、已注册的配方实例
      *
-     * <p>数组内的每个位置的物品ID，包括数组长度，都需要和已注册配方内的 {@link ArtisanRecipe#getInputs()} 一致</p>
-     *
-     * @param items 配方物品输入矩阵（非null且无null）
      * @param recipeType 配方类型（非null）
      * @return 对应的配方实例（不可变）
      * @see RecipeType 已有的配方类型，配方类型可用自己的命名空间。
      */
+    @Unmodifiable
     @NotNull
-    Optional<ArtisanRecipe> getRecipe(@NotNull NamespacedKey[] items, @NotNull NamespacedKey recipeType);
+    Collection<ArtisanRecipe> getRecipes(@NotNull NamespacedKey recipeType);
 
 }

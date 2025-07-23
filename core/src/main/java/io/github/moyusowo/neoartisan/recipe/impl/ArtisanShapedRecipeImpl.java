@@ -1,24 +1,25 @@
 package io.github.moyusowo.neoartisan.recipe.impl;
 
+import com.google.common.base.Preconditions;
 import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
-import io.github.moyusowo.neoartisanapi.api.item.ArtisanItem;
 import io.github.moyusowo.neoartisanapi.api.item.ItemGenerator;
 import io.github.moyusowo.neoartisanapi.api.recipe.ArtisanShapedRecipe;
 import io.github.moyusowo.neoartisanapi.api.recipe.RecipeType;
+import io.github.moyusowo.neoartisanapi.api.recipe.choice.Choice;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.ServicePriority;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Unmodifiable;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 final class ArtisanShapedRecipeImpl implements ArtisanShapedRecipe {
     private final NamespacedKey key;
-    private final NamespacedKey[] matrix;
+    private final List<Choice> matrix;
     private final ItemGenerator resultGenerator;
 
     @InitMethod(priority = InitPriority.REGISTRAR)
@@ -36,9 +37,10 @@ final class ArtisanShapedRecipeImpl implements ArtisanShapedRecipe {
         );
     }
 
-    private ArtisanShapedRecipeImpl(@NotNull NamespacedKey key, @NotNull NamespacedKey[] matrix, @NotNull ItemGenerator resultGenerator) {
+    private ArtisanShapedRecipeImpl(@NotNull NamespacedKey key, @NotNull List<Choice> matrix, @NotNull ItemGenerator resultGenerator) {
         this.key = key;
-        this.matrix = Arrays.copyOf(matrix, matrix.length);
+        Preconditions.checkArgument(matrix.size() == 9, "shaped matrix size must be 9.");
+        this.matrix = new ArrayList<>(matrix);
         this.resultGenerator = resultGenerator;
     }
 
@@ -53,18 +55,31 @@ final class ArtisanShapedRecipeImpl implements ArtisanShapedRecipe {
     }
 
     @Override
-    public @NotNull NamespacedKey[] getInputs() {
-        return Arrays.copyOf(matrix, matrix.length);
+    @Unmodifiable
+    @NotNull
+    public List<Choice> getInputs() {
+        return Collections.unmodifiableList(matrix);
     }
 
     @Override
-    public @NotNull ItemGenerator[] getResultGenerator() {
-        return new ItemGenerator[]{ resultGenerator };
+    @Unmodifiable
+    @NotNull
+    public List<ItemGenerator> getResultGenerators() {
+        return List.of(resultGenerator);
+    }
+
+    @Override
+    public boolean matches(ItemStack @NotNull [] matrix) {
+        if (matrix.length != 9) return false;
+        for (int i = 0; i < 9; i++) {
+            if (!this.matrix.get(i).matches(matrix[i])) return false;
+        }
+        return true;
     }
 
     public static final class BuilderImpl implements Builder {
         private NamespacedKey key;
-        private final Map<Character, NamespacedKey> toRegistryId;
+        private final Map<Character, Choice> toRegistryId;
         private char[] recipe;
         private ItemGenerator resultGenerator;
 
@@ -76,7 +91,7 @@ final class ArtisanShapedRecipeImpl implements ArtisanShapedRecipe {
         }
 
         @Override
-        public @NotNull Builder key(NamespacedKey key) {
+        public @NotNull Builder key(@NotNull NamespacedKey key) {
             this.key = key;
             return this;
         }
@@ -108,13 +123,13 @@ final class ArtisanShapedRecipeImpl implements ArtisanShapedRecipe {
         }
 
         @Override
-        public @NotNull Builder add(char c, @NotNull NamespacedKey itemId) {
-            toRegistryId.put(c, itemId);
+        public @NotNull Builder add(char c, @NotNull Choice choice) {
+            toRegistryId.put(c, choice);
             return this;
         }
 
         @Override
-        public @NotNull Builder resultGenerator(ItemGenerator resultGenerator) {
+        public @NotNull Builder resultGenerator(@NotNull ItemGenerator resultGenerator) {
             this.resultGenerator = resultGenerator;
             return this;
         }
@@ -122,10 +137,10 @@ final class ArtisanShapedRecipeImpl implements ArtisanShapedRecipe {
         @Override
         public @NotNull ArtisanShapedRecipe build() {
             if (key == null || recipe == null || resultGenerator == null) throw new IllegalCallerException("You have to fill all the params before build!");
-            NamespacedKey[] matrix = new NamespacedKey[9];
-            for (int i = 0; i < 9; i++) {
-                if (recipe[i] == ' ') matrix[i] = ArtisanItem.EMPTY;
-                else matrix[i] = toRegistryId.get(recipe[i]);
+            final List<Choice> matrix = new ArrayList<>(9);
+            for (char c : recipe) {
+                if (c == ' ') matrix.add(Choice.EMPTY);
+                else matrix.add(toRegistryId.get(c));
             }
             return new ArtisanShapedRecipeImpl(key, matrix, resultGenerator);
         }
