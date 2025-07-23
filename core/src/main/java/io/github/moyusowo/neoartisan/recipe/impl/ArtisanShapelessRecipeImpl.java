@@ -42,7 +42,7 @@ final class ArtisanShapelessRecipeImpl implements ArtisanShapelessRecipe {
 
     private ArtisanShapelessRecipeImpl(NamespacedKey key, List<Choice> recipe, ItemGenerator resultGenerator) {
         this.key = key;
-        Preconditions.checkArgument(!recipe.isEmpty() && recipe.size() < 9);
+        Preconditions.checkArgument(!recipe.isEmpty() && recipe.size() <= 9);
         this.recipe = new ArrayList<>(recipe);
         this.recipe.removeIf(
                 choice -> choice == null || choice == Choice.EMPTY
