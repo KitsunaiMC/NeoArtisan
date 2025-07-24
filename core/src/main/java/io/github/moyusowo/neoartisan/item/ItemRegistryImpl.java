@@ -101,9 +101,9 @@ final class ItemRegistryImpl implements ItemRegistry {
         NeoArtisanAPI.getItemRegistry().registerTagToMaterial(Material.POPPED_CHORUS_FRUIT, "chorus", "cooked", "fruit");
         //关键词：肉类
         NeoArtisanAPI.getItemRegistry().registerTagToMaterial(Material.BEEF, "beef", "meat", "raw", "raw_beef");
-        NeoArtisanAPI.getItemRegistry().registerTagToMaterial(Material.COOOKED_BEEF, "beef", "meat", "cooked", "cooked_beef");
+        NeoArtisanAPI.getItemRegistry().registerTagToMaterial(Material.COOKED_BEEF, "beef", "meat", "cooked", "cooked_beef");
         NeoArtisanAPI.getItemRegistry().registerTagToMaterial(Material.PORKCHOP, "porkchop", "meat", "raw", "raw_porkchop");
-        NeoArtisanAPI.getItemRegistry().registerTagToMaterial(Material.COOOKED_PORKCHOP, "porkchop", "meat", "cooked", "cooked_porkchop");
+        NeoArtisanAPI.getItemRegistry().registerTagToMaterial(Material.COOKED_PORKCHOP, "porkchop", "meat", "cooked", "cooked_porkchop");
         NeoArtisanAPI.getItemRegistry().registerTagToMaterial(Material.MUTTON, "mutton", "meat", "raw", "raw_mutton");
         NeoArtisanAPI.getItemRegistry().registerTagToMaterial(Material.COOKED_MUTTON, "mutton", "meat", "cooked", "cooked_mutton");
         NeoArtisanAPI.getItemRegistry().registerTagToMaterial(Material.CHICKEN, "chicken", "meat", "raw", "raw_chicken");
@@ -111,7 +111,7 @@ final class ItemRegistryImpl implements ItemRegistry {
         NeoArtisanAPI.getItemRegistry().registerTagToMaterial(Material.RABBIT, "rabbit", "rabbit_meat", "meat", "raw", "raw_rabbit");
         NeoArtisanAPI.getItemRegistry().registerTagToMaterial(Material.COOKED_RABBIT, "rabbit", "rabbit_meat", "meat", "cooked", "cooked_rabbit");
         NeoArtisanAPI.getItemRegistry().registerTagToMaterial(Material.RABBIT_FOOT, "rabbit", "meat", "foot");
-        NeoArtisanAPI.getItemRegistry().registerTagToMaterial(Material.ROTTEN_FLASH, "rotten_flash", "meat", "poisonous");
+        NeoArtisanAPI.getItemRegistry().registerTagToMaterial(Material.ROTTEN_FLESH, "rotten_flash", "meat", "poisonous");
         //关键词：眼睛
         NeoArtisanAPI.getItemRegistry().registerTagToMaterial(Material.SPIDER_EYE, "spider_eye", "eye", "poisonous");
         NeoArtisanAPI.getItemRegistry().registerTagToMaterial(Material.FERMENTED_SPIDER_EYE, "spider_eye", "eye", "poisonous", "fermented");
@@ -139,7 +139,7 @@ final class ItemRegistryImpl implements ItemRegistry {
         NeoArtisanAPI.getItemRegistry().registerTagToMaterial(Material.BREAD, "bread", "wheat_bread", "baking");
         NeoArtisanAPI.getItemRegistry().registerTagToMaterial(Material.COOKIE, "cookie", "cocoa_cookie", "baking");
         NeoArtisanAPI.getItemRegistry().registerTagToMaterial(Material.CAKE, "cake", "egg_and_milk_cake", "baking");
-        NeoArtisanAPI.getItemRegistry().registerTagToMaterial(Material.PUMKIN_PIE, "pie", "pumpkin_pie", "baking");
+        NeoArtisanAPI.getItemRegistry().registerTagToMaterial(Material.PUMPKIN_PIE, "pie", "pumpkin_pie", "baking");
         //关键词：汤
         NeoArtisanAPI.getItemRegistry().registerTagToMaterial(Material.MUSHROOM_STEW, "stew", "soup", "bowled");
         NeoArtisanAPI.getItemRegistry().registerTagToMaterial(Material.BEETROOT_SOUP, "soup", "bowled");
@@ -214,7 +214,7 @@ final class ItemRegistryImpl implements ItemRegistry {
         NeoArtisanAPI.getItemRegistry().registerTagToMaterial(Material.FLOWERING_AZALEA, "plant", "flower");
         NeoArtisanAPI.getItemRegistry().registerTagToMaterial(Material.SHORT_GRASS, "plant", "grass");
         NeoArtisanAPI.getItemRegistry().registerTagToMaterial(Material.DEAD_BUSH, "plant");
-        NeoArtisanAPI.getItemRegistry().registerTagToMaterial(Material.DANDWLION,  "plant", "flower");
+        NeoArtisanAPI.getItemRegistry().registerTagToMaterial(Material.DANDELION,  "plant", "flower");
         NeoArtisanAPI.getItemRegistry().registerTagToMaterial(Material.POPPY,  "plant", "flower");
         NeoArtisanAPI.getItemRegistry().registerTagToMaterial(Material.BLUE_ORCHID,  "plant", "flower");
         NeoArtisanAPI.getItemRegistry().registerTagToMaterial(Material.ALLIUM,  "plant", "flower");
@@ -305,7 +305,7 @@ final class ItemRegistryImpl implements ItemRegistry {
         NeoArtisanAPI.getItemRegistry().registerTagToMaterial(Material.BLAZE_POWDER, "peppery_taste", "powder");
         NeoArtisanAPI.getItemRegistry().registerTagToMaterial(Material.ECHO_SHARD, "sculk", "scute");
         NeoArtisanAPI.getItemRegistry().registerTagToMaterial(Material.GUNPOWDER, "powder");
-        NeoArtisanAPI.getItemRegistry().registerTagToMaterial(Material.GLOW_STONE_DUST, "powder", "glow");
+        NeoArtisanAPI.getItemRegistry().registerTagToMaterial(Material.GLOWSTONE_DUST, "powder", "glow");
         NeoArtisanAPI.getItemRegistry().registerTagToMaterial(Material.REDSTONE, "powder");
         NeoArtisanAPI.getItemRegistry().registerTagToMaterial(Material.HEART_OF_THE_SEA, "heart");
         NeoArtisanAPI.getItemRegistry().registerTagToMaterial(Material.CREAKING_HEART, "heart");
@@ -317,7 +317,6 @@ final class ItemRegistryImpl implements ItemRegistry {
         NeoArtisanAPI.getItemRegistry().registerTagToMaterial(Material.GHAST_TEAR, "ghast", "tear");
         NeoArtisanAPI.getItemRegistry().registerTagToMaterial(Material.TRIAL_KEY, "key");
         NeoArtisanAPI.getItemRegistry().registerTagToMaterial(Material.OMINOUS_TRIAL_KEY, "key", "ominous");
-    }
     }
 
     @Override
