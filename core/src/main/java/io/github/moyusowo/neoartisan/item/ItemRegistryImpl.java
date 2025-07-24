@@ -7,6 +7,7 @@ import io.github.moyusowo.neoartisan.RegisterManager;
 import io.github.moyusowo.neoartisan.util.data.NamespacedKeyDataType;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
+import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
 import io.github.moyusowo.neoartisanapi.api.item.ArtisanItem;
 import io.github.moyusowo.neoartisanapi.api.item.ItemRegistry;
 import org.bukkit.Bukkit;
@@ -63,6 +64,14 @@ final class ItemRegistryImpl implements ItemRegistry {
                         tag -> instance.tagToId.put(tag, artisanItem.getRegistryId())
                 )
         );
+        instance.originalItemTag.forEach(
+                (material, tag) -> instance.tagToId.put(tag, material.getKey())
+        );
+    }
+
+    @InitMethod
+    public static void initOriginalItemTag() {
+        NeoArtisanAPI.getItemRegistry().registerTagToMaterial(Material.BEETROOT, "crop");
     }
 
     @Override
