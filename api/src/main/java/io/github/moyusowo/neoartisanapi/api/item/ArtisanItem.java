@@ -9,11 +9,13 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.function.Supplier;
 
@@ -280,6 +282,8 @@ public interface ArtisanItem {
          * @return 当前构建器实例
          */
         @NotNull Builder foodProperty(int nutrition, float saturation, boolean canAlwaysEat);
+
+        @NotNull Builder foodProperty(int nutrition, float saturation, boolean canAlwaysEat, @NotNull Map<PotionEffect, Float> effectChance, float consumeSeconds);
 
         /**
          * 设置物品的武器属性。
