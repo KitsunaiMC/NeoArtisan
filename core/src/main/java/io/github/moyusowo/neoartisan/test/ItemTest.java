@@ -11,8 +11,11 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 @SuppressWarnings("UnstableApiUsage")
@@ -29,7 +32,8 @@ public final class ItemTest {
             magic_block = new NamespacedKey(namespace, "magic_block"),
             soup_block = new NamespacedKey(namespace, "soup_block"),
             paper_soup_block = new NamespacedKey(namespace, "paper_soup_block"),
-            useless_emerald = new NamespacedKey(namespace, "useless_emerald");
+            useless_emerald = new NamespacedKey(namespace, "useless_emerald"),
+            magic_beef = new NamespacedKey(namespace, "magic_beef");
 
     static final String soup_block_skull = "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvM2UwYzE3MTFhNzU2MmEyNGE3MDgzOWUyY2YyNDZiYTE2ZGE0MzFmZGNiNzRkNTA2Zjc3OWRlYjA1YzNhNDEzNSJ9fX0=";
 
@@ -52,6 +56,27 @@ public final class ItemTest {
                             })
                             .hasOriginalCraft()
                             .blockId(new NamespacedKey(NeoArtisan.instance(), "magic_crop"))
+                            .build()
+            );
+            NeoArtisanAPI.getItemRegistry().registerItem(
+                    ArtisanItem.builder()
+                            .registryId(magic_beef)
+                            .rawMaterial(Material.COOKED_BEEF)
+                            .displayName("<aqua>魔法牛肉")
+                            .foodProperty(
+                                    10,
+                                    12,
+                                    true,
+                                    Map.of(
+                                            new PotionEffect(
+                                                    PotionEffectType.LUCK,
+                                                    1000,
+                                                    2
+                                            ),
+                                            0.85f
+                                    ),
+                                    8.0f
+                            )
                             .build()
             );
             NeoArtisanAPI.getItemRegistry().registerItem(

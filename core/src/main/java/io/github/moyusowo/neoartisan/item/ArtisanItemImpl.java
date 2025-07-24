@@ -14,6 +14,8 @@ import io.github.moyusowo.neoartisanapi.api.item.AttributeProperty;
 import io.github.moyusowo.neoartisanapi.api.item.factory.ItemBuilderFactory;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.*;
+import io.papermc.paper.datacomponent.item.consumable.ConsumeEffect;
+import io.papermc.paper.datacomponent.item.consumable.ItemUseAnimation;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
@@ -27,6 +29,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.ServicePriority;
+import org.bukkit.potion.PotionEffect;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
@@ -361,7 +364,13 @@ final class ArtisanItemImpl implements ArtisanItem {
         @NotNull
         @Override
         public Builder foodProperty(int nutrition, float saturation, boolean canAlwaysEat) {
-            this.foodProperty = new FoodProperty(nutrition, saturation, canAlwaysEat);
+            this.foodProperty = FoodProperty.create(nutrition, saturation, canAlwaysEat);
+            return this;
+        }
+
+        @Override
+        public @NotNull Builder foodProperty(int nutrition, float saturation, boolean canAlwaysEat, @NotNull Map<PotionEffect, Float> effectChance, float consumeSeconds) {
+            this.foodProperty = FoodProperty.create(nutrition, saturation, canAlwaysEat, effectChance, consumeSeconds);
             return this;
         }
 
@@ -481,6 +490,20 @@ final class ArtisanItemImpl implements ArtisanItem {
                         .saturation(this.foodProperty.saturation())
                         .build();
                 itemStack.setData(DataComponentTypes.FOOD, foodProperties);
+                if (this.foodProperty.getEffectChances().isPresent() && this.foodProperty.getConsumeSeconds().isPresent()) {
+                    final Map<PotionEffect, Float> effectChances = this.foodProperty.getEffectChances().get();
+                    final float consumeSeconds = this.foodProperty.getConsumeSeconds().get();
+                    Consumable.Builder consumableBuilder = Consumable.consumable();
+                    consumableBuilder.consumeSeconds(consumeSeconds).animation(ItemUseAnimation.EAT).hasConsumeParticles(true);
+                    final List<ConsumeEffect> consumeEffects = new ArrayList<>();
+                    effectChances.forEach(
+                            (effect, chance) -> consumeEffects.add(
+                                    ConsumeEffect.applyStatusEffects(List.of(effect), chance)
+                            )
+                    );
+                    consumableBuilder.addEffects(consumeEffects);
+                    itemStack.setData(DataComponentTypes.CONSUMABLE, consumableBuilder.build());
+                }
             }
             if (this.weaponProperty != WeaponProperty.EMPTY) {
                 builder.addModifier(
