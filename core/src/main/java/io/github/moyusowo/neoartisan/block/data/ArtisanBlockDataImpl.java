@@ -19,7 +19,6 @@ import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.plugin.ServicePriority;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -56,18 +55,14 @@ class ArtisanBlockDataImpl implements ArtisanBlockDataInternal {
         }
         if (getArtisanBlockInternal() instanceof ArtisanCropBlock artisanCropBlock) {
             this.lifecycleTaskManager.addLifecycleTask(
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            if (location.isChunkLoaded()) {
-                                int random = ThreadLocalRandom.current().nextInt(0, 5000);
-                                if (random > 3) return;
-                                artisanCropBlock.onRandomTick(ArtisanBlockDataImpl.this);
-                            }
-                        }
+                    () -> {
+                        int random = ThreadLocalRandom.current().nextInt(0, 5000);
+                        if (random > 3) return;
+                        artisanCropBlock.onRandomTick(ArtisanBlockDataImpl.this);
                     },
                     0L,
                     1L,
+                    false,
                     false
             );
         }

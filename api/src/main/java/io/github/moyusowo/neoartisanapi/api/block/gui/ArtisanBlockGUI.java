@@ -158,13 +158,10 @@ public abstract class ArtisanBlockGUI implements BlockInventoryHolder, Listener 
      * 效果和手动调用 {@link ArtisanBlockData#getLifecycleTaskManager()} 相同。
      * </p>
      *
-     * @param bukkitRunnable 要添加的任务（非null）
-     * @param delay 任务开始时的延迟（Tick为单位）
-     * @param period 任务执行的周期（Tick为单位）
-     * @param isAsynchronous 是否异步执行
+     * @see ArtisanBlockData#getLifecycleTaskManager()
      */
-    protected void addLifecycleTask(@NotNull BukkitRunnable bukkitRunnable, long delay, long period, boolean isAsynchronous) {
-        getArtisanBlockData().getLifecycleTaskManager().addLifecycleTask(bukkitRunnable, delay, period, isAsynchronous);
+    protected void addLifecycleTask(@NotNull Runnable runnable, long delay, long period, boolean isAsynchronous, boolean runInChunkNotLoaded) {
+        getArtisanBlockData().getLifecycleTaskManager().addLifecycleTask(runnable, delay, period, isAsynchronous, runInChunkNotLoaded);
     }
 
     /**
