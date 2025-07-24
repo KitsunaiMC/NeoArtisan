@@ -222,14 +222,14 @@ final class ArtisanItemImpl implements ArtisanItem {
 
         @NotNull
         @Override
-        public ComplexBuilder attributeProperty(@NotNull AttributeProperty attributeProperty) {
-            this.attributeProperty = Objects.requireNonNull((AttributePropertyImpl) attributeProperty);
+        public ComplexBuilder attributeProperty(@Nullable AttributeProperty attributeProperty) {
+            this.attributeProperty = attributeProperty;
             return this;
         }
 
         @NotNull
         @Override
-        public ComplexBuilder blockId(@NotNull NamespacedKey cropId) {
+        public ComplexBuilder blockId(@Nullable NamespacedKey cropId) {
             this.blockId = cropId;
             return this;
         }
@@ -325,21 +325,21 @@ final class ArtisanItemImpl implements ArtisanItem {
 
         @NotNull
         @Override
-        public Builder customModelData(@NotNull CustomModelData customModelData) {
+        public Builder customModelData(@Nullable CustomModelData customModelData) {
             this.customModelData = customModelData;
             return this;
         }
 
         @NotNull
         @Override
-        public Builder displayName(@NotNull String displayName) {
+        public Builder displayName(@Nullable String displayName) {
             this.displayName = toNameComponent(Objects.requireNonNull(displayName));
             return this;
         }
 
         @NotNull
         @Override
-        public Builder displayName(@NotNull Component component) {
+        public Builder displayName(@Nullable Component component) {
             this.displayName = Objects.requireNonNull(component);
             return this;
         }
@@ -395,14 +395,14 @@ final class ArtisanItemImpl implements ArtisanItem {
 
         @NotNull
         @Override
-        public Builder blockId(@NotNull NamespacedKey cropId) {
+        public Builder blockId(@Nullable NamespacedKey cropId) {
             this.blockId = cropId;
             return this;
         }
 
         @NotNull
         @Override
-        public Builder itemModel(@NotNull NamespacedKey itemModel) {
+        public Builder itemModel(@Nullable NamespacedKey itemModel) {
             this.itemModel = itemModel;
             return this;
         }

@@ -156,7 +156,7 @@ public interface ArtisanItem {
          * @throws IllegalArgumentException 如果attributeProperty为null
          * @see AttributeProperty
          */
-        @NotNull ComplexBuilder attributeProperty(@NotNull AttributeProperty attributeProperty);
+        @NotNull ComplexBuilder attributeProperty(@Nullable AttributeProperty attributeProperty);
 
         /**
          * 设置物品右键关联放置的自定义方块。
@@ -165,7 +165,7 @@ public interface ArtisanItem {
          * @return 当前构建器实例
          * @see ArtisanBaseBlock
          */
-        @NotNull ComplexBuilder blockId(@NotNull NamespacedKey blockId);
+        @NotNull ComplexBuilder blockId(@Nullable NamespacedKey blockId);
 
         /**
          * 标注仅限内部使用，标注后这个物品将不会出现在命令补全中。
@@ -233,7 +233,7 @@ public interface ArtisanItem {
          * @return 当前构建器实例
          * @throws IllegalArgumentException 如果customModelData ≤ 0
          */
-        @NotNull Builder customModelData(@NotNull CustomModelData customModelData);
+        @NotNull Builder customModelData(@Nullable CustomModelData customModelData);
 
         /**
          * 设置物品的显示名称。
@@ -242,7 +242,7 @@ public interface ArtisanItem {
          * @return 当前构建器实例
          * @throws IllegalArgumentException 如果displayName为null或空
          */
-        @NotNull Builder displayName(@NotNull String displayName);
+        @NotNull Builder displayName(@Nullable String displayName);
 
         /**
          * 用adventure API的文本组件设置物品的显示名称。
@@ -251,7 +251,7 @@ public interface ArtisanItem {
          * @return 当前构建器实例
          * @throws IllegalArgumentException 如果displayName为null或空
          */
-        @NotNull Builder displayName(@NotNull Component component);
+        @NotNull Builder displayName(@Nullable Component component);
 
         /**
          * 设置物品的Lore描述。
@@ -327,7 +327,7 @@ public interface ArtisanItem {
          * @return 当前构建器实例
          * @see ArtisanBaseBlock
          */
-        @NotNull Builder blockId(@NotNull NamespacedKey blockId);
+        @NotNull Builder blockId(@Nullable NamespacedKey blockId);
 
         /**
          * 设置物品的自定义模型。
@@ -335,7 +335,7 @@ public interface ArtisanItem {
          * @param itemModel 自定义模型的命名空间键（不能为null）
          * @return 当前构建器实例
          */
-        @NotNull Builder itemModel(@NotNull NamespacedKey itemModel);
+        @NotNull Builder itemModel(@Nullable NamespacedKey itemModel);
 
         /**
          * 若该物品的Material为PLAYER_HEAD，则可用该方法设置头颅的贴图。
