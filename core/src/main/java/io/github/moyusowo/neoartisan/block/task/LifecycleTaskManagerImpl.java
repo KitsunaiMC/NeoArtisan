@@ -27,18 +27,20 @@ final class LifecycleTaskManagerImpl implements LifecycleTaskManagerInternal {
 
     private final List<LifecycleTask> lifecycleTasks;
     private final List<PriorityRunnable> terminateTasks, initTasks;
+    private final Location location;
     private boolean isInit = false;
 
     public LifecycleTaskManagerImpl(@NotNull Location location) {
         this.lifecycleTasks = new ArrayList<>();
         this.terminateTasks = new ArrayList<>();
         this.initTasks = new ArrayList<>();
+        this.location = location;
     }
 
     @Override
-    public void addLifecycleTask(@NotNull BukkitRunnable bukkitRunnable, long delay, long period, boolean isAsynchronous) {
+    public void addLifecycleTask(@NotNull Runnable runnable, long delay, long period, boolean isAsynchronous, boolean runInChunkNotLoaded) {
         if (isInit) throw new IllegalStateException("The LifecycleTaskManager has been init!");
-        lifecycleTasks.add(new LifecycleTask(NeoArtisan.instance(), bukkitRunnable, delay, period, isAsynchronous));
+        lifecycleTasks.add(new LifecycleTask(runnable, delay, period, location, isAsynchronous, runInChunkNotLoaded));
     }
 
     @Override

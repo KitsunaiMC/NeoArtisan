@@ -14,13 +14,14 @@ public interface LifecycleTaskManager {
      * 任务在方块被破坏后会自动取消。
      * </p>
      *
-     * @param bukkitRunnable 要添加的任务（非null）
+     * @param runnable 要添加的任务（非null）
      * @param delay 任务开始时的延迟（Tick为单位）
      * @param period 任务执行的周期（Tick为单位）
      * @param isAsynchronous 是否异步执行
+     * @param runInChunkNotLoaded 在区块未加载的情况下仍然执行任务（谨慎使用！）
      * @throws IllegalStateException 如果初始化已完成
      */
-    void addLifecycleTask(@NotNull BukkitRunnable bukkitRunnable, long delay, long period, boolean isAsynchronous);
+    void addLifecycleTask(@NotNull Runnable runnable, long delay, long period, boolean isAsynchronous, boolean runInChunkNotLoaded);
 
     /**
      * 添加方块被破坏后的任务

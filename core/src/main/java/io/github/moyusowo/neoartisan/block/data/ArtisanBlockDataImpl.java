@@ -48,7 +48,9 @@ class ArtisanBlockDataImpl implements ArtisanBlockDataInternal {
         this.location = location;
         this.artisanBlockGUI = this.getArtisanBlockInternal().createGUI(location);
         this.lifecycleTaskManager = this.getArtisanBlockInternal().createLifecycleTaskManager(location);
-        this.lifecycleTaskManager.addTerminateRunnable(() -> BlockEntityManager.remove(location), SingleTaskPriority.BLOCK_ENTITY);
+        if (getArtisanBlock().hasBlockEntity()) {
+            this.lifecycleTaskManager.addTerminateRunnable(() -> BlockEntityManager.remove(location), SingleTaskPriority.BLOCK_ENTITY);
+        }
         if (this.artisanBlockGUI != null) {
             lifecycleTaskManager.addInitRunnable(artisanBlockGUI::onInit, SingleTaskPriority.GUI);
         }
