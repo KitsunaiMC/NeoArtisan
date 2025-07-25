@@ -74,7 +74,7 @@ final class ItemRegistryImpl implements ItemRegistry {
     public static void initOriginalItemTag() {
         // 关键词：蔬菜
         NeoArtisanAPI.getItemRegistry().registerTagToMaterial(Material.BEETROOT, "beetroot", "crop", "vegetable", "sweet");
-        NeoArtisanAPI.getItemRegistry().registerTagToMaterial(Material.CARROT, "carrot", "crop", "vegetable");
+        NeoArtisanAPI.getItemRegistry().registerTagToMaterial(Material.CARROT, "carrot", "crop", "vegetable", "cabbage_roll_ingredient");
         NeoArtisanAPI.getItemRegistry().registerTagToMaterial(Material.GOLDEN_CARROT, "carrot", "vegetable", "golden_food");
         NeoArtisanAPI.getItemRegistry().registerTagToMaterial(Material.POTATO, "potato", "crop", "vegetable", "raw");
         NeoArtisanAPI.getItemRegistry().registerTagToMaterial(Material.BAKED_POTATO, "potato", "vegetable", "cooked", "baked_potato", "baking");
