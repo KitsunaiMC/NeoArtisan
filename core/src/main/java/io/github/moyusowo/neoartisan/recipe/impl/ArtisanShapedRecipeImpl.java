@@ -19,8 +19,9 @@ import java.util.*;
 
 final class ArtisanShapedRecipeImpl implements ArtisanShapedRecipe {
     private final NamespacedKey key;
-    private final List<Choice> matrix;
+    private final List<Choice> inputs;
     private final ItemGenerator resultGenerator;
+    private final Choice[][] inputMatrix;
 
     @InitMethod(priority = InitPriority.REGISTRAR)
     public static void init() {
@@ -37,10 +38,37 @@ final class ArtisanShapedRecipeImpl implements ArtisanShapedRecipe {
         );
     }
 
-    private ArtisanShapedRecipeImpl(@NotNull NamespacedKey key, @NotNull List<Choice> matrix, @NotNull ItemGenerator resultGenerator) {
+    private ArtisanShapedRecipeImpl(@NotNull NamespacedKey key, @NotNull List<@NotNull Choice> inputs, @NotNull ItemGenerator resultGenerator) {
         this.key = key;
-        Preconditions.checkArgument(matrix.size() == 9, "shaped matrix size must be 9.");
-        this.matrix = new ArrayList<>(matrix);
+        Preconditions.checkArgument(inputs.size() == 9, "shaped inputs size must be 9.");
+        this.inputs = new ArrayList<>(inputs);
+        final Choice[][] matrix = new Choice[3][3];
+        for (int i = 0; i < 9; i++) {
+            matrix[i / 3][i % 3] = inputs.get(i);
+        }
+        int minRow = 3, maxRow = -1;
+        int minCol = 3, maxCol = -1;
+        for (int r = 0; r < 3; r++) {
+            for (int c = 0; c < 3; c++) {
+                if (matrix[r][c] != Choice.EMPTY) {
+                    minRow = Math.min(minRow, r);
+                    maxRow = Math.max(maxRow, r);
+                    minCol = Math.min(minCol, c);
+                    maxCol = Math.max(maxCol, c);
+                }
+            }
+        }
+        if (maxRow == -1) {
+            throw new IllegalArgumentException("recipe can not be full of empty!");
+        }
+        int rows = maxRow - minRow + 1;
+        int cols = maxCol - minCol + 1;
+        this.inputMatrix = new Choice[rows][cols];
+        for (int r = 0; r < rows; r++) {
+            for (int c = 0; c < cols; c++) {
+                this.inputMatrix[r][c] = matrix[minRow + r][minCol + c];
+            }
+        }
         this.resultGenerator = resultGenerator;
     }
 
@@ -58,7 +86,12 @@ final class ArtisanShapedRecipeImpl implements ArtisanShapedRecipe {
     @Unmodifiable
     @NotNull
     public List<Choice> getInputs() {
-        return Collections.unmodifiableList(matrix);
+        return Collections.unmodifiableList(inputs);
+    }
+
+    @NotNull
+    public Choice[][] getInputMatrix() {
+        return this.inputMatrix.clone();
     }
 
     @Override
@@ -69,10 +102,42 @@ final class ArtisanShapedRecipeImpl implements ArtisanShapedRecipe {
     }
 
     @Override
-    public boolean matches(ItemStack @NotNull [] matrix) {
-        if (matrix.length != 9) return false;
+    public boolean matches(ItemStack @NotNull [] originalMatrix) {
+        if (originalMatrix.length != 9) return false;
+        final ItemStack[][] firstMatrix = new ItemStack[3][3];
         for (int i = 0; i < 9; i++) {
-            if (!this.matrix.get(i).matches(matrix[i])) return false;
+            if (originalMatrix[i] != null && !originalMatrix[i].isEmpty()) {
+                firstMatrix[i / 3][i % 3] = originalMatrix[i].clone();
+            } else {
+                firstMatrix[i / 3][i % 3] = ItemStack.empty();
+            }
+        }
+        int minRow = 3, maxRow = -1;
+        int minCol = 3, maxCol = -1;
+        for (int r = 0; r < 3; r++) {
+            for (int c = 0; c < 3; c++) {
+                if (firstMatrix[r][c] != null && !firstMatrix[r][c].isEmpty()) {
+                    minRow = Math.min(minRow, r);
+                    maxRow = Math.max(maxRow, r);
+                    minCol = Math.min(minCol, c);
+                    maxCol = Math.max(maxCol, c);
+                }
+            }
+        }
+        if (maxRow == -1) return false;
+        int rows = maxRow - minRow + 1;
+        int cols = maxCol - minCol + 1;
+        final ItemStack[][] matrix = new ItemStack[rows][cols];
+        for (int r = 0; r < rows; r++) {
+            for (int c = 0; c < cols; c++) {
+                matrix[r][c] = firstMatrix[minRow + r][minCol + c];
+            }
+        }
+        if (matrix.length != this.inputMatrix.length || matrix[0].length != this.inputMatrix[0].length) return false;
+        for (int row = 0; row < rows; row++) {
+            for (int col = 0; col < cols; col++) {
+                if (!this.inputMatrix[row][col].matches(matrix[row][col])) return false;
+            }
         }
         return true;
     }
