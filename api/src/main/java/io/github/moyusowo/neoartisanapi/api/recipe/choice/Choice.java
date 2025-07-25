@@ -4,7 +4,7 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
 public interface Choice {
-    Choice EMPTY = itemStack -> itemStack == null || itemStack.isEmpty();
+    Choice EMPTY = new EmptyChoice();
 
     boolean matches(@Nullable ItemStack itemStack);
 }
