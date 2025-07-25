@@ -3,54 +3,33 @@
 > 本文档遵循 [Keep a Changelog](https://keepachangelog.com/) 规范
 > This document follows the [Keep a Changelog](https://keepachangelog.com/) specification
 
-<div class="warning" style="
-    background: #fff8e6;
-    border-left: 4px solid #ffc107;
-    padding: 1rem;
-    margin: 1.5rem 0;
-    border-radius: 0 4px 4px 0;
-">
-  <div style="
-      display: flex;
-      align-items: center;
-      margin-bottom: 0.5rem;
-      color: #d84315;
-      font-weight: bold;
-  ">
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style="margin-right: 8px">
-      <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM13 17H11V15H13V17ZM13 13H11V7H13V13Z" fill="currentColor"/>
-    </svg>
-    <span>开发阶段警告 / Development Phase Warning</span>
-  </div>
+## [0.10.0 - beta] - 2025-07-25
+### 新增 / Added
+- 方块创建时增加是否为方块实体的选择，默认无方块实体 / Added optional block-entity flag when creating blocks; defaults to no block entity
+- 增加方块硬度API / Added block-hardness API
+- 插件startup失败之后自动关闭插件及附属插件 / Plugin now auto-disables itself and its addons if startup fails
+- `ItemGenerator` 接口增加默认的 `ChanceGenerator` 实现类 / Added default `ChanceGenerator` implementation to `ItemGenerator` interface
+- 为物品合成和物品本身增加标签系统，支持为原版物品注册标签，支持一键获取标签，增加原版物品默认标签 / Introduced tag system for items and recipes; supports registering tags for vanilla items, one-click tag retrieval, and default vanilla tags
+- 增加了对食物使用后效果和食物使用时间的支持 / Added support for post-consume effects and consume duration for food items
+- `LifecycleTask` 增加区块加载检查，默认情况下不会执行未加载区域的方块绑定的生命周期任务 / `LifecycleTask` now checks chunk load status; lifecycle tasks bound to blocks in unloaded chunks are skipped by default
+- 重构 `BlockEntity`，增加索引以提升性能 / Refactored `BlockEntity` with added indexing for better performance
 
-  <p style="margin: 0.5rem 0">
-    <strong>当前版本：0.x.y（开发预览版） / Current Version: 0.x.y (Development Preview)</strong>
-  </p>
+### 变更 / Changed
+- 删除 `@NeoArtisanAPI.Register` 注解，改为在附属插件的onEnable内注册 / Removed `@NeoArtisanAPI.Register` annotation; registration now happens in addon plugins' `onEnable`
+- 方块储存依赖 `World` 的 UUID 而非 `World` 对象本身 / Block storage now uses `World` UUID instead of the `World` object
+- 用命名空间键替换固定的Type，支持其他配方可能，配方增加多物品输出可能 / Replaced fixed Type with namespaced keys to allow other recipe types and multiple outputs
+- 增加 Choice API，重构配方系统，Registry 只起到分类储存的作用 / Added Choice API and refactored recipe system; registries now only store and classify recipes
+- 部分非必须 Builder 条目改为 `@Nullable` / Marked optional builder fields as `@Nullable`
+- 修改命令格式，增加玩家选择器 / Updated command format and added player selectors
 
-  <ul style="
-      margin: 0.5rem 0;
-      padding-left: 1.5rem;
-  ">
-    <li>🚨 <strong>无兼容性承诺</strong>：不遵循语义化版本控制规范 / <strong>No Compatibility Guarantee</strong>: Does not follow semantic versioning specifications</li>
-    <li>⚡ <strong>变更风险</strong>：任何更新都可能包含API破坏性变更 / <strong>Change Risk</strong>: Any update may contain breaking API changes</li>
-    <li>💥 <strong>版本升级规则</strong>：
-      <ul style="padding-left: 1.5rem; margin: 0.25rem 0">
-        <li>修订号更新（0.x.<strong>y</strong>）：<em>可能</em>包含破坏性变更 / Patch updates (0.x.<strong>y</strong>): <em>May</em> contain breaking changes</li>
-        <li>次版本更新（0.<strong>x</strong>.y）：<em>必定</em>包含破坏性变更 / Minor updates (0.<strong>x</strong>.y): <em>Will always</em> contain breaking changes</li>
-      </ul>
-    </li>
-  </ul>
+### 修复 / Fixed
+- 修复压力板类方块能踩下去的问题 / Fixed pressure-plate-like blocks being steppable
+- 修复了树叶方块 canBurn 特性没实现的问题 / Fixed missing `canBurn` behavior for leaf blocks
+- 修复了自定义方块替换方法内不发包从而玩家获取不到更新的问题 / Fixed missing packets in custom block replacement, preventing client updates
+- 修复了玩家踩踏自定义作物导致其掉落之后陷入耕地里面的问题 / Fixed players sinking into farmland after trampling custom crops and causing them to drop
+- 修复给自定义作物放骨粉不消耗骨粉的bug / Fixed bone meal not being consumed when used on custom crops
 
-  <p style="
-      margin: 0.75rem 0 0.25rem;
-      font-style: italic;
-  ">
-    <strong>稳定版计划</strong>：1.0.0版本发布时开始遵循语义化版本控制（时间待定）<br>
-    <strong>Stable Release Plan</strong>: Semantic versioning compliance begins at version 1.0.0 (date TBD)
-  </p>
-</div>
-
-## [0.9.0] - 2025-07-18
+## [0.9.0 - alpha] - 2025-07-18
 ### 新增 / Added
 - 新增营火、高炉、烟熏炉配方支持 / Added support for campfire, blast furnace, and smoker recipes
 - 新增自定义方块生命周期管理系统 / Added custom block lifecycle management system
@@ -69,7 +48,7 @@
 - 修复自定义头颅方块放置后状态未更新问题 / Fixed custom skull block state not updating after placement
 - 修复附属插件加载时的兼容性问题 / Fixed compatibility issues during addon plugin loading
 
-## [0.8.0 and 0.7.0] - 2025-07-15
+## [0.8.0 - alpha and 0.7.0 - alpha] - 2025-07-15
 ### 新增 / Added
 - 引入保护插件钩子库，在方块交互前检查权限 / Added protection plugin hook library to check permissions before block interactions
 - 物品构造器增加 `internalUse` 方法，标记内部物品不在命令补全显示 / Added `internalUse` method to Item builder for internal items excluded from command completions
@@ -88,7 +67,7 @@
 - 解决全局 UUID 存储的线程竞争问题 / Resolved thread contention in global UUID storage
 - 修复 PacketEvents 集成中的包处理异常 / Fixed packet processing exceptions in PacketEvents integration
 
-## [0.6.0] - 2025-07-06
+## [0.6.0 - alpha] - 2025-07-06
 ### 新增 / Added
 - 增加头颅方块ArtisanHeadBlock / Added ArtisanHeadBlock for custom skull blocks
 - 增加物品Builder的头颅参数 / Added skull parameters to Item Builder
@@ -105,7 +84,7 @@
 - 修改了部分包结构与类可见性，确保安全 / Adjusted package structure and class visibility for enhanced security
 - 事件监听方法改为规范的public void前缀 / Standardized event listener methods with public void prefix
 
-## [0.5.0] - 2025-06-23
+## [0.5.0 - alpha] - 2025-06-23
 ### 新增 / Added
 - ArtisanItem增加复杂构造器，支持传入ItemStack的Supplier从而动态生成ItemStack / Added complex constructor to ArtisanItem supporting ItemStack Supplier for dynamic generation
 - 增加初始化时反射调用异常的原因显示 / Added cause display for reflection invocation exceptions during initialization
@@ -130,7 +109,7 @@
 
 ---
 
-## [0.4.0] - 2025-06-03
+## [0.4.0 - alpha] - 2025-06-03
 ### 新增 / Added
 - 自定义方块事件系统初探，增加自定义方块的放置破坏和失去支撑掉落的事件 / Initial custom block event system with place, break and support-loss events
 - 增加方块GUI抽象类和GUICreator接口，增加方块到GUI的绑定 / Added block GUI abstract class and GUICreator interface for block-GUI binding
@@ -152,7 +131,7 @@
 
 ---
 
-## [0.3.0] - 2025-05-20
+## [0.3.0 - alpha] - 2025-05-20
 ### 新增 / Added
 - 属性系统增加玩家绑定属性的支持和API / Added player-bound attributes to attribute system
 - 内部代码初始化增加注解驱动 / Added annotation-driven initialization
@@ -171,7 +150,7 @@
 
 ---
 
-## [0.2.0] - 2025-05-12
+## [0.2.0 - alpha] - 2025-05-12
 ### 新增 / Added
 - 加入作物系统及持久化 / Added crop system with persistence
 
@@ -182,7 +161,7 @@
 
 ---
 
-## [0.1.0] - 2025-05-09
+## [0.1.0 - alpha] - 2025-05-09
 ### 新增 / Added
 - 合成系统、物品系统和属性系统初步完成 / Initial implementation of crafting, item and attribute systems
 - 提供独立的基本API框架 / Provided standalone basic API framework

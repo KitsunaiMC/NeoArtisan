@@ -1,252 +1,106 @@
-# NeoArtisan - Minecraft 高版本自定义内容框架
+# NeoArtisan - Minecraft 高版本自定义内容微框架
 
 ![License](https://img.shields.io/badge/license-GPL3-green)
-![Minecraft](https://img.shields.io/badge/Minecraft-1.21.4-blue)
+![Minecraft](https://img.shields.io/badge/Minecraft-1.21.4+-blue)
 ![API](https://img.shields.io/badge/API-Paper%20Compatible-orange)
 
-[English Version Documentation](README_EN.md)
+[English →](./README_EN.md)
 
-<div class="warning" style="
-    background: #fff8e6;
-    border-left: 4px solid #ffc107;
-    padding: 1rem;
-    margin: 1.5rem 0;
-    border-radius: 0 4px 4px 0;
-">
-  <div style="
-      display: flex;
-      align-items: center;
-      margin-bottom: 0.5rem;
-      color: #d84315;
-      font-weight: bold;
-  ">
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style="margin-right: 8px">
-      <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM13 17H11V15H13V17ZM13 13H11V7H13V13Z" fill="currentColor"/>
-    </svg>
-    <span>开发阶段警告</span>
-  </div>
 
-  <p style="margin: 0.5rem 0">
-    <strong>当前版本：0.x.y（开发预览版）</strong>
-  </p>
+<details>
+<summary>⚠️ 开发预览版小贴士（点一下展开）</summary>
 
-  <ul style="
-      margin: 0.5rem 0;
-      padding-left: 1.5rem;
-  ">
-    <li>🚨 <strong>无兼容性承诺</strong>：不遵循语义化版本控制规范</li>
-    <li>⚡ <strong>变更风险</strong>：任何更新都可能包含API破坏性变更</li>
-    <li>💥 <strong>版本升级规则</strong>：
-      <ul style="padding-left: 1.5rem; margin: 0.25rem 0">
-        <li>修订号更新（0.x.<strong>y</strong>）：<em>可能</em>包含破坏性变更</li>
-        <li>次版本更新（0.<strong>x</strong>.y）：<em>必定</em>包含破坏性变更</li>
-      </ul>
-    </li>
-  </ul>
+- 当前版本 0.x.y，API 可能随小版本变动  
+- 锁定版本号后再上生产服
+- 1.0.0 起开始语义化版本
+</details>
 
-  <p style="
-      margin: 0.75rem 0 0.25rem;
-      font-style: italic;
-  ">
-    <strong>稳定版计划</strong>：1.0.0版本发布时开始遵循语义化版本控制（时间待定）
-  </p>
-</div>
+---
 
-## 项目概述
+### ✅ 「一句话概述」
 
-NeoArtisan 是一个面向 Minecraft 1.21.4+ 的自定义内容框架，基于 GPL3 协议开源，专注于为插件开发者提供灵活的内容创建能力，同时保持与 PaperAPI 的良好兼容性。
+> NeoArtisan 是一个 **基于 PaperAPI的，专为 Minecraft 插件开发者准备的高版本自定义内容微框架**：  
+> 用一行 Builder 就能注册带模型、可交互、可掉落的自定义物品 / 方块 / 配方，  
+> 自带生命周期事件与 GUI 绑定，**不写 NMS、不碰资源包、不依赖重型内容平台**。  
+> 适合想快速交付玩法、又嫌 Slimefun 太重、从零撸 NMS 太累的开发者。
 
-用该插件作为前置实现的插件：
-- [农夫乐事Paper复刻版（开发中）](https://github.com/KitsunaiMC/FarmersDelightRepaper)
 
-## 核心设计理念
+- **开发者友好**：全部基于 Paper API + PacketEvents
+- **零默认内容**：只提供注册器 & 事件，不给任何现成机器或武器，保持最小依赖
+- **可插拔逻辑**：作物掉落、机器产出、GUI 按钮仍由你写，框架只做「存-取-事件路由」
 
-### 🧩 纯粹的基础框架
-- **不包含默认内容**：仅提供框架和工具，不实现任何具体物品/方块
-- **非全功能API**：专注于核心功能，保持精简
-- **全PaperAPI实现**：兼容性较好，完全不使用nms
-- **扩展友好**：完善的扩展点设计，支持开发内容包插件
+---
 
-### 🧱 自定义方块系统
-- **多类型支持**：普通方块、作物、薄型方块、（半）透明方块、头颅方块
-- **状态管理**：每个方块支持多状态切换(如作物生长阶段)
-- **网络包处理**：利用成熟的 [packetevents](https://www.packetevents.com/) 作为框架开发
-- **事件体系**：放置/破坏/交互事件支持
 
-### 🛡️ 自定义物品系统
-- **属性系统**：全局属性、物品堆属性和玩家属性三级架构
-- **类型支持**：武器、防具、食物等全品类物品
-- **NBT集成**：完善的持久化数据容器支持
+### ✅ 「30 秒看懂」
 
-### 🔮 自定义配方系统
-- **扩展性强**：目前支持工作台、熔炉，以后可支持铁砧、锻造台、酿造台等
-- **独立架构**：不依赖原版配方系统，避免冲突
+| 典型场景                 | 传统手写                             | NeoArtisan 实际写法（取自你的测试代码）                                                                                                                                                                                            |
+|----------------------|----------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **加一把带模型、可右键放置方块的剑** | YAML（拓展性差）或手动管理物品                | **1 个 Builder 链**<br>`ArtisanItem.builder()`<br>`.registryId(NamespacedKey.fromString("myplugin:magic_sword"))`<br>`.rawMaterial(Material.IRON_SWORD)`<br>`.itemModel(key)`<br>`.blockId(cooking_pot)`<br>`.build()` |
+| **注册一个 3 阶段作物方块**    | 需要自己管理自定义作物各种各样的事件交互，或深入nms，极其复杂 | **1 个 ArtisanCropBuilder**<br>`ArtisanCropBlock.builder()`<br>`.blockId("magic_crop")`<br>`.states(...3 个阶段...)`<br>`.boneMealMinGrowth(0)`<br>`.boneMealMaxGrowth(2)`<br>`.build()`                                 |
+| **给厨锅做一个 GUI**       | 需要手动实现方块生命周期管理                   | **1 个 ArtisanBlockGUI 子类**<br>`class CookingPotGUI extends ArtisanBlockGUI {`<br>`    protected void init() { /* 放按钮 */ }`<br>`}`                                                                                    |
+| **加一条新配方**           | 原版配方逻辑不能兼容自定义物品                  | **1 个 RecipeBuilder**<br>`ArtisanShapedRecipe.builder()`<br>`.key(NamespacedKey.fromString("myplugin:soup"))`<br>`.set("A B")`<br>`.add('A', choice)`<br>`.resultGenerator(generator)`<br>`.build()`                 |
 
-### 🛠️ 开发者体验
-- **建造者模式**：简化内容对象创建
-- **清晰文档**：完整的Javadoc和示例
-- **事件系统**：覆盖方块生命周期关键事件
-- **效率优先哲学**：我们坚信开发效率的价值，用简洁API满足绝大多数需求
+> 框架只干「注册-保存-事件路由」，业务逻辑仍由你写，**不写 NMS、不碰 YAML、不继承臃肿资源包框架**。
 
-## 快速开始
+---
 
-### 注意：
-- 安装插件时需要安装 [packetevents](https://www.packetevents.com/) 作为前置
-- 不建议将该插件直接打包入附属插件内使用
+## 3 步跑起来
 
-### 添加依赖
-
-```Gradle
-repositories {
-    mavenCentral()
-    maven { url 'https://jitpack.io' }
-}
-
-dependencies {
-    CompileOnly 'com.github.MoYuSOwO:NeoArtisan:-SNAPSHOT:api'
-}
+1. **加仓库 & 依赖**  
+```gradle
+repositories { maven { url 'https://jitpack.io' } }
+dependencies { compileOnly 'com.github.MoYuSOwO:NeoArtisan:-SNAPSHOT:api' }
 ```
 
-### 创建自定义物品和方块示例
+2. **启用框架**  
+   把 `NeoArtisan.jar` 和前置 `packetevents.jar` 一起扔进 `plugins/` 文件夹。
 
+3. **一行注册**
 ```java
-// 注册到服务器
-@NeoArtisanAPI.Register 
-public void registerContent() {
-    NeoArtisanAPI.getBlockRegistry().register(
-            ArtisanTransparentBlock.factory().builder()
-                    .blockId(ItemTest.cooking_pot)
-                    .canBurn(false)
-                    .states(
-                            List.of(
-                                    ArtisanTransparentBlockState.factory().builder()
-                                            .appearanceState(
-                                                    new TransparentAppearance(
-                                                            TransparentAppearance.LeavesAppearance.OAK_LEAVES,
-                                                            1,
-                                                            false,
-                                                            false
-                                                    )
-                                            )
-                                            .generators(
-                                                    new ItemGenerator[]{
-                                                            ItemGenerator.simpleGenerator(
-                                                                    ItemTest.cooking_pot,
-                                                                    1
-                                                            )
-                                                    }
-                                            )
-                                            .build()
-                            )
-                    )
-                    .build()
-    );
-    NeoArtisanAPI.getItemRegistry().registerItem(
-            ArtisanItem.factory().builder()
-                    .registryId(magic_helmet)
-                    .rawMaterial(Material.IRON_HELMET)
-                    .displayName("<aqua>魔法头盔~")
-                    .lore(
-                            List.of(
-                                    "魔法头盔一顶",
-                                    "可以帮助你挡住下落的蜘（ji）蛛（ju）"
-                            )
-                    )
-                    .armorProperty(
-                              5,
-                              1,
-                              null
-                    )
-                    .maxDurability(2500)
-                    .build()
-    );
-    NeoArtisanAPI.getItemRegistry().registerItem(
-            ArtisanItem.factory().builder()
-                    .registryId(magic_sword)
-                    .rawMaterial(Material.IRON_SWORD)
-                    .displayName("<yellow>魔法剑~")
-                    .lore(
-                            List.of(
-                                    "魔法剑一把",
-                                    "可以帮助你更快地杀怪"
-                            )
-                    )
-                    .weaponProperty(
-                              1.0f,
-                              1.5f,
-                              11.0f
-                    )
-                    .maxDurability(5000)
-                    .build()
-    );
-    NeoArtisanAPI.getItemRegistry().registerItem(
-            ArtisanItem.factory().complexBuilder()
-                    .registryId(cooking_pot)
-                    .itemStack(() -> {
-                        ItemStack itemStack = ItemStack.of(Material.PAPER);
-                        itemStack.setData(DataComponentTypes.ITEM_NAME, Component.text("<green>烹饪锅"));
-                        itemStack.setData(DataComponentTypes.ITEM_MODEL, cooking_pot);
-                        return itemStack;
-                    })
-                    .blockId(cooking_pot)
-                    .build()
-    );
+public final class MyPlugin extends JavaPlugin {
+    @Override
+    public void onEnable() {
+        NeoArtisanAPI.getItemRegistry().register(
+            ArtisanItem.builder()
+                .registryId(new NamespacedKey(this, "magic_sword"))
+                .rawMaterial(Material.IRON_SWORD)
+                .displayName("<yellow>魔法剑</yellow>")
+                .build()
+        );
+    }
 }
 ```
+完整示例 → [农夫乐事Paper复刻版](https://github.com/KitsunaiMC/FarmersDelightRepaper)
 
-## 架构优势
+---
 
-1. **清晰的扩展点**
-    - 内容注册接口标准化
-    - 存在扩展性强的事件监听机制
+## 还能做什么？
+<details>
+<summary>点开看功能清单</summary>
 
-2. **Paper友好集成**
-    - 基于Paper事件系统构建
-    - 使用ServicesManager实现服务发现
+- **方块** 普通 / 作物 / 透明 / 头颅 / 压力板 / （未来）多方块结构
+- **物品** 武器 / 防具 / 食物 / 完全自定义
+- **配方** 工作台 / 熔炉 / 后续支持铁砧、酿造
+- **GUI** 继承 `ArtisanBlockGUI` 大大简化逻辑
+- **物流 & 机器 API**（未来）节点-连线抽象，具体逻辑作者写
+</details>
 
-3. **协作开发支持**
-    - 模块化内容包设计
-    - 避免ID冲突的命名空间管理
-    - 建造者模式简化对象创建
-    - 完善的Javadoc文档
+---
 
-## 开发建议
+## 这不是什么
+- ❌ **不是整合包**：0 默认内容，只给 API
+- ❌ **不是 IA / Oraxen**：不负责模型、贴图、音效
+- ❌ **不是 Slimefun 2.0**：不提供现成机器，只让你更快写自己的机器
 
-1. **内容包开发**
-    - 建议每个内容包作为独立插件
-    - 通过服务接口与其他插件交互
+---
 
-2. **GUI实现**
-    - 继承`ArtisanBlockGUI`简化开发
-    - 自动处理库存事件
+## 参与 & 吐槽
+- 提 Issue / PR
+- 邮件：MoYuOwO@outlook.com
+- GPL3 开源，随意折腾
 
-3. **版本兼容**
-    - 目前项目处于起步阶段，仅测试了1.21.4兼容性，但理论上兼容更高的版本
+---
 
-## 一些计划
-
-- 开发更多的方块类型
-- 加入更多的配方类型
-- 加入物流、电力等科技相关内容的API扩展
-- 还有更多还在想
-
-## 贡献与协作
-
-我们欢迎各种形式的贡献：
-- 内容包插件开发
-- 核心框架改进
-- 文档和示例补充
-- ~~作者作者你写的代码就是一坨，看我出招！~~
-
-请遵循：
-1. GPL3协议要求
-2. 保持API精简性
-3. 完善的文档说明
-
-## 许可证
-
-GNU General Public License v3.0 - 详情见LICENSE文件
-
-## 联系
-
-MoYuOwO@outlook.com
+> 如果你嫌 Slimefun 太重、IA 太美术、从零写 NMS 太累——  
+> 用 NeoArtisan，把“注册”这件事一次性搞定。

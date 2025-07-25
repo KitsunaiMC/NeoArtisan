@@ -1,235 +1,104 @@
-# NeoArtisan - High-Version Minecraft Custom Content Framework
+# NeoArtisan – A lightweight content micro-framework for Minecraft 1.21.4+
 
-![License](https://img.shields.io/badge/license-GPL3-green)
-![Minecraft](https://img.shields.io/badge/Minecraft-1.21.4-blue)
+![License](https://img.shields.io/badge/license-GPL3-green)  
+![Minecraft](https://img.shields.io/badge/Minecraft-1.21.4+-blue)  
 ![API](https://img.shields.io/badge/API-Paper%20Compatible-orange)
 
-[中文文档](README.md)
+[中文版](./README.md)
 
-<div class="warning" style="
-    background: #fff8e6;
-    border-left: 4px solid #ffc107;
-    padding: 1rem;
-    margin: 1.5rem 0;
-    border-radius: 0 4px 4px 0;
-">
-  <div style="
-      display: flex;
-      align-items: center;
-      margin-bottom: 0.5rem;
-      color: #d84315;
-      font-weight: bold;
-  ">
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style="margin-right: 8px">
-      <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM13 17H11V15H13V17ZM13 13H11V7H13V13Z" fill="currentColor"/>
-    </svg>
-    <span>DEVELOPMENT STAGE WARNING</span>
-  </div>
+<details>
+<summary>⚠️ Development preview notes (click to expand)</summary>
 
-  <p style="margin: 0.5rem 0">
-    <strong>Current version: 0.x.y (Development Preview)</strong>
-  </p>
+- Current version 0.x.y – API may change in minor updates
+- Pin the version before using in production
+- Semantic versioning starts from 1.0.0
+</details>
 
-  <ul style="
-      margin: 0.5rem 0;
-      padding-left: 1.5rem;
-  ">
-    <li>🚨 <strong>No Compatibility Guarantee</strong>: Does not follow Semantic Versioning spec</li>
-    <li>⚡ <strong>Change Risks</strong>: Any update may contain breaking API changes</li>
-    <li>💥 <strong>Versioning Rules</strong>:
-      <ul style="padding-left: 1.5rem; margin: 0.25rem 0">
-        <li>Patch updates (0.x.<strong>y</strong>): <em>May</em> contain breaking changes</li>
-        <li>Minor updates (0.<strong>x</strong>.y): <em>Will</em> contain breaking changes</li>
-      </ul>
-    </li>
-  </ul>
+---
 
-  <p style="
-      margin: 0.75rem 0 0.25rem;
-      font-style: italic;
-  ">
-    <strong>Stability Plan</strong>: Semantic Versioning compliance begins at v1.0.0 (ETA TBD)
-  </p>
-</div>
+### ✅ One-sentence pitch
 
-## Project Overview
+> NeoArtisan is a **Paper-API-based micro-framework made for Minecraft plugin developers**:  
+> register custom items / blocks / recipes with model, interaction and drops in one fluent Builder,  
+> complete with lifecycle events and GUI hooks – **no NMS, no resource-pack hassle, no heavyweight content platform**.  
+> Perfect for devs who want to ship features fast but find Slimefun too heavy and raw NMS too painful.
 
-NeoArtisan is a custom content framework for Minecraft 1.21.4+, licensed under GPL3, focused on providing flexible content creation capabilities for plugin developers while maintaining good compatibility with PaperAPI.
+- **Developer-friendly**: built entirely on Paper API + PacketEvents
+- **Zero default content**: only registries & events – no premade machines or weapons, minimal footprint
+- **Pluggable logic**: crop drops, machine output, GUI buttons remain yours; the framework just handles “store–retrieve–route events”
 
-Use this plugin as a pre-implemented plugin:
-- [FarmersDelightRepaper(under development)](https://github.com/KitsunaiMC/FarmersDelightRepaper)
+---
 
-## Core Design Philosophy
+### ✅ 30-second tour
 
-### 🧩 Pure Foundation Framework
-- **No Default Content**: Only provides framework and tools
-- **Non-Comprehensive API**: Focused on core functionality
-- **PaperAPI Implementation**: Good compatibility, no NMS usage
-- **Extension-Friendly**: Well-designed extension points
+| Typical task                                                                 | Traditional way                                                   | NeoArtisan (from real test code)                                                                                                                                                                                         |
+|------------------------------------------------------------------------------|-------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Add a sword with custom model that can be right-clicked to place a block** | YAML (limited) or manual item management                          | **One Builder chain**<br>`ArtisanItem.builder()`<br>`.registryId(NamespacedKey.fromString("myplugin:magic_sword"))`<br>`.rawMaterial(Material.IRON_SWORD)`<br>`.itemModel(key)`<br>`.blockId(cooking_pot)`<br>`.build()` |
+| **Register a 3-stage crop block**                                            | Hand-roll custom crop events or dive into NMS – extremely complex | **One ArtisanCropBuilder**<br>`ArtisanCropBlock.builder()`<br>`.blockId("magic_crop")`<br>`.states(...3 stages...)`<br>`.boneMealMinGrowth(0)`<br>`.boneMealMaxGrowth(2)`<br>`.build()`                                  |
+| **Create a cooking-pot GUI**                                                 | Manually implement block lifecycle management                     | **One ArtisanBlockGUI subclass**<br>`class CookingPotGUI extends ArtisanBlockGUI {`<br>`    protected void init() { /* place buttons */ }`<br>`}`                                                                        |
+| **Add a new recipe**                                                         | Vanilla recipe logic can’t handle custom items                    | **One RecipeBuilder**<br>`ArtisanShapedRecipe.builder()`<br>`.key(NamespacedKey.fromString("myplugin:soup"))`<br>`.set("A B")`<br>`.add('A', choice)`<br>`.resultGenerator(generator)`<br>`.build()`                     |
 
-### 🧱 Custom Block System
-- Multiple block types supported
-- State management with multi-state transitions
-- [packetevents](https://www.packetevents.com/) packet handling
-- Complete event system
+> The framework only does “register–save–route events”; your business logic stays yours.  
+> **No NMS, no YAML, no bulky resource-pack frameworks.**
 
-### 🛡️ Custom Item System
-- Three-tier attribute system
-- Full category support (weapons, armor, food, etc.)
-- NBT integration
+---
 
-### 🔮 Custom Recipe System
-- Extensible design (currently only crafting table and furnace)
-- Independent architecture
+## Get started in 3 steps
 
-### 🛠️ Developer Experience
-- Builder pattern
-- Comprehensive documentation
-- Lifecycle event system
-- **Efficiency-First Philosophy**: We believe in the value of development efficiency, meeting most needs with concise APIs
-
-
-## Quick Start
-
-### Note:
-- When installing the plugin, you need to install [packetevents](https://www.packetevents.com/) as a prerequisite
-- It is not recommended to package this plugin directly into the auxiliary plugin for use
-
-### Add Dependency
-
+1. **Add repository & dependency**
 ```gradle
-repositories {
-    mavenCentral()
-    maven { url 'https://jitpack.io' }
-}
-
-dependencies {
-    compileOnly 'com.github.MoYuSOwO:NeoArtisan:<api_version>:api'
-}
+repositories { maven { url 'https://jitpack.io' } }
+dependencies { compileOnly 'com.github.MoYuSOwO:NeoArtisan:-SNAPSHOT:api' }
 ```
 
-### Example Usage
+2. **Enable the framework**  
+   Drop `NeoArtisan.jar` and its dependency `packetevents.jar` into the `plugins/` folder.
 
+3. **One-line registration**
 ```java
-// register to server
-@NeoArtisanAPI.Register
-public void registerContent() {
-    NeoArtisanAPI.getBlockRegistry().register(
-            ArtisanTransparentBlock.factory().builder()
-                    .blockId(ItemTest.cooking_pot)
-                    .canBurn(false)
-                    .states(
-                            List.of(
-                                    ArtisanTransparentBlockState.factory().builder()
-                                            .appearanceState(
-                                                    new TransparentAppearance(
-                                                            TransparentAppearance.LeavesAppearance.OAK_LEAVES,
-                                                            1,
-                                                            false,
-                                                            false
-                                                    )
-                                            )
-                                            .generators(
-                                                    new ItemGenerator[]{
-                                                            ItemGenerator.simpleGenerator(
-                                                                    ItemTest.cooking_pot,
-                                                                    1
-                                                            )
-                                                    }
-                                            )
-                                            .build()
-                            )
-                    )
-                    .build()
-    );
-    NeoArtisanAPI.getItemRegistry().registerItem(
-            ArtisanItem.factory().builder()
-                    .registryId(magic_helmet)
-                    .rawMaterial(Material.IRON_HELMET)
-                    .displayName("<aqua>魔法头盔~")
-                    .lore(
-                            List.of(
-                                    "魔法头盔一顶",
-                                    "可以帮助你挡住下落的蜘（ji）蛛（ju）"
-                            )
-                    )
-                    .armorProperty(
-                            5,
-                            1,
-                            null
-                    )
-                    .maxDurability(2500)
-                    .build()
-    );
-    NeoArtisanAPI.getItemRegistry().registerItem(
-            ArtisanItem.factory().builder()
-                    .registryId(magic_sword)
-                    .rawMaterial(Material.IRON_SWORD)
-                    .displayName("<yellow>魔法剑~")
-                    .lore(
-                            List.of(
-                                    "魔法剑一把",
-                                    "可以帮助你更快地杀怪"
-                            )
-                    )
-                    .weaponProperty(
-                            1.0f,
-                            1.5f,
-                            11.0f
-                    )
-                    .maxDurability(5000)
-                    .build()
-    );
-    NeoArtisanAPI.getItemRegistry().registerItem(
-            ArtisanItem.factory().complexBuilder()
-                    .registryId(cooking_pot)
-                    .itemStack(() -> {
-                        ItemStack itemStack = ItemStack.of(Material.PAPER);
-                        itemStack.setData(DataComponentTypes.ITEM_NAME, Component.text("<green>烹饪锅"));
-                        itemStack.setData(DataComponentTypes.ITEM_MODEL, cooking_pot);
-                        return itemStack;
-                    })
-                    .blockId(cooking_pot)
-                    .build()
-    );
+public final class MyPlugin extends JavaPlugin {
+    @Override
+    public void onEnable() {
+        NeoArtisanAPI.getItemRegistry().register(
+            ArtisanItem.builder()
+                .registryId(new NamespacedKey(this, "magic_sword"))
+                .rawMaterial(Material.IRON_SWORD)
+                .displayName("<yellow>Magic Sword</yellow>")
+                .build()
+        );
+    }
 }
 ```
+Full example → [FarmersDelightRepaper](https://github.com/KitsunaiMC/FarmersDelightRepaper)
 
-## Architectural Advantages
+---
 
-1. Clear extension points
-2. Paper-friendly integration
-3. Collaborative development support
+## What else can it do?
+<details>
+<summary>Expand the feature list</summary>
 
-## Development Recommendations
+- **Blocks**: normal / crop / transparent / skull / pressure plate / (future) multiblock
+- **Items**: weapons / armor / food / fully custom
+- **Recipes**: crafting table / furnace / upcoming anvil & brewing support
+- **GUI**: extend `ArtisanBlockGUI` to cut boilerplate to almost zero
+- **Logistics & machine API** (planned): node–edge abstraction, logic left to you
+</details>
 
-1. Develop content packs as separate plugins
-2. Extend `ArtisanBlockGUI` for custom GUIs
-3. The project is currently in its infancy and has only tested compatibility with 1.21.4, but in theory it should be compatible with higher versions
+---
 
-## Future Plans
+## What it is **not**
+- ❌ **Not a modpack**: zero default content, pure API only
+- ❌ **Not IA / Oraxen**: we don’t handle models, textures or sounds
+- ❌ **Not Slimefun 2.0**: no ready-made machines, just a faster way to write your own
 
-- Develop more block types
-- Add support for more recipe types
-- Implement API extensions for technical content (logistics, electricity systems)
-- More features under consideration
+---
 
-## Contribution
+## Contribute & feedback
+- Open an issue / PR
+- Email: MoYuOwO@outlook.com
+- GPL3 open source – hack away
 
-We welcome:
-- Content pack development
-- Core improvements
-- Documentation enhancements
+---
 
-Requirements:
-1. Follow GPL3 license
-2. Maintain API simplicity
-3. Provide proper documentation
-
-## License
-
-GNU General Public License v3.0 - See LICENSE file
-
-## Contact
-
-MoYuOwO@outlook.com
+> If Slimefun feels too heavy, IA too artist-centric, and raw NMS too daunting –  
+> grab NeoArtisan and get “registration” done once and for all.
