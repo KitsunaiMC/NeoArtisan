@@ -4,6 +4,8 @@ import com.github.retrooper.packetevents.protocol.world.states.WrappedBlockState
 import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
+import org.bukkit.Bukkit;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
@@ -33,8 +35,10 @@ public final class BlockMappingsManager {
                 NeoArtisan.logger().severe("Error on reading mappings.yml: " + key + " don't have a value.");
                 continue;
             }
-            WrappedBlockState fromState = WrappedBlockState.getByString(key);
-            WrappedBlockState toState = WrappedBlockState.getByString(value);
+            BlockData fromData = Bukkit.createBlockData(key);
+            BlockData toData = Bukkit.createBlockData(value);
+            WrappedBlockState fromState = WrappedBlockState.getByString(fromData.getAsString());
+            WrappedBlockState toState = WrappedBlockState.getByString(toData.getAsString());
             mappings.put(fromState.getGlobalId(), toState.getGlobalId());
         }
     }

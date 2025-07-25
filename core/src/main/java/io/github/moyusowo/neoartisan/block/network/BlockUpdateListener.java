@@ -14,7 +14,6 @@ import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerUp
 import io.github.moyusowo.neoartisan.block.state.listener.BlockBreakSynchronize;
 import io.github.moyusowo.neoartisan.block.storage.internal.ArtisanBlockStorageAsync;
 import io.github.moyusowo.neoartisan.block.util.BlockPos;
-import io.github.moyusowo.neoartisan.block.util.ChunkPos;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
 
