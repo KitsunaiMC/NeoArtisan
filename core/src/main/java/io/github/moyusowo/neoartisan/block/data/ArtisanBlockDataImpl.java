@@ -7,13 +7,13 @@ import io.github.moyusowo.neoartisan.block.task.LifecycleTaskManagerInternal;
 import io.github.moyusowo.neoartisan.block.task.SingleTaskPriority;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
-import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
 import io.github.moyusowo.neoartisanapi.api.block.block.base.ArtisanBaseBlock;
 import io.github.moyusowo.neoartisanapi.api.block.block.ArtisanCropBlock;
 import io.github.moyusowo.neoartisanapi.api.block.data.ArtisanBlockData;
 import io.github.moyusowo.neoartisanapi.api.block.state.base.ArtisanBaseBlockState;
 import io.github.moyusowo.neoartisanapi.api.block.gui.ArtisanBlockGUI;
 import io.github.moyusowo.neoartisanapi.api.block.task.LifecycleTaskManager;
+import io.github.moyusowo.neoartisanapi.api.registry.Registries;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
@@ -91,13 +91,13 @@ class ArtisanBlockDataImpl implements ArtisanBlockDataInternal {
     @Override
     @NotNull
     public ArtisanBaseBlock getArtisanBlock() {
-        return NeoArtisanAPI.getBlockRegistry().getArtisanBlock(blockId);
+        return Registries.BLOCK.getArtisanBlock(blockId);
     }
 
     @Override
     @NotNull
     public ArtisanBaseBlockState getArtisanBlockState() {
-        return NeoArtisanAPI.getBlockRegistry().getArtisanBlock(blockId).getState(stage);
+        return Registries.BLOCK.getArtisanBlock(blockId).getState(stage);
     }
 
     @Override

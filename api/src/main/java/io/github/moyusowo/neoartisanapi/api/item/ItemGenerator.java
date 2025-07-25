@@ -1,7 +1,7 @@
 package io.github.moyusowo.neoartisanapi.api.item;
 
 import com.google.common.base.Preconditions;
-import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
+import io.github.moyusowo.neoartisanapi.api.registry.Registries;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -77,7 +77,7 @@ public interface ItemGenerator {
 
         @Override
         public @NotNull ItemStack generate() {
-            return NeoArtisanAPI.getItemRegistry().getItemStack(this.registryId, this.amount);
+            return Registries.ITEM.getItemStack(this.registryId, this.amount);
         }
     }
 
@@ -99,7 +99,7 @@ public interface ItemGenerator {
 
         @Override
         public @NotNull ItemStack generate() {
-            return NeoArtisanAPI.getItemRegistry().getItemStack(this.registryId, ThreadLocalRandom.current().nextInt(min, max + 1));
+            return Registries.ITEM.getItemStack(this.registryId, ThreadLocalRandom.current().nextInt(min, max + 1));
         }
     }
 
@@ -124,7 +124,7 @@ public interface ItemGenerator {
         @Override
         public @NotNull ItemStack generate() {
             if (ThreadLocalRandom.current().nextDouble() < chance) {
-                return NeoArtisanAPI.getItemRegistry().getItemStack(this.registryId, amount);
+                return Registries.ITEM.getItemStack(this.registryId, amount);
             } else {
                 return ItemStack.empty();
             }

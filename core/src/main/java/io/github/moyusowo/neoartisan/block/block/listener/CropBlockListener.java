@@ -5,12 +5,14 @@ import io.github.moyusowo.neoartisan.block.storage.internal.ArtisanBlockStorageI
 import io.github.moyusowo.neoartisan.block.util.InteractionUtil;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
-import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
 import io.github.moyusowo.neoartisanapi.api.block.block.base.ArtisanBlocks;
 import io.github.moyusowo.neoartisanapi.api.block.block.ArtisanCropBlock;
 import io.github.moyusowo.neoartisanapi.api.block.data.ArtisanBlockData;
 import io.github.moyusowo.neoartisanapi.api.block.event.ArtisanBlockPlaceEvent;
+import io.github.moyusowo.neoartisanapi.api.block.protection.Protections;
+import io.github.moyusowo.neoartisanapi.api.block.storage.Storages;
 import io.github.moyusowo.neoartisanapi.api.item.ArtisanItem;
+import io.github.moyusowo.neoartisanapi.api.registry.Registries;
 import org.bukkit.*;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
@@ -44,13 +46,13 @@ final class CropBlockListener implements Listener {
         // ensure player have an item when click
         if (event.getItem() == null) return;
         // is item ArtisanItem
-        if (!NeoArtisanAPI.getItemRegistry().isArtisanItem(event.getItem())) return;
-        ArtisanItem artisanItem = NeoArtisanAPI.getItemRegistry().getArtisanItem(event.getItem());
+        if (!Registries.ITEM.isArtisanItem(event.getItem())) return;
+        ArtisanItem artisanItem = Registries.ITEM.getArtisanItem(event.getItem());
         // ensure ArtisanItem connect to ArtisanBlock
         if (artisanItem.getBlockId() == null) return;
         // check if ArtisanCropBlock
-        if (!NeoArtisanAPI.getBlockRegistry().isArtisanBlock(artisanItem.getBlockId())) return;
-        if (NeoArtisanAPI.getBlockRegistry().getArtisanBlock(artisanItem.getBlockId()).getType() != ArtisanBlocks.CROP) return;
+        if (!Registries.BLOCK.isArtisanBlock(artisanItem.getBlockId())) return;
+        if (Registries.BLOCK.getArtisanBlock(artisanItem.getBlockId()).getType() != ArtisanBlocks.CROP) return;
         // check farmland
         if (event.getClickedBlock().getType() != Material.FARMLAND) return;
         // check click position
@@ -59,7 +61,7 @@ final class CropBlockListener implements Listener {
         // check sneaking interaction
         if (event.getPlayer().isSneaking() && InteractionUtil.isInteractable(event.getClickedBlock())) return;
         // check permission
-        if (!NeoArtisanAPI.getBlockProtection().canPlace(event.getPlayer(), event.getClickedBlock().getRelative(event.getBlockFace()).getLocation())) return;
+        if (!Protections.BLOCK.canPlace(event.getPlayer(), event.getClickedBlock().getRelative(event.getBlockFace()).getLocation())) return;
         event.setCancelled(true);
         // call event
         ArtisanBlockPlaceEvent artisanBlockPlaceEvent = new ArtisanBlockPlaceEvent(
@@ -70,7 +72,7 @@ final class CropBlockListener implements Listener {
                 event.getPlayer(),
                 true,
                 EquipmentSlot.HAND,
-                NeoArtisanAPI.getBlockRegistry().getArtisanBlock(artisanItem.getBlockId()),
+                Registries.BLOCK.getArtisanBlock(artisanItem.getBlockId()),
                 ArtisanBlockData.builder().blockId(artisanItem.getBlockId()).location(event.getClickedBlock().getRelative(BlockFace.UP).getLocation()).stage(0).build()
         );
         artisanBlockPlaceEvent.callEvent();
@@ -83,9 +85,9 @@ final class CropBlockListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onEntityChangeFarmland(EntityChangeBlockEvent event) {
-        if (!NeoArtisanAPI.getArtisanBlockStorage().isArtisanBlock(event.getBlock().getRelative(BlockFace.UP))) return;
+        if (!Storages.BLOCK.isArtisanBlock(event.getBlock().getRelative(BlockFace.UP))) return;
         if (event.getBlock().getType() != Material.FARMLAND) return;
-        ArtisanBlockData blockData = NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlockData(event.getBlock().getRelative(BlockFace.UP));
+        ArtisanBlockData blockData = Storages.BLOCK.getArtisanBlockData(event.getBlock().getRelative(BlockFace.UP));
         if (blockData.getArtisanBlock().getType() != ArtisanBlocks.CROP) return;
         event.setCancelled(true);
         event.getBlock().getRelative(BlockFace.UP).setType(Material.AIR);
@@ -108,14 +110,14 @@ final class CropBlockListener implements Listener {
         // ensure player have an item when click
         if (event.getItem() == null) return;
         // is item boneMeal
-        if (!NeoArtisanAPI.getItemRegistry().getRegistryId(event.getItem()).equals(Material.BONE_MEAL.getKey())) return;
+        if (!Registries.ITEM.getRegistryId(event.getItem()).equals(Material.BONE_MEAL.getKey())) return;
         // check if ArtisanCropBlock
-        if (!NeoArtisanAPI.getArtisanBlockStorage().isArtisanBlock(event.getClickedBlock())) return;
-        if (NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlockData(event.getClickedBlock()).getArtisanBlock().getType() != ArtisanBlocks.CROP) return;
+        if (!Storages.BLOCK.isArtisanBlock(event.getClickedBlock())) return;
+        if (Storages.BLOCK.getArtisanBlockData(event.getClickedBlock()).getArtisanBlock().getType() != ArtisanBlocks.CROP) return;
         // check permission
-        if (!NeoArtisanAPI.getBlockProtection().canPlace(event.getPlayer(), event.getClickedBlock().getRelative(event.getBlockFace()).getLocation())) return;
+        if (!Protections.BLOCK.canPlace(event.getPlayer(), event.getClickedBlock().getRelative(event.getBlockFace()).getLocation())) return;
         event.setCancelled(true);
-        ArtisanBlockData artisanBlockData = NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlockData(event.getClickedBlock());
+        ArtisanBlockData artisanBlockData = Storages.BLOCK.getArtisanBlockData(event.getClickedBlock());
         if (Util.hasNextStage(artisanBlockData)) {
             Util.replace(event.getClickedBlock(), getNextFertilizeStage(artisanBlockData));
             playBoneMealEffects(event.getClickedBlock().getLocation());

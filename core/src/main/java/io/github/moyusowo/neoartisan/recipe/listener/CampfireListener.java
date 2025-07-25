@@ -3,10 +3,10 @@ package io.github.moyusowo.neoartisan.recipe.listener;
 import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
-import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
 import io.github.moyusowo.neoartisanapi.api.recipe.ArtisanCampfireRecipe;
 import io.github.moyusowo.neoartisanapi.api.recipe.ArtisanRecipe;
 import io.github.moyusowo.neoartisanapi.api.recipe.RecipeType;
+import io.github.moyusowo.neoartisanapi.api.registry.Registries;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -48,7 +48,7 @@ final class CampfireListener implements Listener {
         final ItemStack itemStack = event.getItem();
         if (itemStack == null || itemStack.isEmpty()) return;
         if (!hasRecipe(itemStack)) {
-            final Collection<ArtisanRecipe> campfireRecipes = NeoArtisanAPI.getRecipeRegistry().getRecipes(RecipeType.CAMPFIRE);
+            final Collection<ArtisanRecipe> campfireRecipes = Registries.RECIPE.getRecipes(RecipeType.CAMPFIRE);
             for (ArtisanRecipe artisanRecipe : campfireRecipes) {
                 if (artisanRecipe instanceof ArtisanCampfireRecipe campfireRecipe) {
                     if (campfireRecipe.matches(new ItemStack[] { itemStack })) {

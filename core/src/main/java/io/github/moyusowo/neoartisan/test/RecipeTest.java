@@ -1,7 +1,6 @@
 package io.github.moyusowo.neoartisan.test;
 
 import io.github.moyusowo.neoartisan.NeoArtisan;
-import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
 import io.github.moyusowo.neoartisanapi.api.item.ItemGenerator;
 import io.github.moyusowo.neoartisanapi.api.recipe.ArtisanCampfireRecipe;
 import io.github.moyusowo.neoartisanapi.api.recipe.ArtisanFurnaceRecipe;
@@ -9,6 +8,7 @@ import io.github.moyusowo.neoartisanapi.api.recipe.ArtisanShapedRecipe;
 import io.github.moyusowo.neoartisanapi.api.recipe.ArtisanShapelessRecipe;
 import io.github.moyusowo.neoartisanapi.api.recipe.choice.ItemChoice;
 import io.github.moyusowo.neoartisanapi.api.recipe.choice.TagChoice;
+import io.github.moyusowo.neoartisanapi.api.registry.Registries;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 
@@ -16,7 +16,7 @@ public final class RecipeTest {
 
     public static void register() {
         if (NeoArtisan.isDebugMode()) {
-            NeoArtisanAPI.getRecipeRegistry().register(
+            Registries.RECIPE.register(
                     ArtisanShapedRecipe.builder()
                             .key(new NamespacedKey(NeoArtisan.instance(), "aaaa"))
                             .set("A B")
@@ -31,7 +31,7 @@ public final class RecipeTest {
                             .build()
 
             );
-            NeoArtisanAPI.getRecipeRegistry().register(
+            Registries.RECIPE.register(
                     ArtisanShapelessRecipe.builder()
                             .key(new NamespacedKey(NeoArtisan.instance(), "bbbb"))
                             .add(
@@ -46,7 +46,7 @@ public final class RecipeTest {
                             )
                             .build()
             );
-            NeoArtisanAPI.getRecipeRegistry().register(
+            Registries.RECIPE.register(
                     ArtisanFurnaceRecipe.builder()
                             .key(new NamespacedKey(NeoArtisan.instance(), "diamondF"))
                             .input(new ItemChoice(ItemTest.magic_diamond))
@@ -60,7 +60,7 @@ public final class RecipeTest {
                             .cookTime(100)
                             .build()
             );
-            NeoArtisanAPI.getRecipeRegistry().register(
+            Registries.RECIPE.register(
                     ArtisanCampfireRecipe.builder()
                             .key(new NamespacedKey(NeoArtisan.instance(), "diamondC"))
                             .input(new ItemChoice(ItemTest.magic_diamond))

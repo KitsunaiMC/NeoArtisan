@@ -1,9 +1,8 @@
-package io.github.moyusowo.neoartisan.recipe;
+package io.github.moyusowo.neoartisan.registry;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import io.github.moyusowo.neoartisan.NeoArtisan;
-import io.github.moyusowo.neoartisan.RegisterManager;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
 import io.github.moyusowo.neoartisan.util.terminate.TerminateMethod;
@@ -12,6 +11,7 @@ import io.github.moyusowo.neoartisanapi.api.recipe.*;
 import io.github.moyusowo.neoartisanapi.api.recipe.choice.Choice;
 import io.github.moyusowo.neoartisanapi.api.recipe.choice.ItemChoice;
 import io.github.moyusowo.neoartisanapi.api.recipe.choice.MultiChoice;
+import io.github.moyusowo.neoartisanapi.api.registry.RecipeRegistry;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;

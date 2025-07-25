@@ -3,10 +3,10 @@ package io.github.moyusowo.neoartisan.recipe.listener;
 import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
-import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
 import io.github.moyusowo.neoartisanapi.api.recipe.ArtisanFurnaceRecipe;
 import io.github.moyusowo.neoartisanapi.api.recipe.ArtisanRecipe;
 import io.github.moyusowo.neoartisanapi.api.recipe.RecipeType;
+import io.github.moyusowo.neoartisanapi.api.registry.Registries;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -51,7 +51,7 @@ final class FurnaceListener implements Listener {
         final ItemStack itemStack = event.getCursor();
         if (itemStack.isEmpty()) return;
         if (!hasRecipe(itemStack)) {
-            final Collection<ArtisanRecipe> furnaceRecipes = NeoArtisanAPI.getRecipeRegistry().getRecipes(RecipeType.FURNACE);
+            final Collection<ArtisanRecipe> furnaceRecipes = Registries.RECIPE.getRecipes(RecipeType.FURNACE);
             for (ArtisanRecipe artisanRecipe : furnaceRecipes) {
                 if (artisanRecipe instanceof ArtisanFurnaceRecipe furnaceRecipe) {
                     if (furnaceRecipe.matches(new ItemStack[] { itemStack })) {

@@ -1,10 +1,11 @@
 package io.github.moyusowo.neoartisan;
 
+import com.sun.jdi.InternalException;
 import io.github.moyusowo.neoartisan.util.file.FileUtil;
 import io.github.moyusowo.neoartisan.util.init.Initializer;
 import io.github.moyusowo.neoartisan.util.terminate.Terminator;
-import io.github.moyusowo.neoartisanapi.api.persistence.type.ItemStackDataType;
-import net.momirealms.antigrieflib.AntiGriefLib;
+import io.github.moyusowo.neoartisanapi.api.registry.Registries;
+import io.github.moyusowo.neoartisanapi.api.util.ItemStackDataType;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Server;
@@ -24,7 +25,6 @@ public final class NeoArtisan extends JavaPlugin {
     private static NeoArtisan instance;
     private static NamespacedKey artisanItemIdKey;
     private static NamespacedKey artisanItemAttackDamageKey, artisanItemAttackKnockbackKey, artisanItemAttackSpeedKey;
-    private static AntiGriefLib antiGriefLib;
 
     public NeoArtisan() {
         super();
@@ -38,8 +38,6 @@ public final class NeoArtisan extends JavaPlugin {
         YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
         isDebugMode = config.getBoolean("debug");
     }
-
-    public static AntiGriefLib getAntiGriefLib() { return antiGriefLib; }
 
     public static NamespacedKey getArtisanItemIdKey() {
         return artisanItemIdKey;
@@ -79,11 +77,13 @@ public final class NeoArtisan extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        antiGriefLib = AntiGriefLib.builder(this).silentLogs(true).ignoreOP(true).build();
         ItemStackDataType.ITEM_STACK.getComplexType();
         Initializer.scanPackage(pkg);
         Initializer.executeEnable();
         Terminator.scanPackage(pkg);
+        if (Registries.ITEM == null) throw new InternalException("Item registry is not successfully loaded");
+        if (Registries.RECIPE == null) throw new InternalException("Recipe registry is not successfully loaded");
+        if (Registries.BLOCK == null) throw new InternalException("Block registry is not successfully loaded");
     }
 
     @Override

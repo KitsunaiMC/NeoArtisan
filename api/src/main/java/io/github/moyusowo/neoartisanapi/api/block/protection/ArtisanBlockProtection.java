@@ -20,9 +20,10 @@ import org.jetbrains.annotations.NotNull;
  *       - 产生安全漏洞</li>
  * </ol>
  *
- * @see io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI#getBlockProtection() 获取服务实例
+ * @see io.github.moyusowo.neoartisanapi.api.block.protection.Protections#BLOCK 获取服务实例
  */
-public interface BlockProtection {
+public interface ArtisanBlockProtection {
+
     /**
      * 检查玩家是否可以破坏指定位置的方块
      *

@@ -1,13 +1,13 @@
 package io.github.moyusowo.neoartisan.test;
 
 import io.github.moyusowo.neoartisan.NeoArtisan;
-import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
 import io.github.moyusowo.neoartisanapi.api.block.block.ArtisanCropBlock;
 import io.github.moyusowo.neoartisanapi.api.block.block.ArtisanSimpleBlock;
 import io.github.moyusowo.neoartisanapi.api.block.state.*;
 import io.github.moyusowo.neoartisanapi.api.block.state.appearance.common.NoteBlockAppearance;
 import io.github.moyusowo.neoartisanapi.api.block.state.appearance.crop.TripwireAppearance;
 import io.github.moyusowo.neoartisanapi.api.item.ItemGenerator;
+import io.github.moyusowo.neoartisanapi.api.registry.Registries;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 
@@ -21,7 +21,7 @@ public final class BlockTest {
 
     public static void register() {
         if (NeoArtisan.isDebugMode()) {
-            NeoArtisanAPI.getBlockRegistry().register(
+            Registries.BLOCK.register(
                     ArtisanCropBlock.builder()
                             .blockId(magic_crop)
                             .states(
@@ -100,7 +100,7 @@ public final class BlockTest {
                             .boneMealMaxGrowth(2)
                             .build()
             );
-            NeoArtisanAPI.getBlockRegistry().register(
+            Registries.BLOCK.register(
                     ArtisanSimpleBlock.builder()
                             .blockId(ItemTest.magic_block)
                             .state(
@@ -116,7 +116,7 @@ public final class BlockTest {
                             )
                             .build()
             );
-            NeoArtisanAPI.getBlockRegistry().register(
+            Registries.BLOCK.register(
                     ArtisanSimpleBlock.builder()
                             .blockId(ItemTest.soup_block)
                             .state(

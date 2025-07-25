@@ -4,10 +4,11 @@ import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisan.block.storage.internal.ArtisanBlockStorageInternal;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
-import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
 import io.github.moyusowo.neoartisanapi.api.block.data.ArtisanBlockData;
 import io.github.moyusowo.neoartisanapi.api.block.event.ArtisanBlockBreakEvent;
 import io.github.moyusowo.neoartisanapi.api.block.event.ArtisanBlockLoseSupportEvent;
+import io.github.moyusowo.neoartisanapi.api.block.protection.Protections;
+import io.github.moyusowo.neoartisanapi.api.block.storage.Storages;
 import io.github.moyusowo.neoartisanapi.api.block.util.PistonMoveBlockReaction;
 import io.papermc.paper.event.block.BlockBreakBlockEvent;
 import org.bukkit.GameMode;
@@ -43,10 +44,10 @@ final class BaseStateListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onPlayerBreak(BlockBreakEvent event) {
         // if ArtisanBlock
-        if (!NeoArtisanAPI.getArtisanBlockStorage().isArtisanBlock(event.getBlock())) return;
+        if (!Storages.BLOCK.isArtisanBlock(event.getBlock())) return;
         // check player permission
-        if (!NeoArtisanAPI.getBlockProtection().canBreak(event.getPlayer(), event.getBlock().getLocation())) return;
-        ArtisanBlockData artisanBlockData = NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlockData(event.getBlock());
+        if (!Protections.BLOCK.canBreak(event.getPlayer(), event.getBlock().getLocation())) return;
+        ArtisanBlockData artisanBlockData = Storages.BLOCK.getArtisanBlockData(event.getBlock());
         event.setCancelled(true);
         ArtisanBlockBreakEvent artisanBlockBreakEvent = new ArtisanBlockBreakEvent(
                 event.getBlock(),
@@ -78,11 +79,11 @@ final class BaseStateListener implements Listener {
     public void onPlayerBreakUnder(BlockBreakEvent event) {
         final Block upsideBlock = event.getBlock().getRelative(BlockFace.UP);
         // if UP is ArtisanBlock
-        if (!NeoArtisanAPI.getArtisanBlockStorage().isArtisanBlock(upsideBlock)) return;
+        if (!Storages.BLOCK.isArtisanBlock(upsideBlock)) return;
         // check player permission
-        if (!NeoArtisanAPI.getBlockProtection().canBreak(event.getPlayer(), upsideBlock.getLocation())) return;
+        if (!Protections.BLOCK.canBreak(event.getPlayer(), upsideBlock.getLocation())) return;
         // check if state can float
-        ArtisanBlockData artisanBlockData = NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlockData(upsideBlock);
+        ArtisanBlockData artisanBlockData = Storages.BLOCK.getArtisanBlockData(upsideBlock);
         if (artisanBlockData.getArtisanBlockState().canSurviveFloating()) return;
         upsideBlock.setType(Material.AIR);
         ArtisanBlockLoseSupportEvent artisanBlockLoseSupportEvent = new ArtisanBlockLoseSupportEvent(
@@ -109,8 +110,8 @@ final class BaseStateListener implements Listener {
     public void onBlockBreak(BlockBreakBlockEvent event) {
         final Block upsideBlock = event.getBlock().getRelative(BlockFace.UP);
         // check if ArtisanBlock
-        if (NeoArtisanAPI.getArtisanBlockStorage().isArtisanBlock(event.getBlock())) {
-            ArtisanBlockData artisanBlockData = NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlockData(event.getBlock());
+        if (Storages.BLOCK.isArtisanBlock(event.getBlock())) {
+            ArtisanBlockData artisanBlockData = Storages.BLOCK.getArtisanBlockData(event.getBlock());
             event.getDrops().clear();
             for (ItemStack drop : artisanBlockData.getArtisanBlockState().drops()) {
                 event.getDrops().add(drop);
@@ -118,9 +119,9 @@ final class BaseStateListener implements Listener {
             ArtisanBlockStorageInternal.getInternal().removeArtisanBlock(event.getBlock());
         }
         // check if up ArtisanBlock
-        else if (NeoArtisanAPI.getArtisanBlockStorage().isArtisanBlock(upsideBlock)) {
+        else if (Storages.BLOCK.isArtisanBlock(upsideBlock)) {
             // check if state can float
-            ArtisanBlockData artisanBlockData = NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlockData(upsideBlock);
+            ArtisanBlockData artisanBlockData = Storages.BLOCK.getArtisanBlockData(upsideBlock);
             if (artisanBlockData.getArtisanBlockState().canSurviveFloating()) return;
             upsideBlock.setType(Material.AIR);
             ArtisanBlockLoseSupportEvent artisanBlockLoseSupportEvent = new ArtisanBlockLoseSupportEvent(
@@ -151,8 +152,8 @@ final class BaseStateListener implements Listener {
         final Iterator<Block> iterator = event.blockList().iterator();
         while (iterator.hasNext()) {
             Block block = iterator.next();
-            if (!NeoArtisanAPI.getArtisanBlockStorage().isArtisanBlock(block)) {
-                if (NeoArtisanAPI.getArtisanBlockStorage().isArtisanBlock(block.getRelative(BlockFace.UP))) {
+            if (!Storages.BLOCK.isArtisanBlock(block)) {
+                if (Storages.BLOCK.isArtisanBlock(block.getRelative(BlockFace.UP))) {
                     affectedBlocks.add(block.getRelative(BlockFace.UP));
                 }
                 continue;
@@ -161,7 +162,7 @@ final class BaseStateListener implements Listener {
             iterator.remove();
         }
         for (Block affectedBlock : affectedBlocks) {
-            ArtisanBlockData artisanBlockData = NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlockData(affectedBlock);
+            ArtisanBlockData artisanBlockData = Storages.BLOCK.getArtisanBlockData(affectedBlock);
             if (artisanBlockData.getArtisanBlockState().canSurviveFloating()) return;
             affectedBlock.setType(Material.AIR);
             ArtisanBlockLoseSupportEvent artisanBlockLoseSupportEvent = new ArtisanBlockLoseSupportEvent(
@@ -184,7 +185,7 @@ final class BaseStateListener implements Listener {
             ArtisanBlockStorageInternal.getInternal().removeArtisanBlock(affectedBlock);
         }
         for (Block artisanBlock : artisanBlocks) {
-            ArtisanBlockData artisanBlockData = NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlockData(artisanBlock);
+            ArtisanBlockData artisanBlockData = Storages.BLOCK.getArtisanBlockData(artisanBlock);
             if (ThreadLocalRandom.current().nextDouble() < event.getYield()) {
                 for (ItemStack drop : artisanBlockData.getArtisanBlockState().drops()) {
                     artisanBlock.getWorld().dropItemNaturally(artisanBlock.getLocation().add(0.5, 0.5, 0.5), drop);
@@ -202,8 +203,8 @@ final class BaseStateListener implements Listener {
         final Iterator<Block> iterator = event.blockList().iterator();
         while (iterator.hasNext()) {
             Block block = iterator.next();
-            if (!NeoArtisanAPI.getArtisanBlockStorage().isArtisanBlock(block)) {
-                if (NeoArtisanAPI.getArtisanBlockStorage().isArtisanBlock(block.getRelative(BlockFace.UP))) {
+            if (!Storages.BLOCK.isArtisanBlock(block)) {
+                if (Storages.BLOCK.isArtisanBlock(block.getRelative(BlockFace.UP))) {
                     affectedBlocks.add(block.getRelative(BlockFace.UP));
                 }
                 continue;
@@ -212,7 +213,7 @@ final class BaseStateListener implements Listener {
             iterator.remove();
         }
         for (Block affectedBlock : affectedBlocks) {
-            ArtisanBlockData artisanBlockData = NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlockData(affectedBlock);
+            ArtisanBlockData artisanBlockData = Storages.BLOCK.getArtisanBlockData(affectedBlock);
             if (artisanBlockData.getArtisanBlockState().canSurviveFloating()) return;
             affectedBlock.setType(Material.AIR);
             ArtisanBlockLoseSupportEvent artisanBlockLoseSupportEvent = new ArtisanBlockLoseSupportEvent(
@@ -235,7 +236,7 @@ final class BaseStateListener implements Listener {
             ArtisanBlockStorageInternal.getInternal().removeArtisanBlock(affectedBlock);
         }
         for (Block artisanBlock : artisanBlocks) {
-            ArtisanBlockData artisanBlockData = NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlockData(artisanBlock);
+            ArtisanBlockData artisanBlockData = Storages.BLOCK.getArtisanBlockData(artisanBlock);
             if (ThreadLocalRandom.current().nextDouble() < event.getYield()) {
                 for (ItemStack drop : artisanBlockData.getArtisanBlockState().drops()) {
                     artisanBlock.getWorld().dropItemNaturally(artisanBlock.getLocation().add(0.5, 0.5, 0.5), drop);
@@ -248,15 +249,15 @@ final class BaseStateListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onEntityChangeBlock(EntityChangeBlockEvent event) {
-        if (NeoArtisanAPI.getArtisanBlockStorage().isArtisanBlock(event.getBlock())) {
+        if (Storages.BLOCK.isArtisanBlock(event.getBlock())) {
             if (event.getEntityType() == EntityType.ENDERMAN) {
                 event.setCancelled(true);
             } else if (event.getEntityType() == EntityType.WITHER) {
                 event.getBlock().setType(Material.AIR);
                 ArtisanBlockStorageInternal.getInternal().removeArtisanBlock(event.getBlock());
             }
-        } else if (NeoArtisanAPI.getArtisanBlockStorage().isArtisanBlock(event.getBlock().getRelative(BlockFace.UP))) {
-            ArtisanBlockData artisanBlockData = NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlockData(event.getBlock().getRelative(BlockFace.UP));
+        } else if (Storages.BLOCK.isArtisanBlock(event.getBlock().getRelative(BlockFace.UP))) {
+            ArtisanBlockData artisanBlockData = Storages.BLOCK.getArtisanBlockData(event.getBlock().getRelative(BlockFace.UP));
             if (artisanBlockData.getArtisanBlockState().canSurviveFloating()) return;
             if (event.getEntityType() == EntityType.ENDERMAN) {
                 event.setCancelled(true);
@@ -270,8 +271,8 @@ final class BaseStateListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onPistonExtend(BlockPistonExtendEvent event) {
         for (Block block : event.getBlocks()) {
-            if (!NeoArtisanAPI.getArtisanBlockStorage().isArtisanBlock(block)) continue;
-            ArtisanBlockData artisanBlockData = NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlockData(block);
+            if (!Storages.BLOCK.isArtisanBlock(block)) continue;
+            ArtisanBlockData artisanBlockData = Storages.BLOCK.getArtisanBlockData(block);
             if (artisanBlockData.getArtisanBlockState().pistonMoveReaction() == PistonMoveBlockReaction.RESIST || artisanBlockData.getArtisanBlock().hasBlockEntity()) {
                 event.setCancelled(true);
             }
@@ -282,8 +283,8 @@ final class BaseStateListener implements Listener {
     public void onPistonExtendUnder(BlockPistonExtendEvent event) {
         for (Block block : event.getBlocks()) {
             final Block upsideBlock = block.getRelative(BlockFace.UP);
-            if (!NeoArtisanAPI.getArtisanBlockStorage().isArtisanBlock(upsideBlock)) continue;
-            ArtisanBlockData artisanBlockData = NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlockData(upsideBlock);
+            if (!Storages.BLOCK.isArtisanBlock(upsideBlock)) continue;
+            ArtisanBlockData artisanBlockData = Storages.BLOCK.getArtisanBlockData(upsideBlock);
             if (artisanBlockData.getArtisanBlockState().canSurviveFloating()) continue;
             upsideBlock.setType(Material.AIR);
             ArtisanBlockLoseSupportEvent artisanBlockLoseSupportEvent = new ArtisanBlockLoseSupportEvent(
@@ -310,8 +311,8 @@ final class BaseStateListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onPistonRetract(BlockPistonRetractEvent event) {
         for (Block block : event.getBlocks()) {
-            if (!NeoArtisanAPI.getArtisanBlockStorage().isArtisanBlock(block)) continue;
-            ArtisanBlockData artisanBlockData = NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlockData(block);
+            if (!Storages.BLOCK.isArtisanBlock(block)) continue;
+            ArtisanBlockData artisanBlockData = Storages.BLOCK.getArtisanBlockData(block);
             if (artisanBlockData.getArtisanBlockState().pistonMoveReaction() == PistonMoveBlockReaction.BREAK) continue;
             event.setCancelled(true);
         }
@@ -321,8 +322,8 @@ final class BaseStateListener implements Listener {
     public void onPistonRetractUnder(BlockPistonRetractEvent event) {
         for (Block block : event.getBlocks()) {
             final Block upsideBlock = block.getRelative(BlockFace.UP);
-            if (!NeoArtisanAPI.getArtisanBlockStorage().isArtisanBlock(upsideBlock)) continue;
-            ArtisanBlockData artisanBlockData = NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlockData(upsideBlock);
+            if (!Storages.BLOCK.isArtisanBlock(upsideBlock)) continue;
+            ArtisanBlockData artisanBlockData = Storages.BLOCK.getArtisanBlockData(upsideBlock);
             if (artisanBlockData.getArtisanBlockState().canSurviveFloating()) continue;
             upsideBlock.setType(Material.AIR);
             ArtisanBlockLoseSupportEvent artisanBlockLoseSupportEvent = new ArtisanBlockLoseSupportEvent(

@@ -3,7 +3,8 @@ package io.github.moyusowo.neoartisan.block.data.entity;
 import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisan.block.util.BlockPos;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
-import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
+
+import io.github.moyusowo.neoartisanapi.api.block.storage.Storages;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -26,7 +27,7 @@ public final class BlockEntityManager {
         for (World world : Bukkit.getWorlds()) {
             for (Marker marker : world.getEntitiesByClass(Marker.class)) {
                 if (marker.getScoreboardTags().contains(TAG)) {
-                    if (NeoArtisanAPI.getArtisanBlockStorage().isArtisanBlock(marker.getLocation()) && NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlockData(marker.getLocation()).getArtisanBlock().hasBlockEntity()) {
+                    if (Storages.BLOCK.isArtisanBlock(marker.getLocation()) && Storages.BLOCK.getArtisanBlockData(marker.getLocation()).getArtisanBlock().hasBlockEntity()) {
                         cached.put(BlockPos.from(marker.getLocation()), marker);
                     } else {
                         marker.remove();

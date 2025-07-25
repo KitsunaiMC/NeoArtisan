@@ -3,10 +3,10 @@ package io.github.moyusowo.neoartisan.recipe.listener;
 import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
-import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
 import io.github.moyusowo.neoartisanapi.api.recipe.ArtisanRecipe;
 import io.github.moyusowo.neoartisanapi.api.recipe.ArtisanSmokingRecipe;
 import io.github.moyusowo.neoartisanapi.api.recipe.RecipeType;
+import io.github.moyusowo.neoartisanapi.api.registry.Registries;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -50,7 +50,7 @@ final class SmokerListener implements Listener {
         final ItemStack itemStack = event.getCursor();
         if (itemStack.isEmpty()) return;
         if (!hasRecipe(itemStack)) {
-            final Collection<ArtisanRecipe> smokingRecipes = NeoArtisanAPI.getRecipeRegistry().getRecipes(RecipeType.SMOKING);
+            final Collection<ArtisanRecipe> smokingRecipes = Registries.RECIPE.getRecipes(RecipeType.SMOKING);
             for (ArtisanRecipe artisanRecipe : smokingRecipes) {
                 if (artisanRecipe instanceof ArtisanSmokingRecipe smokingRecipe) {
                     if (smokingRecipe.matches(new ItemStack[] { itemStack })) {

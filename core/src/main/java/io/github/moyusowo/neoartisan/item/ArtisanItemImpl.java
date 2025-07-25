@@ -8,7 +8,6 @@ import io.github.moyusowo.neoartisan.item.property.WeaponProperty;
 import io.github.moyusowo.neoartisan.util.data.NamespacedKeyDataType;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
-import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
 import io.github.moyusowo.neoartisanapi.api.item.ArtisanItem;
 import io.github.moyusowo.neoartisanapi.api.item.AttributeProperty;
 import io.github.moyusowo.neoartisanapi.api.item.factory.ItemBuilderFactory;
@@ -27,7 +26,6 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.EquipmentSlotGroup;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.potion.PotionEffect;
 import org.jetbrains.annotations.NotNull;
@@ -175,11 +173,7 @@ final class ArtisanItemImpl implements ArtisanItem {
     private void addIdAndAttribute(ItemStack itemStack) {
         ItemMeta itemMeta = itemStack.getItemMeta();
         if (!this.attributeProperty.isEmpty()) {
-            NamespacedKey[] keys = this.attributeProperty.getItemStackAttributeKeys();
-            for (NamespacedKey key : keys) {
-                PersistentDataType<?, ?> PDCType = NeoArtisanAPI.getItemStackAttributeRegistry().getAttributePDCType(key);
-                itemMeta.getPersistentDataContainer().set(key, PDCType, this.attributeProperty.getItemStackAttributeValue(key));
-            }
+            this.attributeProperty.setPersistenceDataContainer(itemMeta.getPersistentDataContainer());
         }
         itemMeta.getPersistentDataContainer().set(NeoArtisan.getArtisanItemIdKey(), NamespacedKeyDataType.NAMESPACED_KEY, this.registryId);
         itemStack.setItemMeta(itemMeta);

@@ -1,4 +1,4 @@
-package io.github.moyusowo.neoartisanapi.api.persistence.type;
+package io.github.moyusowo.neoartisanapi.api.util;
 
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataAdapterContext;

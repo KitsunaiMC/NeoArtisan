@@ -1,6 +1,6 @@
-package io.github.moyusowo.neoartisan;
+package io.github.moyusowo.neoartisan.registry;
 
-import io.github.moyusowo.neoartisan.test.AttributeTest;
+import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisan.test.BlockTest;
 import io.github.moyusowo.neoartisan.test.ItemTest;
 import io.github.moyusowo.neoartisan.test.RecipeTest;
@@ -41,7 +41,6 @@ public final class RegisterManager implements Listener {
     @EventHandler
     public void onStartup(ServerLoadEvent event) {
         if (event.getType() == ServerLoadEvent.LoadType.STARTUP) {
-            AttributeTest.register();
             ItemTest.register();
             RecipeTest.register();
             BlockTest.register();

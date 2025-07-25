@@ -3,11 +3,11 @@ package io.github.moyusowo.neoartisan.recipe.listener;
 import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
-import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
 import io.github.moyusowo.neoartisanapi.api.recipe.ArtisanRecipe;
 import io.github.moyusowo.neoartisanapi.api.recipe.ArtisanShapedRecipe;
 import io.github.moyusowo.neoartisanapi.api.recipe.ArtisanShapelessRecipe;
 import io.github.moyusowo.neoartisanapi.api.recipe.RecipeType;
+import io.github.moyusowo.neoartisanapi.api.registry.Registries;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
@@ -39,8 +39,8 @@ final class CraftingTableListener implements Listener {
         if (matrix.length == 4) {
             for (int i = 0; i < 4; i++) {
                 if (matrix[i] == null) continue;
-                NamespacedKey registryId = NeoArtisanAPI.getItemRegistry().getRegistryId(matrix[i]);
-                if (NeoArtisanAPI.getItemRegistry().isArtisanItem(registryId) && (!NeoArtisanAPI.getItemRegistry().getArtisanItem(registryId).hasOriginalCraft())) {
+                NamespacedKey registryId = Registries.ITEM.getRegistryId(matrix[i]);
+                if (Registries.ITEM.isArtisanItem(registryId) && (!Registries.ITEM.getArtisanItem(registryId).hasOriginalCraft())) {
                     event.getInventory().setResult(null);
                     break;
                 }
@@ -51,8 +51,8 @@ final class CraftingTableListener implements Listener {
             boolean hasArtisan = false;
             for (int i = 0; i < 9; i++) {
                 if (matrix[i] == null) continue;
-                NamespacedKey registryId = NeoArtisanAPI.getItemRegistry().getRegistryId(matrix[i]);
-                if (NeoArtisanAPI.getItemRegistry().isArtisanItem(registryId) && (!NeoArtisanAPI.getItemRegistry().getArtisanItem(registryId).hasOriginalCraft())) {
+                NamespacedKey registryId = Registries.ITEM.getRegistryId(matrix[i]);
+                if (Registries.ITEM.isArtisanItem(registryId) && (!Registries.ITEM.getArtisanItem(registryId).hasOriginalCraft())) {
                     event.getInventory().setResult(null);
                     hasArtisan = true;
                     break;
@@ -60,7 +60,7 @@ final class CraftingTableListener implements Listener {
             }
             if (!hasArtisan) return;
         }
-        final Collection<ArtisanRecipe> shapedRecipes = NeoArtisanAPI.getRecipeRegistry().getRecipes(RecipeType.SHAPED);
+        final Collection<ArtisanRecipe> shapedRecipes = Registries.RECIPE.getRecipes(RecipeType.SHAPED);
         for (ArtisanRecipe artisanRecipe : shapedRecipes) {
             if (artisanRecipe instanceof ArtisanShapedRecipe shapedRecipe) {
                 if (shapedRecipe.matches(matrix)) {
@@ -69,7 +69,7 @@ final class CraftingTableListener implements Listener {
                 }
             }
         }
-        final Collection<ArtisanRecipe> shapelessRecipes = NeoArtisanAPI.getRecipeRegistry().getRecipes(RecipeType.SHAPELESS);
+        final Collection<ArtisanRecipe> shapelessRecipes = Registries.RECIPE.getRecipes(RecipeType.SHAPELESS);
         for (ArtisanRecipe artisanRecipe : shapelessRecipes) {
             if (artisanRecipe instanceof ArtisanShapelessRecipe shapelessRecipe) {
                 if (shapelessRecipe.matches(matrix)) {

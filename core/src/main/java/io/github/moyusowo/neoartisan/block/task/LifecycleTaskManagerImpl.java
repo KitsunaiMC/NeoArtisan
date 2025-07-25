@@ -3,11 +3,10 @@ package io.github.moyusowo.neoartisan.block.task;
 import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
-import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
+import io.github.moyusowo.neoartisanapi.api.block.storage.Storages;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.plugin.ServicePriority;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -62,7 +61,7 @@ final class LifecycleTaskManagerImpl implements LifecycleTaskManagerInternal {
             try {
                 priorityRunnable.runnable.run();
             } catch (Exception e) {
-                NeoArtisan.logger().warning("error when block lifecycle init at location " + location + " of block " + NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlockData(location.getBlock()).blockId().asString() + ", " + e);
+                NeoArtisan.logger().warning("error when block lifecycle init at location " + location + " of block " + Storages.BLOCK.getArtisanBlockData(location.getBlock()).blockId().asString() + ", " + e);
             }
         }
         isInit = true;
@@ -81,7 +80,7 @@ final class LifecycleTaskManagerImpl implements LifecycleTaskManagerInternal {
             try {
                 priorityRunnable.runnable.run();
             } catch (Exception e) {
-                NeoArtisan.logger().warning("error when block lifecycle terminate at location " + location + " of block " + NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlockData(location.getBlock()).blockId().asString() + ", " + e);
+                NeoArtisan.logger().warning("error when block lifecycle terminate at location " + location + " of block " + Storages.BLOCK.getArtisanBlockData(location.getBlock()).blockId().asString() + ", " + e);
             }
         }
     }

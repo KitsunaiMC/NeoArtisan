@@ -1,5 +1,6 @@
-package io.github.moyusowo.neoartisanapi.api.item;
+package io.github.moyusowo.neoartisanapi.api.registry;
 
+import io.github.moyusowo.neoartisanapi.api.item.ArtisanItem;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
@@ -8,6 +9,7 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.Collection;
+import java.util.Set;
 
 /**
  * 自定义物品注册表核心接口，提供完整的自定义物品生命周期管理。
@@ -128,4 +130,8 @@ public interface ItemRegistry {
     @NotNull
     @Unmodifiable
     Collection<String> getTagsById(NamespacedKey id);
+
+    @Unmodifiable
+    @NotNull
+    Set<NamespacedKey> getAllIds();
 }

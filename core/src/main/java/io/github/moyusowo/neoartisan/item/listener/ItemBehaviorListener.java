@@ -3,8 +3,8 @@ package io.github.moyusowo.neoartisan.item.listener;
 import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
-import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
 import io.github.moyusowo.neoartisanapi.api.item.ArtisanItem;
+import io.github.moyusowo.neoartisanapi.api.registry.Registries;
 import io.papermc.paper.event.player.PlayerTradeEvent;
 import org.bukkit.NamespacedKey;
 import org.bukkit.event.EventHandler;
@@ -22,7 +22,7 @@ final class ItemBehaviorListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlace(BlockPlaceEvent event) {
         if (event.isCancelled()) return;
-        if (!NeoArtisanAPI.getItemRegistry().isArtisanItem(event.getItemInHand())) return;
+        if (!Registries.ITEM.isArtisanItem(event.getItemInHand())) return;
         event.setCancelled(true);
     }
 
@@ -31,13 +31,13 @@ final class ItemBehaviorListener implements Listener {
         if (event.isCancelled()) return;
         MerchantInventory inventory = (MerchantInventory) event.getPlayer().getOpenInventory().getTopInventory();
         var ingredients = event.getTrade().getIngredients();
-        final NamespacedKey id0 = NeoArtisanAPI.getItemRegistry().getRegistryId(inventory.getItem(0));
-        final NamespacedKey id1 = NeoArtisanAPI.getItemRegistry().getRegistryId(inventory.getItem(1));
-        final NamespacedKey originalId0 = NeoArtisanAPI.getItemRegistry().getRegistryId(ingredients.getFirst()), originalId1;
+        final NamespacedKey id0 = Registries.ITEM.getRegistryId(inventory.getItem(0));
+        final NamespacedKey id1 = Registries.ITEM.getRegistryId(inventory.getItem(1));
+        final NamespacedKey originalId0 = Registries.ITEM.getRegistryId(ingredients.getFirst()), originalId1;
         if (ingredients.size() == 1) {
             originalId1 = ArtisanItem.EMPTY;
         } else {
-            originalId1 = NeoArtisanAPI.getItemRegistry().getRegistryId(ingredients.get(1));
+            originalId1 = Registries.ITEM.getRegistryId(ingredients.get(1));
         }
         if (id0.equals(originalId0) && id1.equals(originalId1)) return;
         if (id1.equals(originalId0) && id0.equals(originalId1)) return;

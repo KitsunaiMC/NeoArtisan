@@ -1,8 +1,10 @@
 package io.github.moyusowo.neoartisan.test;
 
 import io.github.moyusowo.neoartisan.NeoArtisan;
-import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
+
 import io.github.moyusowo.neoartisanapi.api.item.ArtisanItem;
+import io.github.moyusowo.neoartisanapi.api.item.AttributeProperty;
+import io.github.moyusowo.neoartisanapi.api.registry.Registries;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.FoodProperties;
 import io.papermc.paper.datacomponent.item.ItemLore;
@@ -11,6 +13,7 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -39,7 +42,7 @@ public final class ItemTest {
 
     public static void register() {
         if (NeoArtisan.isDebugMode()) {
-            NeoArtisanAPI.getItemRegistry().registerItem(
+            Registries.ITEM.registerItem(
                     ArtisanItem.complexBuilder()
                             .registryId(broken_stick)
                             .itemStack(() -> {
@@ -58,7 +61,7 @@ public final class ItemTest {
                             .blockId(new NamespacedKey(NeoArtisan.instance(), "magic_crop"))
                             .build()
             );
-            NeoArtisanAPI.getItemRegistry().registerItem(
+            Registries.ITEM.registerItem(
                     ArtisanItem.builder()
                             .registryId(magic_beef)
                             .rawMaterial(Material.COOKED_BEEF)
@@ -77,9 +80,10 @@ public final class ItemTest {
                                     ),
                                     8.0f
                             )
+                            .attributeProperty(AttributeProperty.empty().addAttribute(new NamespacedKey("my", "abc"), PersistentDataType.FLOAT, 1.3f))
                             .build()
             );
-            NeoArtisanAPI.getItemRegistry().registerItem(
+            Registries.ITEM.registerItem(
                     ArtisanItem.complexBuilder()
                             .registryId(magic_bread)
                             .itemStack(() -> {
@@ -100,7 +104,7 @@ public final class ItemTest {
                             .tags(Set.of("item/magic"))
                             .build()
             );
-            NeoArtisanAPI.getItemRegistry().registerItem(
+            Registries.ITEM.registerItem(
                     ArtisanItem.builder()
                             .registryId(magic_helmet)
                             .rawMaterial(Material.IRON_HELMET)
@@ -120,7 +124,7 @@ public final class ItemTest {
                             .tags(Set.of("item/magic"))
                             .build()
             );
-            NeoArtisanAPI.getItemRegistry().registerItem(
+            Registries.ITEM.registerItem(
                     ArtisanItem.builder()
                             .registryId(magic_sword)
                             .rawMaterial(Material.IRON_SWORD)
@@ -140,7 +144,7 @@ public final class ItemTest {
                             .tags(Set.of("item/magic"))
                             .build()
             );
-            NeoArtisanAPI.getItemRegistry().registerItem(
+            Registries.ITEM.registerItem(
                     ArtisanItem.builder()
                             .registryId(magic_diamond)
                             .rawMaterial(Material.IRON_INGOT)
@@ -149,7 +153,7 @@ public final class ItemTest {
                             .tags(Set.of("item/magic"))
                             .build()
             );
-            NeoArtisanAPI.getItemRegistry().registerItem(
+            Registries.ITEM.registerItem(
                     ArtisanItem.builder()
                             .registryId(magic_block)
                             .rawMaterial(Material.GRASS_BLOCK)
@@ -158,7 +162,7 @@ public final class ItemTest {
                             .tags(Set.of("item/magic"))
                             .build()
             );
-            NeoArtisanAPI.getItemRegistry().registerItem(
+            Registries.ITEM.registerItem(
                     ArtisanItem.builder()
                             .registryId(soup_block)
                             .rawMaterial(Material.PLAYER_HEAD)
@@ -168,7 +172,7 @@ public final class ItemTest {
                             .foodProperty(1, 1, true)
                             .build()
             );
-            NeoArtisanAPI.getItemRegistry().registerItem(
+            Registries.ITEM.registerItem(
                     ArtisanItem.builder()
                             .registryId(paper_soup_block)
                             .rawMaterial(Material.PAPER)
@@ -178,7 +182,7 @@ public final class ItemTest {
                             .foodProperty(1, 1, true)
                             .build()
             );
-            NeoArtisanAPI.getItemRegistry().registerItem(
+            Registries.ITEM.registerItem(
                     ArtisanItem.builder()
                             .registryId(useless_emerald)
                             .rawMaterial(Material.EMERALD)

@@ -7,7 +7,7 @@ import com.mojang.brigadier.tree.LiteralCommandNode;
 import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
-import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
+import io.github.moyusowo.neoartisanapi.api.registry.Registries;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
 import io.papermc.paper.command.brigadier.argument.ArgumentTypes;
@@ -22,7 +22,7 @@ final class ItemCommandRegistrar {
     private static final SuggestionProvider<CommandSourceStack> REGISTRY_ID_SUGGESTIONS =
             (ctx, builder) -> {
                 String currentInput = builder.getRemaining().toLowerCase();
-                ItemRegistryImpl.getInstance().getAllIds().stream()
+                Registries.ITEM.getAllIds().stream()
                         .filter(id -> id.asString().startsWith(currentInput) || id.getKey().contains(currentInput))
                         .forEach(id -> builder.suggest(id.asString()));
                 return builder.buildFuture();
@@ -38,8 +38,8 @@ final class ItemCommandRegistrar {
                                                     ctx -> {
                                                         if (ctx.getSource().getSender() instanceof Player player) {
                                                             NamespacedKey registryId = ctx.getArgument("registryId", NamespacedKey.class);
-                                                            if (NeoArtisanAPI.getItemRegistry().isArtisanItem(registryId)) {
-                                                                player.give(NeoArtisanAPI.getItemRegistry().getArtisanItem(registryId).getItemStack());
+                                                            if (Registries.ITEM.isArtisanItem(registryId)) {
+                                                                player.give(Registries.ITEM.getArtisanItem(registryId).getItemStack());
                                                             } else {
                                                                 player.sendMessage(Component.text("该物品ID不存在！").color(TextColor.color(255, 0, 0)));
                                                             }
@@ -60,8 +60,8 @@ final class ItemCommandRegistrar {
                                                                 if (ctx.getSource().getSender() instanceof Player player) {
                                                                     NamespacedKey registryId = ctx.getArgument("registryId", NamespacedKey.class);
                                                                     int count = IntegerArgumentType.getInteger(ctx, "count");
-                                                                    if (NeoArtisanAPI.getItemRegistry().isArtisanItem(registryId)) {
-                                                                        player.give(NeoArtisanAPI.getItemRegistry().getArtisanItem(registryId).getItemStack(count));
+                                                                    if (Registries.ITEM.isArtisanItem(registryId)) {
+                                                                        player.give(Registries.ITEM.getArtisanItem(registryId).getItemStack(count));
                                                                     } else {
                                                                         player.sendMessage(Component.text("该物品ID不存在！").color(TextColor.color(255, 0, 0)));
                                                                     }
@@ -82,8 +82,8 @@ final class ItemCommandRegistrar {
                                                             ctx -> {
                                                                 final NamespacedKey registryId = ctx.getArgument("registryId", NamespacedKey.class);
                                                                 final Player player = ctx.getArgument("player", Player.class);
-                                                                if (NeoArtisanAPI.getItemRegistry().isArtisanItem(registryId)) {
-                                                                    player.give(NeoArtisanAPI.getItemRegistry().getArtisanItem(registryId).getItemStack());
+                                                                if (Registries.ITEM.isArtisanItem(registryId)) {
+                                                                    player.give(Registries.ITEM.getArtisanItem(registryId).getItemStack());
                                                                 } else {
                                                                     player.sendMessage(Component.text("该物品ID不存在！").color(TextColor.color(255, 0, 0)));
                                                                 }
@@ -101,8 +101,8 @@ final class ItemCommandRegistrar {
                                                                         final NamespacedKey registryId = ctx.getArgument("registryId", NamespacedKey.class);
                                                                         final Player player = ctx.getArgument("player", Player.class);
                                                                         final int count = ctx.getArgument("count", int.class);
-                                                                        if (NeoArtisanAPI.getItemRegistry().isArtisanItem(registryId)) {
-                                                                            player.give(NeoArtisanAPI.getItemRegistry().getArtisanItem(registryId).getItemStack(count));
+                                                                        if (Registries.ITEM.isArtisanItem(registryId)) {
+                                                                            player.give(Registries.ITEM.getArtisanItem(registryId).getItemStack(count));
                                                                         } else {
                                                                             player.sendMessage(Component.text("该物品ID不存在！").color(TextColor.color(255, 0, 0)));
                                                                         }

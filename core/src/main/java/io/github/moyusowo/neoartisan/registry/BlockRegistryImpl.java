@@ -1,10 +1,9 @@
-package io.github.moyusowo.neoartisan.block;
+package io.github.moyusowo.neoartisan.registry;
 
 import io.github.moyusowo.neoartisan.NeoArtisan;
-import io.github.moyusowo.neoartisan.RegisterManager;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
-import io.github.moyusowo.neoartisanapi.api.block.BlockRegistry;
+import io.github.moyusowo.neoartisanapi.api.registry.BlockRegistry;
 import io.github.moyusowo.neoartisanapi.api.block.block.base.ArtisanBaseBlock;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;

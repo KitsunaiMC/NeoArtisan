@@ -9,11 +9,11 @@ import com.sun.jdi.InternalException;
 import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
-import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
 import io.github.moyusowo.neoartisanapi.api.block.data.ArtisanBlockData;
 import io.github.moyusowo.neoartisanapi.api.block.state.ArtisanCommonState;
 import io.github.moyusowo.neoartisanapi.api.block.state.ArtisanLeavesState;
 import io.github.moyusowo.neoartisanapi.api.block.state.ArtisanSkullState;
+import io.github.moyusowo.neoartisanapi.api.block.storage.Storages;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
@@ -45,8 +45,8 @@ public class BlockBreakSynchronize implements Listener {
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onBreakStart(BlockDamageEvent event) {
         if (event.getInstaBreak()) return;
-        if (!NeoArtisanAPI.getArtisanBlockStorage().isArtisanBlock(event.getBlock())) return;
-        ArtisanBlockData blockData = NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlockData(event.getBlock());
+        if (!Storages.BLOCK.isArtisanBlock(event.getBlock())) return;
+        ArtisanBlockData blockData = Storages.BLOCK.getArtisanBlockData(event.getBlock());
         switch (blockData.getArtisanBlockState().getType()) {
             case COMMON -> onCommonStateBreakStart(event, blockData);
             case LEAVES -> onLeavesStateBreakStart(event, blockData);

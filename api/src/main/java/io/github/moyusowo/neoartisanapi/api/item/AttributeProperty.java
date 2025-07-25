@@ -2,18 +2,18 @@ package io.github.moyusowo.neoartisanapi.api.item;
 
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Unmodifiable;
+
+import java.util.Collection;
+import java.util.List;
 
 /**
- * 物品属性存储容器接口，用于管理物品的全局默认属性和实例初始属性。
+ * 物品属性存储容器接口，用于管理物品的初始属性。
  *
- * <p>本接口实例通过 {@link #empty()} 工厂方法获取，不应直接实现。</p>
- *
- * <h3>属性存储机制：</h3>
- * <ul>
- *   <li><b>全局属性</b> - 作为模板值存储，修改将影响所有关联物品</li>
- *   <li><b>物品堆属性</b> - 作为新建物品实例的初始值存储，不影响已有实例</li>
- * </ul>
+ * <p>所有属性都会在物品的 `ItemStack` 创建时被写入内部的 {@link org.bukkit.persistence.PersistentDataContainer} 数据容器中</p>
  *
  * @see #empty()
  */
@@ -30,58 +30,33 @@ public interface AttributeProperty {
     }
 
     /**
-     * 添加/更新全局模板属性。
+     * 添加属性。
      *
-     * @param attributeKey 属性标识（不可为null）
+     * @param key 属性标识（不可为null）
+     * @param type 属性类型（不可为null）
      * @param value 属性值（不可为null）
      * @throws IllegalArgumentException 如果参数为null或值类型不合法
      */
-    AttributeProperty addGlobalAttribute(@NotNull NamespacedKey attributeKey, @NotNull Object value);
+    <P, C> AttributeProperty addAttribute(@NotNull NamespacedKey key, @NotNull PersistentDataType<P, C> type, @NotNull C value);
 
     /**
-     * 添加/更新物品实例初始属性。
+     * 检查是否存在指定的属性。
      *
-     * @param attributeKey 属性标识（不可为null）
-     * @param value 新建物品时的默认值（不可为null）
-     * @throws IllegalArgumentException 如果参数为null或值类型不合法
+     * @param key 要检查的属性标识
+     * @return 如果存在该属性返回true
      */
-    AttributeProperty addItemStackAttribute(@NotNull NamespacedKey attributeKey, @NotNull Object value);
-
-    /**
-     * 检查是否存在指定的全局属性。
-     *
-     * @param attributeKey 要检查的属性标识
-     * @return 如果存在该全局属性返回true
-     */
-    boolean hasGlobalAttribute(@NotNull NamespacedKey attributeKey);
-
-    /**
-     * 检查是否存在指定的物品实例属性。
-     *
-     * @param attributeKey 要检查的属性标识
-     * @return 如果存在该物品属性返回true
-     */
-    boolean hasItemStackAttribute(@NotNull NamespacedKey attributeKey);
+    boolean hasAttribute(@NotNull NamespacedKey key);
 
     /**
      * 获取全局属性值。
      *
      * @param <T> 返回值类型
-     * @param attributeKey 属性标识（不可为null）
+     * @param key 属性标识（不可为null）
+     * @param type 属性类型（不可为null）
      * @return 存储的属性值（不会为null）
      * @throws IllegalArgumentException 如果属性不存在或类型不匹配
      */
-    @NotNull <T> T getGlobalAttributeValue(@NotNull NamespacedKey attributeKey);
-
-    /**
-     * 获取物品实例属性初始值。
-     *
-     * @param <T> 返回值类型
-     * @param attributeKey 属性标识（不可为null）
-     * @return 存储的属性值（不会为null）
-     * @throws IllegalArgumentException 如果属性不存在或类型不匹配
-     */
-    @NotNull <T> T getItemStackAttributeValue(@NotNull NamespacedKey attributeKey);
+    @NotNull <T> T getAttribute(@NotNull NamespacedKey key, @NotNull Class<T> type);
 
     /**
      * 判断当前容器是否为空配置。
@@ -91,9 +66,13 @@ public interface AttributeProperty {
     boolean isEmpty();
 
     /**
-     * 获取所有已注册的物品实例属性键。
+     * 获取所有已注册的所有属性的 `NamespacedKey`。
      *
-     * @return 物品属性键数组，无属性时返回空数组（不会为null）
+     * @return 物品属性键列表
      */
-    NamespacedKey[] getItemStackAttributeKeys();
+    @Unmodifiable
+    @NotNull
+    Collection<NamespacedKey> getAttributeKeys();
+
+    void setPersistenceDataContainer(@NotNull PersistentDataContainer persistenceDataContainer);
 }

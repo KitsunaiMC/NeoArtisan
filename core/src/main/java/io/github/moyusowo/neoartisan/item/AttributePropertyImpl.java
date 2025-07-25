@@ -3,23 +3,25 @@ package io.github.moyusowo.neoartisan.item;
 import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
-import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
 import io.github.moyusowo.neoartisanapi.api.item.AttributeProperty;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.ServicePriority;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Unmodifiable;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 final class AttributePropertyImpl implements AttributeProperty {
+    @SuppressWarnings("all")
+    private final Map<NamespacedKey, ObjectWithType> attributes;
 
-    private final Map<NamespacedKey, Object> globalAttributeValues, itemstackAttributeValues;
+    private record ObjectWithType<P, C>(@NotNull C object, @NotNull PersistentDataType<P, C> type) {}
 
     AttributePropertyImpl() {
-        this.globalAttributeValues = new HashMap<>();
-        this.itemstackAttributeValues = new HashMap<>();
+        this.attributes = new HashMap<>();
     }
 
     @InitMethod(priority = InitPriority.REGISTRAR)
@@ -33,55 +35,39 @@ final class AttributePropertyImpl implements AttributeProperty {
     }
 
     @Override
-    public AttributeProperty addGlobalAttribute(@NotNull NamespacedKey attributeKey, @NotNull Object value) {
-        if (!NeoArtisanAPI.getGlobalAttributeRegistry().hasAttribute(attributeKey)) throw new IllegalArgumentException("You didn't register this attribute!");
-        Class<?> typeJavaClass = NeoArtisanAPI.getGlobalAttributeRegistry().getAttributeJavaType(attributeKey);
-        if (!typeJavaClass.isInstance(value)) throw new IllegalArgumentException("the value doesn't match the attribute!");
-        this.globalAttributeValues.put(attributeKey, value);
+    public <P, C> AttributeProperty addAttribute(@NotNull NamespacedKey key, @NotNull PersistentDataType<P, C> type, @NotNull C value) {
+        if (attributes.containsKey(key)) throw new IllegalArgumentException("key already exists!");
+        attributes.put(key, new ObjectWithType<>(value, type));
         return this;
     }
 
     @Override
-    public AttributeProperty addItemStackAttribute(@NotNull NamespacedKey attributeKey, @NotNull Object value) {
-        if (attributeKey == null) throw new IllegalArgumentException("You can't provide a null key!");
-        if (!NeoArtisanAPI.getItemStackAttributeRegistry().hasAttribute(attributeKey)) throw new IllegalArgumentException("You didn't register this attribute!");
-        Class<?> typeJavaClass = NeoArtisanAPI.getItemStackAttributeRegistry().getAttributeJavaType(attributeKey);
-        if (!typeJavaClass.isInstance(value)) throw new IllegalArgumentException("the value doesn't match the attribute!");
-        this.itemstackAttributeValues.put(attributeKey, value);
-        return this;
+    public boolean hasAttribute(@NotNull NamespacedKey key) {
+        return attributes.containsKey(key);
     }
 
-    @Override
-    public boolean hasGlobalAttribute(@NotNull NamespacedKey attributeKey) {
-        return this.globalAttributeValues.containsKey(attributeKey);
-    }
-
-    @Override
-    public boolean hasItemStackAttribute(@NotNull NamespacedKey attributeKey) {
-        return this.itemstackAttributeValues.containsKey(attributeKey);
-    }
-
-    @Override
     @SuppressWarnings("unchecked")
-    public @NotNull <T> T getGlobalAttributeValue(@NotNull NamespacedKey attributeKey) {
-        Class<T> type = (Class<T>) NeoArtisanAPI.getGlobalAttributeRegistry().getAttributeJavaType(attributeKey);
-        return type.cast(this.globalAttributeValues.get(attributeKey));
-    }
-
     @Override
-    @SuppressWarnings("unchecked")
-    public @NotNull <T> T getItemStackAttributeValue(@NotNull NamespacedKey attributeKey) {
-        Class<T> type = (Class<T>) NeoArtisanAPI.getItemStackAttributeRegistry().getAttributeJavaType(attributeKey);
-        return type.cast(this.itemstackAttributeValues.get(attributeKey));
+    public <T> @NotNull T getAttribute(@NotNull NamespacedKey key, @NotNull Class<T> type) {
+        return (T) attributes.get(key).object;
     }
 
     @Override
     public boolean isEmpty() {
-        return this.globalAttributeValues.isEmpty() && this.itemstackAttributeValues.isEmpty();
+        return this.attributes.isEmpty();
     }
 
     @Override
-    public NamespacedKey[] getItemStackAttributeKeys() {
-        return this.itemstackAttributeValues.keySet().toArray(new NamespacedKey[0]);
+    public @Unmodifiable @NotNull Collection<NamespacedKey> getAttributeKeys() {
+        return Collections.unmodifiableCollection(attributes.keySet());
+    }
+
+    @Override
+    @SuppressWarnings("all")
+    public void setPersistenceDataContainer(@NotNull PersistentDataContainer persistenceDataContainer) {
+        for (NamespacedKey key : getAttributeKeys()) {
+            ObjectWithType objectWithType = attributes.get(key);
+            persistenceDataContainer.set(key, objectWithType.type, objectWithType.object);
+        }
     }
 }

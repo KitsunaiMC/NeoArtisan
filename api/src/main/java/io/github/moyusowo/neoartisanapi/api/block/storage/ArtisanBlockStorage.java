@@ -17,7 +17,7 @@ import java.util.UUID;
  * </p>
  *
  * @see ArtisanBlockData 基础方块数据接口
- * @see io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI#getArtisanBlockStorage() 获取服务实例
+ * @see io.github.moyusowo.neoartisanapi.api.block.storage.Storages#BLOCK 获取服务实例
  */
 public interface ArtisanBlockStorage {
     /**

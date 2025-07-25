@@ -1,7 +1,8 @@
 package io.github.moyusowo.neoartisanapi.api.block.gui;
 
-import io.github.moyusowo.neoartisanapi.api.NeoArtisanAPI;
 import io.github.moyusowo.neoartisanapi.api.block.data.ArtisanBlockData;
+import io.github.moyusowo.neoartisanapi.api.block.protection.Protections;
+import io.github.moyusowo.neoartisanapi.api.block.storage.Storages;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
@@ -15,7 +16,6 @@ import org.bukkit.inventory.BlockInventoryHolder;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
@@ -143,7 +143,7 @@ public abstract class ArtisanBlockGUI implements BlockInventoryHolder, Listener 
      * @throws NullPointerException 如果方块数据尚未加载
      */
     public @NotNull ArtisanBlockData getArtisanBlockData() {
-        return NeoArtisanAPI.getArtisanBlockStorage().getArtisanBlockData(this.location.getBlock());
+        return Storages.BLOCK.getArtisanBlockData(this.location.getBlock());
     }
 
     /**
@@ -293,7 +293,7 @@ public abstract class ArtisanBlockGUI implements BlockInventoryHolder, Listener 
         if (event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
         if (event.getClickedBlock() == null) return;
         if (!event.getClickedBlock().getLocation().equals(this.location)) return;
-        if (!NeoArtisanAPI.getBlockProtection().canInteract(event.getPlayer(), event.getClickedBlock().getLocation())) return;
+        if (!Protections.BLOCK.canInteract(event.getPlayer(), event.getClickedBlock().getLocation())) return;
         event.setCancelled(true);
         InventoryView inventoryView = Objects.requireNonNull(event.getPlayer().openInventory(this.inventory));
         InventoryOpenEvent inventoryOpenEvent = new InventoryOpenEvent(inventoryView);
