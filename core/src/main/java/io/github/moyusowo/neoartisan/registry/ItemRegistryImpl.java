@@ -410,14 +410,14 @@ final class ItemRegistryImpl implements ItemRegistry {
     }
 
     @Override
-    public @NotNull ArtisanItem getArtisanItem(ItemStack itemStack) {
+    public @NotNull ArtisanItem getArtisanItem(@NotNull ItemStack itemStack) {
         ArtisanItem artisanItem = registry.get(getRegistryId(itemStack));
         if (artisanItem == null) throw new IllegalArgumentException("You should use has method to check before get!");
         return artisanItem;
     }
 
     @Override
-    public @NotNull @Unmodifiable Collection<NamespacedKey> getIdByTag(String tag) {
+    public @NotNull @Unmodifiable Collection<NamespacedKey> getIdByTag(@NotNull String tag) {
         if (tagToId.containsKey(tag)) {
             return Collections.unmodifiableCollection(tagToId.get(tag));
         }
@@ -425,7 +425,7 @@ final class ItemRegistryImpl implements ItemRegistry {
     }
 
     @Override
-    public @NotNull @Unmodifiable Collection<String> getTagsById(NamespacedKey id) {
+    public @NotNull @Unmodifiable Collection<String> getTagsById(@NotNull NamespacedKey id) {
         if (isArtisanItem(id)) return getArtisanItem(id).getTags();
         else if (id.getNamespace().equals("minecraft")) {
             Material material = Material.matchMaterial(id.getKey());

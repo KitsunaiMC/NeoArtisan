@@ -9,6 +9,7 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Set;
 
 /**
@@ -121,15 +122,22 @@ public interface ItemRegistry {
      * @apiNote 调用该方法之前应该总是调用 {@link ItemRegistry#isArtisanItem(ItemStack)} 以检查有效性
      */
     @NotNull
-    ArtisanItem getArtisanItem(ItemStack itemStack);
+    ArtisanItem getArtisanItem(@NotNull ItemStack itemStack);
 
     @NotNull
     @Unmodifiable
-    Collection<NamespacedKey> getIdByTag(String tag);
+    Collection<NamespacedKey> getIdByTag(@NotNull String tag);
 
     @NotNull
     @Unmodifiable
-    Collection<String> getTagsById(NamespacedKey id);
+    Collection<String> getTagsById(@NotNull NamespacedKey id);
+
+    @NotNull
+    @Unmodifiable
+    default Collection<String> getTagsByItemStack(@Nullable ItemStack itemStack) {
+        if (itemStack == null || itemStack.isEmpty()) return Collections.emptyList();
+        return getTagsById(Registries.ITEM.getRegistryId(itemStack));
+    }
 
     @Unmodifiable
     @NotNull
