@@ -66,7 +66,6 @@ public final class GuideIndexManager {
 
     public static void openIndex(@NotNull Player player, int page) {
         if (page >= 0 && page < indexs.size()) {
-            player.closeInventory();
             player.openInventory(indexs.get(page).getInventory());
         }
     }

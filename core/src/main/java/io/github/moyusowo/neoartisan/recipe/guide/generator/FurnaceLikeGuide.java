@@ -1,5 +1,6 @@
 package io.github.moyusowo.neoartisan.recipe.guide.generator;
 
+import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisanapi.api.recipe.*;
 import io.github.moyusowo.neoartisanapi.api.recipe.choice.Choice;
 import io.github.moyusowo.neoartisanapi.api.recipe.choice.ItemChoice;
@@ -19,6 +20,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -79,14 +81,36 @@ public class FurnaceLikeGuide implements GuideGUIGenerator {
             }
             handle.removeFirst();
         }
-        final ItemStack itemStack = Registries.ITEM.getItemStack(input.getFirst());
-        final ItemLore.Builder itemLore = ItemLore.lore().addLine(MiniMessage.miniMessage().deserialize("<white>可以接受的物品<dark_gray>：</dark_gray></white>").decoration(TextDecoration.ITALIC, false));
-        while (!input.isEmpty()) {
-            itemLore.addLine(MiniMessage.miniMessage().deserialize(" <gray>- </gray>").append(Registries.ITEM.getItemStack(input.getFirst()).displayName().decoration(TextDecoration.ITALIC, false)).decoration(TextDecoration.ITALIC, false));
-            input.removeFirst();
+        if (input.size() > 1) {
+            final List<ItemStack> itemStacks = new ArrayList<>();
+            final List<Component> components = new ArrayList<>();
+            components.add(Component.text("可以接受的物品").color(TextColor.fromHexString("#aaaaaa")).decoration(TextDecoration.ITALIC, false));
+            while (!input.isEmpty()) {
+                final ItemStack itemStack = Registries.ITEM.getItemStack(input.getFirst());
+                components.add(MiniMessage.miniMessage().deserialize(" <gray>- </gray>").append(itemStack.displayName().decoration(TextDecoration.ITALIC, false)).decoration(TextDecoration.ITALIC, false));
+                itemStacks.add(itemStack);
+                input.removeFirst();
+            }
+            for (ItemStack itemStack : itemStacks) {
+                final ItemLore itemLore = itemStack.getDataOrDefault(DataComponentTypes.LORE, ItemLore.lore().build());
+                final List<Component> lores = new ArrayList<>(itemLore.lines());
+                lores.add(Component.empty());
+                lores.addAll(components);
+                itemStack.setData(DataComponentTypes.LORE, ItemLore.lore(lores));
+                itemStack.setData(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+            }
+            new BukkitRunnable() {
+                private int k = 0;
+                @Override
+                public void run() {
+                    inventory.setItem(13, itemStacks.get(k % itemStacks.size()));
+                    k++;
+                }
+            }.runTaskTimer(NeoArtisan.instance(), 0L, 20L);
+        } else {
+            final ItemStack itemStack = Registries.ITEM.getItemStack(input.getFirst());
+            inventory.setItem(13, itemStack);
         }
-        itemStack.setData(DataComponentTypes.LORE, itemLore);
-        inventory.setItem(13, itemStack);
         inventory.setItem(15, furnaceLikeRecipe.getResultGenerator().generate());
         return inventory;
     }

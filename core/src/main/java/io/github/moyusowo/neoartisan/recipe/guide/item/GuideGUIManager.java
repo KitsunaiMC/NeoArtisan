@@ -49,7 +49,6 @@ public final class GuideGUIManager {
 
     public void openInventory(final Player player, final GuideGUIType type, int page) {
         if (page >= 0 && page < inventorys.get(type).size()) {
-            player.closeInventory();
             player.openInventory(inventorys.get(type).get(page).getInventory());
         }
     }
