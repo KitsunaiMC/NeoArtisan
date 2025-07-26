@@ -1,5 +1,6 @@
 package io.github.moyusowo.neoartisanapi.api.recipe.choice;
 
+import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -21,6 +22,16 @@ public final class MultiChoice implements Choice {
     public boolean matches(@Nullable ItemStack itemStack) {
         for (Choice choice : choices) {
             if (!choice.matches(itemStack)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public boolean matches(@Nullable NamespacedKey itemId) {
+        for (Choice choice : choices) {
+            if (!choice.matches(itemId)) {
                 return false;
             }
         }

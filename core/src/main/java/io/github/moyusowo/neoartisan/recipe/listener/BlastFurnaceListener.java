@@ -50,7 +50,7 @@ final class BlastFurnaceListener implements Listener {
         final ItemStack itemStack = event.getCursor();
         if (itemStack.isEmpty()) return;
         if (!hasRecipe(itemStack)) {
-            final Collection<ArtisanRecipe> blastingRecipes = Registries.RECIPE.getRecipes(RecipeType.BLASTING);
+            final Collection<ArtisanRecipe> blastingRecipes = Registries.RECIPE.getRecipesByType(RecipeType.BLASTING);
             for (ArtisanRecipe artisanRecipe : blastingRecipes) {
                 if (artisanRecipe instanceof ArtisanBlastingRecipe blastingRecipe) {
                     if (blastingRecipe.matches(new ItemStack[] { itemStack })) {

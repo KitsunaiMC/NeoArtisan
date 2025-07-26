@@ -2,6 +2,7 @@ package io.github.moyusowo.neoartisanapi.api.registry;
 
 import io.github.moyusowo.neoartisanapi.api.recipe.ArtisanRecipe;
 import io.github.moyusowo.neoartisanapi.api.recipe.RecipeType;
+import io.github.moyusowo.neoartisanapi.api.recipe.guide.GuideGUIGenerator;
 import org.bukkit.NamespacedKey;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -70,6 +71,12 @@ public interface RecipeRegistry {
      */
     @Unmodifiable
     @NotNull
-    Collection<ArtisanRecipe> getRecipes(@NotNull NamespacedKey recipeType);
+    Collection<ArtisanRecipe> getRecipesByType(@NotNull NamespacedKey recipeType);
+
+    @Unmodifiable
+    @NotNull
+    Collection<ArtisanRecipe> getAllRecipes();
+
+    void setGuide(@NotNull NamespacedKey recipeType, @NotNull GuideGUIGenerator generator);
 
 }

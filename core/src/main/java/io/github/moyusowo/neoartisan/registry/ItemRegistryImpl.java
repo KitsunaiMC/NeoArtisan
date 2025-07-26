@@ -11,7 +11,9 @@ import io.github.moyusowo.neoartisanapi.api.registry.ItemRegistry;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.Registry;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.ItemType;
 import org.bukkit.plugin.ServicePriority;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -375,12 +377,13 @@ final class ItemRegistryImpl implements ItemRegistry {
         else return registryId.getNamespace().equals("minecraft") && Material.getMaterial(registryId.getKey().toUpperCase()) != null;
     }
 
+    @SuppressWarnings("UnstableApiUsage")
     @Override
     public @NotNull ItemStack getItemStack(NamespacedKey registryId, int count) {
         if (isArtisanItem(registryId)) return getArtisanItem(registryId).getItemStack(count);
-        Material material = Material.getMaterial(registryId.getKey().toUpperCase());
-        if (material == null) throw new IllegalArgumentException("You should use has method to check before get!");
-        ItemStack itemStack = new ItemStack(material);
+        ItemType itemType = Registry.ITEM.get(registryId);
+        if (itemType == null) throw new IllegalArgumentException("No registryId as: " + registryId.asString());
+        ItemStack itemStack = itemType.createItemStack();
         itemStack.setAmount(Math.min(count, itemStack.getMaxStackSize()));
         return itemStack;
     }

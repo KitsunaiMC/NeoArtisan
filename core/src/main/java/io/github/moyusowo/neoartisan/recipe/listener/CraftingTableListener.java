@@ -60,7 +60,7 @@ final class CraftingTableListener implements Listener {
             }
             if (!hasArtisan) return;
         }
-        final Collection<ArtisanRecipe> shapedRecipes = Registries.RECIPE.getRecipes(RecipeType.SHAPED);
+        final Collection<ArtisanRecipe> shapedRecipes = Registries.RECIPE.getRecipesByType(RecipeType.SHAPED);
         for (ArtisanRecipe artisanRecipe : shapedRecipes) {
             if (artisanRecipe instanceof ArtisanShapedRecipe shapedRecipe) {
                 if (shapedRecipe.matches(matrix)) {
@@ -69,7 +69,7 @@ final class CraftingTableListener implements Listener {
                 }
             }
         }
-        final Collection<ArtisanRecipe> shapelessRecipes = Registries.RECIPE.getRecipes(RecipeType.SHAPELESS);
+        final Collection<ArtisanRecipe> shapelessRecipes = Registries.RECIPE.getRecipesByType(RecipeType.SHAPELESS);
         for (ArtisanRecipe artisanRecipe : shapelessRecipes) {
             if (artisanRecipe instanceof ArtisanShapelessRecipe shapelessRecipe) {
                 if (shapelessRecipe.matches(matrix)) {

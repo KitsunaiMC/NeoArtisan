@@ -51,7 +51,7 @@ final class FurnaceListener implements Listener {
         final ItemStack itemStack = event.getCursor();
         if (itemStack.isEmpty()) return;
         if (!hasRecipe(itemStack)) {
-            final Collection<ArtisanRecipe> furnaceRecipes = Registries.RECIPE.getRecipes(RecipeType.FURNACE);
+            final Collection<ArtisanRecipe> furnaceRecipes = Registries.RECIPE.getRecipesByType(RecipeType.FURNACE);
             for (ArtisanRecipe artisanRecipe : furnaceRecipes) {
                 if (artisanRecipe instanceof ArtisanFurnaceRecipe furnaceRecipe) {
                     if (furnaceRecipe.matches(new ItemStack[] { itemStack })) {

@@ -48,7 +48,7 @@ final class CampfireListener implements Listener {
         final ItemStack itemStack = event.getItem();
         if (itemStack == null || itemStack.isEmpty()) return;
         if (!hasRecipe(itemStack)) {
-            final Collection<ArtisanRecipe> campfireRecipes = Registries.RECIPE.getRecipes(RecipeType.CAMPFIRE);
+            final Collection<ArtisanRecipe> campfireRecipes = Registries.RECIPE.getRecipesByType(RecipeType.CAMPFIRE);
             for (ArtisanRecipe artisanRecipe : campfireRecipes) {
                 if (artisanRecipe instanceof ArtisanCampfireRecipe campfireRecipe) {
                     if (campfireRecipe.matches(new ItemStack[] { itemStack })) {

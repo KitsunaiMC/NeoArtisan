@@ -50,7 +50,7 @@ final class SmokerListener implements Listener {
         final ItemStack itemStack = event.getCursor();
         if (itemStack.isEmpty()) return;
         if (!hasRecipe(itemStack)) {
-            final Collection<ArtisanRecipe> smokingRecipes = Registries.RECIPE.getRecipes(RecipeType.SMOKING);
+            final Collection<ArtisanRecipe> smokingRecipes = Registries.RECIPE.getRecipesByType(RecipeType.SMOKING);
             for (ArtisanRecipe artisanRecipe : smokingRecipes) {
                 if (artisanRecipe instanceof ArtisanSmokingRecipe smokingRecipe) {
                     if (smokingRecipe.matches(new ItemStack[] { itemStack })) {

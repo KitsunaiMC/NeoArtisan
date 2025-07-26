@@ -11,4 +11,9 @@ public record ItemChoice(@NotNull NamespacedKey itemId) implements Choice {
     public boolean matches(@Nullable ItemStack itemStack) {
         return Registries.ITEM.getRegistryId(itemStack).equals(itemId);
     }
+
+    @Override
+    public boolean matches(@Nullable NamespacedKey itemId) {
+        return this.itemId.equals(itemId);
+    }
 }

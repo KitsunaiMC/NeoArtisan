@@ -12,4 +12,9 @@ public record TagChoice(@NotNull String tag) implements Choice {
         NamespacedKey itemId = Registries.ITEM.getRegistryId(itemStack);
         return Registries.ITEM.getIdByTag(tag).contains(itemId);
     }
+
+    @Override
+    public boolean matches(@Nullable NamespacedKey itemId) {
+        return Registries.ITEM.getIdByTag(tag).contains(itemId);
+    }
 }

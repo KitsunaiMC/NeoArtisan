@@ -16,7 +16,7 @@ import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.List;
 
-public class ArtisanBlastingRecipeImpl implements ArtisanBlastingRecipe {
+final class ArtisanBlastingRecipeImpl implements ArtisanBlastingRecipe {
     private final NamespacedKey key;
     private final Choice input;
     private final int cookTime;
