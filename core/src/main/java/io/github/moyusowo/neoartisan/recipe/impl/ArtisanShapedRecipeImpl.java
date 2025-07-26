@@ -89,6 +89,7 @@ final class ArtisanShapedRecipeImpl implements ArtisanShapedRecipe {
         return Collections.unmodifiableList(inputs);
     }
 
+    @Override
     @NotNull
     public Choice[][] getInputMatrix() {
         return this.inputMatrix.clone();

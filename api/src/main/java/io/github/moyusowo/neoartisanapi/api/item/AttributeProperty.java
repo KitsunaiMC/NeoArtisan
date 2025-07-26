@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 
@@ -17,7 +18,7 @@ import java.util.List;
  *
  * @see #empty()
  */
-@SuppressWarnings("unused")
+@ApiStatus.NonExtendable
 public interface AttributeProperty {
 
     /**

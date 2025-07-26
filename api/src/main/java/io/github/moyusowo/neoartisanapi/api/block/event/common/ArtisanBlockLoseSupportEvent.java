@@ -1,4 +1,4 @@
-package io.github.moyusowo.neoartisanapi.api.block.event;
+package io.github.moyusowo.neoartisanapi.api.block.event.common;
 
 import io.github.moyusowo.neoartisanapi.api.block.block.base.ArtisanBaseBlock;
 import org.bukkit.block.Block;

@@ -23,10 +23,10 @@ import org.bukkit.NamespacedKey;
  * @see ArtisanBlastingRecipe
  */
 public final class RecipeType {
-    public static final NamespacedKey SHAPED = NamespacedKey.minecraft("shaped"),
-        SHAPELESS = NamespacedKey.minecraft("shapeless"),
-        FURNACE = NamespacedKey.minecraft("furnace"),
-        CAMPFIRE = NamespacedKey.minecraft("campfire"),
+    public static final NamespacedKey SHAPED = NamespacedKey.minecraft("crafting_shaped"),
+        SHAPELESS = NamespacedKey.minecraft("crafting_shapeless"),
+        FURNACE = NamespacedKey.minecraft("smelting"),
+        CAMPFIRE = NamespacedKey.minecraft("campfire_cooking"),
         SMOKING = NamespacedKey.minecraft("smoking"),
         BLASTING = NamespacedKey.minecraft("blasting");
 }

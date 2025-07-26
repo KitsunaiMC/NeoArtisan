@@ -7,7 +7,7 @@ import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
 import io.github.moyusowo.neoartisanapi.api.block.block.base.ArtisanBlocks;
 import io.github.moyusowo.neoartisanapi.api.block.data.ArtisanBlockData;
-import io.github.moyusowo.neoartisanapi.api.block.event.ArtisanBlockPlaceEvent;
+import io.github.moyusowo.neoartisanapi.api.block.event.common.ArtisanBlockPlaceEvent;
 import io.github.moyusowo.neoartisanapi.api.block.protection.Protections;
 import io.github.moyusowo.neoartisanapi.api.item.ArtisanItem;
 import io.github.moyusowo.neoartisanapi.api.registry.Registries;

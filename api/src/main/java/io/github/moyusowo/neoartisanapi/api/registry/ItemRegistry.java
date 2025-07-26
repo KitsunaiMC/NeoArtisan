@@ -4,6 +4,7 @@ import io.github.moyusowo.neoartisanapi.api.item.ArtisanItem;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
@@ -27,6 +28,7 @@ import java.util.Set;
  * @see ArtisanItem
  * @see org.bukkit.plugin.ServicesManager
  */
+@ApiStatus.NonExtendable
 public interface ItemRegistry {
 
     /**

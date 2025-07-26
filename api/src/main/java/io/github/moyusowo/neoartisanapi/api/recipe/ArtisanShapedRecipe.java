@@ -4,6 +4,7 @@ import io.github.moyusowo.neoartisanapi.api.item.ItemGenerator;
 import io.github.moyusowo.neoartisanapi.api.recipe.choice.Choice;
 import io.github.moyusowo.neoartisanapi.api.util.BuilderFactoryUtil;
 import org.bukkit.NamespacedKey;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -23,6 +24,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @see ArtisanRecipe 基础配方接口
  */
+@ApiStatus.NonExtendable
 public interface ArtisanShapedRecipe extends ArtisanRecipe {
     @NotNull
     static Builder builder() {
@@ -38,6 +40,9 @@ public interface ArtisanShapedRecipe extends ArtisanRecipe {
     default ItemGenerator getResultGenerator() {
         return getResultGenerators().getFirst();
     }
+
+    @NotNull
+    Choice[][] getInputMatrix();
 
     /**
      * 建造器工厂接口

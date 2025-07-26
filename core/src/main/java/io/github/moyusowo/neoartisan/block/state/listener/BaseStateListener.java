@@ -5,8 +5,8 @@ import io.github.moyusowo.neoartisan.block.storage.internal.ArtisanBlockStorageI
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
 import io.github.moyusowo.neoartisanapi.api.block.data.ArtisanBlockData;
-import io.github.moyusowo.neoartisanapi.api.block.event.ArtisanBlockBreakEvent;
-import io.github.moyusowo.neoartisanapi.api.block.event.ArtisanBlockLoseSupportEvent;
+import io.github.moyusowo.neoartisanapi.api.block.event.common.ArtisanBlockBreakEvent;
+import io.github.moyusowo.neoartisanapi.api.block.event.common.ArtisanBlockLoseSupportEvent;
 import io.github.moyusowo.neoartisanapi.api.block.protection.Protections;
 import io.github.moyusowo.neoartisanapi.api.block.storage.Storages;
 import io.github.moyusowo.neoartisanapi.api.block.util.PistonMoveBlockReaction;

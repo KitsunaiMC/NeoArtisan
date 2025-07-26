@@ -8,6 +8,7 @@ import io.github.moyusowo.neoartisanapi.api.block.gui.ArtisanBlockGUI;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.persistence.PersistentDataContainer;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -27,6 +28,7 @@ import org.jetbrains.annotations.Nullable;
  * @see ArtisanBaseBlock 自定义方块类型定义
  * @see ArtisanBaseBlockState 方块状态系统
  */
+@ApiStatus.NonExtendable
 public interface ArtisanBlockData {
     @NotNull
     static Builder builder() {

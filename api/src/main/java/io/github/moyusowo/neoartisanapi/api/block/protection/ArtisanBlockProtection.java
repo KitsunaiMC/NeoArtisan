@@ -23,7 +23,6 @@ import org.jetbrains.annotations.NotNull;
  * @see io.github.moyusowo.neoartisanapi.api.block.protection.Protections#BLOCK 获取服务实例
  */
 public interface ArtisanBlockProtection {
-
     /**
      * 检查玩家是否可以破坏指定位置的方块
      *

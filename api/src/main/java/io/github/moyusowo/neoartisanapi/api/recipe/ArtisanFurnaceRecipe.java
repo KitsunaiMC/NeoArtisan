@@ -2,9 +2,9 @@ package io.github.moyusowo.neoartisanapi.api.recipe;
 
 import io.github.moyusowo.neoartisanapi.api.item.ItemGenerator;
 import io.github.moyusowo.neoartisanapi.api.recipe.choice.Choice;
-import io.github.moyusowo.neoartisanapi.api.recipe.choice.ItemChoice;
 import io.github.moyusowo.neoartisanapi.api.util.BuilderFactoryUtil;
 import org.bukkit.NamespacedKey;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -30,7 +30,8 @@ import org.jetbrains.annotations.NotNull;
  *
  * @see ArtisanRecipe 基础配方接口
  */
-public interface ArtisanFurnaceRecipe extends ArtisanRecipe {
+@ApiStatus.NonExtendable
+public interface ArtisanFurnaceRecipe extends ArtisanFurnaceLikeRecipe {
     @NotNull
     static Builder builder() {
         return BuilderFactoryUtil.getBuilder(BuilderFactory.class).builder();
@@ -45,34 +46,6 @@ public interface ArtisanFurnaceRecipe extends ArtisanRecipe {
     default NamespacedKey getKey() {
         return RecipeType.FURNACE;
     }
-
-    /**
-     * 获取烧炼原料物品ID
-     *
-     * @return 非null的物品命名空间键
-     * @implNote 应与 {@link #getInputs()} 的首元素一致
-     */
-    @NotNull
-    Choice getInput();
-
-    /**
-     * 获取标准烧炼所需时间（tick）
-     *
-     * @return 正整数值（1 tick = 0.05秒）
-     */
-    int getCookTime();
-
-    @NotNull
-    default ItemGenerator getResultGenerator() {
-        return getResultGenerators().getFirst();
-    }
-
-    /**
-     * 获取烧炼完成时获得的经验值
-     *
-     * @return 正浮点数值
-     */
-    float getExp();
 
     /**
      * 熔炉配方建造器接口

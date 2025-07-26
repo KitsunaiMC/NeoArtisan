@@ -1,8 +1,9 @@
 package io.github.moyusowo.neoartisanapi.api.block.task;
 
-import org.bukkit.scheduler.BukkitRunnable;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
+@ApiStatus.NonExtendable
 public interface LifecycleTaskManager {
     /**
      * 添加方块生命周期任务

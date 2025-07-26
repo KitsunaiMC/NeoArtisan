@@ -2,6 +2,7 @@ package io.github.moyusowo.neoartisanapi.api.registry;
 
 import io.github.moyusowo.neoartisanapi.api.block.block.base.ArtisanBaseBlock;
 import org.bukkit.NamespacedKey;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -13,6 +14,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @see ArtisanBaseBlock 自定义方块接口
  */
+@ApiStatus.NonExtendable
 public interface BlockRegistry {
 
     /**

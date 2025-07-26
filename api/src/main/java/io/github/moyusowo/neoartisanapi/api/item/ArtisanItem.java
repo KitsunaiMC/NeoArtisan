@@ -10,6 +10,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
@@ -26,6 +27,7 @@ import java.util.function.Supplier;
  * 和各种扩展属性。所有自定义物品都应有唯一的 {@link NamespacedKey} 标识。</p>
  *
  */
+@ApiStatus.NonExtendable
 public interface ArtisanItem {
     @NotNull
     static Builder builder() {

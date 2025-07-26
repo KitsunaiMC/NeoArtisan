@@ -4,6 +4,7 @@ import io.github.moyusowo.neoartisanapi.api.block.data.ArtisanBlockData;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -19,6 +20,7 @@ import java.util.UUID;
  * @see ArtisanBlockData 基础方块数据接口
  * @see io.github.moyusowo.neoartisanapi.api.block.storage.Storages#BLOCK 获取服务实例
  */
+@ApiStatus.NonExtendable
 public interface ArtisanBlockStorage {
     /**
      * 通过世界坐标获取自定义方块数据

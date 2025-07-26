@@ -3,7 +3,6 @@ package io.github.moyusowo.neoartisan.recipe.impl;
 import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
-import io.github.moyusowo.neoartisanapi.api.item.ArtisanItem;
 import io.github.moyusowo.neoartisanapi.api.item.ItemGenerator;
 import io.github.moyusowo.neoartisanapi.api.recipe.ArtisanFurnaceRecipe;
 import io.github.moyusowo.neoartisanapi.api.recipe.RecipeType;
