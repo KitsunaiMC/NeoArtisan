@@ -1,6 +1,7 @@
 package io.github.moyusowo.neoartisan.recipe.guide.item;
 
 import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
 import io.github.moyusowo.neoartisan.registry.internal.RecipeRegistryInternal;
 import io.github.moyusowo.neoartisanapi.api.item.ItemGenerator;
 import io.github.moyusowo.neoartisanapi.api.recipe.ArtisanRecipe;
@@ -36,15 +37,17 @@ public final class GuideGUIManager {
     public GuideGUIManager(@NotNull NamespacedKey itemId) {
         this.itemId = itemId;
         this.inventorys = ArrayListMultimap.create();
-        Collection<ArtisanRecipe> allRecipes = Registries.RECIPE.getAllRecipes();
-        for (ArtisanRecipe recipe : allRecipes) {
-            if (recipe.getKey().getNamespace().equals(NamespacedKey.MINECRAFT)) continue;
-            final Optional<GuideGUIGenerator> optional = ((RecipeRegistryInternal) Registries.RECIPE).getGuide(recipe.getType());
-            final Optional<GuideGUIType> typeOptional = hasItemInRecipe(recipe, itemId);
-            if (optional.isPresent() && typeOptional.isPresent()) {
-                this.inventorys.put(typeOptional.get(), new GuideGUIHolder(itemId, typeOptional.get(), this.inventorys.size(), optional.get(), recipe, Component.text("配方指南")));
-            }
-        }
+        final Multimap<NamespacedKey, ArtisanRecipe> allRecipesByType = Registries.RECIPE.getAllRecipesByType();
+        allRecipesByType.forEach(
+                (type, recipe) -> {
+                    if (recipe.getKey().getNamespace().equals(NamespacedKey.MINECRAFT)) return;
+                    final Optional<GuideGUIGenerator> optional = ((RecipeRegistryInternal) Registries.RECIPE).getGuide(recipe.getType());
+                    final Optional<GuideGUIType> typeOptional = hasItemInRecipe(recipe, itemId);
+                    if (optional.isPresent() && typeOptional.isPresent()) {
+                        this.inventorys.put(typeOptional.get(), new GuideGUIHolder(itemId, typeOptional.get(), this.inventorys.size(), optional.get(), recipe, Component.text("配方指南")));
+                    }
+                }
+        );
     }
 
     public void openInventory(final Player player, final GuideGUIType type, int page) {

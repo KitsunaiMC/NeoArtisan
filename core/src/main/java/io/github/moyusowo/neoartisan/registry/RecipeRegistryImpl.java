@@ -2,9 +2,8 @@ package io.github.moyusowo.neoartisan.registry;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
+import com.google.common.collect.Multimaps;
 import io.github.moyusowo.neoartisan.NeoArtisan;
-import io.github.moyusowo.neoartisan.recipe.guide.item.GuideGUIManager;
-import io.github.moyusowo.neoartisan.recipe.guide.item.GuideGUIType;
 import io.github.moyusowo.neoartisan.recipe.guide.generator.FurnaceLikeGuide;
 import io.github.moyusowo.neoartisan.recipe.guide.generator.ShapedGuide;
 import io.github.moyusowo.neoartisan.recipe.guide.generator.ShapelessGuide;
@@ -19,11 +18,9 @@ import io.github.moyusowo.neoartisanapi.api.recipe.choice.ItemChoice;
 import io.github.moyusowo.neoartisanapi.api.recipe.choice.MultiChoice;
 import io.github.moyusowo.neoartisanapi.api.recipe.guide.GuideGUIGenerator;
 import io.github.moyusowo.neoartisanapi.api.registry.RecipeRegistry;
-import io.github.moyusowo.neoartisanapi.api.registry.Registries;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.*;
 import org.bukkit.plugin.ServicePriority;
@@ -234,5 +231,10 @@ final class RecipeRegistryImpl implements Listener, RecipeRegistryInternal {
     public @NotNull Optional<GuideGUIGenerator> getGuide(@NotNull NamespacedKey recipeType) {
         if (generators.containsKey(recipeType)) return Optional.of(generators.get(recipeType));
         return Optional.empty();
+    }
+
+    @Override
+    public @Unmodifiable @NotNull Multimap<NamespacedKey, ArtisanRecipe> getAllRecipesByType() {
+        return Multimaps.unmodifiableMultimap(recipeByType);
     }
 }

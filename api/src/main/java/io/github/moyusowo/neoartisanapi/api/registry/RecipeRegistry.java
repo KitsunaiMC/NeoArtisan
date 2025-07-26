@@ -1,5 +1,6 @@
 package io.github.moyusowo.neoartisanapi.api.registry;
 
+import com.google.common.collect.Multimap;
 import io.github.moyusowo.neoartisanapi.api.recipe.ArtisanRecipe;
 import io.github.moyusowo.neoartisanapi.api.recipe.RecipeType;
 import io.github.moyusowo.neoartisanapi.api.recipe.guide.GuideGUIGenerator;
@@ -76,6 +77,10 @@ public interface RecipeRegistry {
     @Unmodifiable
     @NotNull
     Collection<ArtisanRecipe> getAllRecipes();
+
+    @Unmodifiable
+    @NotNull
+    Multimap<NamespacedKey, ArtisanRecipe> getAllRecipesByType();
 
     void setGuide(@NotNull NamespacedKey recipeType, @NotNull GuideGUIGenerator generator);
 
