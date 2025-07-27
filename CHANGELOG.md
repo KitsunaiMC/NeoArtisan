@@ -3,6 +3,24 @@
 > 本文档遵循 [Keep a Changelog](https://keepachangelog.com/) 规范
 > This document follows the [Keep a Changelog](https://keepachangelog.com/) specification
 
+## [1.0.0-rc-1] - 2025-07-27
+### 新增 / Added
+- 物品注册表新增 `getTagsByItemStack` 方法
+- 新增 `EmptyChoice` 类以规范配方选择为空时的默认实现
+- `Choice` 接口新增 `match(NamespacedKey)` 方法
+- 配方注册表内新增 `getAllRecipesByType` 方法
+- 新增配方书系统，可以通过实现 `GuideGUIGenerator` 并用 `RecipeRegistry#setGuide` 方法注册自己的配方显示器
+- 自定义物品新增配方书分类字段，可以用 `RecipeRegistry#setCategory` 注册自定义的类别名称和展示物品
+
+### 变更 / Changed
+- 移除只是对Paper的PDC简单包装的属性系统，保留自定义物品属性，默认写入PDC
+- 规范移动和重命名了部分类和包
+- 版本号更新至 `1.0.0-rc-1`，正式进入预发布阶段
+
+### 修复 / Fixed
+- 修复了有序配方合成时绝对位置必须一样的问题，改为相对位置一样即可合成
+- 修复了 `BlockMappingsManager` 类内无法正确读取方块ID的问题
+
 ## [0.10.0 - beta] - 2025-07-25
 ### 新增 / Added
 - 方块创建时增加是否为方块实体的选择，默认无方块实体 / Added optional block-entity flag when creating blocks; defaults to no block entity

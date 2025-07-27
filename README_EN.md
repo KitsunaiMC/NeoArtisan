@@ -7,18 +7,17 @@
 [中文版](./README.md)
 
 <details>
-<summary>⚠️ Development preview notes (click to expand)</summary>
+<summary>⚠️ Development notes (click to expand)</summary>
 
-- Current version 0.x.y – API may change in minor updates
-- Pin the version before using in production
-- Semantic versioning starts from 1.0.0
+- Current version 1.0.0-rc-1 – current API is frozen
+- Semantic versioning management
 </details>
 
 ---
 
 ### ✅ One-sentence pitch
 
-> NeoArtisan is a **Paper-API-based micro-framework made for Minecraft plugin developers**:  
+> NeoArtisan is a **Paper-API-based micro-framework made for 1.21.4+ Minecraft plugin developers**:  
 > register custom items / blocks / recipes with model, interaction and drops in one fluent Builder,  
 > complete with lifecycle events and GUI hooks – **no NMS, no resource-pack hassle, no heavyweight content platform**.  
 > Perfect for devs who want to ship features fast but find Slimefun too heavy and raw NMS too painful.
