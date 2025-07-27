@@ -15,6 +15,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -29,12 +30,11 @@ public final class GuideListener implements Listener {
         NeoArtisan.registerListener(new GuideListener());
     }
 
-    @EventHandler(priority = EventPriority.LOWEST)
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onInteract(PlayerInteractEvent event) {
-        if (event.useInteractedBlock() == Event.Result.DENY || event.useItemInHand() == Event.Result.DENY) return;
-        if (!event.getAction().isRightClick()) return;
+        if (event.useItemInHand() == Event.Result.DENY) return;
+        if (event.getAction() != Action.RIGHT_CLICK_AIR && event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
         if (event.getItem() == null || !Registries.ITEM.getRegistryId(event.getItem()).equals(RECIPE_BOOK)) return;
-        event.setCancelled(true);
         GuideCategoryManager.openCategoryGuide(event.getPlayer(), 0);
     }
 
