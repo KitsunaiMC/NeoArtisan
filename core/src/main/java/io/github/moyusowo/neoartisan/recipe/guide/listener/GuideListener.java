@@ -19,6 +19,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
 
 public final class GuideListener implements Listener {
     private GuideListener() {}
@@ -49,11 +50,14 @@ public final class GuideListener implements Listener {
                 GuideCategoryManager.openItemGuide(holder.itemId, player, holder.type, holder.page - 1);
             } else if (event.getRawSlot() == holder.returnPageSlot) {
                 GuideCategoryManager.openIndexGuide(player, holder.itemId, 0, true);
-            } else if (event.getClickedInventory() == holder.getInventory() && holder.getInventory().getItem(event.getRawSlot()) != null && !holder.getInventory().getItem(event.getRawSlot()).isEmpty()) {
-                if (event.getClick().isRightClick()) {
-                    GuideCategoryManager.openItemGuide(Registries.ITEM.getRegistryId(holder.getInventory().getItem(event.getRawSlot())), player, GuideGUIType.FROM, 0);
-                } else if (event.getClick().isLeftClick()) {
-                    GuideCategoryManager.openItemGuide(Registries.ITEM.getRegistryId(holder.getInventory().getItem(event.getRawSlot())), player, GuideGUIType.TO, 0);
+            } else if (event.getClickedInventory() == holder.getInventory()) {
+                final ItemStack itemStack = holder.getInventory().getItem(event.getRawSlot());
+                if (itemStack != null && !itemStack.isEmpty()) {
+                    if (event.getClick().isRightClick()) {
+                        GuideCategoryManager.openItemGuide(Registries.ITEM.getRegistryId(holder.getInventory().getItem(event.getRawSlot())), player, GuideGUIType.FROM, 0);
+                    } else if (event.getClick().isLeftClick()) {
+                        GuideCategoryManager.openItemGuide(Registries.ITEM.getRegistryId(holder.getInventory().getItem(event.getRawSlot())), player, GuideGUIType.TO, 0);
+                    }
                 }
             }
         } else if (event.getInventory().getHolder() instanceof GuideIndexHolder holder) {
@@ -64,11 +68,14 @@ public final class GuideListener implements Listener {
                 GuideCategoryManager.openIndexGuide(player, holder.category, holder.page - 1, false);
             } else if (event.getRawSlot() == GuideIndexHolder.returnSlot) {
                 GuideCategoryManager.openCategoryGuide(player, 0);
-            } else if (event.getClickedInventory() == holder.getInventory() && holder.getInventory().getItem(event.getRawSlot()) != null && !holder.getInventory().getItem(event.getRawSlot()).isEmpty()) {
-                if (event.getClick().isRightClick()) {
-                    GuideCategoryManager.openItemGuide(Registries.ITEM.getRegistryId(holder.getInventory().getItem(event.getRawSlot())), player, GuideGUIType.FROM, 0);
-                } else if (event.getClick().isLeftClick()) {
-                    GuideCategoryManager.openItemGuide(Registries.ITEM.getRegistryId(holder.getInventory().getItem(event.getRawSlot())), player, GuideGUIType.TO, 0);
+            } else if (event.getClickedInventory() == holder.getInventory()) {
+                final ItemStack itemStack = holder.getInventory().getItem(event.getRawSlot());
+                if (itemStack != null && !itemStack.isEmpty()) {
+                    if (event.getClick().isRightClick()) {
+                        GuideCategoryManager.openItemGuide(Registries.ITEM.getRegistryId(holder.getInventory().getItem(event.getRawSlot())), player, GuideGUIType.FROM, 0);
+                    } else if (event.getClick().isLeftClick()) {
+                        GuideCategoryManager.openItemGuide(Registries.ITEM.getRegistryId(holder.getInventory().getItem(event.getRawSlot())), player, GuideGUIType.TO, 0);
+                    }
                 }
             }
         } else if (event.getInventory().getHolder() instanceof GuideCategoryHolder holder) {
@@ -79,8 +86,11 @@ public final class GuideListener implements Listener {
                 GuideCategoryManager.openCategoryGuide(player, holder.page - 1);
             } else if (event.getRawSlot() == GuideCategoryHolder.returnSlot) {
                 player.closeInventory();
-            } else if (event.getClickedInventory() == holder.getInventory() && holder.getInventory().getItem(event.getRawSlot()) != null && !holder.getInventory().getItem(event.getRawSlot()).isEmpty()) {
-                GuideCategoryManager.openIndexGuide(player, event.getRawSlot() - 9, 0);
+            } else if (event.getClickedInventory() == holder.getInventory()) {
+                final ItemStack itemStack = holder.getInventory().getItem(event.getRawSlot());
+                if (itemStack != null && !itemStack.isEmpty()) {
+                    GuideCategoryManager.openIndexGuide(player, event.getRawSlot() - 9, 0);
+                }
             }
         }
     }
