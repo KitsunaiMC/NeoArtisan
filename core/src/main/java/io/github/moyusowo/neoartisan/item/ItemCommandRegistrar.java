@@ -5,6 +5,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import io.github.moyusowo.neoartisan.NeoArtisan;
+import io.github.moyusowo.neoartisan.recipe.guide.listener.GuideListener;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
 import io.github.moyusowo.neoartisanapi.api.registry.Registries;
@@ -112,6 +113,19 @@ final class ItemCommandRegistrar {
                                             )
                                     )
                             )
+            ).then(
+                    Commands.literal("guide").executes(
+                            ctx -> {
+                                if (ctx.getSource().getSender() instanceof Player player) {
+                                    player.give(Registries.ITEM.getArtisanItem(GuideListener.RECIPE_BOOK).getItemStack());
+                                } else {
+                                    ctx.getSource().getSender().sendMessage(
+                                            Component.text("你必须是一名玩家！").color(TextColor.color(255, 0, 0))
+                                    );
+                                }
+                                return 1;
+                            }
+                    )
             );
     private static final LiteralCommandNode<CommandSourceStack> buildCommand = command.build();
 

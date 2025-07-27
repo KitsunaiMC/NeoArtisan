@@ -1,14 +1,14 @@
 package io.github.moyusowo.neoartisan.block.task;
 
 import io.github.moyusowo.neoartisanapi.api.block.task.LifecycleTaskManager;
-import io.github.moyusowo.neoartisanapi.api.util.BuilderFactoryUtil;
+import io.github.moyusowo.neoartisanapi.api.util.ServiceUtil;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 
 public interface LifecycleTaskManagerInternal extends LifecycleTaskManager {
     @NotNull
     static LifecycleTaskManagerInternal create(@NotNull Location location) {
-        return BuilderFactoryUtil.getBuilder(BuilderFactory.class).create(location);
+        return ServiceUtil.getService(BuilderFactory.class).create(location);
     }
 
     interface BuilderFactory {

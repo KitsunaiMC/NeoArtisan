@@ -2,7 +2,7 @@ package io.github.moyusowo.neoartisanapi.api.recipe;
 
 import io.github.moyusowo.neoartisanapi.api.item.ItemGenerator;
 import io.github.moyusowo.neoartisanapi.api.recipe.choice.Choice;
-import io.github.moyusowo.neoartisanapi.api.util.BuilderFactoryUtil;
+import io.github.moyusowo.neoartisanapi.api.util.ServiceUtil;
 import org.bukkit.NamespacedKey;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -28,7 +28,7 @@ import org.jetbrains.annotations.NotNull;
 public interface ArtisanShapedRecipe extends ArtisanRecipe {
     @NotNull
     static Builder builder() {
-        return BuilderFactoryUtil.getBuilder(BuilderFactory.class).builder();
+        return ServiceUtil.getService(BuilderFactory.class).builder();
     }
 
     @NotNull

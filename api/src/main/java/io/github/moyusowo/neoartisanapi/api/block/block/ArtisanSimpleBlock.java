@@ -5,7 +5,7 @@ import io.github.moyusowo.neoartisanapi.api.block.block.base.ArtisanBlocks;
 import io.github.moyusowo.neoartisanapi.api.block.util.SoundProperty;
 import io.github.moyusowo.neoartisanapi.api.block.gui.GUICreator;
 import io.github.moyusowo.neoartisanapi.api.block.state.base.ArtisanBaseBlockState;
-import io.github.moyusowo.neoartisanapi.api.util.BuilderFactoryUtil;
+import io.github.moyusowo.neoartisanapi.api.util.ServiceUtil;
 import org.bukkit.NamespacedKey;
 import org.jetbrains.annotations.NotNull;
 
@@ -21,7 +21,7 @@ import org.jetbrains.annotations.NotNull;
 public interface ArtisanSimpleBlock extends ArtisanBaseBlock {
     @NotNull
     static Builder builder() {
-        return BuilderFactoryUtil.getBuilder(BuilderFactory.class).builder();
+        return ServiceUtil.getService(BuilderFactory.class).builder();
     }
 
     @Override

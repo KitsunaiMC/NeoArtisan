@@ -2,7 +2,7 @@ package io.github.moyusowo.neoartisanapi.api.item;
 
 import io.github.moyusowo.neoartisanapi.api.block.block.base.ArtisanBaseBlock;
 import io.github.moyusowo.neoartisanapi.api.item.factory.ItemBuilderFactory;
-import io.github.moyusowo.neoartisanapi.api.util.BuilderFactoryUtil;
+import io.github.moyusowo.neoartisanapi.api.util.ServiceUtil;
 import io.papermc.paper.datacomponent.item.CustomModelData;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
@@ -31,12 +31,12 @@ import java.util.function.Supplier;
 public interface ArtisanItem {
     @NotNull
     static Builder builder() {
-        return BuilderFactoryUtil.getBuilder(ItemBuilderFactory.class).builder();
+        return ServiceUtil.getService(ItemBuilderFactory.class).builder();
     }
 
     @NotNull
     static ComplexBuilder complexBuilder() {
-        return BuilderFactoryUtil.getBuilder(ItemBuilderFactory.class).complexBuilder();
+        return ServiceUtil.getService(ItemBuilderFactory.class).complexBuilder();
     }
 
     /**

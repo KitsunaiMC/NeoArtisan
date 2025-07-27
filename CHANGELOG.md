@@ -3,23 +3,25 @@
 > 本文档遵循 [Keep a Changelog](https://keepachangelog.com/) 规范
 > This document follows the [Keep a Changelog](https://keepachangelog.com/) specification
 
-## [1.0.0-rc-1] - 2025-07-27
+## [1.0.0-rc.1] - 2025-07-27
 ### 新增 / Added
-- 物品注册表新增 `getTagsByItemStack` 方法
-- 新增 `EmptyChoice` 类以规范配方选择为空时的默认实现
-- `Choice` 接口新增 `match(NamespacedKey)` 方法
-- 配方注册表内新增 `getAllRecipesByType` 方法
-- 新增配方书系统，可以通过实现 `GuideGUIGenerator` 并用 `RecipeRegistry#setGuide` 方法注册自己的配方显示器
-- 自定义物品新增配方书分类字段，可以用 `RecipeRegistry#setCategory` 注册自定义的类别名称和展示物品
+- **物品注册表新增 `getTagsByItemStack` 方法** / Added `getTagsByItemStack` method to the item registry
+- **新增 `EmptyChoice` 类以规范配方选择为空时的默认实现** / Added `EmptyChoice` class to standardize the default implementation when a recipe choice is empty
+- **`Choice` 接口新增 `match(NamespacedKey)` 方法** / Added `match(NamespacedKey)` method to the `Choice` interface
+- **配方注册表内新增 `getAllRecipesByType` 方法** / Added `getAllRecipesByType` method to the recipe registry
+- **新增配方书系统，新增命令 `/neoartisan guide`** / Added recipe book system with new command `/neoartisan guide`
+- **可以通过实现 `GuideGUIGenerator` 并用 `RecipeRegistry#setGuide` 方法注册自己的配方显示器** / You can now register your own recipe display by implementing `GuideGUIGenerator` and using the `RecipeRegistry#setGuide` method
+- **自定义物品新增配方书分类字段，可以用 `RecipeRegistry#setCategory` 注册自定义的类别名称和展示物品** / Custom items now have a recipe book category field; you can register custom category names and display items using `RecipeRegistry#setCategory`
 
 ### 变更 / Changed
-- 移除只是对Paper的PDC简单包装的属性系统，保留自定义物品属性，默认写入PDC
-- 规范移动和重命名了部分类和包
-- 版本号更新至 `1.0.0-rc-1`，正式进入预发布阶段
+- **移除只是对Paper的PDC简单包装的属性系统，保留自定义物品属性，默认写入PDC** / Removed the simple PDC wrapper for Paper's attribute system; retained custom item attributes with default PDC storage
+- **规范移动和重命名了部分类和包** / Standardized and renamed some classes and packages
+- **版本号更新至 `1.0.0-rc.1`，正式进入预发布阶段** / Updated version number to `1.0.0-rc.1`, officially entering the pre-release phase
+- **`Registries` 类内的注册表常量改为隐式懒加载，防止意外触发<clinit>导致崩溃** / Changed the registry constants in the `Registries` class to implicit lazy loading to prevent accidental triggering of <clinit> causing crashes
 
 ### 修复 / Fixed
-- 修复了有序配方合成时绝对位置必须一样的问题，改为相对位置一样即可合成
-- 修复了 `BlockMappingsManager` 类内无法正确读取方块ID的问题
+- **修复了有序配方合成时绝对位置必须一样的问题，改为相对位置一样即可合成** / Fixed the issue where absolute positions were required for shaped recipe crafting; now relative positions are sufficient
+- **修复了 `BlockMappingsManager` 类内无法正确读取方块ID的问题** / Fixed the issue in the `BlockMappingsManager` class where block IDs were not being read correctly
 
 ## [0.10.0 - beta] - 2025-07-25
 ### 新增 / Added

@@ -43,7 +43,7 @@ public final class GuideCategoryManager {
                 itemStacks.clear();
                 i = 0;
             }
-            Optional<ItemStack> optional = ((RecipeRegistryInternal) Registries.RECIPE).getCategory(category);
+            Optional<ItemStack> optional = RecipeRegistryInternal.getInstance().getCategory(category);
             if (optional.isPresent()) {
                 itemStacks.add(optional.get().clone());
                 categoryToId.put(category, indexs.size());

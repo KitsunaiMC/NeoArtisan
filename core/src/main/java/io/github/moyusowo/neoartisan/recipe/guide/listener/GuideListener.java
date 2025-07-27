@@ -9,7 +9,7 @@ import io.github.moyusowo.neoartisan.recipe.guide.item.GuideGUIType;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
 import io.github.moyusowo.neoartisanapi.api.registry.Registries;
-import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
@@ -22,6 +22,8 @@ import org.bukkit.event.player.PlayerInteractEvent;
 public final class GuideListener implements Listener {
     private GuideListener() {}
 
+    public static final NamespacedKey RECIPE_BOOK = new NamespacedKey("neoartisan", "recipe_book");
+
     @InitMethod(priority = InitPriority.LISTENER)
     static void init() {
         NeoArtisan.registerListener(new GuideListener());
@@ -31,7 +33,7 @@ public final class GuideListener implements Listener {
     public void onInteract(PlayerInteractEvent event) {
         if (event.useInteractedBlock() == Event.Result.DENY || event.useItemInHand() == Event.Result.DENY) return;
         if (!event.getAction().isRightClick()) return;
-        if (event.getItem() == null || event.getMaterial() != Material.BONE_BLOCK) return;
+        if (event.getItem() == null || !Registries.ITEM.getRegistryId(event.getItem()).equals(RECIPE_BOOK)) return;
         event.setCancelled(true);
         GuideCategoryManager.openCategoryGuide(event.getPlayer(), 0);
     }

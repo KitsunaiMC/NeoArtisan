@@ -3,7 +3,7 @@ package io.github.moyusowo.neoartisanapi.api.block.data;
 import io.github.moyusowo.neoartisanapi.api.block.block.base.ArtisanBaseBlock;
 import io.github.moyusowo.neoartisanapi.api.block.state.base.ArtisanBaseBlockState;
 import io.github.moyusowo.neoartisanapi.api.block.task.LifecycleTaskManager;
-import io.github.moyusowo.neoartisanapi.api.util.BuilderFactoryUtil;
+import io.github.moyusowo.neoartisanapi.api.util.ServiceUtil;
 import io.github.moyusowo.neoartisanapi.api.block.gui.ArtisanBlockGUI;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
@@ -32,7 +32,7 @@ import org.jetbrains.annotations.Nullable;
 public interface ArtisanBlockData {
     @NotNull
     static Builder builder() {
-        return BuilderFactoryUtil.getBuilder(BuilderFactory.class).builder();
+        return ServiceUtil.getService(BuilderFactory.class).builder();
     }
 
     interface BuilderFactory {

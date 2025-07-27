@@ -3,11 +3,14 @@ package io.github.moyusowo.neoartisan.registry;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import io.github.moyusowo.neoartisan.NeoArtisan;
+import io.github.moyusowo.neoartisan.recipe.guide.listener.GuideListener;
 import io.github.moyusowo.neoartisan.util.data.NamespacedKeyDataType;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
 import io.github.moyusowo.neoartisanapi.api.item.ArtisanItem;
 import io.github.moyusowo.neoartisanapi.api.registry.ItemRegistry;
+import io.papermc.paper.datacomponent.DataComponentTypes;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -66,6 +69,22 @@ final class ItemRegistryImpl implements ItemRegistry {
         );
         instance.originalItemTag.forEach(
                 (material, tag) -> instance.tagToId.put(tag, material.getKey())
+        );
+    }
+
+    @InitMethod(priority = InitPriority.INTERNAL_REGISTER)
+    public static void initRecipeBook() {
+        instance.registerItem(
+                ArtisanItem.complexBuilder()
+                        .registryId(GuideListener.RECIPE_BOOK)
+                        .itemStack(() -> {
+                            final ItemStack itemStack = new ItemStack(Material.BOOK);
+                            itemStack.setData(DataComponentTypes.ITEM_NAME, MiniMessage.miniMessage().deserialize("<yellow>配方书</yellow>"));
+                            itemStack.setData(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+                            return itemStack;
+                        })
+                        .internalUse()
+                        .build()
         );
     }
 

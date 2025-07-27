@@ -5,11 +5,9 @@ import io.github.moyusowo.neoartisanapi.api.block.state.base.ArtisanBaseBlockSta
 import io.github.moyusowo.neoartisanapi.api.block.state.base.ArtisanBlockStates;
 import io.github.moyusowo.neoartisanapi.api.block.util.PistonMoveBlockReaction;
 import io.github.moyusowo.neoartisanapi.api.item.ItemGenerator;
-import io.github.moyusowo.neoartisanapi.api.util.BuilderFactoryUtil;
+import io.github.moyusowo.neoartisanapi.api.util.ServiceUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Optional;
 
 /**
  * 作物型方块状态定义。
@@ -22,7 +20,7 @@ import java.util.Optional;
 public interface ArtisanCropState extends ArtisanBaseBlockState {
     @NotNull
     static Builder builder() {
-        return BuilderFactoryUtil.getBuilder(BuilderFactory.class).builder();
+        return ServiceUtil.getService(BuilderFactory.class).builder();
     }
 
     @Override

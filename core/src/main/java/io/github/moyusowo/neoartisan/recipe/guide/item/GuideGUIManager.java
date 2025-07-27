@@ -41,7 +41,7 @@ public final class GuideGUIManager {
         allRecipesByType.forEach(
                 (type, recipe) -> {
                     if (recipe.getKey().getNamespace().equals(NamespacedKey.MINECRAFT)) return;
-                    final Optional<GuideGUIGenerator> optional = ((RecipeRegistryInternal) Registries.RECIPE).getGuide(recipe.getType());
+                    final Optional<GuideGUIGenerator> optional = RecipeRegistryInternal.getInstance().getGuide(recipe.getType());
                     final Optional<GuideGUIType> typeOptional = hasItemInRecipe(recipe, itemId);
                     if (optional.isPresent() && typeOptional.isPresent()) {
                         this.inventorys.put(typeOptional.get(), new GuideGUIHolder(itemId, typeOptional.get(), this.inventorys.size(), optional.get(), recipe, Component.text("配方指南")));
