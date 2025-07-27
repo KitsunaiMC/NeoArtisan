@@ -5,12 +5,14 @@ import io.github.moyusowo.neoartisanapi.api.recipe.ArtisanRecipe;
 import io.github.moyusowo.neoartisanapi.api.recipe.RecipeType;
 import io.github.moyusowo.neoartisanapi.api.recipe.guide.GuideGUIGenerator;
 import org.bukkit.NamespacedKey;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.Collection;
+import java.util.function.Supplier;
 
 /**
  * 自定义合成配方注册表API，提供标准化的配方创建接口。
@@ -83,5 +85,7 @@ public interface RecipeRegistry {
     Multimap<NamespacedKey, ArtisanRecipe> getAllRecipesByType();
 
     void setGuide(@NotNull NamespacedKey recipeType, @NotNull GuideGUIGenerator generator);
+
+    void setCategory(@NotNull NamespacedKey category, @NotNull Supplier<ItemStack> itemStackSupplier);
 
 }

@@ -4,6 +4,7 @@ import io.github.moyusowo.neoartisan.NeoArtisan;
 
 import io.github.moyusowo.neoartisanapi.api.item.ArtisanItem;
 import io.github.moyusowo.neoartisanapi.api.item.AttributeProperty;
+import io.github.moyusowo.neoartisanapi.api.recipe.guide.ItemCategories;
 import io.github.moyusowo.neoartisanapi.api.registry.Registries;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.FoodProperties;
@@ -57,6 +58,7 @@ public final class ItemTest {
                                 itemStack.setData(DataComponentTypes.LORE, itemLore);
                                 return itemStack;
                             })
+                            .category(ItemCategories.MISC)
                             .hasOriginalCraft()
                             .blockId(new NamespacedKey(NeoArtisan.instance(), "magic_crop"))
                             .build()
@@ -80,6 +82,7 @@ public final class ItemTest {
                                     ),
                                     8.0f
                             )
+                            .category(ItemCategories.FOOD)
                             .attributeProperty(AttributeProperty.empty().addAttribute(new NamespacedKey("my", "abc"), PersistentDataType.FLOAT, 1.3f))
                             .build()
             );
@@ -102,6 +105,7 @@ public final class ItemTest {
                                 return itemStack;
                             })
                             .tags(Set.of("item/magic"))
+                            .category(ItemCategories.FOOD)
                             .build()
             );
             Registries.ITEM.registerItem(
@@ -122,6 +126,7 @@ public final class ItemTest {
                             )
                             .maxDurability(2500)
                             .tags(Set.of("item/magic"))
+                            .category(ItemCategories.COMBAT)
                             .build()
             );
             Registries.ITEM.registerItem(
@@ -142,6 +147,7 @@ public final class ItemTest {
                             )
                             .maxDurability(5000)
                             .tags(Set.of("item/magic"))
+                            .category(ItemCategories.COMBAT)
                             .build()
             );
             Registries.ITEM.registerItem(
@@ -188,6 +194,7 @@ public final class ItemTest {
                             .rawMaterial(Material.EMERALD)
                             .displayName("<green>无用的绿宝石")
                             .foodProperty(10, 10, true)
+                            .category(ItemCategories.DECORATIONS)
                             .build()
             );
         }

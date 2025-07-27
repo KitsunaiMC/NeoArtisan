@@ -1,26 +1,19 @@
-package io.github.moyusowo.neoartisan.recipe.guide.index;
+package io.github.moyusowo.neoartisan.recipe.guide.category;
 
-import io.github.moyusowo.neoartisanapi.api.registry.Registries;
 import io.papermc.paper.datacomponent.DataComponentTypes;
-import io.papermc.paper.datacomponent.item.ItemLore;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
-import net.kyori.adventure.text.format.TextDecoration;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("UnstableApiUsage")
-public final class GuideIndexHolder implements InventoryHolder {
-    public final NamespacedKey category;
+public final class GuideCategoryHolder implements InventoryHolder {
     private final Inventory inventory;
     public final int page;
     public static final int nextPageSlot = 53, lastPageSlot = 45, returnSlot = 0;
@@ -35,25 +28,14 @@ public final class GuideIndexHolder implements InventoryHolder {
         RETURN.setData(DataComponentTypes.ITEM_NAME, Component.text("返回").color(TextColor.color(255, 0, 0)));
     }
 
-    public GuideIndexHolder(int page, final List<NamespacedKey> items, @NotNull NamespacedKey category) {
-        this.category = category;
+    public GuideCategoryHolder(int page, final List<ItemStack> items) {
         this.page = page;
         this.inventory = Bukkit.createInventory(this, 54, Component.text("物品大全"));
         int slot = 9;
-        for (NamespacedKey item : items) {
+        for (ItemStack itemStack : items) {
             if (slot >= 45) {
                 throw new IllegalArgumentException("too large list!");
             }
-            final ItemStack itemStack = Registries.ITEM.getItemStack(item);
-            ItemLore itemLore = itemStack.getDataOrDefault(DataComponentTypes.LORE, ItemLore.lore().build());
-            List<Component> components = new ArrayList<>(itemLore.lines());
-            components.add(Component.empty());
-            components.add(MiniMessage.miniMessage().deserialize("<white><aqua>右键</aqua>查看作为<green>原料</green>的配方</white>").decoration(TextDecoration.ITALIC, false));
-            components.add(MiniMessage.miniMessage().deserialize("<white><aqua>左键</aqua>查看作为<green>产物</green>的配方</white>").decoration(TextDecoration.ITALIC, false));
-            components.add(Component.empty());
-            components.add(Component.text("ID: ").append(Component.text(item.asString())).decoration(TextDecoration.ITALIC, false).color(TextColor.fromHexString("#555555")));
-            itemLore = ItemLore.lore(components);
-            itemStack.setData(DataComponentTypes.LORE, itemLore);
             inventory.setItem(slot, itemStack);
             slot++;
         }

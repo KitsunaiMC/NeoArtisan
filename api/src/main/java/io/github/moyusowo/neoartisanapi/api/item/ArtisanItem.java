@@ -110,6 +110,9 @@ public interface ArtisanItem {
     @NotNull
     Set<String> getTags();
 
+    @NotNull
+    NamespacedKey getCategory();
+
     /**
      * 构建复杂自定义物品的构建器接口，可以完全自定义物品堆的各项数据。
      * <p>使用示例：
@@ -179,6 +182,8 @@ public interface ArtisanItem {
         @NotNull ComplexBuilder internalUse();
 
         @NotNull ComplexBuilder tags(@NotNull Set<String> tags);
+
+        @NotNull ComplexBuilder category(@NotNull NamespacedKey category);
 
         /**
          * 按照所给的参数构建自定义物品。
@@ -362,6 +367,8 @@ public interface ArtisanItem {
         @NotNull Builder internalUse();
 
         @NotNull Builder tags(@NotNull Set<String> tags);
+
+        @NotNull Builder category(@NotNull NamespacedKey category);
 
         /**
          * 按照所给的参数构建自定义物品。

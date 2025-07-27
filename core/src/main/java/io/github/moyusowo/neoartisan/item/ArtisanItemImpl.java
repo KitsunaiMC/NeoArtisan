@@ -11,6 +11,7 @@ import io.github.moyusowo.neoartisan.util.init.InitPriority;
 import io.github.moyusowo.neoartisanapi.api.item.ArtisanItem;
 import io.github.moyusowo.neoartisanapi.api.item.AttributeProperty;
 import io.github.moyusowo.neoartisanapi.api.item.factory.ItemBuilderFactory;
+import io.github.moyusowo.neoartisanapi.api.recipe.guide.ItemCategories;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.*;
 import io.papermc.paper.datacomponent.item.consumable.ConsumeEffect;
@@ -66,6 +67,7 @@ final class ArtisanItemImpl implements ArtisanItem {
     private final Supplier<ItemStack> itemStackSupplier;
     private final boolean isInternal;
     private final Set<String> tags;
+    private final NamespacedKey category;
 
     ArtisanItemImpl(
             NamespacedKey registryId,
@@ -74,7 +76,8 @@ final class ArtisanItemImpl implements ArtisanItem {
             @NotNull AttributeProperty attributeProperty,
             @Nullable NamespacedKey blockId,
             boolean isInternal,
-            @NotNull Set<String> tags
+            @NotNull Set<String> tags,
+            @NotNull NamespacedKey category
     ) {
         this.registryId = registryId;
         this.itemStack = itemStack.clone();
@@ -85,6 +88,7 @@ final class ArtisanItemImpl implements ArtisanItem {
         this.itemStackSupplier = null;
         this.isInternal = isInternal;
         this.tags = new HashSet<>(tags);
+        this.category = category;
     }
 
     ArtisanItemImpl(
@@ -94,7 +98,8 @@ final class ArtisanItemImpl implements ArtisanItem {
             @NotNull AttributeProperty attributeProperty,
             @Nullable NamespacedKey blockId,
             boolean isInternal,
-            @NotNull Set<String> tags
+            @NotNull Set<String> tags,
+            @NotNull NamespacedKey category
     ) {
         this.registryId = registryId;
         this.itemStack = null;
@@ -104,6 +109,7 @@ final class ArtisanItemImpl implements ArtisanItem {
         this.itemStackSupplier = itemStackSupplier;
         this.isInternal = isInternal;
         this.tags = new HashSet<>(tags);
+        this.category = category;
     }
 
     public @NotNull ItemStack getItemStack(int count) {
@@ -170,6 +176,11 @@ final class ArtisanItemImpl implements ArtisanItem {
         return Collections.unmodifiableSet(tags);
     }
 
+    @Override
+    public @NotNull NamespacedKey getCategory() {
+        return category;
+    }
+
     private void addIdAndAttribute(ItemStack itemStack) {
         ItemMeta itemMeta = itemStack.getItemMeta();
         if (!this.attributeProperty.isEmpty()) {
@@ -187,6 +198,7 @@ final class ArtisanItemImpl implements ArtisanItem {
         private Supplier<ItemStack> itemStackSupplier;
         private boolean isInternal;
         private Set<String> tags;
+        private NamespacedKey category;
 
         private ComplexBuilderImpl() {
             this.registryId = null;
@@ -196,6 +208,7 @@ final class ArtisanItemImpl implements ArtisanItem {
             this.itemStackSupplier = null;
             this.isInternal = false;
             this.tags = new HashSet<>();
+            category = ItemCategories.MISC;
         }
 
         @NotNull
@@ -244,6 +257,12 @@ final class ArtisanItemImpl implements ArtisanItem {
         }
 
         @Override
+        public @NotNull ComplexBuilder category(@NotNull NamespacedKey category) {
+            this.category = category;
+            return this;
+        }
+
+        @Override
         @NotNull
         public ArtisanItem build() {
             if (registryId == null || itemStackSupplier == null) {
@@ -256,7 +275,8 @@ final class ArtisanItemImpl implements ArtisanItem {
                     attributeProperty,
                     blockId,
                     isInternal,
-                    tags
+                    tags,
+                    category
             );
         }
     }
@@ -279,6 +299,7 @@ final class ArtisanItemImpl implements ArtisanItem {
         private String skullTextureUrlBase64;
         private boolean isInternal;
         private Set<String> tags;
+        private NamespacedKey category;
 
         private BuilderImpl() {
             this.registryId = null;
@@ -297,6 +318,7 @@ final class ArtisanItemImpl implements ArtisanItem {
             this.skullTextureUrlBase64 = null;
             this.isInternal = false;
             this.tags = new HashSet<>();
+            this.category = ItemCategories.MISC;
         }
 
         @NotNull
@@ -433,6 +455,12 @@ final class ArtisanItemImpl implements ArtisanItem {
         }
 
         @Override
+        public @NotNull Builder category(@NotNull NamespacedKey category) {
+            this.category = category;
+            return this;
+        }
+
+        @Override
         @NotNull
         public ArtisanItem build() {
             if (registryId == null || rawMaterial == null) {
@@ -445,7 +473,8 @@ final class ArtisanItemImpl implements ArtisanItem {
                     attributeProperty,
                     blockId,
                     isInternal,
-                    tags
+                    tags,
+                    category
             );
         }
 
