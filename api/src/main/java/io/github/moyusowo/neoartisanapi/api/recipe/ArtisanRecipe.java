@@ -10,31 +10,31 @@ import org.jetbrains.annotations.Unmodifiable;
 import java.util.List;
 
 /**
- * 自定义配方系统的核心抽象接口，定义所有配方类型的公共契约。
+ * Core abstract interface of the custom recipe system, defining the common contract for all recipe types.
  *
- * <p><b>设计哲学：</b></p>
+ * <p><b>Design philosophy:</b></p>
  * <ul>
- *   <li><b>不变性</b> - 所有实现类应当是不可变的</li>
- *   <li><b>生成式设计</b> - 结果物品通过生成器动态创建</li>
+ *   <li><b>Immutability</b> - All implementation classes should be immutable</li>
+ *   <li><b>Generative design</b> - Result items are dynamically created through generators</li>
  * </ul>
  *
- * @see ArtisanShapedRecipe 有序合成配方
- * @see ArtisanShapelessRecipe 无序合成配方
- * @see ArtisanFurnaceRecipe 熔炉配方
- * @see ArtisanSmokingRecipe 烟熏炉配方
- * @see ArtisanCampfireRecipe 营火配方
- * @see ArtisanBlastingRecipe 高炉配方
- * @implNote 可以实现自己的配方类型
+ * @see ArtisanShapedRecipe shaped crafting recipe
+ * @see ArtisanShapelessRecipe shapeless crafting recipe
+ * @see ArtisanFurnaceRecipe furnace recipe
+ * @see ArtisanSmokingRecipe smoker recipe
+ * @see ArtisanCampfireRecipe campfire recipe
+ * @see ArtisanBlastingRecipe blast furnace recipe
+ * @implNote You can implement your own recipe types
  */
 public interface ArtisanRecipe {
     /**
-     * 获取配方的全局唯一标识符
+     * Gets the globally unique identifier of the recipe
      */
     @NotNull
     NamespacedKey getKey();
 
     /**
-     * 获取配方类型
+     * Gets the recipe type
      *
      * @see RecipeType
      */
@@ -42,7 +42,7 @@ public interface ArtisanRecipe {
     NamespacedKey getType();
 
     /**
-     * 获取配方所需的输入材料的不可变列表
+     * Gets the immutable list of input materials required for the recipe
      *
      * @see Choice
      */
@@ -51,7 +51,7 @@ public interface ArtisanRecipe {
     List<Choice> getInputs();
 
     /**
-     * 获取结果物品生成器的不可变列表
+     * Gets the immutable list of result item generators
      *
      * @see ItemGenerator
      */
@@ -59,6 +59,11 @@ public interface ArtisanRecipe {
     @NotNull
     List<ItemGenerator> getResultGenerators();
 
+    /**
+     * Checks if the given item matrix matches this recipe
+     *
+     * @param matrix the item matrix to check (cannot be null)
+     * @return true if the matrix matches this recipe, false otherwise
+     */
     boolean matches(ItemStack @NotNull [] matrix);
-
 }

@@ -8,19 +8,24 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * 烟熏炉烧炼配方接口，继承自基础 {@link ArtisanRecipe}。
+ * Smoker smelting recipe interface, extending the base {@link ArtisanRecipe}.
  *
- * <p><b>配方特性说明：</b></p>
+ * <p><b>Recipe features:</b></p>
  * <ul>
- *   <li>支持自定义烧炼时间（tick）</li>
- *   <li>可配置经验值产出</li>
- *   <li>相当于覆写了原版的MaterialChoice逻辑，原版的MaterialChoice不再适用！</li>
+ *   <li>Supports custom smelting time (ticks)</li>
+ *   <li>Configurable experience output</li>
+ *   <li>Overrides vanilla MaterialChoice logic - vanilla MaterialChoice no longer applies!</li>
  * </ul>
  *
- * @see ArtisanRecipe 基础配方接口
+ * @see ArtisanRecipe base recipe interface
  */
 @ApiStatus.NonExtendable
 public interface ArtisanSmokingRecipe extends ArtisanFurnaceLikeRecipe {
+    /**
+     * Creates a new builder for constructing {@link ArtisanFurnaceRecipe} instances.
+     *
+     * @return A new builder instance
+     */
     @NotNull
     static Builder builder() {
         return ServiceUtil.getService(BuilderFactory.class).builder();
@@ -37,60 +42,58 @@ public interface ArtisanSmokingRecipe extends ArtisanFurnaceLikeRecipe {
     }
 
     /**
-     * 营火配方建造器接口
+     * Builder interface for creating campfire recipes.
      *
-     * <p><b>必须设置全部项！</b></p>
+     * <p><b>All fields must be set!</b></p>
      */
     interface Builder {
-
         /**
-         * 设置配方唯一标识符
+         * Sets the recipe identifier.
          *
-         * @param key 符合命名空间规范的键（非null）
-         * @return 当前建造器实例
+         * @param key The namespace key for this recipe (must not be null)
+         * @return This builder instance
          */
         @NotNull Builder key(@NotNull NamespacedKey key);
 
         /**
-         * 设置烧炼原料物品ID
+         * Sets the input ingredient for smelting.
          *
-         * @param choice 原料物品选择器（非null）
-         * @return 当前建造器实例
-         * @throws IllegalArgumentException 如果物品未注册
+         * @param choice The input item choice (must not be null)
+         * @return This builder instance
+         * @throws IllegalArgumentException If the item is not registered
          */
         @NotNull Builder input(@NotNull Choice choice);
 
         /**
-         * 设置烧炼结果生成器
+         * Sets the result item generator.
          *
-         * @param resultGenerator 生成器实例（非null）
-         * @return 当前建造器实例
-         * @see ItemGenerator 生成器接口
+         * @param resultGenerator The result generator (must not be null)
+         * @return This builder instance
+         * @see ItemGenerator Generator interface
          */
         @NotNull Builder resultGenerator(@NotNull ItemGenerator resultGenerator);
 
         /**
-         * 设置标准烧炼时间
+         * Sets the cooking time.
          *
-         * @param cookTime 烧炼ticks数（≥1）
-         * @return 当前建造器实例
+         * @param cookTime The number of ticks to cook (must be ≥1)
+         * @return This builder instance
          */
         @NotNull Builder cookTime(int cookTime);
 
         /**
-         * 设置烧炼经验值
+         * Sets the experience reward.
          *
-         * @param exp 获得经验值（≥0）
-         * @return 当前建造器实例
+         * @param exp The experience gained (must be ≥0)
+         * @return This builder instance
          */
         @NotNull Builder exp(float exp);
 
         /**
-         * 构建不可变的熔炉配方实例
+         * Builds an immutable furnace recipe instance.
          *
-         * @return 配置完成的配方实例
-         * @throws IllegalCallerException 如果缺少必要参数
-         * @implSpec 实现必须保证烧炼时间与经验值的精度
+         * @return The configured recipe instance
+         * @throws IllegalArgumentException If required parameters are missing
          */
         @NotNull ArtisanSmokingRecipe build();
     }

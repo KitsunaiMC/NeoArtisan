@@ -7,13 +7,13 @@ import org.bukkit.event.block.BlockExpEvent;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * 当自定义方块因失去支撑（如下方方块被破坏）可能掉落时触发的事件。
+ * Event is called when a custom block may drop due to losing support
+ * (e.g., the block below it is destroyed).
  * <p>
- * 继承自 {@link BlockExpEvent}，事件不可取消。
+ * Extends {@link BlockExpEvent} and cannot be cancelled.
  * </p>
  *
- * @see ArtisanBaseBlock 自定义方块类型
- * @see BlockExpEvent
+ * @see ArtisanBaseBlock
  */
 public class ArtisanBlockLoseSupportEvent extends BlockExpEvent {
 
@@ -22,10 +22,10 @@ public class ArtisanBlockLoseSupportEvent extends BlockExpEvent {
     private boolean dropItems;
 
     /**
-     * 构造失去支撑事件
+     * Constructs a lose support event
      *
-     * @param theBlock 即将掉落的方块实例（非null）
-     * @param artisanBaseBlock 关联的自定义方块定义（非null）
+     * @param theBlock the block instance that may drop (non-null)
+     * @param artisanBaseBlock the associated custom block definition (non-null)
      */
     public ArtisanBlockLoseSupportEvent(@NotNull final Block theBlock, @NotNull ArtisanBaseBlock artisanBaseBlock) {
         super(theBlock, 0);
@@ -34,27 +34,28 @@ public class ArtisanBlockLoseSupportEvent extends BlockExpEvent {
     }
 
     /**
-     * 设置是否生成掉落物
+     * Sets whether to generate dropped items
      *
-     * @param dropItems true时生成正常掉落物，false时无掉落
+     * @param dropItems if true, normal dropped items will be generated;
+     *                  if false, no items will drop
      */
     public void setDropItems(boolean dropItems) {
         this.dropItems = dropItems;
     }
 
     /**
-     * 检查是否会生成掉落物
+     * Checks if dropped items will be generated
      *
-     * @return 当前掉落物生成状态
+     * @return current drop items status
      */
     public boolean isDropItems() {
         return this.dropItems;
     }
 
     /**
-     * 获取关联的自定义方块定义
+     * Gets the associated custom block definition
      *
-     * @return 自定义方块实例
+     * @return the custom block instance
      */
     public @NotNull ArtisanBaseBlock getArtisanBlock() {
         return this.artisanBaseBlock;

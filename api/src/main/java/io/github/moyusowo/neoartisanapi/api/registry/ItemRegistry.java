@@ -14,126 +14,148 @@ import java.util.Collections;
 import java.util.Set;
 
 /**
- * 自定义物品注册表核心接口，提供完整的自定义物品生命周期管理。
+ * Core interface for custom item registry, providing complete lifecycle management for custom items.
  *
- * <p>此接口负责：</p>
+ * <p>This interface is responsible for:</p>
  * <ul>
- *   <li>自定义物品的注册与配置</li>
- *   <li>物品实例的获取与验证</li>
+ *   <li>Registration and configuration of custom items</li>
+ *   <li>Retrieval and validation of item instances</li>
  * </ul>
  *
- * <p>通过 {@link org.bukkit.Bukkit#getServicesManager()} 获取实例。</p>
+ * <p>Get the instance through {@link org.bukkit.Bukkit#getServicesManager()}.</p>
  *
- * @apiNote 部分方法涉及持久化操作，请在主线程调用
- * @see ArtisanItem
- * @see org.bukkit.plugin.ServicesManager
+ * @apiNote Some methods involve persistence operations, please call on the main thread
+ * @see ArtisanItem custom Item interface
  */
 @ApiStatus.NonExtendable
 public interface ItemRegistry {
-
     /**
-     * 注册自定义物品。
+     * Registers a custom item.
      *
-     * @param artisanItem 自定义物品实例（不能为null）
-     * @throws IllegalArgumentException 如果builder为null或包含无效参数
+     * @param artisanItem The custom item instance (must not be null)
+     * @throws IllegalArgumentException If the builder is null or contains invalid parameters
      */
     void registerItem(@NotNull ArtisanItem artisanItem);
 
+    /**
+     * Registers tags to a material.
+     *
+     * @param material The material to tag (must not be null)
+     * @param tags The tags to associate with the material (must not be null)
+     */
     void registerTagToMaterial(@NotNull Material material, @NotNull String... tags);
 
     /**
-     * 从物品堆解析注册ID。
+     * Resolves the registry ID from an item stack.
      *
-     * <p>minecraft原版物品会返回原版物品的命名空间ID。</p>
+     * <p>Vanilla Minecraft items will return their namespace ID.</p>
      *
-     * <p>空物品会返回 {@link ArtisanItem#EMPTY}。</p>
+     * <p>Empty items will return {@link ArtisanItem#EMPTY}.</p>
      *
-     * @param itemStack 目标物品堆（可为null）
-     * @return 对应的注册ID（不会为null）
+     * @param itemStack The target item stack (can be null)
+     * @return The corresponding registry ID (never null)
      */
     @NotNull NamespacedKey getRegistryId(@Nullable ItemStack itemStack);
 
     /**
-     * 检查指定ID的自定义物品是否已注册。
+     * Checks if a custom item with the specified ID is registered.
      *
-     * <p>该方法包括minecraft原版物品</p>
+     * <p>This method includes vanilla Minecraft items.</p>
      *
-     * @param registryId 要检查的物品ID（可为null）
-     * @return 如果物品存在则返回true，否则返回false
-     * @apiNote 此方法总是立即返回，不会抛出异常
+     * @param registryId The item ID to check (can be null)
+     * @return true if the item exists, false otherwise
+     * @apiNote This method always returns immediately and does not throw exceptions
      */
     boolean hasItem(@Nullable NamespacedKey registryId);
 
     /**
-     * 创建指定数量的指定命名空间ID的物品堆。
+     * Creates an item stack with the specified quantity of the given namespace ID.
      *
-     * <p>该方法兼容minecraft原版物品命名空间ID</p>
+     * <p>This method is compatible with vanilla Minecraft item namespace IDs.</p>
      *
-     * @param registryId 物品注册ID（不能为null）
-     * @param count 物品数量（超过堆叠上限的数值会自动变为上限值）
-     * @return 新的物品堆实例（不会为null）
-     * @throws IllegalArgumentException 如果物品未注册或参数无效
+     * @param registryId The item registry ID (must not be null)
+     * @param count The item quantity (values exceeding the stack limit will be automatically set to the limit)
+     * @return A new item stack instance (never null)
+     * @throws IllegalArgumentException If the item is not registered or parameters are invalid
      */
     @NotNull ItemStack getItemStack(NamespacedKey registryId, int count);
 
     /**
-     * 创建数量为1的指定命名空间ID的物品堆。
+     * Creates an item stack with quantity 1 of the given namespace ID.
      *
-     * <p>该方法兼容minecraft原版物品命名空间ID</p>
+     * <p>This method is compatible with vanilla Minecraft item namespace IDs.</p>
      *
-     * @param registryId 物品注册ID（不能为null）
-     * @return 新的物品堆实例（不会为null）
+     * @param registryId The item registry ID (must not be null)
+     * @return A new item stack instance (never null)
      */
     @NotNull ItemStack getItemStack(NamespacedKey registryId);
 
     /**
-     * 通过ID验证是否为有效自定义物品。
+     * Validates whether the given ID corresponds to a valid custom item.
      *
-     * @param registryId 要检查的物品ID（可为null）
-     * @return 如果是注册的自定义物品返回true
+     * @param registryId The item ID to check (can be null)
+     * @return true if it is a registered custom item, false otherwise
      */
     boolean isArtisanItem(@Nullable NamespacedKey registryId);
 
     /**
-     * 通过物品堆验证是否为自定义物品。
+     * Validates whether the given item stack is a custom item.
      *
-     * @param itemStack 要检查的物品堆（可为null）
-     * @return 如果是本系统注册的自定义物品返回true
+     * @param itemStack The item stack to check (can be null)
+     * @return true if it is a custom item registered by this system, false otherwise
      */
     boolean isArtisanItem(@Nullable ItemStack itemStack);
 
     /**
-     * 通过ID获取物品API实例。
+     * Gets the item API instance by ID.
      *
-     * @param registryId 物品注册ID（不能为null）
-     * @return 物品API接口实例（不会为null）
-     * @throws IllegalArgumentException 如果物品未注册
+     * @param registryId The item registry ID (must not be null)
+     * @return The item API interface instance (never null)
+     * @throws IllegalArgumentException If the item is not registered
      * @see ArtisanItem
-     * @apiNote 调用该方法之前应该总是调用 {@link ItemRegistry#isArtisanItem(NamespacedKey)} 以检查有效性
+     * @apiNote You should always call {@link ItemRegistry#isArtisanItem(NamespacedKey)} to check validity before calling this method
      */
     @NotNull
     ArtisanItem getArtisanItem(@NotNull NamespacedKey registryId);
 
     /**
-     * 通过物品堆获取物品API实例。
+     * Gets the item API instance from an item stack.
      *
-     * @param itemStack 目标物品堆（不能为null）
-     * @return 物品API接口实例（不会为null）
-     * @throws IllegalArgumentException 如果不是有效自定义物品
+     * @param itemStack The target item stack (must not be null)
+     * @return The item API interface instance (never null)
+     * @throws IllegalArgumentException If it is not a valid custom item
      * @see #getArtisanItem(NamespacedKey)
-     * @apiNote 调用该方法之前应该总是调用 {@link ItemRegistry#isArtisanItem(ItemStack)} 以检查有效性
+     * @apiNote You should always call {@link ItemRegistry#isArtisanItem(ItemStack)} to check validity before calling this method
      */
     @NotNull
     ArtisanItem getArtisanItem(@NotNull ItemStack itemStack);
 
+    /**
+     * Gets all IDs associated with the specified tag.
+     *
+     * @param tag The tag to query (must not be null)
+     * @return An unmodifiable collection of namespace keys
+     */
     @NotNull
     @Unmodifiable
     Collection<NamespacedKey> getIdByTag(@NotNull String tag);
 
+    /**
+     * Gets all tags associated with the specified ID.
+     *
+     * @param id The namespace key to query (must not be null)
+     * @return An unmodifiable collection of tags
+     */
     @NotNull
     @Unmodifiable
     Collection<String> getTagsById(@NotNull NamespacedKey id);
 
+    /**
+     * Gets all tags associated with the specified item stack.
+     *
+     * @param itemStack The item stack to query (can be null)
+     * @return An unmodifiable collection of tags
+     */
     @NotNull
     @Unmodifiable
     default Collection<String> getTagsByItemStack(@Nullable ItemStack itemStack) {
@@ -141,6 +163,11 @@ public interface ItemRegistry {
         return getTagsById(Registries.ITEM.getRegistryId(itemStack));
     }
 
+    /**
+     * Gets all registered item IDs.
+     *
+     * @return An unmodifiable set of all registered namespace keys
+     */
     @Unmodifiable
     @NotNull
     Set<NamespacedKey> getAllIds();

@@ -12,13 +12,13 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * 当玩家放置自定义方块时触发的事件。
+ * Event is called when a player places a custom block.
  * <p>
- * 继承自 {@link BlockPlaceEvent}，包含被放置的自定义方块实例。
- * 可用于取消放置行为或修改放置后的方块状态。
+ * Extends {@link BlockPlaceEvent} and includes the placed custom block instance.
+ * Can be used to cancel the placement or modify the block state after placement.
  * </p>
  *
- * @see ArtisanBaseBlock 自定义方块类型
+ * @see ArtisanBaseBlock custom block type
  */
 public class ArtisanBlockPlaceEvent extends BlockPlaceEvent {
 
@@ -28,16 +28,17 @@ public class ArtisanBlockPlaceEvent extends BlockPlaceEvent {
     protected ArtisanBlockData placedArtisanBlockData;
 
     /**
-     * 构造自定义方块放置事件
+     * Constructs a custom block place event
      *
-     * @param placedBlock 被放置的方块实例（非null）
-     * @param replacedBlockState 被替换的原有方块状态（非null）
-     * @param placedAgainst 所依附的相邻方块（非null）
-     * @param itemInHand 玩家手持的物品（非null）
-     * @param thePlayer 放置方块的玩家（非null）
-     * @param canBuild 是否有建造权限
-     * @param hand 使用的手持装备槽（非null）
-     * @param artisanBaseBlock 关联的自定义方块定义（非null）
+     * @param placedBlock the placed block instance (non-null)
+     * @param replacedBlockState the original block state being replaced (non-null)
+     * @param placedAgainst the adjacent block that the new block is placed against (non-null)
+     * @param itemInHand the item in the player's hand (non-null)
+     * @param thePlayer the player placing the block (non-null)
+     * @param canBuild whether the player has build permission
+     * @param hand the equipment slot used (non-null)
+     * @param artisanBaseBlock the associated custom block definition (non-null)
+     * @param placedArtisanBlockData the custom BlockData that will be stored (non-null)
      */
     @SuppressWarnings("UnstableApiUsage")
     public ArtisanBlockPlaceEvent(@NotNull Block placedBlock, @NotNull BlockState replacedBlockState, @NotNull Block placedAgainst, @NotNull ItemStack itemInHand, @NotNull Player thePlayer, boolean canBuild, @NotNull EquipmentSlot hand, @NotNull ArtisanBaseBlock artisanBaseBlock, @NotNull ArtisanBlockData placedArtisanBlockData) {
@@ -47,25 +48,26 @@ public class ArtisanBlockPlaceEvent extends BlockPlaceEvent {
     }
 
     /**
-     * 获取被放置的自定义方块定义
+     * Gets the custom block definition of the placed block
      *
-     * @return 自定义方块实例，包含方块类型和状态信息
+     * @return the custom block instance containing block type and state information
      */
     public @NotNull ArtisanBaseBlock getArtisanBlock() {
         return this.artisanBaseBlock;
     }
 
     /**
-     * 获取即将被储存的自定义方块BlockData
+     * Gets the custom BlockData that will be stored
      *
-     * @return 即将被储存的自定义方块BlockData
+     * @return the custom BlockData that will be stored
      * @see ArtisanBlockData
      */
     public ArtisanBlockData getPlacedArtisanBlockData() { return this.placedArtisanBlockData; }
 
     /**
-     * 设置即将被储存的自定义方块BlockData
+     * Sets the custom BlockData that will be stored
      *
+     * @param placedArtisanBlockData the custom BlockData to be stored
      * @see ArtisanBlockData
      */
     public void setPlacedArtisanBlockData(ArtisanBlockData placedArtisanBlockData) { this.placedArtisanBlockData = placedArtisanBlockData; }

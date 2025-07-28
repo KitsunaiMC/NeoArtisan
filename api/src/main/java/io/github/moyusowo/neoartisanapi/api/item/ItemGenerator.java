@@ -10,24 +10,23 @@ import org.jetbrains.annotations.Range;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * 自定义物品生成器接口，用于按需生成指定注册ID的物品堆(ItemStack)。
+ * Custom item generator interface, used to generate ItemStacks of specified registry IDs on demand.
  * <p>
- * 提供两种内置实现：
+ * Provides two built-in implementations:
  * <ul>
- *   <li>{@link SimpleItemGenerator} - 生成固定数量的物品</li>
- *   <li>{@link RangedItemGenerator} - 生成随机数量范围内的物品</li>
+ *   <li>{@link SimpleItemGenerator} - Generates items with fixed quantity</li>
+ *   <li>{@link RangedItemGenerator} - Generates items within a random quantity range</li>
  * </ul>
  *
  */
 @SuppressWarnings("unused")
 public interface ItemGenerator {
-
     /**
-     * 创建生成固定数量物品的生成器
+     * Creates a generator that produces items with a fixed quantity
      *
-     * @param registryId 物品注册ID，不能为null
-     * @param amount 生成的固定数量（数字无效的话实际使用时会取接近一侧的边界值）
-     * @return 配置好的物品生成器实例
+     * @param registryId item registry ID, cannot be null
+     * @param amount the fixed quantity to generate (if the number is invalid, the actual usage will take the nearest boundary value)
+     * @return a configured item generator instance
      * @see SimpleItemGenerator
      */
     static ItemGenerator simpleGenerator(@NotNull NamespacedKey registryId, int amount) {
@@ -35,12 +34,12 @@ public interface ItemGenerator {
     }
 
     /**
-     * 创建生成随机数量物品的生成器
+     * Creates a generator that produces items with a random quantity
      *
-     * @param registryId 物品注册ID，不能为null
-     * @param min 最小生成数量
-     * @param max 最大生成数量
-     * @return 配置好的物品生成器实例
+     * @param registryId item registry ID, cannot be null
+     * @param min minimum quantity to generate
+     * @param max maximum quantity to generate
+     * @return a configured item generator instance
      * @see RangedItemGenerator
      */
     static ItemGenerator rangedGenerator(@NotNull NamespacedKey registryId, int min, int max) {
@@ -48,12 +47,12 @@ public interface ItemGenerator {
     }
 
     /**
-     * 创建有概率生成物品的生成器
+     * Creates a generator that produces items with a certain probability
      *
-     * @param registryId 物品注册ID，不能为null
-     * @param amount 生成数量
-     * @param chance 生成几率（0到1的小数）
-     * @return 配置好的物品生成器实例
+     * @param registryId item registry ID, cannot be null
+     * @param amount quantity to generate
+     * @param chance generation chance (decimal from 0 to 1)
+     * @return a configured item generator instance
      * @see ChanceItemGenerator
      */
     static ItemGenerator chanceGenerator(@NotNull NamespacedKey registryId, int amount, @Range(from = 0, to = 1) double chance) {

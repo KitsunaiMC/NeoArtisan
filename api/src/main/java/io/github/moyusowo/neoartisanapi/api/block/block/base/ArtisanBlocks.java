@@ -4,7 +4,7 @@ import io.github.moyusowo.neoartisanapi.api.block.block.ArtisanCropBlock;
 import io.github.moyusowo.neoartisanapi.api.block.block.ArtisanSimpleBlock;
 
 /**
- * 自定义方块种类枚举。
+ * Enum representing types of custom blocks.
  */
 public enum ArtisanBlocks {
     CROP(ArtisanCropBlock.class),

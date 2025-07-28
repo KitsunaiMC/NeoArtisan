@@ -13,23 +13,28 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * 表示世界中实际存在的自定义方块实例的数据容器。
+ * Data container representing an actual custom block instance in the world.
  * <p>
- * 此接口封装了一个已放置的自定义方块的所有运行时状态，包括：
+ * This interface encapsulates all runtime state of a placed custom block, including:
  * <ul>
- *   <li>物理位置和显示状态</li>
- *   <li>关联的GUI实例（如果有）</li>
- *   <li>方块生命周期事件管理器</li>
- *   <li>自定义持久化数据储存器</li>
- *   <li>当前方块状态索引</li>
+ *   <li>Physical location and display state</li>
+ *   <li>Associated GUI instance (if any)</li>
+ *   <li>Block lifecycle event manager</li>
+ *   <li>Custom persistent data storage (if any)</li>
+ *   <li>Current block state index</li>
  * </ul>
  * </p>
  *
- * @see ArtisanBaseBlock 自定义方块类型定义
- * @see ArtisanBaseBlockState 方块状态系统
+ * @see ArtisanBaseBlock custom block type definition
+ * @see ArtisanBaseBlockState block state system
  */
 @ApiStatus.NonExtendable
 public interface ArtisanBlockData {
+    /**
+     * Creates a new block data builder instance
+     *
+     * @return a block data builder instance for creating custom block data
+     */
     @NotNull
     static Builder builder() {
         return ServiceUtil.getService(BuilderFactory.class).builder();
@@ -41,81 +46,111 @@ public interface ArtisanBlockData {
     }
 
     /**
-     * 获取与此方块关联的GUI
+     * Gets the GUI associated with this block
      *
-     * @return GUI实例，如果方块不支持则返回 {@code null}
+     * @return GUI instance, or {@code null} if the block doesn't support it
      */
     @Nullable
     ArtisanBlockGUI getGUI();
 
     /**
-     * 获取方块在世界中的物理位置
+     * Gets the physical location of the block in the world
      *
-     * @return 不可变的位置对象，包含世界、坐标信息
+     * @return an immutable location object containing world and coordinate information
      */
     @NotNull
     Location getLocation();
 
     /**
-     * 获取方块的ID
+     * Gets the block's ID
      *
-     * @return 与 {@link ArtisanBaseBlock#getBlockId()} 一致地命名空间键
+     * @return a namespaced key consistent with {@link ArtisanBaseBlock#getBlockId()}
      * @see ArtisanBaseBlock#getBlockId()
      */
     @NotNull
     NamespacedKey blockId();
 
     /**
-     * 获取当前方块状态索引
+     * Gets the current block state index
      *
-     * @return 0 到 {@link ArtisanBaseBlock#getTotalStates()} 之间的整数（不包括右边界）
-     * @implNote 该值应与 {@link #getArtisanBlockState()} 返回的状态一致
+     * @return an integer between 0 and {@link ArtisanBaseBlock#getTotalStates()} (exclusive of the upper bound)
      */
     int stage();
 
     /**
-     * 获取关联的自定义方块定义
+     * Gets the associated custom block definition
      *
-     * @return 不可变的方块类型实例
+     * @return an immutable block type instance
      */
     @NotNull
     ArtisanBaseBlock getArtisanBlock();
 
     /**
-     * 获取当前方块状态实例
+     * Gets the current block state instance
      *
-     * @return 通过 {@link ArtisanBaseBlock#getState(int)} 获取的不可变状态
-     * @see ArtisanBaseBlock#getState(int)
+     * @return an immutable state obtained through {@link ArtisanBaseBlock#getState(int)}
      */
     @NotNull
     ArtisanBaseBlockState getArtisanBlockState();
 
     /**
-     * 获取方块的持久化数据容器
+     * Gets the persistent data container for the block
      * <p>
-     * 用于存储一些要添加的其他自定义数据
+     * Used to store additional custom data
      * </p>
      *
-     * @return 可读写的bukkitAPI数据容器，生命周期与方块实例相同。
-     * @throws IllegalStateException 若该自定义方块并未携带方块实体则抛出异常。
-     * @apiNote 调用该方法之前请确保该自定义方块绑定了方块实体，或用 {@link ArtisanBaseBlock#hasBlockEntity()} 检查。
+     * @return a readable and writable Bukkit API data container with the same lifecycle as the block instance
+     * @throws IllegalStateException if the custom block doesn't have a block entity
+     * @apiNote Please ensure the custom block has a block entity bound to it before calling this method,
+     *          or check with {@link ArtisanBaseBlock#hasBlockEntity()}
      */
     @NotNull
     PersistentDataContainer getPersistentDataContainer();
 
+    /**
+     * Gets the lifecycle task manager for the block
+     *
+     * @return the lifecycle task manager instance for this block
+     */
     @NotNull
     LifecycleTaskManager getLifecycleTaskManager();
 
+    /**
+     * Builder interface for block data, used to gradually build custom block data instances
+     */
     interface Builder {
+        /**
+         * Sets the location for the block data
+         *
+         * @param location the location for the block data, cannot be null
+         * @return the builder instance, supporting method chaining
+         */
         @NotNull
         Builder location(@NotNull Location location);
 
+        /**
+         * Sets the block ID for the block data
+         *
+         * @param blockId the namespaced key identifier for the block, cannot be null
+         * @return the builder instance, supporting method chaining
+         */
         @NotNull
         Builder blockId(@NotNull NamespacedKey blockId);
 
+        /**
+         * Sets the state index for the block data
+         *
+         * @param stage the state index for the block data
+         * @return the builder instance, supporting method chaining
+         */
         @NotNull
         Builder stage(int stage);
 
+        /**
+         * Builds and returns the final block data instance
+         *
+         * @return the completed block data instance
+         */
         @NotNull
         ArtisanBlockData build();
     }

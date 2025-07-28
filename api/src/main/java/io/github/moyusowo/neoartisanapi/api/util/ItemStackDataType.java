@@ -6,27 +6,27 @@ import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * 专为 {@link org.bukkit.persistence.PersistentDataContainer} 设计的 {@link ItemStack} 序列化处理器，
- * 提供高效的物品堆栈二进制序列化支持。
+ * {@link ItemStack} serialization handler designed for {@link org.bukkit.persistence.PersistentDataContainer},
+ * providing efficient item stack binary serialization support.
  * <p>
- * 本实现通过 {@link ItemStack#serializeAsBytes()} 和 {@link ItemStack#deserializeBytes(byte[])}
- * 实现物品数据的无损存储，适用于需要将物品数据嵌入NBT结构的场景。
+ * This implementation uses {@link ItemStack#serializeAsBytes()} and {@link ItemStack#deserializeBytes(byte[])}
+ * to achieve lossless storage of item data, suitable for scenarios where item data needs to be embedded in NBT structures.
  * </p>
  *
- * <h3>典型用法：</h3>
+ * <h3>Typical usage:</h3>
  * <pre>{@code
- * // 存储物品到PDC
+ * // Store item to PDC
  * ItemStack diamond = new ItemStack(Material.DIAMOND);
  * container.set(CUSTOM_ITEM_KEY, ItemStackDataType.ITEM_STACK, diamond);
  *
- * // 从PDC读取物品
+ * // Read item from PDC
  * ItemStack stored = container.get(CUSTOM_ITEM_KEY, ItemStackDataType.ITEM_STACK);
  * }</pre>
  *
- * <h3>技术特性：</h3>
+ * <h3>Technical features:</h3>
  * <ul>
- *   <li><b>版本安全</b> - 使用PaperAPI官方序列化方案</li>
- *   <li><b>线程安全</b> - 单例设计，可安全跨线程使用</li>
+ *   <li><b>Version safe</b> - Uses PaperAPI official serialization scheme</li>
+ *   <li><b>Thread safe</b> - Singleton design, can be safely used across threads</li>
  * </ul>
  *
  * @see org.bukkit.persistence.PersistentDataType
@@ -36,7 +36,7 @@ import org.jetbrains.annotations.NotNull;
 public class ItemStackDataType implements PersistentDataType<byte[], ItemStack> {
 
     /**
-     * 全局唯一实例
+     * Global singleton instance
      */
     public static final ItemStackDataType ITEM_STACK = new ItemStackDataType();
 

@@ -10,9 +10,14 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * 薄型方块状态定义。
+ * Thin block state definition.
  */
 public interface ArtisanThinState extends ArtisanBaseBlockState {
+    /**
+     * Creates a new thin block state builder instance
+     *
+     * @return a thin block state builder instance for creating custom thin block states
+     */
     @NotNull
     static Builder builder() {
         return ServiceUtil.getService(BuilderFactory.class).builder();
@@ -51,13 +56,33 @@ public interface ArtisanThinState extends ArtisanBaseBlockState {
         Builder builder();
     }
 
+    /**
+     * Builder interface for thin block states, used to gradually build custom thin block state instances
+     */
     interface Builder {
+        /**
+         * Sets the client appearance for the thin block state
+         *
+         * @param thinAppearance the appearance for the thin block state, cannot be null
+         * @return the builder instance, supporting method chaining
+         */
         @NotNull
         Builder appearance(@NotNull ThinAppearance thinAppearance);
 
+        /**
+         * Sets the item generators for the thin block state
+         *
+         * @param generators the item generators for the thin block state, cannot be null
+         * @return the builder instance, supporting method chaining
+         */
         @NotNull
         Builder generators(@NotNull ItemGenerator[] generators);
 
+        /**
+         * Builds and returns the final thin block state instance
+         *
+         * @return the completed thin block state instance
+         */
         @NotNull
         ArtisanThinState build();
     }

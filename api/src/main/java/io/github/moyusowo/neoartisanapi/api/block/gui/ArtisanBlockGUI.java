@@ -21,51 +21,39 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 /**
- * 自定义方块GUI的抽象基类，实现与方块位置绑定的交互界面。
+ * Abstract base class for custom block GUIs, implementing an interface bound to a block location.
  * <p>
- * <b>核心特性：</b>
+ * <b>Core features:</b>
  * <ul>
- *   <li><b>自动事件管理</b> - 自动注册所需事件监听器</li>
- *   <li><b>生命周期控制</b> - 提供初始化(init)和终止(terminate)钩子</li>
- *   <li><b>延迟初始化</b> - 确保方块数据加载完成后再初始化</li>
- *   <li><b>任务调度</b> - 绑定方块的任务调度器，确保方块数据加载完成后再初始化，支持注册初始化、终止和生命周期任务</li>
- *   <li><b>位置绑定</b> - 与特定方块位置严格关联</li>
+ *   <li><b>Automatic event management</b> - Automatically registers required event listeners</li>
+ *   <li><b>Lifecycle control</b> - Provides initialization (init) and termination (terminate) hooks</li>
+ *   <li><b>Delayed initialization</b> - Ensures block data is loaded before initialization</li>
+ *   <li><b>Task scheduling</b> - Binds to block task scheduler</li>
+ *   <li><b>Location binding</b> - Strictly associated with a specific block location</li>
  * </ul>
  *
- * <b>继承要求：</b>
+ * <b>Inheritance requirements:</b>
  * <ol>
- *   <li>必须实现 {@link #init()} 方法进行初始化，可在内调用 {@link ArtisanBlockData#getLifecycleTaskManager()} 注册</li>
- *   <li>可通过重写 {@link #terminate()} 实现清理逻辑</li>
- *   <li>在构造函数中<b>禁止直接调用</b> {@link #getArtisanBlockData()}，必须通过重写 {@link #init()} 方法以使用内置的延迟初始化机制</li>
- *   <li>如需与GUI生命周期相关的周期性任务，使用  注册</li>
+ *   <li>Must implement {@link #init()} method for initialization</li>
+ *   <li>Can override {@link #terminate()} to implement cleanup logic</li>
+ *   <li><b>Do not call</b> {@link #getArtisanBlockData()} directly in constructor</li>
  * </ol>
  *
- * <p><b>生命周期流程图：</b></p>
- * <pre>
- * 构造实例 → 等待数据加载 → init() → 运行生命周期任务 → [运行中]
- *      ↓
- * 方块销毁 → onTerminate() → terminate() → 注销监听器 → 取消所有任务
- * </pre>
- *
- * @see BlockInventoryHolder Bukkit库存持有者接口
- * @see Listener 事件监听标记*/
+ * @see BlockInventoryHolder
+ * @see Listener
+ */
 public abstract class ArtisanBlockGUI implements BlockInventoryHolder, Listener {
 
     protected final Inventory inventory;
     protected final Location location;
 
     /**
-     * 基础构造器（不应该在 {@link GUICreator#create(Location)} 之外的地方调用）
+     * Basic constructor (should not be called outside {@link GUICreator#create(Location)})
      *
-     * @param plugin 插件实例（非null）
-     * @param size 库存大小（9的倍数）
-     * @param title 标题
-     * @param location 框架提供的方块位置（非null）
-     *
-     * @implNote 构造流程：
-     * 1. 附属插件在GUICreator中提供plugin/size/title
-     * 2. 框架在方块放置时提供location
-     * 3. 构造器组合这些参数初始化GUI
+     * @param plugin plugin instance (non-null)
+     * @param size inventory size (multiple of 9)
+     * @param title title
+     * @param location framework-provided block location (non-null)
      */
     protected ArtisanBlockGUI(Plugin plugin, int size, Component title, Location location) {
         this.location = location;
@@ -74,12 +62,12 @@ public abstract class ArtisanBlockGUI implements BlockInventoryHolder, Listener 
     }
 
     /**
-     * 基础构造器（库存类型版本）
+     * Basic constructor (inventory type version)
      *
-     * @param plugin 插件实例
-     * @param inventoryType 原版库存类型
-     * @param title 标题
-     * @param location 框架提供的方块位置
+     * @param plugin plugin instance
+     * @param inventoryType vanilla inventory type
+     * @param title title
+     * @param location framework-provided block location
      */
     protected ArtisanBlockGUI(Plugin plugin, InventoryType inventoryType, Component title, Location location) {
         this.location = location;
@@ -88,30 +76,32 @@ public abstract class ArtisanBlockGUI implements BlockInventoryHolder, Listener 
     }
 
     /**
-     * 构造器（指定大小和字符串标题，但支持MiniMessage格式）
-     * @param plugin 插件实例
-     * @param size 库存大小
-     * @param title 传统字符串标题（自动转换为MiniMessage）
-     * @param location 框架提供的方块位置
+     * Constructor (with size and string title, supports MiniMessage format)
+     *
+     * @param plugin plugin instance
+     * @param size inventory size
+     * @param title traditional string title (automatically converted to MiniMessage)
+     * @param location framework-provided block location
      */
     protected ArtisanBlockGUI(Plugin plugin, int size, String title, Location location) {
         this(plugin, size, MiniMessage.miniMessage().deserialize(title), location);
     }
 
     /**
-     * 构造器（指定大小和字符串标题，但支持MiniMessage格式）
-     * @param plugin 插件实例
-     * @param inventoryType 原版库存类型
-     * @param title 传统字符串标题（自动转换为MiniMessage）
-     * @param location 绑定的方块位置
+     * Constructor (with inventory type and string title, supports MiniMessage format)
+     *
+     * @param plugin plugin instance
+     * @param inventoryType vanilla inventory type
+     * @param title traditional string title (automatically converted to MiniMessage)
+     * @param location bound block location
      */
     protected ArtisanBlockGUI(Plugin plugin, InventoryType inventoryType, String title, Location location) {
         this(plugin, inventoryType, MiniMessage.miniMessage().deserialize(title), location);
     }
 
     /**
-     * 获取绑定的库存实例
-     * @return 与此GUI关联的库存
+     * Gets the bound inventory instance
+     * @return the inventory associated with this GUI
      */
     @Override
     @NotNull
@@ -120,8 +110,8 @@ public abstract class ArtisanBlockGUI implements BlockInventoryHolder, Listener 
     }
 
     /**
-     * 获取绑定的方块实例
-     * @return 库存关联的物理方块
+     * Gets the bound block instance
+     * @return the physical block associated with the inventory
      */
     @NotNull
     @Override
@@ -130,32 +120,28 @@ public abstract class ArtisanBlockGUI implements BlockInventoryHolder, Listener 
     }
 
     /**
-     * 获取关联的自定义方块数据
+     * Gets the associated custom block data
      * <p>
-     * <b>安全访问时机：</b>
+     * <b>Safe access times:</b>
      * <ul>
-     *   <li>{@link #init()} 方法及其调用链</li>
-     *   <li>事件处理方法（如 {@link #onClick(InventoryClickEvent)}）</li>
-     *   <li>生命周期任务执行时</li>
+     *   <li>{@link #init()} method and its call chain</li>
+     *   <li>Event handling methods (like {@link #onClick(InventoryClickEvent)})</li>
+     *   <li>Lifecycle task execution</li>
      * </ul>
      *
-     * @return 该位置的自定义方块数据（不会为null）
-     * @throws NullPointerException 如果方块数据尚未加载
+     * @return the custom block data at this location (never null)
+     * @throws NullPointerException if block data is not yet loaded
      */
     public @NotNull ArtisanBlockData getArtisanBlockData() {
         return Storages.BLOCK.getArtisanBlockData(this.location.getBlock());
     }
 
     /**
-     * 添加GUI生命周期任务
+     * Add GUI lifecycle task
      *
      * <p>
-     * 用于注册需要在GUI初始化后运行的周期性任务（如库存刷新）。
-     * 必须在 {@link #init()} 方法执行前调用，可在构造函数或 {@link #init()} 方法中注册。
-     * </p>
-     *
-     * <p>
-     * 效果和手动调用 {@link ArtisanBlockData#getLifecycleTaskManager()} 相同。
+     * Used to register periodic tasks that need to run after GUI initialization.
+     * Must be called before {@link #init()} method executes.
      * </p>
      *
      * @see ArtisanBlockData#getLifecycleTaskManager()
@@ -165,19 +151,19 @@ public abstract class ArtisanBlockGUI implements BlockInventoryHolder, Listener 
     }
 
     /**
-     * 执行GUI初始化流程（框架内部调用）
+     * Execute GUI initialization process (called internally by framework)
      * <p>
-     * 此方法在确认关联方块数据已加载后自动触发，执行顺序：
+     * This method is automatically triggered after confirming the associated block data is loaded.
+     * Execution order:
      * <ol>
-     *   <li>调用子类实现的 {@link #init()} 方法</li>
-     *   <li>启动所有注册的生命周期任务</li>
-     *   <li>标记初始化完成状态</li>
+     *   <li>Call subclass implementation of {@link #init()} method</li>
+     *   <li>Start all registered lifecycle tasks</li>
+     *   <li>Mark initialization as complete</li>
      * </ol>
      *
-     * <p><b>重要：</b>此方法由框架自动调用，开发者不应手动触发。</p>
+     * <p><b>Important:</b>This method is automatically called by the framework, developers should not trigger it manually.</p>
      *
-     * @implNote 保证在主线程同步执行
-     * @see #init() 抽象初始化方法
+     * @see #init() abstract initialization method
      */
     public final void onInit() {
         try {
@@ -188,34 +174,11 @@ public abstract class ArtisanBlockGUI implements BlockInventoryHolder, Listener 
     }
 
     /**
-     * 执行GUI终止流程（框架内部调用）
+     * Execute GUI termination process (called internally by framework)
      * <p>
-     * 当关联方块被破坏或区块卸载时，框架自动调用此方法进行资源清理，执行顺序：
-     * <ol>
-     *   <li>调用子类实现的 {@link #terminate()} 清理逻辑（异常安全）</li>
-     *   <li>强制关闭所有查看此GUI的玩家库存</li>
-     *   <li>注销所有事件监听器</li>
-     *   <li>取消所有生命周期任务</li>
-     * </ol>
-     *
-     * <p><b>资源清理保证：</b></p>
-     * <ul>
-     *   <li><b>玩家库存安全</b> - 自动关闭所有关联的玩家界面</li>
-     *   <li><b>异常隔离</b> - terminate() 异常不影响后续清理</li>
-     *   <li><b>事件安全</b> - 确保后续不会触发无效事件</li>
-     *   <li><b>任务清理</b> - 所有周期任务立即终止</li>
-     * </ul>
-     *
-     * <p><b>执行示例：</b></p>
-     * <pre>
-     * // 方块被破坏时
-     * artisanBlockStorage.remove(location);
-     * → 触发 onTerminate()
-     *   → 关闭玩家库存
-     *   → 清理任务
-     *   → 注销事件
-     * </pre>
-     *
+     * When the associated block is destroyed or chunk is unloaded, the framework automatically
+     * calls this method for resource cleanup.
+     * </p>
      */
     private void onTerminate() {
         try {
@@ -229,43 +192,31 @@ public abstract class ArtisanBlockGUI implements BlockInventoryHolder, Listener 
     }
 
     /**
-     * 抽象初始化方法（子类必须实现）
+     * Abstract initialization method (subclass must implement)
      * <p>
-     * 当GUI确认关联方块数据已加载后，框架会自动调用此方法。
-     * 此方法中可安全执行以下操作：
+     * Called automatically by the framework after confirming associated block data is loaded.
+     * In this method you can safely:
      * <ul>
-     *   <li>访问 {@link #getArtisanBlockData()} 获取方块数据</li>
-     *   <li>初始化库存物品布局</li>
-     *   <li>配置GUI初始状态</li>
-     *   <li>注册生命周期事件/li>
+     *   <li>Access {@link #getArtisanBlockData()} to get block data</li>
+     *   <li>Initialize inventory item layout</li>
+     *   <li>Configure initial GUI state</li>
+     *   <li>Register lifecycle events</li>
      * </ul>
      *
-     * <p><b>最佳实践：</b></p>
-     * <pre>
-     * protected void init() {
-     *   ArtisanBlockData data = getArtisanBlockData();
-     *   getInventory().setItem(0, createDisplayItem(data));
-     *   // 注册自定义处理
-     *   registerCustomTask();
-     * }
-     * </pre>
-     *
-     * @throws IllegalStateException 如果方块数据不可用
-     * @implSpec 避免执行耗时操作
+     * @throws IllegalStateException if block data is unavailable
      */
     protected abstract void init();
 
     /**
-     * 终止清理方法（子类可选实现）
+     * Termination cleanup method (subclass can optionally implement)
      * <p>
-     * 当GUI关联的方块被破坏时调用，用于执行资源清理操作。
+     * Called when the GUI-associated block is destroyed, for executing resource cleanup operations.
      * </p>
-     *
      */
     protected void terminate() {}
 
     /**
-     * 库存点击事件处理（默认取消所有操作）
+     * Inventory click event handler (cancels all operations by default)
      */
     @EventHandler
     public void onClick(InventoryClickEvent event) {
@@ -275,7 +226,7 @@ public abstract class ArtisanBlockGUI implements BlockInventoryHolder, Listener 
     }
 
     /**
-     * 库存点击事件处理（默认取消所有操作）
+     * Inventory drag event handler (cancels all operations by default)
      */
     @EventHandler
     public void onDrag(InventoryDragEvent event) {
@@ -284,7 +235,7 @@ public abstract class ArtisanBlockGUI implements BlockInventoryHolder, Listener 
     }
 
     /**
-     * 方块打开GUI处理
+     * Handle block GUI opening
      */
     @EventHandler(priority = EventPriority.LOWEST)
     public final void onInteract(PlayerInteractEvent event) {

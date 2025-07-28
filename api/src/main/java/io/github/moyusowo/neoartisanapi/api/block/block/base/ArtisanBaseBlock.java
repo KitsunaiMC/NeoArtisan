@@ -8,68 +8,89 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * 自定义方块的基础接口，定义所有自定义方块的类型，如作物、机器等。
+ * Base interface for custom blocks, defining basic behaviors and properties
+ * for all custom blocks such as crops, machines, etc.
  *
- * <p>本接口只沟通方块状态之间的转变，或方块类型整体的行为。</p>
+ * <p>This interface is mainly used to manage transitions between block states
+ * and define common behaviors for block types.</p>
  *
  * <p>
- * 每个自定义方块实例应当是不可变的，所有状态变更应通过 {@link ArtisanBlockData} 处理。
+ * Each custom block instance should be immutable. All state changes must be
+ * handled through {@link ArtisanBlockData} to ensure data consistency and
+ * persistence support.
  * </p>
  *
- * @see ArtisanBlockData 在世界中的方块数据
+ * @see ArtisanBlockData represents a specific block data instance in the world
  */
 public interface ArtisanBaseBlock {
     /**
-     * 获取此自定义方块的唯一标识符
+     * Gets the unique identifier of this custom block.
      * <p>
-     * 该ID用于持久化存储和跨模块引用，应当全局唯一且恒定不变。
+     * This ID is used for persistent storage and cross-module references.
+     * It must be globally unique and remain unchanged during program execution.
      * </p>
      *
-     * @return 不可变的命名空间键
+     * @return an immutable namespaced key that serves as the unique identifier for the block
      */
     @NotNull
     NamespacedKey getBlockId();
 
     /**
-     * 获取指定状态值的方块状态实例
+     * Gets the block state instance for the specified state value.
      *
      * <p>
-     * 状态值通常是连续整数，用于表示方块的视觉或逻辑变化阶段
-     * （如作物生长阶段、机械工作状态等）。
+     * State values are typically consecutive integers used to represent visual
+     * or logical change stages of the block, such as crop growth stages or
+     * machine working states.
      * </p>
      *
-     * @param n 状态索引（0 <= n < {@link #getTotalStates()}）
-     * @return 对应的不可变状态实例
+     * @param n state index (0 <= n < {@link #getTotalStates()})
+     * @return the corresponding immutable state instance (fails silently,
+     *         returns boundary value if out of range)
      */
     @NotNull
     ArtisanBaseBlockState getState(int n);
 
     /**
-     * 获取此方块支持的总状态数
+     * Gets the total number of states supported by this block.
      * <p>
-     * 状态数决定了方块的视觉/逻辑变化粒度。例如：
+     * The total number of states determines the granularity of visual or logical
+     * changes of the block. Examples:
      * <ul>
-     *   <li>普通方块：通常为1（单一状态）</li>
-     *   <li>生长作物：等于生长阶段数（如小麦为8）</li>
-     *   <li>状态机方块：等于所有可能状态组合数</li>
+     *   <li>Regular block: usually 1 (only one state)</li>
+     *   <li>Growing crop: equals the number of growth stages (e.g., wheat has 8 stages)</li>
+     *   <li>Complex device: equals the number of all possible state combinations</li>
      * </ul>
      * </p>
      *
-     * @return 正整数，表示方块状态总数
-     * @implNote 该值在生命周期内必须恒定不变
+     * @return a positive integer representing the total number of states the block has
      */
     int getTotalStates();
 
     /**
-     * 以字符串形式获取自定义方块放置方块时音效的键
+     * Gets the sound property played when placing the custom block.
      *
-     * @return 对应自定义方块被放置时音效的命名空间键，如果没有则为空
+     * @return the sound property object for the custom block placement sound,
+     *         or {@code null} if not specified
      */
     @Nullable
     SoundProperty getPlaceSoundProperty();
 
+    /**
+     * Gets the type enum that this block belongs to.
+     *
+     * @return the enum value representing the block type, not {@code null}
+     */
     @NotNull
     ArtisanBlocks getType();
 
+    /**
+     * Checks whether this block has a block entity (BlockEntity).
+     *
+     * @return {@code true} if the block has an associated block entity;
+     *         {@code false} otherwise
+     * @apiNote Blocks with block entities can use
+     *          {@link ArtisanBlockData#getPersistentDataContainer()} for data storage
+     */
     boolean hasBlockEntity();
 }

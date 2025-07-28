@@ -3,46 +3,55 @@ package io.github.moyusowo.neoartisanapi.api.block.task;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Manages lifecycle tasks for custom blocks.
+ * <p>
+ * Provides methods to register periodic and one-time tasks that run during different phases
+ * of a block's lifecycle, such as initialization, ongoing operations, and termination.
+ * </p>
+ */
 @ApiStatus.NonExtendable
 public interface LifecycleTaskManager {
     /**
-     * 添加方块生命周期任务
+     * Adds a block lifecycle task
      * <p>
-     * 用于注册需要在方块放置后运行的周期性任务（如GUI刷新等）。
+     * Used to register periodic tasks that need to run after the block is placed (such as GUI refresh).
      * </p>
      *
      * <p>
-     * 任务在方块被破坏后会自动取消。
+     * Tasks are automatically cancelled when the block is destroyed.
      * </p>
      *
-     * @param runnable 要添加的任务（非null）
-     * @param delay 任务开始时的延迟（Tick为单位）
-     * @param period 任务执行的周期（Tick为单位）
-     * @param isAsynchronous 是否异步执行
-     * @param runInChunkNotLoaded 在区块未加载的情况下仍然执行任务（谨慎使用！）
-     * @throws IllegalStateException 如果初始化已完成
+     * @param runnable the task to add (non-null)
+     * @param delay the delay before the task starts (in ticks)
+     * @param period the period between task executions (in ticks)
+     * @param isAsynchronous whether to execute asynchronously
+     * @param runInChunkNotLoaded whether to run the task even when the chunk is not loaded (use with caution!)
+     * @throws IllegalStateException if initialization is already complete
      */
     void addLifecycleTask(@NotNull Runnable runnable, long delay, long period, boolean isAsynchronous, boolean runInChunkNotLoaded);
 
     /**
-     * 添加方块被破坏后的任务
+     * Adds a task to run after the block is destroyed
      *
      * <p>
-     * 用于注册需要在方块被破坏后运行的一次性任务（如保存、释放资源等）。
+     * Used to register one-time tasks that need to run after the block is destroyed
+     * (such as saving data, releasing resources).
      * </p>
      *
-     * @param runnable 要添加的任务（非null）
+     * @param runnable the task to add (non-null)
      */
     void addTerminateRunnable(@NotNull Runnable runnable);
 
     /**
-     * 添加方块初始化时的任务
+     * Adds a task to run during block initialization
      *
      * <p>
-     * 用于注册需要在方块初始化时运行的一次性任务（如初始化GUI等）。
+     * Used to register one-time tasks that need to run during block initialization
+     * (such as initializing GUI).
      * </p>
      *
-     * @param runnable 要添加的任务（非null）
+     * @param runnable the task to add (non-null)
      */
     void addInitRunnable(@NotNull Runnable runnable);
 }

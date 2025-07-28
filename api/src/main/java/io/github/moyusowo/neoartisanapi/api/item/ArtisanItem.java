@@ -21,104 +21,132 @@ import java.util.Set;
 import java.util.function.Supplier;
 
 /**
- * 自定义物品核心接口，提供对自定义物品属性和特性的访问。
+ * Core interface for custom items, providing access to custom item properties and features.
  *
- * <p>此接口代表一个在系统中注册的自定义物品实例，包含物品的基础信息
- * 和各种扩展属性。所有自定义物品都应有唯一的 {@link NamespacedKey} 标识。</p>
+ * <p>This interface represents a registered custom item instance in the system, containing
+ * the item's basic information and various extended properties. All custom items should
+ * have a unique {@link NamespacedKey} identifier.</p>
  *
  */
 @ApiStatus.NonExtendable
 public interface ArtisanItem {
+    /**
+     * Creates a new item builder instance
+     *
+     * @return an item builder instance for creating custom items
+     */
     @NotNull
     static Builder builder() {
         return ServiceUtil.getService(ItemBuilderFactory.class).builder();
     }
 
+    /**
+     * Creates a new complex item builder instance
+     *
+     * @return a complex item builder instance for creating custom items with full control
+     */
     @NotNull
     static ComplexBuilder complexBuilder() {
         return ServiceUtil.getService(ItemBuilderFactory.class).complexBuilder();
     }
 
     /**
-     * 空命名空间键，物品为空时的物品注册ID
+     * Empty namespace key, used as item registry ID when item is empty
      */
     NamespacedKey EMPTY = new NamespacedKey("neoartisan", "empty_item_registry_id");
 
     /**
-     * 通过物品堆判断是否为此自定义物品。
+     * Checks if the given item stack represents this custom item.
      *
-     * @param itemStack 要比较的物品堆（不能为null）
-     * @return 如果物品堆代表此自定义物品返回true，否则返回false
+     * @param itemStack the item stack to compare (cannot be null)
+     * @return true if the item stack represents this custom item, false otherwise
      */
     boolean equals(@NotNull ItemStack itemStack);
 
     /**
-     * 通过注册ID判断是否为此自定义物品。
+     * Checks if the given registry ID matches this custom item.
      *
-     * @param registryId 要比较的注册ID（不能为null）
-     * @return 如果ID匹配返回true，否则返回false
+     * @param registryId the registry ID to compare (cannot be null)
+     * @return true if the ID matches, false otherwise
      */
     boolean equals(@NotNull NamespacedKey registryId);
 
     /**
-     * 获取此自定义物品的唯一注册ID。
+     * Gets the unique registry ID of this custom item.
      *
-     * @return 物品的命名空间键（不会为null）
+     * @return the namespace key of the item (never null)
      */
     @NotNull NamespacedKey getRegistryId();
 
     /**
-     * 获取此自定义物品的ItemStack。
+     * Gets the ItemStack of this custom item.
      *
-     * @return 自定义物品的ItemStack（不会为null）
+     * @return the ItemStack of the custom item (never null)
      */
     @NotNull ItemStack getItemStack();
 
     /**
-     * 获取此自定义物品的指定数量ItemStack。
+     * Gets the ItemStack of this custom item with specified count.
      *
-     * @return 自定义物品的指定数量ItemStack（不会为null）
+     * @return the ItemStack of the custom item with specified count (never null)
      */
     @NotNull ItemStack getItemStack(int count);
 
     /**
-     * 检查此物品是否保留原版合成配方。
+     * Checks if this item preserves vanilla crafting recipes.
      *
-     * @return 如果保留原版合成返回true，否则返回false
+     * @return true if vanilla crafting is preserved, false otherwise
      */
     boolean hasOriginalCraft();
 
     /**
-     * 获取此物品的属性系统配置。
+     * Gets the attribute system configuration of this item.
      *
-     * @return 属性配置对象，不会返回null，可以使用 {@link AttributeProperty#isEmpty()} 判空
+     * @return attribute configuration object, never null, can use {@link AttributeProperty#isEmpty()} to check empty
      * @see AttributeProperty
      */
     @NotNull
     AttributeProperty getAttributeProperty();
 
     /**
-     * 获取此物品右键放置出的方块。
+     * Gets the block ID that is placed when this item is right-clicked.
      *
-     * @return 此物品右键放置出的方块的命名空间ID，如果没有返回 {@code null}
+     * @return the namespace ID of the block placed by right-clicking this item, or {@code null} if none
      */
     @Nullable NamespacedKey getBlockId();
 
+    /**
+     * Checks if this item is for internal use only.
+     *
+     * <p>internal use item will not show in tab-complete, guide book and collections returned by registry.</p>
+     *
+     * @return true if this item is for internal use, false otherwise
+     */
     boolean isInternal();
 
+    /**
+     * Gets the tags associated with this item
+     *
+     * @return unmodifiable set of tags
+     */
     @Unmodifiable
     @NotNull
     Set<String> getTags();
 
+    /**
+     * Gets the category of this item
+     *
+     * @return the category namespace key
+     */
     @NotNull
     NamespacedKey getCategory();
 
     /**
-     * 构建复杂自定义物品的构建器接口，可以完全自定义物品堆的各项数据。
-     * <p>使用示例：
+     * Builder interface for complex custom items, allowing full customization of item stack data.
+     * <p>Usage example:
      * <pre>{@code
      * ItemStack itemStack = ItemStack.of(Material.DIAMOND_SWORD);
-     * itemStack.setData(DataComponentTypes.ITEM_NAME, Component.text("<red>传奇之剑");
+     * itemStack.setData(DataComponentTypes.ITEM_NAME, Component.text("<red>Legendary Sword");
      * ArtisanItem newItem = ArtisanItem.complexBuilder()
      *     .registryId(new NamespacedKey(plugin, "sword"))
      *     .itemStack(itemStack)
@@ -128,252 +156,286 @@ public interface ArtisanItem {
     interface ComplexBuilder {
 
         /**
-         * 设置物品的唯一标识键。
+         * Sets the unique identifier key for the item.
          *
-         * @param registryId 物品的唯一标识键（不能为null）
-         * @return 当前构建器实例
-         * @throws IllegalArgumentException 如果registryId为null
+         * @param registryId the unique identifier key for the item (cannot be null)
+         * @return current builder instance
+         * @throws IllegalArgumentException if registryId is null
          */
         @NotNull ComplexBuilder registryId(@NotNull NamespacedKey registryId);
 
         /**
-         * 传入自定义物品的ItemStack Supplier，物品数量可任意。
+         * Provides the ItemStack Supplier for the custom item. Item count can be arbitrary.
          *
-         * <p>传入Supplier后每次请求会调用 {@link Supplier#get()} 以动态生成ItemStack实例。</p>
+         * <p>After providing Supplier, {@link Supplier#get()} will be called each time to
+         * dynamically generate ItemStack instances.</p>
          *
-         * @param itemStackSupplier 自定义物品的ItemStack的提供者（不能为null）
-         * @return 当前构建器实例
-         * @throws IllegalArgumentException 如果rawMaterial为null
+         * @param itemStackSupplier the provider of the custom item's ItemStack (cannot be null)
+         * @return current builder instance
+         * @throws IllegalArgumentException if rawMaterial is null
          * @see ItemStack
          */
         @NotNull ComplexBuilder itemStack(@NotNull Supplier<ItemStack> itemStackSupplier);
 
         /**
-         * 设置保留原版合成配方。
+         * Sets whether to preserve vanilla crafting recipes.
          *
-         * @return 当前构建器实例
+         * @return current builder instance
          */
         @NotNull ComplexBuilder hasOriginalCraft();
 
         /**
-         * 设置物品的属性系统配置。
+         * Sets the attribute system configuration for the item.
          *
-         * @param attributeProperty 属性系统配置（不能为null，使用 {@link AttributeProperty#empty()} 表示无属性）
-         * @return 当前构建器实例
-         * @throws IllegalArgumentException 如果attributeProperty为null
+         * @param attributeProperty attribute system configuration (cannot be null, use {@link AttributeProperty#empty()} for no attributes)
+         * @return current builder instance
+         * @throws IllegalArgumentException if attributeProperty is null
          * @see AttributeProperty
          */
         @NotNull ComplexBuilder attributeProperty(@Nullable AttributeProperty attributeProperty);
 
         /**
-         * 设置物品右键关联放置的自定义方块。
+         * Sets the custom block that is placed when the item is right-clicked.
          *
-         * @param blockId 方块ID（不能为null）
-         * @return 当前构建器实例
+         * @param blockId block ID (cannot be null)
+         * @return current builder instance
          * @see ArtisanBaseBlock
          */
         @NotNull ComplexBuilder blockId(@Nullable NamespacedKey blockId);
 
         /**
-         * 标注仅限内部使用，标注后这个物品将不会出现在命令补全中。
+         * Marks as internal use only. When marked, this item will not appear in tab-complete, guide book and collections returned by registry.
          *
-         * @return 构建的自定义物品实例
+         * @return current builder instance
          */
         @NotNull ComplexBuilder internalUse();
 
+        /**
+         * Sets the tags for this item
+         *
+         * @param tags set of tags (cannot be null)
+         * @return current builder instance
+         */
         @NotNull ComplexBuilder tags(@NotNull Set<String> tags);
 
+        /**
+         * Sets the category for this item
+         *
+         * @param category category namespace key (cannot be null)
+         * @return current builder instance
+         */
         @NotNull ComplexBuilder category(@NotNull NamespacedKey category);
 
         /**
-         * 按照所给的参数构建自定义物品。
+         * Builds the custom item with the given parameters.
          *
-         * @return 构建的自定义物品实例
+         * @return the built custom item instance
          */
         @NotNull ArtisanItem build();
 
     }
 
     /**
-     * 构建简单自定义物品的构建器接口。
-     * <p>使用示例：
+     * Builder interface for simple custom items.
+     * <p>Usage example:
      * <pre>{@code
      * ArtisanItem newItem = ArtisanItem.builder()
      *     .registryId(new NamespacedKey(plugin, "sword"))
      *     .rawMaterial(Material.DIAMOND_SWORD)
-     *     .displayName("传奇之剑")
+     *     .displayName("Legendary Sword")
      *     .build();
      * }</pre>
      */
     @SuppressWarnings("UnstableApiUsage")
     interface Builder {
-
         /**
-         * 设置物品的唯一标识键。
+         * Sets the unique identifier key for the item.
          *
-         * @param registryId 物品的唯一标识键（不能为null）
-         * @return 当前构建器实例
-         * @throws IllegalArgumentException 如果registryId为null
+         * @param registryId the unique identifier key for the item (cannot be null)
+         * @return current builder instance
+         * @throws IllegalArgumentException if registryId is null
          */
         @NotNull Builder registryId(@NotNull NamespacedKey registryId);
 
         /**
-         * 设置物品的基础材质类型。
+         * Sets the base material type for the item.
          *
-         * @param rawMaterial 基础材质类型（不能为null）
-         * @return 当前构建器实例
-         * @throws IllegalArgumentException 如果rawMaterial为null
+         * @param rawMaterial base material type (cannot be null)
+         * @return current builder instance
+         * @throws IllegalArgumentException if rawMaterial is null
          * @see Material
          */
         @NotNull Builder rawMaterial(@NotNull Material rawMaterial);
 
         /**
-         * 设置是否保留原版合成配方。
+         * Sets whether to preserve vanilla crafting recipes.
          *
-         * @param hasOriginalCraft true表示保留原版合成，false表示禁用（默认禁用）
-         * @return 当前构建器实例
+         * @param hasOriginalCraft true to preserve vanilla crafting, false to disable (disabled by default)
+         * @return current builder instance
          */
         @NotNull Builder hasOriginalCraft(boolean hasOriginalCraft);
 
         /**
-         * 设置物品的自定义模型数据。
+         * Sets the custom model data for the item.
          *
-         * @param customModelData 自定义模型数据ID（必须大于0）
-         * @return 当前构建器实例
-         * @throws IllegalArgumentException 如果customModelData ≤ 0
+         * @param customModelData custom model data ID (must be greater than 0)
+         * @return current builder instance
+         * @throws IllegalArgumentException if customModelData ≤ 0
          */
         @NotNull Builder customModelData(@Nullable CustomModelData customModelData);
 
         /**
-         * 设置物品的显示名称。
+         * Sets the display name for the item (support minimessage format).
          *
-         * @param displayName 物品显示名称（不能为null或空字符串）
-         * @return 当前构建器实例
-         * @throws IllegalArgumentException 如果displayName为null或空
+         * @param displayName item display name (cannot be null or empty string)
+         * @return current builder instance
+         * @throws IllegalArgumentException if displayName is null or empty
          */
         @NotNull Builder displayName(@Nullable String displayName);
 
         /**
-         * 用adventure API的文本组件设置物品的显示名称。
+         * Sets the display name for the item using adventure API text component.
          *
-         * @param component 物品显示名称（不能为null或空字符串）
-         * @return 当前构建器实例
-         * @throws IllegalArgumentException 如果displayName为null或空
+         * @param component item display name (cannot be null or empty string)
+         * @return current builder instance
+         * @throws IllegalArgumentException if displayName is null or empty
          */
         @NotNull Builder displayName(@Nullable Component component);
 
         /**
-         * 设置物品的Lore描述。
+         * Sets the Lore description for the item.
          *
-         * @param lore 物品描述文本列表
-         * @return 当前构建器实例
-         * @throws IllegalArgumentException 如果lore为null
+         * @param lore item description text list
+         * @return current builder instance
+         * @throws IllegalArgumentException if lore is null
          */
         @NotNull Builder lore(@NotNull List<String> lore);
 
         /**
-         * 用adventure API的文本组件设置物品的Lore描述。
+         * Sets the Lore description for the item using adventure API text components.
          *
-         * @param lore 物品描述文本列表
-         * @return 当前构建器实例
-         * @throws IllegalArgumentException 如果lore为null
+         * @param lore item description text list
+         * @return current builder instance
+         * @throws IllegalArgumentException if lore is null
          */
         @NotNull Builder loreComponent(@NotNull List<Component> lore);
 
         /**
-         * 设置物品的食物属性。
+         * Sets the food properties for the item.
          *
-         * @param nutrition 营养值
-         * @param saturation 饱和度
-         * @param canAlwaysEat 是否在饱食时仍可食用
-         * @return 当前构建器实例
+         * @param nutrition nutrition value
+         * @param saturation saturation level
+         * @param canAlwaysEat whether it can be eaten when full
+         * @return current builder instance
          */
         @NotNull Builder foodProperty(int nutrition, float saturation, boolean canAlwaysEat);
 
+        /**
+         * Sets the food properties for the item with effects.
+         *
+         * @param nutrition nutrition value
+         * @param saturation saturation level
+         * @param canAlwaysEat whether it can be eaten when full
+         * @param effectChance map of potion effects and their chances
+         * @param consumeSeconds time to consume in seconds
+         * @return current builder instance
+         */
         @NotNull Builder foodProperty(int nutrition, float saturation, boolean canAlwaysEat, @NotNull Map<PotionEffect, Float> effectChance, float consumeSeconds);
 
         /**
-         * 设置物品的武器属性。
+         * Sets the weapon properties for the item.
          *
-         * @param speed 攻击速度
-         * @param knockback 击退强度
-         * @param damage 基础伤害值
-         * @return 当前构建器实例
+         * @param speed attack speed
+         * @param knockback knockback strength
+         * @param damage base damage value
+         * @return current builder instance
          */
         @NotNull Builder weaponProperty(float speed, float knockback, float damage);
 
         /**
-         * 设置物品的最大耐久值。
+         * Sets the maximum durability value for the item.
          *
-         * @param maxDurability 最大耐久值（必须大于0）
-         * @return 当前构建器实例
-         * @throws IllegalArgumentException 如果maxDurability ≤ 0
+         * @param maxDurability maximum durability value (must be greater than 0)
+         * @return current builder instance
+         * @throws IllegalArgumentException if maxDurability ≤ 0
          */
         @NotNull Builder maxDurability(int maxDurability);
 
         /**
-         * 设置物品的护甲属性配置。
+         * Sets the armor property configuration for the item.
          *
-         * @param armor 护甲值
-         * @param armorToughness 护甲韧性
-         * @param slot 装备槽位（null则继承模板物品的穿戴位置，如果没有则不能为null）
-         * @return 当前构建器实例
+         * @param armor armor value
+         * @param armorToughness armor toughness
+         * @param slot equipment slot (null inherits template item's wear position, if none then cannot be null)
+         * @return current builder instance
          */
         @NotNull Builder armorProperty(int armor, int armorToughness, @Nullable EquipmentSlot slot);
 
         /**
-         * 设置物品的属性系统配置。
+         * Sets the attribute system configuration for the item.
          *
-         * @param attributeProperty 属性系统配置（不能为null，使用 {@link AttributeProperty#empty()} 表示无属性）
-         * @return 当前构建器实例
-         * @throws IllegalArgumentException 如果attributeProperty为null
+         * @param attributeProperty attribute system configuration (cannot be null, use {@link AttributeProperty#empty()} for no attributes)
+         * @return current builder instance
+         * @throws IllegalArgumentException if attributeProperty is null
          * @see AttributeProperty
          */
         @NotNull Builder attributeProperty(@NotNull AttributeProperty attributeProperty);
 
         /**
-         * 设置物品右键关联放置的自定义方块。
+         * Sets the custom block that is placed when the item is right-clicked.
          *
-         * @param blockId 方块ID（不能为null）
-         * @return 当前构建器实例
+         * @param blockId block ID (cannot be null)
+         * @return current builder instance
          * @see ArtisanBaseBlock
          */
         @NotNull Builder blockId(@Nullable NamespacedKey blockId);
 
         /**
-         * 设置物品的自定义模型。
+         * Sets the custom model for the item.
          *
-         * @param itemModel 自定义模型的命名空间键（不能为null）
-         * @return 当前构建器实例
+         * @param itemModel the namespace key of the custom model (cannot be null)
+         * @return current builder instance
          */
         @NotNull Builder itemModel(@Nullable NamespacedKey itemModel);
 
         /**
-         * 若该物品的Material为PLAYER_HEAD，则可用该方法设置头颅的贴图。
+         * If the item's Material is PLAYER_HEAD, this method can be used to set the skull texture.
          *
-         * <p>若该物品的Material不为PLAYER_HEAD，则该方法不起作用</p>
+         * <p>If the item's Material is not PLAYER_HEAD, this method has no effect</p>
          *
-         * @param textureUrl 头颅贴图的URL链接或对应的Base64编码（不能为null）
-         * @param isBase64 提供的字符串是否为Base64编码
-         * @return 当前构建器实例
+         * @param textureUrl skull texture URL or corresponding Base64 encoding (cannot be null)
+         * @param isBase64 whether the provided string is Base64 encoded
+         * @return current builder instance
          */
         @NotNull Builder skullProperty(@NotNull String textureUrl, boolean isBase64);
 
         /**
-         * 标注仅限内部使用，标注后这个物品将不会出现在命令补全中。
+         * Marks as internal use only. When marked, this item will not appear in tab-complete, guide book and collections returned by registry.
          *
-         * @return 构建的自定义物品实例
+         * @return current builder instance
          */
         @NotNull Builder internalUse();
 
+        /**
+         * Sets the tags for this item
+         *
+         * @param tags set of tags (cannot be null)
+         * @return current builder instance
+         */
         @NotNull Builder tags(@NotNull Set<String> tags);
 
+        /**
+         * Sets the category for this item
+         *
+         * @param category category namespace key (cannot be null)
+         * @return current builder instance
+         */
         @NotNull Builder category(@NotNull NamespacedKey category);
 
         /**
-         * 按照所给的参数构建自定义物品。
+         * Builds the custom item with the given parameters.
          *
-         * @return 构建的自定义物品实例
+         * @return the built custom item instance
          */
         @NotNull ArtisanItem build();
 

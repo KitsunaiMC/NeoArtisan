@@ -15,16 +15,9 @@ import java.util.Collection;
 import java.util.function.Supplier;
 
 /**
- * 自定义合成配方注册表API，提供标准化的配方创建接口。
+ * Custom crafting recipe registry API, providing standardized recipe creation interface.
  *
- * <p>支持三种配方类型：</p>
- * <ul>
- *   <li><b>有序合成(Shaped)</b> - 精确匹配物品排列位置</li>
- *   <li><b>无序合成(Shapeless)</b> - 仅需材料无需考虑排列</li>
- *   <li><b>熔炉烧炼(Furnace)</b> - 在熔炉中烧炼的配方</li>
- * </ul>
- *
- * <p>通过 {@link Registries#ITEM} 获取实例。</p>
+ * <p>Get the instance through {@link Registries#RECIPE}.</p>
  *
  * @see ArtisanRecipe
  */
@@ -32,60 +25,84 @@ import java.util.function.Supplier;
 public interface RecipeRegistry {
 
     /**
-     * 注册自定义合成配方到中央注册表
+     * Registers a custom crafting recipe to the central registry (any recipe implementing {@link ArtisanRecipe} can be registered).
      *
-     * <p><b>注册约束：</b></p>
+     * <p><b>Registration constraints:</b></p>
      * <ul>
-     *   <li>配方ID必须全局唯一</li>
-     *   <li>重复注册相同ID将抛出异常</li>
-     *   <li>必须在插件启用阶段完成注册</li>
+     *   <li>Recipe ID must be globally unique</li>
+     *   <li>Registering the same ID twice will throw an exception</li>
+     *   <li>Registration must be completed during plugin enable phase</li>
      * </ul>
      *
-     * @param recipe 要注册的配方实例（非null）
-     * @throws IllegalArgumentException 使用了相同的配方ID
+     * @param recipe The recipe instance to register (must not be null)
+     * @throws IllegalArgumentException If the same recipe ID is used
      */
     void register(@NotNull ArtisanRecipe recipe);
 
     /**
-     * 检查指定ID的配方是否已注册
+     * Checks if a recipe with the specified ID is registered.
      *
-     * @param key 要检查的配方ID
-     * @return 如果存在对应配方返回true
-     * @apiNote 该方法线程安全，可在任意阶段调用
+     * @param key The recipe ID to check
+     * @return true if a corresponding recipe exists, false otherwise
+     * @apiNote This method is thread-safe and can be called at any phase
      */
     boolean hasRecipe(@Nullable NamespacedKey key);
 
     /**
-     * 获取已注册的配方实例
+     * Gets a registered recipe instance.
      *
-     * @param key 配方ID（非null）
-     * @return 对应的配方实例
-     * @throws IllegalArgumentException 如果key未在任何命名空间注册
-     * @implNote 返回的配方实例是不可变对象
+     * @param key The recipe ID (must not be null)
+     * @return The corresponding recipe instance
+     * @throws IllegalArgumentException If the key is not registered in any namespace
+     * @implNote The returned recipe instance is an immutable object
      */
     @NotNull ArtisanRecipe getRecipe(@NotNull NamespacedKey key);
 
     /**
-     * 获取所有同类别的、已注册的配方实例
+     * Gets all registered recipes of the same type.
      *
-     * @param recipeType 配方类型（非null）
-     * @return 对应的配方实例（不可变）
-     * @see RecipeType 已有的配方类型，配方类型可用自己的命名空间。
+     * @param recipeType The recipe type (must not be null)
+     * @return The corresponding recipe instances (immutable)
+     * @see RecipeType Available recipe types, recipe types can use custom namespaces
      */
     @Unmodifiable
     @NotNull
     Collection<ArtisanRecipe> getRecipesByType(@NotNull NamespacedKey recipeType);
 
+    /**
+     * Gets all registered recipes.
+     *
+     * @return All recipe instances (immutable)
+     */
     @Unmodifiable
     @NotNull
     Collection<ArtisanRecipe> getAllRecipes();
 
+    /**
+     * Gets all registered recipes grouped by type.
+     *
+     * @return A multimap of recipe types to recipe instances (immutable)
+     */
     @Unmodifiable
     @NotNull
     Multimap<NamespacedKey, ArtisanRecipe> getAllRecipesByType();
 
+    /**
+     * Sets (replaces) the guide GUI generator for a recipe type.
+     *
+     * @param recipeType The recipe type (must not be null)
+     * @param generator The guide GUI generator (must not be null)
+     */
     void setGuide(@NotNull NamespacedKey recipeType, @NotNull GuideGUIGenerator generator);
 
+    /**
+     * register a category item for an item category in the recipe book.
+     *
+     * <p>the ItemStack will be used as the icon of the category in the recipe book.</p>
+     *
+     * @param category The category key (must not be null)
+     * @param itemStackSupplier The item stack supplier (must not be null)
+     */
     void setCategory(@NotNull NamespacedKey category, @NotNull Supplier<ItemStack> itemStackSupplier);
 
 }

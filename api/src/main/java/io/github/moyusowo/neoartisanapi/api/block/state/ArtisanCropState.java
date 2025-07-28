@@ -6,18 +6,26 @@ import io.github.moyusowo.neoartisanapi.api.block.state.base.ArtisanBlockStates;
 import io.github.moyusowo.neoartisanapi.api.block.util.PistonMoveBlockReaction;
 import io.github.moyusowo.neoartisanapi.api.item.ItemGenerator;
 import io.github.moyusowo.neoartisanapi.api.util.ServiceUtil;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * 作物型方块状态定义。
+ * Crop block state definition.
  *
  * <p>
- * 推动破坏、不可悬空、能被水冲走的作物型方块。
+ * Crop-type blocks that break when pushed by pistons, cannot float in air,
+ * and can be washed away by water.
  * </p>
  *
  */
+@ApiStatus.NonExtendable
 public interface ArtisanCropState extends ArtisanBaseBlockState {
+    /**
+     * Creates a new crop block state builder instance
+     *
+     * @return a crop block state builder instance for creating custom crop block states
+     */
     @NotNull
     static Builder builder() {
         return ServiceUtil.getService(BuilderFactory.class).builder();
@@ -56,13 +64,33 @@ public interface ArtisanCropState extends ArtisanBaseBlockState {
         Builder builder();
     }
 
+    /**
+     * Builder interface for crop block states, used to gradually build custom crop block state instances
+     */
     interface Builder {
+        /**
+         * Sets the client appearance for the crop block state
+         *
+         * @param cropAppearance the appearance for the crop block state, cannot be null
+         * @return the builder instance, supporting method chaining
+         */
         @NotNull
         Builder appearance(@NotNull CropAppearance cropAppearance);
 
+        /**
+         * Sets the item generators for the crop block state
+         *
+         * @param generators the item generators for the crop block state, cannot be null
+         * @return the builder instance, supporting method chaining
+         */
         @NotNull
         Builder generators(@NotNull ItemGenerator[] generators);
 
+        /**
+         * Builds and returns the final crop block state instance
+         *
+         * @return the completed crop block state instance
+         */
         @NotNull
         ArtisanCropState build();
     }

@@ -8,13 +8,13 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * 当玩家破坏自定义方块时触发的事件。
+ * Event is called when a player breaks a custom block.
  * <p>
- * 继承自 {@link BlockBreakEvent}，包含被破坏的自定义方块实例。
- * 可用于取消破坏行为或修改掉落物（通过父类方法）。
+ * Extends {@link BlockBreakEvent} and includes the broken custom block instance.
+ * Can be used to cancel the breaking action or modify dropped items (through parent methods).
  * </p>
  *
- * @see ArtisanBaseBlock 自定义方块类型
+ * @see ArtisanBaseBlock
  */
 public class ArtisanBlockBreakEvent extends BlockBreakEvent {
 
@@ -23,11 +23,11 @@ public class ArtisanBlockBreakEvent extends BlockBreakEvent {
     protected ArtisanBaseBlock artisanBaseBlock;
 
     /**
-     * 构造自定义方块破坏事件
+     * Constructs a custom block break event
      *
-     * @param theBlock 被破坏的方块实例（非null）
-     * @param player 破坏方块的玩家（非null）
-     * @param artisanBaseBlock 关联的自定义方块定义（非null）
+     * @param theBlock the broken block instance (non-null)
+     * @param player the player breaking the block (non-null)
+     * @param artisanBaseBlock the associated custom block definition (non-null)
      */
     public ArtisanBlockBreakEvent(@NotNull Block theBlock, @NotNull Player player, @NotNull ArtisanBaseBlock artisanBaseBlock) {
         super(theBlock, player);
@@ -35,9 +35,9 @@ public class ArtisanBlockBreakEvent extends BlockBreakEvent {
     }
 
     /**
-     * 获取被破坏的自定义方块定义
+     * Gets the custom block definition of the broken block
      *
-     * @return 自定义方块实例
+     * @return the custom block instance
      */
     public @NotNull ArtisanBaseBlock getArtisanBlock() {
         return this.artisanBaseBlock;

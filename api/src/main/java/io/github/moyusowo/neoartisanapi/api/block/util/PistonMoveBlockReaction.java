@@ -1,8 +1,8 @@
 package io.github.moyusowo.neoartisanapi.api.block.util;
 
 public enum PistonMoveBlockReaction {
-//    MOVE,
+//  MOVE,
     BREAK,
     RESIST,
-//    PUSH_ONLY
+//  PUSH_ONLY
 }

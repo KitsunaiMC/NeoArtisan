@@ -7,7 +7,7 @@ public final class Storages {
 
     // lazy load
     /**
-     * 获取方块储存模块实例。
+     * Gets the block storage module instance.
      */
     public static final ArtisanBlockStorage BLOCK = ServiceUtil.createProxy(ArtisanBlockStorage.class);
 }

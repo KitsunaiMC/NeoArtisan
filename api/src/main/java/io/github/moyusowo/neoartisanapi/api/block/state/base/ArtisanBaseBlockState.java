@@ -7,87 +7,96 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
-import java.util.Optional;
 
 /**
- * 表示自定义方块的一个特定状态，包含视觉表现和实际行为定义。
+ * Represents a specific state of a custom block, containing visual appearance and actual behavior definitions.
  * <p>
- * 每个状态对应方块在特定条件下的：
+ * Each state corresponds to the block under specific conditions:
  * <ul>
- *   <li><b>视觉表现</b> - 客户端看到的方块外观</li>
- *   <li><b>实际状态</b> - 服务端使用的逻辑状态</li>
- *   <li><b>掉落物</b> - 被破坏时产生的物品</li>
- *   <li><b>部分交互表现</b> - 活塞推动、是否可然、是否漂浮等</li>
+ *   <li><b>Visual appearance</b> - The block appearance seen by clients</li>
+ *   <li><b>Actual state</b> - The logical state used by the server</li>
+ *   <li><b>Drops</b> - Items produced when broken</li>
+ *   <li><b>Some interactions</b> - Piston pushing, flammability, floating, etc.</li>
  * </ul>
  * </p>
  *
  */
 public interface ArtisanBaseBlockState {
     /**
-     * 获取客户端显示的Minecraft Internal BlockState ID
+     * Gets the Minecraft Internal BlockState ID for client display
      * <p>
-     * 对应NMS中的 {@code BlockState} 数字ID，用于客户端渲染。
+     * Corresponds to the {@code BlockState} numeric ID in NMS, used for client rendering.
      * </p>
      *
-     * @return NMS方块状态数字ID
+     * @return NMS block state numeric ID
      */
     int appearanceState();
 
     /**
-     * 获取服务端使用的实际Minecraft Internal BlockState ID
+     * Gets the actual Minecraft Internal BlockState ID used by the server
      * <p>
-     * 用于服务端逻辑计算，可能与视觉状态不同。
+     * Used for server-side logic calculations, may differ from visual state.
      * </p>
      *
-     * @return 实际逻辑状态对应的NMS方块状态ID
+     * @return NMS block state ID corresponding to actual logic state
      */
     int actualState();
 
     /**
-     * 获取该方块状态被破坏时的掉落物
+     * Gets the dropped items when this block state is broken
      * <p>
-     * 掉落物通过 {@link ItemGenerator} 动态生成，支持条件化掉落。
-     * 返回数组可能为空（表示无掉落），但不会为 {@code null}。
+     * Drops are dynamically generated through {@link ItemGenerator}, supporting conditional drops.
+     * The returned array may be empty (indicating no drops), but will not be {@code null}.
      * </p>
      *
-     * @return 新生成的物品堆副本（安全修改）
+     * @return new copies of item stacks (safe to modify)
      */
     @NotNull
     Collection<ItemStack> drops();
 
     /**
+     * Gets the type of interaction between this block state and pistons
      *
-     * @return 该状态下方块与活塞交互的类型
+     * @return the piston move reaction type for this block state
      */
     @NotNull
     PistonMoveBlockReaction pistonMoveReaction();
 
     /**
+     * Checks if this block state can be broken by fluids
      *
-     * @return 该状态下方块是否能被流体破坏
+     * @return true if the block can be broken by fluids, false otherwise
      */
     boolean isFlowBreaking();
 
     /**
+     * Checks if this block state can be placed floating in air
      *
-     * @return 该状态下方块是否能悬空放置
+     * @return true if the block can survive floating, false otherwise
      */
     boolean canSurviveFloating();
 
     /**
+     * Gets the light emission of this block state
      *
-     * @return 该状态下方块的亮度，{@code null} 表示采用原版的亮度
+     * @return the brightness level, or {@code null} to use vanilla brightness
      */
     @Nullable
     Integer getBrightness();
 
     /**
+     * Gets the hardness of this block state
      *
-     * @return 该状态下方块的亮度，{@code null} 表示采用原版的硬度
+     * @return the hardness value, or {@code null} to use vanilla hardness
      */
     @Nullable
     Float getHardness();
 
+    /**
+     * Gets the type enum that this block state belongs to
+     *
+     * @return the enum value representing the block state type, not {@code null}
+     */
     @NotNull
     ArtisanBlockStates getType();
 }

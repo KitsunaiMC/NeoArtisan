@@ -6,39 +6,38 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * 自定义方块注册表，负责管理所有 {@link ArtisanBaseBlock} 的注册和查询。
+ * Custom block registry, responsible for managing registration and lookup of all {@link ArtisanBaseBlock} instances.
  * <p>
- * 本注册表通过 {@link io.github.moyusowo.neoartisanapi.api.registry.Registries#BLOCK} 获取实例，
- * 所有注册操作必须在插件的 `onEnable` 方法执行
+ * This registry can be accessed through {@link io.github.moyusowo.neoartisanapi.api.registry.Registries#BLOCK}.
+ * All registration operations must be performed during the plugin's [onEnable](file://E:\code\NeoArtisan\core\src\main\java\io\github\moyusowo\neoartisan\NeoArtisan.java#L77-L86) method.
  * </p>
  *
- * @see ArtisanBaseBlock 自定义方块接口
+ * @see ArtisanBaseBlock Custom block interface
  */
 @ApiStatus.NonExtendable
 public interface BlockRegistry {
-
     /**
-     * 注册自定义方块到中央注册表
+     * Registers a custom block to the central registry.
      *
-     * @param artisanBlock 要注册的自定义方块实例（非null）
-     * @throws IllegalArgumentException 如果方块ID已存在或参数无效
+     * @param artisanBlock The custom block instance to register (must not be null)
+     * @throws IllegalArgumentException If the block ID already exists or parameters are invalid
      */
     void register(@NotNull ArtisanBaseBlock artisanBlock);
 
     /**
-     * 检查指定ID是否已注册为自定义方块
+     * Checks if the specified ID is registered as a custom block.
      *
-     * @param blockId 要检查的命名空间键（非null）
-     * @return 如果ID对应已注册方块返回true
+     * @param blockId The namespace key to check (must not be null)
+     * @return true if the ID corresponds to a registered block, false otherwise
      */
     boolean isArtisanBlock(NamespacedKey blockId);
 
     /**
-     * 获取已注册的自定义方块实例
+     * Gets a registered custom block instance.
      *
-     * @param blockId 方块的命名空间键（非null）
-     * @return 对应的自定义方块实例
-     * @throws IllegalArgumentException 如果ID未注册
+     * @param blockId The namespace key of the block (must not be null)
+     * @return The corresponding custom block instance
+     * @throws IllegalArgumentException If the ID is not registered
      */
     @NotNull ArtisanBaseBlock getArtisanBlock(@NotNull NamespacedKey blockId);
 

@@ -3,7 +3,7 @@ package io.github.moyusowo.neoartisanapi.api.block.state.base;
 import io.github.moyusowo.neoartisanapi.api.block.state.*;
 
 /**
- * 自定义方块状态枚举。
+ * Enum representing types of custom block states.
  */
 public enum ArtisanBlockStates {
     COMMON(ArtisanCommonState.class),

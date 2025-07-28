@@ -7,7 +7,7 @@ public final class Protections {
 
     // lazy load
     /**
-     * 获取保护模块实例。
+     * Gets the protection module instance.
      */
     public static final ArtisanBlockProtection BLOCK = ServiceUtil.createProxy(ArtisanBlockProtection.class);
 }

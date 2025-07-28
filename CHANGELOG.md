@@ -3,6 +3,10 @@
 > 本文档遵循 [Keep a Changelog](https://keepachangelog.com/) 规范
 > This document follows the [Keep a Changelog](https://keepachangelog.com/) specification
 
+## [1.0.0-rc.2] - 2025-07-28
+### 新增 / Added
+- **补充并更改 javadoc** / Updated javadoc
+
 ## [1.0.0-rc.1] - 2025-07-27
 ### 新增 / Added
 - **物品注册表新增 `getTagsByItemStack` 方法** / Added `getTagsByItemStack` method to the item registry

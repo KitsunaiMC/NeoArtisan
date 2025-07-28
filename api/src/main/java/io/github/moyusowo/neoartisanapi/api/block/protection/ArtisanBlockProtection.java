@@ -5,54 +5,59 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * 方块保护检查服务，用于验证玩家在指定位置的交互权限。
+ * Block protection check service, used to verify player interaction permissions at specified locations.
  * <p>
- * 本服务为 <b>核心安全机制</b>，所有涉及方块破坏、放置和交互的操作都必须通过此接口进行权限验证。
- * 内置实现已集成主流保护插件（如 WorldGuard、GriefPrevention），确保与服务器生态兼容。
+ * This service is a <b>core security mechanism</b>. All operations involving block breaking,
+ * placing, and interaction must go through this interface for permission verification.
+ * Built-in implementations integrate with major protection plugins (such as WorldGuard,
+ * GriefPrevention) to ensure compatibility with the server ecosystem.
  * </p>
  *
- * <p><b>附属插件开发必读：</b></p>
+ * <p><b>Add-on plugin development requirements:</b></p>
  * <ol>
- *   <li>在实现任何方块操作逻辑前，<strong>必须</strong>调用本接口方法进行权限检查</li>
- *   <li>忽略权限检查将导致：<br>
- *       - 与其他保护插件冲突<br>
- *       - 玩家绕过领地权限<br>
- *       - 产生安全漏洞</li>
+ *   <li><strong>Must</strong> call this interface method for permission checking before
+ *       implementing any block operation logic</li>
+ *   <li>Ignoring permission checks will cause:<br>
+ *       - Conflicts with other protection plugins<br>
+ *       - Players bypassing territory permissions<br>
+ *       - Security vulnerabilities</li>
  * </ol>
  *
- * @see io.github.moyusowo.neoartisanapi.api.block.protection.Protections#BLOCK 获取服务实例
+ * @see io.github.moyusowo.neoartisanapi.api.block.protection.Protections#BLOCK Get service instance
  */
 public interface ArtisanBlockProtection {
     /**
-     * 检查玩家是否可以破坏指定位置的方块
+     * Checks if a player can break a block at the specified location
      *
-     * @param player   操作玩家（非null）
-     * @param location 方块位置（非null）
-     * @return 若有破坏权限返回 true，否则 false
+     * @param player   the operating player (non-null)
+     * @param location the block location (non-null)
+     * @return true if the player has break permission, false otherwise
      *
-     * @apiNote 附属插件实现破坏逻辑时必须调用此方法
+     * @apiNote Add-on plugins must call this method when implementing break logic
      */
     boolean canBreak(@NotNull Player player, @NotNull Location location);
 
     /**
-     * 检查玩家是否可以在指定位置放置方块
+     * Checks if a player can place a block at the specified location
      *
-     * @param player   操作玩家（非null）
-     * @param location 目标位置（非null）
-     * @return 若有放置权限返回 true，否则 false
+     * @param player   the operating player (non-null)
+     * @param location the target location (non-null)
+     * @return true if the player has place permission, false otherwise
      *
-     * @apiNote 在方块放置事件前必须验证此权限
+     * @apiNote This permission must be verified before block placement events
      */
     boolean canPlace(@NotNull Player player, @NotNull Location location);
 
     /**
-     * 检查玩家是否可以与指定位置的方块交互（如打开容器）
+     * Checks if a player can interact with a block at the specified location
+     * (such as opening containers)
      *
-     * @param player   操作玩家（非null）
-     * @param location 方块位置（非null）
-     * @return 若有交互权限返回 true，否则 false
+     * @param player   the operating player (non-null)
+     * @param location the block location (non-null)
+     * @return true if the player has interaction permission, false otherwise
      *
-     * @apiNote 适用于箱子、熔炉或自定义GUI等容器的交互权限验证
+     * @apiNote Suitable for container interaction permission verification such as chests,
+     *          furnaces, or custom GUIs
      */
     boolean canInteract(@NotNull Player player, @NotNull Location location);
 }

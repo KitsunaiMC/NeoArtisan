@@ -1,5 +1,6 @@
 package io.github.moyusowo.neoartisanapi.api.item;
 
+import io.github.moyusowo.neoartisanapi.api.util.ServiceUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -9,71 +10,76 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.Collection;
-import java.util.List;
 
 /**
- * 物品属性存储容器接口，用于管理物品的初始属性。
+ * Item attribute storage container interface, used to manage item initial attributes.
  *
- * <p>所有属性都会在物品的 `ItemStack` 创建时被写入内部的 {@link org.bukkit.persistence.PersistentDataContainer} 数据容器中</p>
+ * <p>All attributes will be written to the internal {@link org.bukkit.persistence.PersistentDataContainer}
+ * data container when the item's [ItemStack](file://org\bukkit\inventory\ItemStack.java#L37-L170) is created</p>
  *
  * @see #empty()
  */
 @ApiStatus.NonExtendable
 public interface AttributeProperty {
-
     /**
-     * 获取新的自定义物品属性配置实例。
+     * Gets a new custom item attribute configuration instance.
      *
-     * @return 新的自定义物品属性配置实例
+     * @return a new custom item attribute configuration instance
      */
+    @NotNull
     static AttributeProperty empty() {
-        return Bukkit.getServicesManager().load(AttributeProperty.class);
+        return ServiceUtil.getService(AttributeProperty.class);
     }
 
     /**
-     * 添加属性。
+     * Adds an attribute.
      *
-     * @param key 属性标识（不可为null）
-     * @param type 属性类型（不可为null）
-     * @param value 属性值（不可为null）
-     * @throws IllegalArgumentException 如果参数为null或值类型不合法
+     * @param key attribute identifier (cannot be null)
+     * @param type attribute type (cannot be null)
+     * @param value attribute value (cannot be null)
+     * @throws IllegalArgumentException if parameters are null or value type is invalid
      */
     <P, C> AttributeProperty addAttribute(@NotNull NamespacedKey key, @NotNull PersistentDataType<P, C> type, @NotNull C value);
 
     /**
-     * 检查是否存在指定的属性。
+     * Checks if a specified attribute exists.
      *
-     * @param key 要检查的属性标识
-     * @return 如果存在该属性返回true
+     * @param key the attribute identifier to check
+     * @return true if the attribute exists
      */
     boolean hasAttribute(@NotNull NamespacedKey key);
 
     /**
-     * 获取全局属性值。
+     * Gets a global attribute value.
      *
-     * @param <T> 返回值类型
-     * @param key 属性标识（不可为null）
-     * @param type 属性类型（不可为null）
-     * @return 存储的属性值（不会为null）
-     * @throws IllegalArgumentException 如果属性不存在或类型不匹配
+     * @param <T> return value type
+     * @param key attribute identifier (cannot be null)
+     * @param type attribute type (cannot be null)
+     * @return the stored attribute value (never null)
+     * @throws IllegalArgumentException if the attribute does not exist or type does not match
      */
     @NotNull <T> T getAttribute(@NotNull NamespacedKey key, @NotNull Class<T> type);
 
     /**
-     * 判断当前容器是否为空配置。
+     * Checks if the current container is an empty configuration.
      *
-     * @return 如果未设置任何属性（全局/物品）返回true
+     * @return true if no attributes (global/item) are set
      */
     boolean isEmpty();
 
     /**
-     * 获取所有已注册的所有属性的 `NamespacedKey`。
+     * Gets all registered attribute `NamespacedKey`s.
      *
-     * @return 物品属性键列表
+     * @return list of item attribute keys
      */
     @Unmodifiable
     @NotNull
     Collection<NamespacedKey> getAttributeKeys();
 
+    /**
+     * write this attribute property into the provided persistence data container
+     *
+     * @param persistenceDataContainer the persistence data container (cannot be null)
+     */
     void setPersistenceDataContainer(@NotNull PersistentDataContainer persistenceDataContainer);
 }

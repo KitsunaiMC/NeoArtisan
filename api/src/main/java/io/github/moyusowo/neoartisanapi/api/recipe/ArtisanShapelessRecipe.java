@@ -8,29 +8,24 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * 无序合成配方接口，继承自基础 {@link ArtisanRecipe}。
+ * Shapeless crafting recipe interface, extending the base {@link ArtisanRecipe}.
  *
- * <p><b>配方特性说明：</b></p>
+ * <p><b>Recipe features:</b></p>
  * <ul>
- *   <li>不限制材料摆放顺序</li>
- *   <li>自动处理材料堆叠数量</li>
- *   <li>支持批量材料添加</li>
+ *   <li>Does not require specific arrangement of ingredients</li>
+ *   <li>Automatically handles ingredient stack amounts</li>
+ *   <li>Supports batch addition of ingredients</li>
  * </ul>
  *
- * <p><b>典型示例：</b></p>
- * <pre>{@code
- * ArtisanShapelessRecipe.builder()
- *     .key(new NamespacedKey("myplugin", "magic_powder"))
- *     .add(Material.REDSTONE)
- *     .add(Material.GLOWSTONE_DUST, 2)
- *     .resultGenerator(() -> new ItemStack(Material.GLOWSTONE))
- *     .build();
- * }</pre>
- *
- * @see ArtisanRecipe 基础配方接口
+ * @see ArtisanRecipe base recipe interface
  */
 @ApiStatus.NonExtendable
 public interface ArtisanShapelessRecipe extends ArtisanRecipe {
+    /**
+     * Creates a new builder for constructing {@link ArtisanShapelessRecipe} instances.
+     *
+     * @return A new builder instance
+     */
     @NotNull
     static Builder builder() {
         return ServiceUtil.getService(BuilderFactory.class).builder();
@@ -41,90 +36,81 @@ public interface ArtisanShapelessRecipe extends ArtisanRecipe {
         return RecipeType.SHAPELESS;
     }
 
+    /**
+     * Gets the result item generator for this recipe.
+     *
+     * @return The result item generator
+     */
     @NotNull
     default ItemGenerator getResultGenerator() {
         return getResultGenerators().getFirst();
     }
 
-    /**
-     * 建造器工厂接口
-     * <p>
-     * 负责创建全新的 {@link Builder} 实例，确保每次构建过程独立。
-     * 实现必须保证每次调用 {@link #builder()} 都返回<strong>未使用过</strong>的构建器。
-     * </p>
-     *
-     * <p><b>实现要求：</b></p>
-     * <ol>
-     *   <li>禁止返回单例或共享实例</li>
-     *   <li>构建器初始状态必须完全重置</li>
-     * </ol>
-     */
     interface BuilderFactory {
         @NotNull
         Builder builder();
     }
 
     /**
-     * 无序配方建造器接口
+     * Shapeless recipe builder interface
      *
-     * <p><b>构建流程：</b></p>
+     * <p><b>Build process:</b></p>
      * <ol>
-     *   <li>必须设置 {@link #key(NamespacedKey)}</li>
-     *   <li>必须添加至少1个材料</li>
-     *   <li>必须设置 {@link #resultGenerator(ItemGenerator)}</li>
+     *   <li>Must set {@link #key(NamespacedKey)}</li>
+     *   <li>Must add at least 1 ingredient</li>
+     *   <li>Must set {@link #resultGenerator(ItemGenerator)}</li>
      * </ol>
      */
     interface Builder {
-
         /**
-         * 设置配方唯一标识符
+         * Sets the recipe identifier.
          *
-         * @param key 符合命名空间规范的键（非null）
-         * @return 当前建造器实例
+         * @param key The namespace key for this recipe (must not be null)
+         * @return This builder instance
          */
         @NotNull Builder key(@NotNull NamespacedKey key);
 
         /**
-         * 添加单个材料
+         * Adds a single ingredient.
          *
-         * @param choice 材料选择（非null）
-         * @return 当前建造器实例
-         * @see #add(Choice, int) 指定数量的版本
+         * @param choice The ingredient choice (must not be null)
+         * @return This builder instance
+         * @see #add(Choice, int) Version with specified amount
          */
         @NotNull Builder add(@NotNull Choice choice);
 
         /**
-         * 批量添加多个材料
+         * Adds multiple ingredients in batch.
          *
-         * @param choices 材料选择数组（非null）
-         * @return 当前建造器实例
+         * @param choices Array of ingredient choices (must not be null)
+         * @return This builder instance
          */
         @NotNull Builder add(@NotNull Choice... choices);
 
         /**
-         * 添加指定数量的材料
+         * Adds an ingredient with a specified amount.
          *
-         * @param choice 材料选择（非null）
-         * @param count 材料数量（≥1）
-         * @return 当前建造器实例
-         * @throws IllegalArgumentException 如果数量无效
+         * @param choice The ingredient choice (must not be null)
+         * @param count The ingredient amount (must be ≥1)
+         * @return This builder instance
+         * @throws IllegalArgumentException If the amount is invalid
          */
         @NotNull Builder add(@NotNull Choice choice, int count);
 
         /**
-         * 设置结果物品生成器
+         * Sets the result item generator.
          *
-         * @param resultGenerator 生成器实例（非null）
-         * @return 当前建造器实例
-         * @see ItemGenerator 生成器接口
+         * @param resultGenerator The result generator (must not be null)
+         * @return This builder instance
+         * @see ItemGenerator Generator interface
          */
         @NotNull Builder resultGenerator(@NotNull ItemGenerator resultGenerator);
 
         /**
-         * 构建不可变的无序配方实例
+         * Builds an immutable shapeless recipe instance.
          *
-         * @return 配置完成的配方实例
-         * @throws IllegalStateException 如果缺少必要参数
+         * @return The configured recipe instance
+         * @throws IllegalStateException If required parameters are missing
          */
         @NotNull ArtisanShapelessRecipe build();
     }
