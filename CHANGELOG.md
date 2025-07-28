@@ -7,6 +7,10 @@
 ### 新增 / Added
 - **补充并更改 javadoc** / Updated javadoc
 
+### 修复 / Fixed
+- **修复编译器 NPE 警告（即使实际上不可能）** / Fixed NPE in compiler (actually impossible)
+- **修复无法通过右击空气打开配方书 GUI 的问题** / Fixed issue where right-clicking air would open the recipe book GUI
+
 ## [1.0.0-rc.1] - 2025-07-27
 ### 新增 / Added
 - **物品注册表新增 `getTagsByItemStack` 方法** / Added `getTagsByItemStack` method to the item registry
