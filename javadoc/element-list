@@ -1,10 +1,7 @@
-io.github.moyusowo.neoartisanapi.api
-io.github.moyusowo.neoartisanapi.api.attribute
-io.github.moyusowo.neoartisanapi.api.block
 io.github.moyusowo.neoartisanapi.api.block.block
 io.github.moyusowo.neoartisanapi.api.block.block.base
 io.github.moyusowo.neoartisanapi.api.block.data
-io.github.moyusowo.neoartisanapi.api.block.event
+io.github.moyusowo.neoartisanapi.api.block.event.common
 io.github.moyusowo.neoartisanapi.api.block.gui
 io.github.moyusowo.neoartisanapi.api.block.protection
 io.github.moyusowo.neoartisanapi.api.block.state
@@ -17,7 +14,8 @@ io.github.moyusowo.neoartisanapi.api.block.task
 io.github.moyusowo.neoartisanapi.api.block.util
 io.github.moyusowo.neoartisanapi.api.item
 io.github.moyusowo.neoartisanapi.api.item.factory
-io.github.moyusowo.neoartisanapi.api.persistence
-io.github.moyusowo.neoartisanapi.api.persistence.type
 io.github.moyusowo.neoartisanapi.api.recipe
+io.github.moyusowo.neoartisanapi.api.recipe.choice
+io.github.moyusowo.neoartisanapi.api.recipe.guide
+io.github.moyusowo.neoartisanapi.api.registry
 io.github.moyusowo.neoartisanapi.api.util
