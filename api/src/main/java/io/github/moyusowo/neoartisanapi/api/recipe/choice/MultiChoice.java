@@ -32,21 +32,21 @@ public final class MultiChoice implements Choice {
     @Override
     public boolean matches(@Nullable ItemStack itemStack) {
         for (Choice choice : choices) {
-            if (!choice.matches(itemStack)) {
-                return false;
+            if (choice.matches(itemStack)) {
+                return true;
             }
         }
-        return true;
+        return false;
     }
 
     @Override
     public boolean matches(@Nullable NamespacedKey itemId) {
         for (Choice choice : choices) {
-            if (!choice.matches(itemId)) {
-                return false;
+            if (choice.matches(itemId)) {
+                return true;
             }
         }
-        return true;
+        return false;
     }
 
     /**
