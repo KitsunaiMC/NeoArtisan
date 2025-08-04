@@ -3,6 +3,10 @@
 > 本文档遵循 [Keep a Changelog](https://keepachangelog.com/) 规范
 > This document follows the [Keep a Changelog](https://keepachangelog.com/) specification
 
+## [1.0.0] - 2025-08-04
+### 修复 / Fixed
+- **增加了命令短别名** / Added short aliases of command
+
 ## [1.0.0-rc.5] - 2025-08-04
 ### 修复 / Fixed
 - **修复了依赖打包时没有正确重定位的问题** / Fixed that dependency packaging does not correctly relocate

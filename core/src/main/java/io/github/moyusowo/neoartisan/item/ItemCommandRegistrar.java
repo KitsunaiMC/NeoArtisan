@@ -18,6 +18,8 @@ import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 
+import java.util.List;
+
 @SuppressWarnings("UnstableApiUsage")
 final class ItemCommandRegistrar {
     private static final SuggestionProvider<CommandSourceStack> REGISTRY_ID_SUGGESTIONS =
@@ -133,6 +135,6 @@ final class ItemCommandRegistrar {
 
     @InitMethod(priority = InitPriority.COMMANDS)
     public static void registerCommands() {
-        NeoArtisan.instance().getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS, commands -> commands.registrar().register(buildCommand));
+        NeoArtisan.instance().getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS, commands -> commands.registrar().register(buildCommand, List.of("na")));
     }
 }

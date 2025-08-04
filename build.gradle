@@ -4,7 +4,7 @@ plugins {
 
 allprojects {
     group = "io.github.moyusowo"
-    version = "1.0.0-rc.5"
+    version = "1.0.0"
 }
 
 tasks.register('copySubprojectJar', Copy) {
