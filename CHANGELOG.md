@@ -3,6 +3,10 @@
 > 本文档遵循 [Keep a Changelog](https://keepachangelog.com/) 规范
 > This document follows the [Keep a Changelog](https://keepachangelog.com/) specification
 
+## [1.0.0-rc.5] - 2025-08-04
+### 修复 / Fixed
+- **修复了依赖打包时没有正确重定位的问题** / Fixed that dependency packaging does not correctly relocate
+
 ## [1.0.0-rc.4] - 2025-08-04
 ### 修复 / Fixed
 - **修复了区块包处理过慢阻塞netty线程的问题** / Fixed that the chunk data package processing is too slow and blocks the netty thread

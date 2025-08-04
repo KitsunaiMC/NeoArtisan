@@ -33,6 +33,8 @@ build {
 }
 
 shadowJar {
+    relocate("org.reflections", "io.github.moyusowo.lib.org.reflections")
+    relocate("net.momirealms", "io.github.moyusowo.lib.net.momirealms")
     minimize()
 }
 
