@@ -3,6 +3,10 @@
 > 本文档遵循 [Keep a Changelog](https://keepachangelog.com/) 规范
 > This document follows the [Keep a Changelog](https://keepachangelog.com/) specification
 
+## [1.0.0-rc.4] - 2025-08-04
+### 修复 / Fixed
+- **修复了区块包处理过慢阻塞netty线程的问题** / Fixed that the chunk data package processing is too slow and blocks the netty thread
+
 ## [1.0.0-rc.3] - 2025-07-29
 ### 修复 / Fixed
 - **修复了 `MultiChoice` 匹配要全部匹配时才返回 `true` 的问题** / Fixed that the `MultiChoice` match method only returns `true` when all choices are matched
