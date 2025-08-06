@@ -23,4 +23,9 @@ public final class Registries {
      * NeoArtisan custom block registry.
      */
     public static final BlockRegistry BLOCK = ServiceUtil.createProxy(BlockRegistry.class);
+
+    /**
+     * NeoArtisan guide book registry.
+     */
+    public static final GuideRegistry GUIDE = ServiceUtil.createProxy(GuideRegistry.class);
 }

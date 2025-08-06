@@ -4,10 +4,6 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
 import io.github.moyusowo.neoartisan.NeoArtisan;
-import io.github.moyusowo.neoartisan.recipe.guide.generator.FurnaceLikeGuide;
-import io.github.moyusowo.neoartisan.recipe.guide.generator.ShapedGuide;
-import io.github.moyusowo.neoartisan.recipe.guide.generator.ShapelessGuide;
-import io.github.moyusowo.neoartisan.registry.internal.RecipeRegistryInternal;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
 import io.github.moyusowo.neoartisan.util.terminate.TerminateMethod;
@@ -17,14 +13,11 @@ import io.github.moyusowo.neoartisanapi.api.recipe.choice.Choice;
 import io.github.moyusowo.neoartisanapi.api.recipe.choice.ItemChoice;
 import io.github.moyusowo.neoartisanapi.api.recipe.choice.MultiChoice;
 import io.github.moyusowo.neoartisanapi.api.recipe.guide.GuideGUIGenerator;
-import io.github.moyusowo.neoartisanapi.api.recipe.guide.ItemCategories;
 import io.github.moyusowo.neoartisanapi.api.registry.RecipeRegistry;
-import io.papermc.paper.datacomponent.DataComponentTypes;
-import net.kyori.adventure.text.minimessage.MiniMessage;
+import io.github.moyusowo.neoartisanapi.api.registry.Registries;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.bukkit.event.Listener;
 import org.bukkit.inventory.*;
 import org.bukkit.plugin.ServicePriority;
 import org.jetbrains.annotations.NotNull;
@@ -33,66 +26,22 @@ import org.jetbrains.annotations.Unmodifiable;
 import java.util.*;
 import java.util.function.Supplier;
 
-final class RecipeRegistryImpl implements Listener, RecipeRegistryInternal {
+final class RecipeRegistryImpl implements RecipeRegistry {
 
     private static RecipeRegistryImpl instance;
-
-    public static RecipeRegistryImpl getInstance() {
-        return instance;
-    }
 
     @InitMethod(priority = InitPriority.REGISTRY_LOAD)
     static void init() {
         new RecipeRegistryImpl();
     }
 
-    @SuppressWarnings("UnstableApiUsage")
     private RecipeRegistryImpl() {
         instance = this;
         recipeByType = ArrayListMultimap.create();
         recipeByKey = new HashMap<>();
-        generators = new HashMap<>();
-        generators.put(RecipeType.SHAPED, new ShapedGuide());
-        generators.put(RecipeType.SHAPELESS, new ShapelessGuide());
-        generators.put(RecipeType.SMOKING, new FurnaceLikeGuide());
-        generators.put(RecipeType.BLASTING, new FurnaceLikeGuide());
-        generators.put(RecipeType.FURNACE, new FurnaceLikeGuide());
-        generators.put(RecipeType.CAMPFIRE, new FurnaceLikeGuide());
-        categorys = new HashMap<>();
-        setCategory(ItemCategories.ORIGINAL, () -> {
-            ItemStack itemStack = ItemStack.of(Material.GRASS_BLOCK);
-            itemStack.setData(DataComponentTypes.ITEM_NAME, MiniMessage.miniMessage().deserialize("原版物品"));
-            return itemStack;
-        });
-        setCategory(ItemCategories.COMBAT, () -> {
-            ItemStack itemStack = ItemStack.of(Material.DIAMOND_SWORD);
-            itemStack.setData(DataComponentTypes.ITEM_NAME, MiniMessage.miniMessage().deserialize("武器"));
-            return itemStack;
-        });
-        setCategory(ItemCategories.DECORATIONS, () -> {
-            ItemStack itemStack = ItemStack.of(Material.FLOWER_POT);
-            itemStack.setData(DataComponentTypes.ITEM_NAME, MiniMessage.miniMessage().deserialize("装饰"));
-            return itemStack;
-        });
-        setCategory(ItemCategories.FOOD, () -> {
-            ItemStack itemStack = ItemStack.of(Material.BREAD);
-            itemStack.setData(DataComponentTypes.ITEM_NAME, MiniMessage.miniMessage().deserialize("食物"));
-            return itemStack;
-        });
-        setCategory(ItemCategories.MISC, () -> {
-            ItemStack itemStack = ItemStack.of(Material.CLAY_BALL);
-            itemStack.setData(DataComponentTypes.ITEM_NAME, MiniMessage.miniMessage().deserialize("杂项"));
-            return itemStack;
-        });
-        setCategory(ItemCategories.TOOLS, () -> {
-            ItemStack itemStack = ItemStack.of(Material.GOLDEN_PICKAXE);
-            itemStack.setData(DataComponentTypes.ITEM_NAME, MiniMessage.miniMessage().deserialize("工具"));
-            return itemStack;
-        });
-        NeoArtisan.registerListener(instance);
         Bukkit.getServicesManager().register(
                 RecipeRegistry.class,
-                RecipeRegistryImpl.getInstance(),
+                RecipeRegistryImpl.instance,
                 NeoArtisan.instance(),
                 ServicePriority.Normal
         );
@@ -100,8 +49,6 @@ final class RecipeRegistryImpl implements Listener, RecipeRegistryInternal {
 
     private final Map<NamespacedKey, ArtisanRecipe> recipeByKey;
     private final Multimap<NamespacedKey, ArtisanRecipe> recipeByType;
-    private final Map<NamespacedKey, GuideGUIGenerator> generators;
-    private final Map<NamespacedKey, ItemStack> categorys;
 
     @InitMethod(priority = InitPriority.INTERNAL_REGISTER)
     static void registerMinecraftFurnaceRecipe() {
@@ -252,34 +199,22 @@ final class RecipeRegistryImpl implements Listener, RecipeRegistryInternal {
         );
     }
 
+    @Deprecated(since = "1.1.0")
     @Override
     public void setGuide(@NotNull NamespacedKey recipeType, @NotNull GuideGUIGenerator generator) {
-        if (!generators.containsKey(recipeType)) generators.put(recipeType, generator);
-        else generators.replace(recipeType, generator);
+        Registries.GUIDE.setGuideGenerator(recipeType, generator);
     }
 
+    @Deprecated(since = "1.1.0")
     @Override
     public void setCategory(@NotNull NamespacedKey category, @NotNull Supplier<ItemStack> itemStackSupplier) {
-        if (!categorys.containsKey(category)) categorys.put(category, itemStackSupplier.get());
-        else categorys.replace(category, itemStackSupplier.get());
+        Registries.GUIDE.registerCategory(category, itemStackSupplier);
     }
 
     @TerminateMethod
     static void resetRecipe() {
         Bukkit.resetRecipes();
         NeoArtisan.logger().info("Successfully reset recipes.");
-    }
-
-    @Override
-    public @NotNull Optional<GuideGUIGenerator> getGuide(@NotNull NamespacedKey recipeType) {
-        if (generators.containsKey(recipeType)) return Optional.of(generators.get(recipeType));
-        return Optional.empty();
-    }
-
-    @Override
-    public @NotNull Optional<ItemStack> getCategory(@NotNull NamespacedKey category) {
-        if (categorys.containsKey(category)) return Optional.of(categorys.get(category));
-        return Optional.empty();
     }
 
     @Override

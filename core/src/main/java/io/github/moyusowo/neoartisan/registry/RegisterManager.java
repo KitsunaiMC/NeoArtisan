@@ -2,6 +2,7 @@ package io.github.moyusowo.neoartisan.registry;
 
 import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisan.test.BlockTest;
+import io.github.moyusowo.neoartisan.test.GuideTest;
 import io.github.moyusowo.neoartisan.test.ItemTest;
 import io.github.moyusowo.neoartisan.test.RecipeTest;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
@@ -44,6 +45,7 @@ public final class RegisterManager implements Listener {
             ItemTest.register();
             RecipeTest.register();
             BlockTest.register();
+            GuideTest.register();
             status = Status.CLOSED;
             Initializer.executeStartup();
         }

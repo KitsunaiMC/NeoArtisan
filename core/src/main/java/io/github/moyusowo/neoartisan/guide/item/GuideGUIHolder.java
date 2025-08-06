@@ -1,5 +1,6 @@
-package io.github.moyusowo.neoartisan.recipe.guide.item;
+package io.github.moyusowo.neoartisan.guide.item;
 
+import io.github.moyusowo.neoartisan.guide.category.GuideCategoryManager;
 import io.github.moyusowo.neoartisanapi.api.recipe.ArtisanRecipe;
 import io.github.moyusowo.neoartisanapi.api.recipe.guide.GuideGUIGenerator;
 import net.kyori.adventure.text.Component;

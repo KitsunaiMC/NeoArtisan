@@ -1,4 +1,4 @@
-package io.github.moyusowo.neoartisan.recipe.guide.generator;
+package io.github.moyusowo.neoartisan.guide.generator;
 
 import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisanapi.api.recipe.ArtisanRecipe;

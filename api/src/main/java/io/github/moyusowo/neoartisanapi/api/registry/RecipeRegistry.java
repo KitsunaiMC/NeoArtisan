@@ -92,7 +92,9 @@ public interface RecipeRegistry {
      *
      * @param recipeType The recipe type (must not be null)
      * @param generator The guide GUI generator (must not be null)
+     * @deprecated Use {@link GuideRegistry#setGuideGenerator(NamespacedKey, GuideGUIGenerator)} instead
      */
+    @Deprecated(since = "1.1.0")
     void setGuide(@NotNull NamespacedKey recipeType, @NotNull GuideGUIGenerator generator);
 
     /**
@@ -102,7 +104,9 @@ public interface RecipeRegistry {
      *
      * @param category The category key (must not be null)
      * @param itemStackSupplier The item stack supplier (must not be null)
+     * @deprecated Use {@link GuideRegistry#registerCategory(NamespacedKey, Supplier)} instead
      */
+    @Deprecated(since = "1.1.0")
     void setCategory(@NotNull NamespacedKey category, @NotNull Supplier<ItemStack> itemStackSupplier);
 
 }
