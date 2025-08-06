@@ -1,0 +1,51 @@
+name: CI & Pre-release Upload
+
+on:
+  push:
+    branches: [ main, dev ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: 'gradle'
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Build
+        run: ./gradlew build --no-daemon
+
+      - name: Delete old release if exists
+        uses: dev-drprasad/delete-tag-and-release@v1.0.1
+        with:
+          tag_name: latest-snapshot
+          delete_release: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload new snapshot
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: latest-snapshot   # 固定 tag，仅用于定位 release，无实际意义
+          name: "Latest Snapshot Build"
+          body: |
+            自动构建（无 tag）  
+            分支：${{ github.ref_name }}  
+            提交：${{ github.sha }}
+          prerelease: true
+          files: |
+            build/*.jar
+        env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

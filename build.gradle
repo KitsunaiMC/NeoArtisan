@@ -22,6 +22,12 @@ tasks.register('copySubprojectJar', Copy) {
     }
 }
 
+tasks.register("printVersion") {
+    doLast {
+        println project.version
+    }
+}
+
 tasks.named('build') {
     finalizedBy 'copySubprojectJar'
 }
