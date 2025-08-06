@@ -9,10 +9,13 @@ import io.github.moyusowo.neoartisanapi.api.block.block.base.ArtisanBlocks;
 import io.github.moyusowo.neoartisanapi.api.block.data.ArtisanBlockData;
 import io.github.moyusowo.neoartisanapi.api.block.event.common.ArtisanBlockPlaceEvent;
 import io.github.moyusowo.neoartisanapi.api.block.protection.Protections;
+import io.github.moyusowo.neoartisanapi.api.block.storage.Storages;
 import io.github.moyusowo.neoartisanapi.api.item.ArtisanItem;
 import io.github.moyusowo.neoartisanapi.api.registry.Registries;
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -31,14 +34,27 @@ final class SimpleBlockListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlace(PlayerInteractEvent event) {
+        final Block theBlock;
+        final boolean replace;
         // is interact valid
         if (event.useInteractedBlock() == Event.Result.DENY || event.useItemInHand() == Event.Result.DENY) return;
         // ensure right click block
         if (event.getAction() != Action.RIGHT_CLICK_BLOCK || event.getClickedBlock() == null) return;
         // ensure player have a item when click
         if (event.getItem() == null) return;
-        // ensure the block is air
-        if (event.getClickedBlock().getRelative(event.getBlockFace()).getType() != Material.AIR) return;
+        // ensure the block will or can be placed
+        if (event.getClickedBlock().isReplaceable()) {
+            replace = false;
+            theBlock = event.getClickedBlock();
+        } else if (event.getClickedBlock().getRelative(event.getBlockFace()).getType() == Material.AIR) {
+            replace = false;
+            theBlock = event.getClickedBlock().getRelative(event.getBlockFace());
+        } else if (event.getClickedBlock().getRelative(event.getBlockFace()).isReplaceable()) {
+            theBlock = event.getClickedBlock().getRelative(event.getBlockFace());
+            replace = Storages.BLOCK.isArtisanBlock(theBlock);
+        } else {
+            return;
+        }
         // is item ArtisanItem
         if (!Registries.ITEM.isArtisanItem(event.getItem())) return;
         ArtisanItem artisanItem = Registries.ITEM.getArtisanItem(event.getItem());
@@ -50,27 +66,33 @@ final class SimpleBlockListener implements Listener {
         // check sneaking interaction
         if (event.getPlayer().isSneaking() && InteractionUtil.isInteractable(event.getClickedBlock())) return;
         // check overlap
-        if (BoundingBoxUtil.overlap(event.getClickedBlock().getRelative(event.getBlockFace()))) return;
+        if (BoundingBoxUtil.overlap(theBlock)) return;
         // check permission
-        if (!Protections.BLOCK.canPlace(event.getPlayer(), event.getClickedBlock().getRelative(event.getBlockFace()).getLocation())) return;
+        if (!Protections.BLOCK.canPlace(event.getPlayer(), theBlock.getLocation())) return;
         event.setCancelled(true);
         // call event
         ArtisanBlockPlaceEvent artisanBlockPlaceEvent = new ArtisanBlockPlaceEvent(
-                event.getClickedBlock().getRelative(event.getBlockFace()),
-                event.getClickedBlock().getRelative(event.getBlockFace()).getState(),
+                theBlock,
+                theBlock.getState(),
                 event.getClickedBlock(),
                 event.getItem(),
                 event.getPlayer(),
                 true,
                 EquipmentSlot.HAND,
                 Registries.BLOCK.getArtisanBlock(artisanItem.getBlockId()),
-                ArtisanBlockData.builder().blockId(artisanItem.getBlockId()).location(event.getClickedBlock().getRelative(event.getBlockFace()).getLocation()).stage(0).build()
+                ArtisanBlockData.builder().blockId(artisanItem.getBlockId()).location(theBlock.getLocation()).stage(0).build()
         );
         artisanBlockPlaceEvent.callEvent();
         if (artisanBlockPlaceEvent.isCancelled()) return;
-        Util.place(event.getClickedBlock().getRelative(event.getBlockFace()), artisanBlockPlaceEvent.getPlacedArtisanBlockData());
-        if (event.getPlayer().getGameMode() != GameMode.CREATIVE) {
-            event.getItem().setAmount(event.getItem().getAmount() - 1);
-        }
+        Bukkit.getScheduler().runTask(NeoArtisan.instance(), () -> {
+            if (replace) {
+                Util.replace(theBlock, artisanBlockPlaceEvent.getPlacedArtisanBlockData());
+            } else {
+                Util.place(theBlock, artisanBlockPlaceEvent.getPlacedArtisanBlockData());
+            }
+            if (event.getPlayer().getGameMode() != GameMode.CREATIVE) {
+                event.getItem().setAmount(event.getItem().getAmount() - 1);
+            }
+        });
     }
 }

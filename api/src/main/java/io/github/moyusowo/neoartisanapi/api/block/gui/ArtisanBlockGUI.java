@@ -13,6 +13,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.*;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.BlockInventoryHolder;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.plugin.Plugin;
@@ -243,6 +244,7 @@ public abstract class ArtisanBlockGUI implements BlockInventoryHolder, Listener 
         if (event.useItemInHand() == Event.Result.DENY) return;
         if (event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
         if (event.getClickedBlock() == null) return;
+        if (event.getHand() != EquipmentSlot.HAND) return;
         if (!event.getClickedBlock().getLocation().equals(this.location)) return;
         if (!Protections.BLOCK.canInteract(event.getPlayer(), event.getClickedBlock().getLocation())) return;
         event.setCancelled(true);
