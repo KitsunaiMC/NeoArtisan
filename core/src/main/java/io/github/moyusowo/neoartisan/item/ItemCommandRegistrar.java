@@ -117,6 +117,7 @@ final class ItemCommandRegistrar {
             ).then(
                     Commands.literal("guide").executes(
                             ctx -> {
+                                if (!NeoArtisan.isDebugMode()) return 1;
                                 if (ctx.getSource().getSender() instanceof Player player) {
                                     player.give(Registries.GUIDE.getGuideBook(NeoArtisan.instance()));
                                 } else {

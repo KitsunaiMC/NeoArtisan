@@ -44,15 +44,15 @@ public final class GuideIndexManager {
 
     public static void openIndexGuideByItem(@NotNull final Player player, @NotNull NamespacedKey itemId, int page) {
         if (Registries.ITEM.isArtisanItem(itemId)) {
-            openIndexGuideByCategory(player, Registries.ITEM.getArtisanItem(itemId).getCategory(), 0);
+            openIndexGuideByCategory(player, Registries.ITEM.getArtisanItem(itemId).getCategory(), page);
         } else {
-            openIndexGuideByCategory(player, ItemCategories.ORIGINAL, 0);
+            openIndexGuideByCategory(player, ItemCategories.ORIGINAL, page);
         }
     }
 
     public static void openIndexGuideByCategoryItemStack(@NotNull final Player player, @NotNull ItemStack itemStack, int page) {
         Optional<NamespacedKey> category = GuideRegistryInternal.getInstance().getCategoryPDC(itemStack);
-        category.ifPresent(key -> openIndexGuideByCategory(player, key, 0));
+        category.ifPresent(key -> openIndexGuideByCategory(player, key, page));
     }
 
     public GuideIndexManager(@NotNull NamespacedKey category, @NotNull Collection<NamespacedKey> itemIds) {

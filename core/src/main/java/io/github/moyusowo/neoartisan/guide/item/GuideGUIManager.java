@@ -35,7 +35,7 @@ public final class GuideGUIManager {
 
     public static void openItemGuide(@NotNull NamespacedKey itemId, @NotNull final Player player, @NotNull GuideGUIType type, int page) {
         if (managers.containsKey(itemId)) {
-            managers.get(itemId).openInventory(player, type, 0);
+            managers.get(itemId).openInventory(player, type, page);
         }
     }
 
