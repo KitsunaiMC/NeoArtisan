@@ -87,7 +87,6 @@ final class ArtisanCropBlockImpl extends ArtisanBaseBlockImpl implements Artisan
                     hasInSouth = Storages.BLOCK.isArtisanBlock(cropData.getLocation().getBlock().getRelative(BlockFace.SOUTH)) && Storages.BLOCK.getArtisanBlockData(cropData.getLocation().getBlock().getRelative(BlockFace.SOUTH)).blockId().equals(cropData.blockId());
             if (((hasInEast && hasInNorth) || (hasInEast && hasInSouth) || (hasInWest && hasInNorth) || (hasInWest && hasInSouth)) && !hasInOblique) g /= 2;
             final double rate = 1.0 / (1.0 + 25.0 / g);
-            NeoArtisan.logger().info(String.valueOf(rate));
             if (ThreadLocalRandom.current().nextDouble() < rate) {
                 Util.place(cropData.getLocation().getBlock(), Util.getNextStage(cropData));
             }
