@@ -10,6 +10,7 @@ import io.github.moyusowo.neoartisanapi.api.block.block.ArtisanCropBlock;
 import io.github.moyusowo.neoartisanapi.api.block.data.ArtisanBlockData;
 import io.github.moyusowo.neoartisanapi.api.block.event.common.ArtisanBlockPlaceEvent;
 import io.github.moyusowo.neoartisanapi.api.block.protection.Protections;
+import io.github.moyusowo.neoartisanapi.api.block.state.ArtisanCropState;
 import io.github.moyusowo.neoartisanapi.api.block.storage.Storages;
 import io.github.moyusowo.neoartisanapi.api.item.ArtisanItem;
 import io.github.moyusowo.neoartisanapi.api.registry.Registries;
@@ -21,6 +22,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockFadeEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
@@ -58,6 +60,8 @@ final class CropBlockListener implements Listener {
         // check click position
         if (event.getBlockFace() != BlockFace.UP) return;
         if (event.getClickedBlock().getRelative(BlockFace.UP).getType() != Material.AIR) return;
+        // check light level
+        if (event.getClickedBlock().getRelative(BlockFace.UP).getLightLevel() == 0) return;
         // check sneaking interaction
         if (event.getPlayer().isSneaking() && InteractionUtil.isInteractable(event.getClickedBlock())) return;
         // check permission
@@ -98,6 +102,14 @@ final class CropBlockListener implements Listener {
         ArtisanBlockStorageInternal.getInternal().removeArtisanBlock(event.getBlock().getRelative(BlockFace.UP));
         if (event.getEntity() instanceof Player player) {
             Bukkit.getScheduler().runTask(NeoArtisan.instance(), () -> player.setVelocity(new Vector(0, 0.1, 0)));
+        }
+    }
+
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+    public void onFarmlandFade(BlockFadeEvent event) {
+        if (event.getBlock().getType() != Material.FARMLAND) return;
+        if (Storages.BLOCK.isArtisanBlock(event.getBlock().getRelative(BlockFace.UP)) && Storages.BLOCK.getArtisanBlockData(event.getBlock().getRelative(BlockFace.UP)).getArtisanBlock() instanceof ArtisanCropBlock) {
+            event.setCancelled(true);
         }
     }
 

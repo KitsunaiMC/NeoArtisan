@@ -64,7 +64,6 @@ final class BaseStateListener implements Listener {
             );
             orb.setExperience(artisanBlockBreakEvent.getExpToDrop());
         }
-        event.getBlock().setType(Material.AIR);
         if (event.getPlayer().getGameMode() != GameMode.CREATIVE) {
             if (artisanBlockBreakEvent.isDropItems()) {
                 for (ItemStack drop : artisanBlockData.getArtisanBlockState().drops()) {
@@ -73,6 +72,7 @@ final class BaseStateListener implements Listener {
             }
         }
         ArtisanBlockStorageInternal.getInternal().removeArtisanBlock(event.getBlock());
+        event.getBlock().setType(Material.AIR);
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)

@@ -3,6 +3,7 @@ package io.github.moyusowo.neoartisan.block.data;
 import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisan.block.block.base.ArtisanBaseBlockInternal;
 import io.github.moyusowo.neoartisan.block.data.entity.BlockEntityManager;
+import io.github.moyusowo.neoartisan.block.storage.internal.ArtisanBlockStorageInternal;
 import io.github.moyusowo.neoartisan.block.task.LifecycleTaskManagerInternal;
 import io.github.moyusowo.neoartisan.block.task.SingleTaskPriority;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
@@ -16,6 +17,7 @@ import io.github.moyusowo.neoartisanapi.api.block.task.LifecycleTaskManager;
 import io.github.moyusowo.neoartisanapi.api.registry.Registries;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.plugin.ServicePriority;
@@ -59,6 +61,19 @@ class ArtisanBlockDataImpl implements ArtisanBlockDataInternal {
                         int random = ThreadLocalRandom.current().nextInt(0, 5000);
                         if (random > 3) return;
                         artisanCropBlock.onRandomTick(ArtisanBlockDataImpl.this);
+                    },
+                    0L,
+                    1L,
+                    false,
+                    false
+            );
+            this.lifecycleTaskManager.addLifecycleTask(
+                    () -> {
+                        if (ArtisanBlockDataImpl.this.location.getBlock().getLightLevel() == 0) {
+                            ArtisanBlockDataImpl.this.getArtisanBlockState().drops().forEach(drop -> location.getWorld().dropItemNaturally(location.add(0.5, 0.5, 0.5), drop));
+                            this.location.getBlock().setType(Material.AIR);
+                            ArtisanBlockStorageInternal.getInternal().removeArtisanBlock(ArtisanBlockDataImpl.this.location.getBlock());
+                        }
                     },
                     0L,
                     1L,

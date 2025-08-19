@@ -16,6 +16,7 @@ import io.github.moyusowo.neoartisanapi.api.block.state.appearance.crop.SugarCan
 import io.github.moyusowo.neoartisanapi.api.block.state.appearance.crop.TripwireAppearance;
 import io.github.moyusowo.neoartisanapi.api.item.ItemGenerator;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.plugin.ServicePriority;
 import org.jetbrains.annotations.NotNull;
 
@@ -37,7 +38,7 @@ final class ArtisanCropStateImpl extends ArtisanBaseBlockStateImpl implements Ar
     private static final class BuilderImpl implements Builder {
         private CropAppearance cropAppearance;
         private ItemGenerator[] generators;
-        private static final int actualState = WrappedBlockState.getByString("minecraft:wheat[age=7]").getGlobalId();
+        private static final int actualState = WrappedBlockState.getByString(Bukkit.createBlockData(Material.STRUCTURE_VOID).getAsString()).getGlobalId();
 
         private int generateAppearanceState() {
             if (this.cropAppearance instanceof TripwireAppearance tripwireAppearance) {
