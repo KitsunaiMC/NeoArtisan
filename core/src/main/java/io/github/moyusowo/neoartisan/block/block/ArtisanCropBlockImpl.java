@@ -8,9 +8,14 @@ import io.github.moyusowo.neoartisan.util.init.InitPriority;
 import io.github.moyusowo.neoartisanapi.api.block.block.ArtisanCropBlock;
 import io.github.moyusowo.neoartisanapi.api.block.data.ArtisanBlockData;
 import io.github.moyusowo.neoartisanapi.api.block.state.base.ArtisanBaseBlockState;
+import io.github.moyusowo.neoartisanapi.api.block.storage.Storages;
 import io.github.moyusowo.neoartisanapi.api.block.util.SoundProperty;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.type.Farmland;
 import org.bukkit.plugin.ServicePriority;
 import org.jetbrains.annotations.NotNull;
 
@@ -53,8 +58,39 @@ final class ArtisanCropBlockImpl extends ArtisanBaseBlockImpl implements Artisan
 
     @Override
     public void onRandomTick(ArtisanBlockData cropData) {
-        if (Util.hasNextStage(cropData)) {
-            Util.replace(cropData.getLocation().getBlock(), Util.getNextStage(cropData));
+        if (Util.hasNextStage(cropData) && cropData.getLocation().getBlock().getLightLevel() >= 9) {
+            double g = 1;
+            final Block farmland = cropData.getLocation().getBlock().getRelative(BlockFace.DOWN);
+            if (farmland.getType() != Material.FARMLAND || (!(farmland.getBlockData() instanceof Farmland farmlandData))) return;
+            if (farmlandData.getMoisture() == 0) g += 1;
+            else g += 3;
+            final BlockFace[] faces = { BlockFace.EAST, BlockFace.NORTH, BlockFace.SOUTH, BlockFace.WEST, BlockFace.NORTH_EAST, BlockFace.NORTH_WEST, BlockFace.SOUTH_EAST, BlockFace.SOUTH_WEST };
+            for (BlockFace face : faces) {
+                final Block block = farmland.getRelative(face);
+                if (block.getType() == Material.FARMLAND) {
+                    final Farmland data = (Farmland) block.getBlockData();
+                    if (data.getMoisture() == 0) g += 0.25;
+                    else g += 0.75;
+                }
+            }
+            boolean hasInOblique = false;
+            for (int i = 4; i < 8; i++) {
+                if (Storages.BLOCK.isArtisanBlock(cropData.getLocation().getBlock().getRelative(faces[i])) && Storages.BLOCK.getArtisanBlockData(cropData.getLocation().getBlock().getRelative(faces[i])).blockId().equals(cropData.blockId())) {
+                    hasInOblique = true;
+                    break;
+                }
+            }
+            if (hasInOblique) g /= 2;
+            boolean hasInEast = Storages.BLOCK.isArtisanBlock(cropData.getLocation().getBlock().getRelative(BlockFace.EAST)) && Storages.BLOCK.getArtisanBlockData(cropData.getLocation().getBlock().getRelative(BlockFace.EAST)).blockId().equals(cropData.blockId()),
+                    hasInWest = Storages.BLOCK.isArtisanBlock(cropData.getLocation().getBlock().getRelative(BlockFace.WEST)) && Storages.BLOCK.getArtisanBlockData(cropData.getLocation().getBlock().getRelative(BlockFace.WEST)).blockId().equals(cropData.blockId()),
+                    hasInNorth = Storages.BLOCK.isArtisanBlock(cropData.getLocation().getBlock().getRelative(BlockFace.NORTH)) && Storages.BLOCK.getArtisanBlockData(cropData.getLocation().getBlock().getRelative(BlockFace.NORTH)).blockId().equals(cropData.blockId()),
+                    hasInSouth = Storages.BLOCK.isArtisanBlock(cropData.getLocation().getBlock().getRelative(BlockFace.SOUTH)) && Storages.BLOCK.getArtisanBlockData(cropData.getLocation().getBlock().getRelative(BlockFace.SOUTH)).blockId().equals(cropData.blockId());
+            if (((hasInEast && hasInNorth) || (hasInEast && hasInSouth) || (hasInWest && hasInNorth) || (hasInWest && hasInSouth)) && !hasInOblique) g /= 2;
+            final double rate = 1.0 / (1.0 + 25.0 / g);
+            NeoArtisan.logger().info(String.valueOf(rate));
+            if (ThreadLocalRandom.current().nextDouble() < rate) {
+                Util.place(cropData.getLocation().getBlock(), Util.getNextStage(cropData));
+            }
         }
     }
 
