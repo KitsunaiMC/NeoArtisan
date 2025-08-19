@@ -131,18 +131,31 @@ public interface ItemGenerator {
     }
 
     /**
-     * 获取生成器关联的物品注册ID
+     * Gets the registry ID of the item associated with this generator
      *
-     * @return 非空的注册表NamespacedKey
+     * @return The non-null NamespacedKey identifying the registered item
      */
-    @NotNull NamespacedKey registryId();
+    @NotNull
+    NamespacedKey registryId();
 
     /**
-     * 生成新的物品堆实例
+     * Generates a new ItemStack instance
      *
-     * @return 新生成的物品堆，保证非空且已通过验证
-     * @throws IllegalArgumentException 如果物品ID未注册
+     * @return A newly generated ItemStack that is guaranteed to be non-null and validated
+     * @throws IllegalArgumentException if the item ID is not registered
      */
-    @NotNull ItemStack generate();
+    @NotNull
+    ItemStack generate();
+
+    /**
+     * Generates a new ItemStack instance, potentially considering the tool in hand
+     *
+     * @param toolInHand The tool currently held in hand, may be used for contextual generation
+     * @return A newly generated ItemStack that is guaranteed to be non-null
+     */
+    @NotNull
+    default ItemStack generate(@NotNull ItemStack toolInHand) {
+        return generate();
+    }
 
 }
