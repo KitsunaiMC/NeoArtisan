@@ -1,7 +1,11 @@
 package io.github.moyusowo.neoartisan.block.state.listener;
 
+import com.github.retrooper.packetevents.protocol.world.states.WrappedBlockState;
 import io.github.moyusowo.neoartisan.NeoArtisan;
+import io.github.moyusowo.neoartisan.block.data.ArtisanBlockDataView;
+import io.github.moyusowo.neoartisan.block.storage.internal.ArtisanBlockStorageAsync;
 import io.github.moyusowo.neoartisan.block.storage.internal.ArtisanBlockStorageInternal;
+import io.github.moyusowo.neoartisan.block.util.ChunkPos;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
 import io.github.moyusowo.neoartisanapi.api.block.data.ArtisanBlockData;
@@ -11,10 +15,12 @@ import io.github.moyusowo.neoartisanapi.api.block.protection.Protections;
 import io.github.moyusowo.neoartisanapi.api.block.storage.Storages;
 import io.github.moyusowo.neoartisanapi.api.block.util.PistonMoveBlockReaction;
 import io.papermc.paper.event.block.BlockBreakBlockEvent;
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.ExperienceOrb;
 import org.bukkit.event.EventHandler;
@@ -26,6 +32,7 @@ import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.block.BlockPistonRetractEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
@@ -344,6 +351,17 @@ final class BaseStateListener implements Listener {
                 }
             }
             ArtisanBlockStorageInternal.getInternal().removeArtisanBlock(upsideBlock);
+        }
+    }
+
+    @EventHandler
+    public void onChunkLoad(ChunkLoadEvent event) {
+        if (event.isNewChunk()) return;
+        for (ArtisanBlockDataView view : ArtisanBlockStorageAsync.getAsync().getChunkArtisanBlockDataViews(new ChunkPos(event.getWorld().getUID(), event.getChunk().getX(), event.getChunk().getZ()))) {
+            final BlockData blockData = Bukkit.createBlockData(WrappedBlockState.getByGlobalId(view.state().actualState()).toString());
+            if (view.location().getBlock().getType() != blockData.getMaterial()) {
+                view.location().getBlock().setBlockData(blockData);
+            }
         }
     }
 }

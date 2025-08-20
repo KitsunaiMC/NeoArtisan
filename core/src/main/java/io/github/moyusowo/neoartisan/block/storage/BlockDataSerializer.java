@@ -1,6 +1,5 @@
 package io.github.moyusowo.neoartisan.block.storage;
 
-import com.github.retrooper.packetevents.protocol.world.states.WrappedBlockState;
 import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisan.block.data.ArtisanBlockDataView;
 import io.github.moyusowo.neoartisan.block.storage.internal.ArtisanBlockStorageAsync;
@@ -14,13 +13,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.World;
-import org.bukkit.block.data.BlockData;
 
 import java.io.*;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.UUID;
 
 final class BlockDataSerializer {
 
@@ -81,19 +76,6 @@ final class BlockDataSerializer {
                 NeoArtisan.logger().severe("Fail to load custom block data at world " + world.getName() + ": " + e);
             }
             NeoArtisan.logger().info("successfully loaded custom block data at world " + world.getName());
-        }
-        final Map<Integer, BlockData> cached = new HashMap<>();
-        for (World world : Bukkit.getWorlds()) {
-            UUID worldUID = world.getUID();
-            final List<ChunkPos> chunkPoses = ArtisanBlockStorageAsync.getAsync().getWorldArtisanBlockChunks(worldUID);
-            for (ChunkPos chunkPos : chunkPoses) {
-                final List<ArtisanBlockDataView> views = ArtisanBlockStorageAsync.getAsync().getChunkArtisanBlockDataViews(chunkPos);
-                for (ArtisanBlockDataView view : views) {
-                    if (!cached.containsKey(view.state().actualState())) cached.put(view.state().actualState(), Bukkit.createBlockData(WrappedBlockState.getByGlobalId(view.state().actualState()).toString()));
-                    if (view.location().getBlock().getType() == cached.get(view.state().actualState()).getMaterial()) continue;
-                    view.location().getBlock().setBlockData(cached.get(view.state().actualState()).clone());
-                }
-            }
         }
         NeoArtisan.logger().info("successfully loaded custom block data at all worlds");
     }
