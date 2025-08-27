@@ -88,7 +88,7 @@ final class ArtisanCropBlockImpl extends ArtisanBaseBlockImpl implements Artisan
             if (((hasInEast && hasInNorth) || (hasInEast && hasInSouth) || (hasInWest && hasInNorth) || (hasInWest && hasInSouth)) && !hasInOblique) g /= 2;
             final double rate = 1.0 / (1.0 + 25.0 / g);
             if (ThreadLocalRandom.current().nextDouble() < rate) {
-                Util.place(cropData.getLocation().getBlock(), Util.getNextStage(cropData));
+                Util.replace(cropData.getLocation().getBlock(), Util.getNextStage(cropData));
             }
         }
     }
