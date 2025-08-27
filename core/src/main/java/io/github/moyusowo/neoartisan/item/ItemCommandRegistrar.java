@@ -7,6 +7,7 @@ import com.mojang.brigadier.tree.LiteralCommandNode;
 import io.github.moyusowo.neoartisan.NeoArtisan;
 import io.github.moyusowo.neoartisan.util.init.InitMethod;
 import io.github.moyusowo.neoartisan.util.init.InitPriority;
+import io.github.moyusowo.neoartisanapi.api.block.storage.Storages;
 import io.github.moyusowo.neoartisanapi.api.registry.Registries;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
@@ -15,6 +16,7 @@ import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.NamespacedKey;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -120,6 +122,36 @@ final class ItemCommandRegistrar {
                                 if (!NeoArtisan.isDebugMode()) return 1;
                                 if (ctx.getSource().getSender() instanceof Player player) {
                                     player.give(Registries.GUIDE.getGuideBook(NeoArtisan.instance()));
+                                } else {
+                                    ctx.getSource().getSender().sendMessage(
+                                            Component.text("你必须是一名玩家！").color(TextColor.color(255, 0, 0))
+                                    );
+                                }
+                                return 1;
+                            }
+                    )
+            ).then(
+                    Commands.literal("blocks").executes(
+                            ctx -> {
+                                if (ctx.getSource().getSender() instanceof Player player) {
+                                    final Block block = player.getTargetBlockExact(8);
+                                    if (block == null) {
+                                        player.sendMessage(Component.text("请将光标指向方块！").color(TextColor.color(255, 0, 0)));
+                                        return 1;
+                                    }
+                                    final Component component;
+                                    if (Storages.BLOCK.isArtisanBlock(block.getLocation())) {
+                                        component = Component.text("真实方块ID: ").color(TextColor.color(255, 152, 0))
+                                                .append(Component.text(block.getType().getKey().toString()).color(TextColor.color(0, 255, 0)))
+                                                .append(Component.text(" NeoArtisan 方块ID: ").color(TextColor.color(255, 152, 0)))
+                                                .append(Component.text(Storages.BLOCK.getArtisanBlockData(block).getArtisanBlock().getBlockId().asString()).color(TextColor.color(255, 255, 255)));
+                                    } else {
+                                        component = Component.text("真实方块ID: ").color(TextColor.color(255, 152, 0))
+                                                .append(Component.text(block.getType().getKey().toString()).color(TextColor.color(0, 255, 0)))
+                                                .append(Component.text(" NeoArtisan 方块ID: ").color(TextColor.color(255, 152, 0)))
+                                                .append(Component.text("Air").color(TextColor.color(0, 255, 0)));
+                                    }
+                                    player.sendMessage(component);
                                 } else {
                                     ctx.getSource().getSender().sendMessage(
                                             Component.text("你必须是一名玩家！").color(TextColor.color(255, 0, 0))
